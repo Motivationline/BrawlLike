@@ -2,12 +2,13 @@ namespace Script {
   import ƒ = FudgeCore;
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
 
-  export class CustomComponentScript extends ƒ.ComponentScript {
+  export class Brawler extends ƒ.ComponentScript {
     // Register the script as component for use in the editor via drag&drop
-    public static readonly iSubclass: number = ƒ.Component.registerSubclass(CustomComponentScript);
+    public static readonly iSubclass: number = ƒ.Component.registerSubclass(Brawler);
     // Properties may be mutated by users in the editor via the automatically created user interface
     public message: string = "CustomComponentScript added to ";
-
+    private direction: ƒ.Vector2 = new ƒ.Vector2();
+    private rigidbody: ƒ.ComponentRigidbody;
 
     constructor() {
       super();
@@ -34,8 +35,21 @@ namespace Script {
           break;
         case ƒ.EVENT.NODE_DESERIALIZED:
           // if deserialized the node is now fully reconstructed and access to all its components and children is possible
+          this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+          entityManager.playerBrawler = this;
+          this.rigidbody.effectRotation = new ƒ.Vector3();
           break;
       }
+    }
+
+    public setMovement(_direction: ƒ.Vector2){
+      this.direction.x = _direction.x;
+      this.direction.y = _direction.y;
+    }
+
+    public update(){
+      if(!this.rigidbody) return;
+      this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, this.rigidbody.getVelocity().y, this.direction.y));
     }
 
     // protected reduceMutator(_mutator: ƒ.Mutator): void {

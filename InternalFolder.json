@@ -1,6 +1,37 @@
 {
   "Fudge.ResourceFolder": {
     "name": "Resources",
-    "entries": []
+    "entries": [
+      {
+        "name": "Brawlers",
+        "entries": [
+          {
+            "idResource": "Graph|2024-06-26T12:42:10.698Z|62317"
+          }
+        ]
+      },
+      {
+        "name": "Maps",
+        "entries": [
+          {
+            "idResource": "Graph|2024-06-26T12:09:52.220Z|08626"
+          }
+        ]
+      },
+      {
+        "name": "Shared",
+        "entries": [
+          {
+            "idResource": "MeshCube|2024-06-26T12:31:46.705Z|83523"
+          },
+          {
+            "idResource": "Material|2024-06-26T12:32:41.145Z|10871"
+          },
+          {
+            "idResource": "MeshCube|2024-06-26T12:37:06.268Z|15864"
+          }
+        ]
+      }
+    ]
   }
 }
