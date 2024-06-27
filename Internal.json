@@ -5290,10 +5290,10 @@
                     "direction": "diagonal",
                     "near": 1,
                     "far": 2000,
-                    "aspect": 1.998435054773083,
+                    "aspect": 1.6513513513513514,
                     "pivot": {
-                      "translation": "[-0.5, 25, -14]",
-                      "rotation": "[60, 0, 0]",
+                      "translation": "[0, 70, 0]",
+                      "rotation": "[90, 0, 0]",
                       "scaling": "[1, 1, 1]"
                     },
                     "Component": {

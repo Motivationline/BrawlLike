@@ -13,6 +13,7 @@ namespace Script {
     constructor() {
       super();
 
+      console.log("constructor brawler")
       // Don't start when running in editor
       if (ƒ.Project.mode == ƒ.MODE.EDITOR)
         return;

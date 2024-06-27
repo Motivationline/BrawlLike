@@ -12,6 +12,7 @@ var Script;
         rigidbody;
         constructor() {
             super();
+            console.log("constructor brawler");
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
@@ -144,11 +145,14 @@ var Script;
 ///<reference path="Managers/EntityManager.ts" />
 (function (Script) {
     var ƒ = FudgeCore;
-    ƒ.Debug.info("Main Program Template running!");
     let viewport;
     document.addEventListener("interactiveViewportStarted", start);
     Script.menuManager = new Script.MenuManager();
     Script.inputManager = new Script.InputManager();
+    document.addEventListener("DOMContentLoaded", preStart);
+    function preStart() {
+        document.documentElement.addEventListener("click", startViewport);
+    }
     function start(_event) {
         viewport = _event.detail;
         viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
@@ -159,6 +163,28 @@ var Script;
         ƒ.Physics.simulate(); // if physics is included and used
         viewport.draw();
         ƒ.AudioManager.default.update();
+    }
+    async function startViewport() {
+        document.documentElement.removeEventListener("click", startViewport);
+        let graphId = document.head.querySelector("meta[autoView]").getAttribute("autoView");
+        await ƒ.Project.loadResourcesFromHTML();
+        let graph = ƒ.Project.resources[graphId];
+        let canvas = document.querySelector("canvas");
+        let viewport = new ƒ.Viewport();
+        let camera = findFirstCameraInGraph(graph);
+        viewport.initialize("GameViewport", graph, camera, canvas);
+        canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
+    }
+    function findFirstCameraInGraph(_graph) {
+        let cam = _graph.getComponent(ƒ.ComponentCamera);
+        if (cam)
+            return cam;
+        for (let child of _graph.getChildren()) {
+            cam = findFirstCameraInGraph(child);
+            if (cam)
+                return cam;
+        }
+        return undefined;
     }
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map
