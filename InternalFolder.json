@@ -53,6 +53,17 @@
                 "idResource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
               }
             ]
+          },
+          {
+            "idResource": "MeshCube|2024-06-27T09:39:02.161Z|07120"
+          }
+        ]
+      },
+      {
+        "name": "Materials",
+        "entries": [
+          {
+            "idResource": "Material|2024-06-27T09:42:46.373Z|74497"
           }
         ]
       }
