@@ -5380,7 +5380,7 @@
               "pivot": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[0.5000000000000001, 1, 0.5000000000000001]"
+                "scaling": "[0.5, 1, 0.5]"
               },
               "Component": {
                 "active": true
@@ -5457,6 +5457,14 @@
       "url": "Assets\\Decorations\\Crate.glb"
     }
   },
+  "AnimationGLTF|2024-06-27T12:08:10.156Z|09227": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
+      "name": "Walk",
+      "url": "Assets\\Chars\\shimbo.glb",
+      "framesPerSecond": 60
+    }
+  },
   "GraphGLTF|2024-06-27T12:08:10.156Z|98294": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
@@ -5481,14 +5489,6 @@
       "idResource": "GraphGLTF|2024-06-27T12:08:10.156Z|98294",
       "type": "GraphGLTF",
       "url": "Assets\\Chars\\shimbo.glb"
-    }
-  },
-  "AnimationGLTF|2024-06-27T12:08:10.156Z|09227": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
-      "name": "Walk",
-      "url": "Assets\\Chars\\shimbo.glb",
-      "framesPerSecond": 60
     }
   }
 }
