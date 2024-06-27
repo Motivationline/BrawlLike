@@ -12,13 +12,10 @@
             "name": "Blobby",
             "entries": [
               {
-                "idResource": "Material|2024-06-27T05:42:10.716Z|54114"
+                "idResource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931"
               },
               {
-                "idResource": "GraphGLTF|2024-06-27T05:45:30.281Z|41200"
-              },
-              {
-                "idResource": "AnimationGLTF|2024-06-27T05:45:30.281Z|23401"
+                "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114"
               }
             ]
           }

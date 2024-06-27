@@ -424,27 +424,7 @@
       "type": "Graph"
     }
   },
-  "Material|2024-06-27T05:42:10.716Z|54114": {
-    "ƒ.Material": {
-      "name": "Eyes",
-      "idResource": "Material|2024-06-27T05:42:10.716Z|54114",
-      "shader": "ShaderLit",
-      "coat": {
-        "ƒ.CoatColored": {
-          "color": "[1, 1, 1, 1]"
-        }
-      }
-    }
-  },
-  "AnimationGLTF|2024-06-27T05:45:30.281Z|23401": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-06-27T05:45:30.281Z|23401",
-      "name": "Walk",
-      "url": "Assets\\Chars\\blobbyv02.glb",
-      "framesPerSecond": 60
-    }
-  },
-  "GraphGLTF|2024-06-27T05:45:30.281Z|41200": {
+  "GraphGLTF|2024-06-27T06:02:06.721Z|31931": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
       "active": true,
@@ -455,7 +435,7 @@
               "Component": {
                 "active": true
               },
-              "idAnimation": "AnimationGLTF|2024-06-27T05:45:30.281Z|23401",
+              "idAnimation": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
               "playmode": "loop",
               "quantization": "continous",
               "scale": 1,
@@ -465,9 +445,17 @@
           }
         ]
       },
-      "idResource": "GraphGLTF|2024-06-27T05:45:30.281Z|41200",
+      "idResource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931",
       "type": "GraphGLTF",
       "url": "Assets\\Chars\\blobbyv02.glb"
+    }
+  },
+  "AnimationGLTF|2024-06-27T06:02:06.721Z|53114": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
+      "name": "Walk",
+      "url": "Assets\\Chars\\blobbyv02.glb",
+      "framesPerSecond": 60
     }
   }
 }
