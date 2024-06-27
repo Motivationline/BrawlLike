@@ -44,6 +44,18 @@
       }
     }
   },
+  "Material|2024-06-27T11:36:07.188Z|68061": {
+    "ƒ.Material": {
+      "name": "Grass",
+      "idResource": "Material|2024-06-27T11:36:07.188Z|68061",
+      "shader": "ShaderLit",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[0.26666666666666666, 0.4980392156862745, 0.20392156862745098, 1]"
+        }
+      }
+    }
+  },
   "Graph|2024-06-26T12:09:52.220Z|08626": {
     "ƒ.Graph": {
       "name": "Map",
@@ -143,7 +155,7 @@
                       {
                         "ƒ.ComponentTransform": {
                           "local": {
-                            "translation": "[1, -0.6200000000000001, 7]",
+                            "translation": "[1, -0.6200000047683716, 7]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[10, 1, 10]"
                           },
@@ -224,7 +236,7 @@
                       {
                         "ƒ.ComponentTransform": {
                           "local": {
-                            "translation": "[-2, -0.6000000000000001, 7]",
+                            "translation": "[-2, -0.6000000238418579, 7]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[10, 1, 10]"
                           },
@@ -305,7 +317,7 @@
                       {
                         "ƒ.ComponentTransform": {
                           "local": {
-                            "translation": "[1, -0.6000000000000001, 0]",
+                            "translation": "[1, -0.6000000238418579, 0]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[10, 1, 10]"
                           },
@@ -386,7 +398,7 @@
                       {
                         "ƒ.ComponentTransform": {
                           "local": {
-                            "translation": "[-2, -0.6200000000000001, 0]",
+                            "translation": "[-2, -0.6200000047683716, 0]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[10, 1, 10]"
                           },
@@ -467,7 +479,7 @@
                       {
                         "ƒ.ComponentTransform": {
                           "local": {
-                            "translation": "[-0.5, -0.5, 3.4999999999999996]",
+                            "translation": "[-0.5, -0.5, 3.5]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[11, 1, 15]"
                           },
@@ -521,7 +533,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[-0.5, 0, -3.5000000000000004]",
+                                  "translation": "[-0.5, 0, -3.5]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -544,7 +556,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[-0.5, 0, 10.500000000000002]",
+                                  "translation": "[-0.5, 0, 10.5]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -582,7 +594,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-0.5, 1, -4.500000000000002]",
+                                        "translation": "[-0.5, 1, -4.5]",
                                         "rotation": "[0, 0, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -592,7 +604,6 @@
                                     }
                                   }
                                 ],
-                                "ComponentMesh": [],
                                 "ComponentRigidbody": [
                                   {
                                     "ƒ.ComponentRigidbody": {
@@ -631,7 +642,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[5.5, 1, 3.4999999999999982]",
+                                        "translation": "[5.5, 1, 3.5]",
                                         "rotation": "[0, 90, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -641,7 +652,6 @@
                                     }
                                   }
                                 ],
-                                "ComponentMesh": [],
                                 "ComponentRigidbody": [
                                   {
                                     "ƒ.ComponentRigidbody": {
@@ -680,7 +690,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-0.5, 1, 11.499999999999998]",
+                                        "translation": "[-0.5, 1, 11.5]",
                                         "rotation": "[0, 0, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -690,7 +700,6 @@
                                     }
                                   }
                                 ],
-                                "ComponentMesh": [],
                                 "ComponentRigidbody": [
                                   {
                                     "ƒ.ComponentRigidbody": {
@@ -729,7 +738,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-6.5, 1, 3.4999999999999982]",
+                                        "translation": "[-6.5, 1, 3.5]",
                                         "rotation": "[0, 90, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -739,7 +748,6 @@
                                     }
                                   }
                                 ],
-                                "ComponentMesh": [],
                                 "ComponentRigidbody": [
                                   {
                                     "ƒ.ComponentRigidbody": {
@@ -787,7 +795,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-0.5, 0, -2.4999999999999996]",
+                                        "translation": "[-0.5, 0, -2.5]",
                                         "rotation": "[0, 0, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -976,7 +984,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-0.5000000000000001, 0, 9.5]",
+                                        "translation": "[-0.5, 0, 9.5]",
                                         "rotation": "[0, 0, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -1921,7 +1929,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-0.5000000000000001, 0.5, 3.499999999999999]",
+                                        "translation": "[-0.5, 0.5, 3.5]",
                                         "rotation": "[0, 180, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -2473,7 +2481,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[0.5, 0, 0.49999999999999956]",
+                                        "translation": "[0.5, 0, 0.5]",
                                         "rotation": "[0, 0, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -2536,8 +2544,7 @@
                                             }
                                           }
                                         }
-                                      ],
-                                      "ComponentRigidbody": []
+                                      ]
                                     },
                                     "children": []
                                   }
@@ -2666,7 +2673,7 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-1.5, 0, 0.49999999999999956]",
+                                        "translation": "[-1.5, 0, 0.5]",
                                         "rotation": "[0, 0, 0]",
                                         "scaling": "[1, 1, 1]"
                                       },
@@ -5407,16 +5414,38 @@
       "url": "Assets\\Decorations\\Crate.glb"
     }
   },
-  "Material|2024-06-27T11:36:07.188Z|68061": {
-    "ƒ.Material": {
-      "name": "Grass",
-      "idResource": "Material|2024-06-27T11:36:07.188Z|68061",
-      "shader": "ShaderLit",
-      "coat": {
-        "ƒ.CoatColored": {
-          "color": "[0.26666666666666666, 0.4980392156862745, 0.20392156862745098, 1]"
-        }
-      }
+  "GraphGLTF|2024-06-27T12:08:10.156Z|98294": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-06-27T12:08:10.156Z|98294",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\shimbo.glb"
+    }
+  },
+  "AnimationGLTF|2024-06-27T12:08:10.156Z|09227": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
+      "name": "Walk",
+      "url": "Assets\\Chars\\shimbo.glb",
+      "framesPerSecond": 60
     }
   }
 }
