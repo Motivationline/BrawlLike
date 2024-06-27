@@ -5269,6 +5269,42 @@
               }
             ]
           }
+        },
+        {
+          "ƒ.Node": {
+            "name": "MainCamera",
+            "active": true,
+            "components": {
+              "ComponentCamera": [
+                {
+                  "ƒ.ComponentCamera": {
+                    "backgroundColor": {
+                      "r": 0,
+                      "g": 0,
+                      "b": 0,
+                      "a": 1
+                    },
+                    "backgroundEnabled": true,
+                    "projection": "central",
+                    "fieldOfView": 30,
+                    "direction": "diagonal",
+                    "near": 1,
+                    "far": 2000,
+                    "aspect": 1.998435054773083,
+                    "pivot": {
+                      "translation": "[-0.5, 25, -14]",
+                      "rotation": "[60, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
         }
       ],
       "idResource": "Graph|2024-06-26T12:09:52.220Z|08626",
