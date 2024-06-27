@@ -7,6 +7,20 @@
         "entries": [
           {
             "idResource": "Graph|2024-06-26T12:42:10.698Z|62317"
+          },
+          {
+            "name": "Blobby",
+            "entries": [
+              {
+                "idResource": "Material|2024-06-27T05:42:10.716Z|54114"
+              },
+              {
+                "idResource": "GraphGLTF|2024-06-27T05:45:30.281Z|41200"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-06-27T05:45:30.281Z|23401"
+              }
+            ]
           }
         ]
       },
