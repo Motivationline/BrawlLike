@@ -42,6 +42,19 @@
             "idResource": "MeshCube|2024-06-26T12:37:06.268Z|15864"
           }
         ]
+      },
+      {
+        "name": "Decoration",
+        "entries": [
+          {
+            "name": "Crate",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
