@@ -327,7 +327,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[-3, 0.75, 0]",
+                                  "translation": "[-3, 1, 0]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -390,7 +390,7 @@
                     "local": {
                       "translation": "[0, -1.500000238418579, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[1, 1, 1]"
+                      "scaling": "[0.9999998807907104, 0.9999998807907104, 0.9999998807907104]"
                     },
                     "Component": {
                       "active": true
@@ -404,6 +404,43 @@
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
                   "idSource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Lights",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.Node": {
+                  "name": "Light01",
+                  "active": true,
+                  "components": {
+                    "ComponentLight": [
+                      {
+                        "ƒ.ComponentLight": {
+                          "pivot": {
+                            "translation": "[0, 3, 0]",
+                            "rotation": "[130, 0, 0]",
+                            "scaling": "[10, 10, 10]"
+                          },
+                          "light": {
+                            "ƒ.LightAmbient": {
+                              "color": "[1, 1, 1, 1]"
+                            }
+                          },
+                          "Component": {
+                            "active": true
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
                 }
               }
             ]
@@ -509,6 +546,14 @@
       "type": "Graph"
     }
   },
+  "AnimationGLTF|2024-06-27T06:02:06.721Z|53114": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
+      "name": "Walk",
+      "url": "Assets\\Chars\\blobbyv02.glb",
+      "framesPerSecond": 60
+    }
+  },
   "GraphGLTF|2024-06-27T06:02:06.721Z|31931": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
@@ -533,14 +578,6 @@
       "idResource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931",
       "type": "GraphGLTF",
       "url": "Assets\\Chars\\blobbyv02.glb"
-    }
-  },
-  "AnimationGLTF|2024-06-27T06:02:06.721Z|53114": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
-      "name": "Walk",
-      "url": "Assets\\Chars\\blobbyv02.glb",
-      "framesPerSecond": 60
     }
   },
   "GraphGLTF|2024-06-27T07:16:42.618Z|60213": {
