@@ -78,6 +78,25 @@
           },
           {
             "idResource": "Material|2024-06-27T11:36:07.188Z|68061"
+          },
+          {
+            "idResource": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641"
+          }
+        ]
+      },
+      {
+        "name": "Floors",
+        "entries": [
+          {
+            "name": "Dirt",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-27T13:47:35.746Z|44149"
+              },
+              {
+                "idResource": "MaterialGLTF|2024-06-27T13:47:35.746Z|21044"
+              }
+            ]
           }
         ]
       }
