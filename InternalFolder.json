@@ -18,6 +18,17 @@
                 "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114"
               }
             ]
+          },
+          {
+            "name": "Shimbo",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-27T12:08:10.156Z|98294"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227"
+              }
+            ]
           }
         ]
       },
