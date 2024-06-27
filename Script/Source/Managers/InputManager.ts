@@ -23,14 +23,14 @@ namespace Script {
             
             let mgtSqrt = direction.magnitudeSquared;
             if (mgtSqrt === 0) {
-                entityManager.playerBrawler.setMovement(direction);
+                EntityManager.Instance.playerBrawler?.setMovement(direction);
                 return;
             }
             if (mgtSqrt > 1) {
                 direction.normalize(1);
             }
             
-            entityManager.playerBrawler.setMovement(direction);
+            EntityManager.Instance.playerBrawler?.setMovement(direction);
         }
     }
 }

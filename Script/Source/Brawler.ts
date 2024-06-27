@@ -6,7 +6,7 @@ namespace Script {
     // Register the script as component for use in the editor via drag&drop
     public static readonly iSubclass: number = ƒ.Component.registerSubclass(Brawler);
     // Properties may be mutated by users in the editor via the automatically created user interface
-    public message: string = "CustomComponentScript added to ";
+    public speed: number = 1;
     private direction: ƒ.Vector2 = new ƒ.Vector2();
     private rigidbody: ƒ.ComponentRigidbody;
 
@@ -27,7 +27,6 @@ namespace Script {
     public hndEvent = (_event: Event): void => {
       switch (_event.type) {
         case ƒ.EVENT.COMPONENT_ADD:
-          ƒ.Debug.log(this.message, this.node);
           break;
         case ƒ.EVENT.COMPONENT_REMOVE:
           this.removeEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
@@ -36,7 +35,6 @@ namespace Script {
         case ƒ.EVENT.NODE_DESERIALIZED:
           // if deserialized the node is now fully reconstructed and access to all its components and children is possible
           this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
-          entityManager.playerBrawler = this;
           this.rigidbody.effectRotation = new ƒ.Vector3();
           break;
       }
@@ -49,7 +47,7 @@ namespace Script {
 
     public update(){
       if(!this.rigidbody) return;
-      this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, this.rigidbody.getVelocity().y, this.direction.y));
+      this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, this.rigidbody.getVelocity().y, this.direction.y).scale(this.speed));
     }
 
     // protected reduceMutator(_mutator: ƒ.Mutator): void {
