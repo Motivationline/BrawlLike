@@ -93,6 +93,86 @@
       "url": "Assets\\Floor\\floor.glb"
     }
   },
+  "Animation|2024-06-28T14:49:00.996Z|86706": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2024-06-28T14:49:00.996Z|86706",
+      "name": "CloudRotationSlow",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "components": {
+          "ComponentTransform": {
+            "0": {
+              "mtxLocal": {
+                "rotation": {
+                  "y": {
+                    "keys": [
+                      {
+                        "time": 0,
+                        "value": 0,
+                        "interpolation": 2,
+                        "slopeIn": 0.0010006231949846501,
+                        "slopeOut": 0.0010006231949846501
+                      },
+                      {
+                        "time": 360200,
+                        "value": 360,
+                        "interpolation": 2,
+                        "slopeIn": 0.0009974005759991922,
+                        "slopeOut": 0.0009974005759991922
+                      }
+                    ],
+                    "animationSequence": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "Animation|2024-06-28T14:43:31.368Z|52613": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2024-06-28T14:43:31.368Z|52613",
+      "name": "CloudRotation",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "components": {
+          "ComponentTransform": {
+            "0": {
+              "mtxLocal": {
+                "rotation": {
+                  "y": {
+                    "keys": [
+                      {
+                        "time": 0,
+                        "value": 0,
+                        "interpolation": 2,
+                        "slopeIn": 0.0030095571241137075,
+                        "slopeOut": 0.0030095571241137075
+                      },
+                      {
+                        "time": 120000.00000000001,
+                        "value": 360,
+                        "interpolation": 2,
+                        "slopeIn": 0.0036093103304088883,
+                        "slopeOut": 0.0036093103304088883
+                      }
+                    ],
+                    "animationSequence": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "Graph|2024-06-26T12:09:52.220Z|08626": {
     "ƒ.Graph": {
       "name": "Map",
@@ -6056,7 +6136,7 @@
                             {
                               "ƒ.ComponentAnimator": {
                                 "Component": {
-                                  "active": true
+                                  "active": false
                                 },
                                 "idAnimation": "Animation|2024-06-28T14:43:31.368Z|52613",
                                 "playmode": "loop",
@@ -6163,7 +6243,7 @@
               "pivot": {
                 "translation": "[0, 0.5, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[0.5, 0.5000000000000001, 0.5]"
+                "scaling": "[0.5, 0.5, 0.5]"
               },
               "Component": {
                 "active": false
@@ -6330,9 +6410,9 @@
               "direction": "diagonal",
               "near": 1,
               "far": 2000,
-              "aspect": 1,
+              "aspect": 1.6280701754385964,
               "pivot": {
-                "translation": "[0, 20, 20]",
+                "translation": "[0, 10, 10]",
                 "rotation": "[45, 180, 0]",
                 "scaling": "[1, 1, 1]"
               },
@@ -6410,86 +6490,6 @@
       "iPrimitive": 0
     }
   },
-  "Animation|2024-06-28T14:43:31.368Z|52613": {
-    "ƒ.Animation": {
-      "idResource": "Animation|2024-06-28T14:43:31.368Z|52613",
-      "name": "CloudRotation",
-      "labels": {},
-      "events": {},
-      "framesPerSecond": 60,
-      "animationStructure": {
-        "components": {
-          "ComponentTransform": {
-            "0": {
-              "mtxLocal": {
-                "rotation": {
-                  "y": {
-                    "keys": [
-                      {
-                        "time": 0,
-                        "value": 0,
-                        "interpolation": 2,
-                        "slopeIn": 0.0030095571241137075,
-                        "slopeOut": 0.0030095571241137075
-                      },
-                      {
-                        "time": 120000.00000000001,
-                        "value": 360,
-                        "interpolation": 2,
-                        "slopeIn": 0.0036093103304088883,
-                        "slopeOut": 0.0036093103304088883
-                      }
-                    ],
-                    "animationSequence": true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "Animation|2024-06-28T14:49:00.996Z|86706": {
-    "ƒ.Animation": {
-      "idResource": "Animation|2024-06-28T14:49:00.996Z|86706",
-      "name": "CloudRotationSlow",
-      "labels": {},
-      "events": {},
-      "framesPerSecond": 60,
-      "animationStructure": {
-        "components": {
-          "ComponentTransform": {
-            "0": {
-              "mtxLocal": {
-                "rotation": {
-                  "y": {
-                    "keys": [
-                      {
-                        "time": 0,
-                        "value": 0,
-                        "interpolation": 2,
-                        "slopeIn": 0.0010006231949846501,
-                        "slopeOut": 0.0010006231949846501
-                      },
-                      {
-                        "time": 360200,
-                        "value": 360,
-                        "interpolation": 2,
-                        "slopeIn": 0.0009974005759991922,
-                        "slopeOut": 0.0009974005759991922
-                      }
-                    ],
-                    "animationSequence": true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "MeshPyramid|2024-06-28T11:42:43.929Z|66964": {
     "ƒ.MeshPyramid": {
       "idResource": "MeshPyramid|2024-06-28T11:42:43.929Z|66964",
@@ -6540,7 +6540,7 @@
               "pivot": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[90, 0, 0]",
-                "scaling": "[0.6000000000000001, 0.5000000000000001, 0.6000000000000001]"
+                "scaling": "[0.6000000238418579, 0.5, 0.6000000238418579]"
               },
               "Component": {
                 "active": true
@@ -6560,7 +6560,7 @@
                   "ƒ.ComponentMesh": {
                     "idMesh": "MeshPyramid|2024-06-28T11:42:43.929Z|66964",
                     "pivot": {
-                      "translation": "[0, 0, 0.050000000000000044]",
+                      "translation": "[0, 0, 0.05000000074505806]",
                       "rotation": "[90, 0, 0]",
                       "scaling": "[0.5, 0.5, 0.5]"
                     },
@@ -6602,7 +6602,7 @@
                   "ƒ.ComponentMesh": {
                     "idMesh": "MeshCube|2024-06-26T12:31:46.705Z|83523",
                     "pivot": {
-                      "translation": "[0, 0, -0.2]",
+                      "translation": "[0, 0, -0.20000000298023224]",
                       "rotation": "[0, 0, 0]",
                       "scaling": "[0.5, 0.5, 0.5]"
                     },
@@ -6675,7 +6675,7 @@
               "pivot": {
                 "translation": "[0, 0.5, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[0.5000000000000001, 0.6000000000000001, 0.6000000000000001]"
+                "scaling": "[0.5, 0.6000000238418579, 0.6000000238418579]"
               },
               "Component": {
                 "active": false
@@ -6716,49 +6716,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931"
-                }
-              },
-              {
-                "ƒ.Node": {
-                  "name": "Hat",
-                  "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshCube|2024-06-26T12:37:06.268Z|15864",
-                          "pivot": {
-                            "translation": "[0, 0.8, 0.1]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[0.30000000000000016, 0.30000000000000016, 0.30000000000000016]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[0, 0, 0, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "Material|2024-06-26T12:32:41.145Z|10871"
-                        }
-                      }
-                    ]
-                  },
-                  "children": []
+                  "idSource": "GraphGLTF|2024-06-27T12:08:10.156Z|98294"
                 }
               }
             ]
