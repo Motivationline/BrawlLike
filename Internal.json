@@ -5998,7 +5998,7 @@
                               "ƒ.ComponentTransform": {
                                 "local": {
                                   "translation": "[0, 0, 0]",
-                                  "rotation": "[180, 0, 0]",
+                                  "rotation": "[180, 9.320495822241762, 0]",
                                   "scaling": "[200, 200, 200]"
                                 },
                                 "Component": {
@@ -6013,7 +6013,7 @@
                                 "Component": {
                                   "active": true
                                 },
-                                "idAnimation": "Animation|2024-06-28T14:43:31.368Z|52613",
+                                "idAnimation": "Animation|2024-06-28T14:49:00.996Z|86706",
                                 "playmode": "loop",
                                 "quantization": "continous",
                                 "scale": 1,
@@ -6435,15 +6435,55 @@
                         "time": 0,
                         "value": 0,
                         "interpolation": 2,
-                        "slopeIn": 0.009289701787301919,
-                        "slopeOut": 0.009289701787301919
+                        "slopeIn": 0.0060457676719987245,
+                        "slopeOut": 0.0060457676719987245
                       },
                       {
-                        "time": 40016.66666666667,
+                        "time": 60000.00000000001,
                         "value": 360,
                         "interpolation": 2,
-                        "slopeIn": 0.01103990952145358,
-                        "slopeOut": 0.01103990952145358
+                        "slopeIn": 0.00595988799257161,
+                        "slopeOut": 0.00595988799257161
+                      }
+                    ],
+                    "animationSequence": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "Animation|2024-06-28T14:49:00.996Z|86706": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2024-06-28T14:49:00.996Z|86706",
+      "name": "CloudRotationSlow",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "components": {
+          "ComponentTransform": {
+            "0": {
+              "mtxLocal": {
+                "rotation": {
+                  "y": {
+                    "keys": [
+                      {
+                        "time": 0,
+                        "value": 0,
+                        "interpolation": 2,
+                        "slopeIn": 0.0030193365028667305,
+                        "slopeOut": 0.0030193365028667305
+                      },
+                      {
+                        "time": 119850.00000000001,
+                        "value": 360,
+                        "interpolation": 2,
+                        "slopeIn": 0.0030253346380615396,
+                        "slopeOut": 0.0030253346380615396
                       }
                     ],
                     "animationSequence": true
