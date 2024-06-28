@@ -48,7 +48,8 @@ namespace Script {
 
     public update(){
       if(!this.rigidbody) return;
-      this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, this.rigidbody.getVelocity().y, this.direction.y).scale(this.speed));
+      if(!this.rigidbody.isActive) this.rigidbody.activate(true);
+      this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, 0, this.direction.y).scale(this.speed));
     }
 
     // protected reduceMutator(_mutator: ƒ.Mutator): void {
