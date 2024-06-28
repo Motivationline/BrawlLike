@@ -144,6 +144,14 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Animations",
+        "entries": [
+          {
+            "idResource": "Animation|2024-06-28T14:43:31.368Z|52613"
+          }
+        ]
       }
     ]
   }

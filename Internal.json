@@ -6006,6 +6006,21 @@
                                 }
                               }
                             }
+                          ],
+                          "ComponentAnimator": [
+                            {
+                              "ƒ.ComponentAnimator": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "idAnimation": "Animation|2024-06-28T14:43:31.368Z|52613",
+                                "playmode": "loop",
+                                "quantization": "continous",
+                                "scale": 1,
+                                "scaleWithGameTime": true,
+                                "animateInEditor": false
+                              }
+                            }
                           ]
                         },
                         "children": [
@@ -6028,12 +6043,27 @@
                               "ƒ.ComponentTransform": {
                                 "local": {
                                   "translation": "[0, 36, 0]",
-                                  "rotation": "[180, 180, 0]",
+                                  "rotation": "[180, 0, 0]",
                                   "scaling": "[31, 51, 41]"
                                 },
                                 "Component": {
                                   "active": true
                                 }
+                              }
+                            }
+                          ],
+                          "ComponentAnimator": [
+                            {
+                              "ƒ.ComponentAnimator": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "idAnimation": "Animation|2024-06-28T14:43:31.368Z|52613",
+                                "playmode": "loop",
+                                "quantization": "continous",
+                                "scale": 1,
+                                "scaleWithGameTime": true,
+                                "animateInEditor": false
                               }
                             }
                           ]
@@ -6384,6 +6414,46 @@
       "name": "MeshBoulder.016",
       "url": "Assets\\Decorations\\Mountain01.glb",
       "iPrimitive": 0
+    }
+  },
+  "Animation|2024-06-28T14:43:31.368Z|52613": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2024-06-28T14:43:31.368Z|52613",
+      "name": "CloudRotation",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "components": {
+          "ComponentTransform": {
+            "0": {
+              "mtxLocal": {
+                "rotation": {
+                  "y": {
+                    "keys": [
+                      {
+                        "time": 0,
+                        "value": 0,
+                        "interpolation": 2,
+                        "slopeIn": 0.009289701787301919,
+                        "slopeOut": 0.009289701787301919
+                      },
+                      {
+                        "time": 40016.66666666667,
+                        "value": 360,
+                        "interpolation": 2,
+                        "slopeIn": 0.01103990952145358,
+                        "slopeOut": 0.01103990952145358
+                      }
+                    ],
+                    "animationSequence": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
