@@ -14,7 +14,6 @@ namespace Script {
 
   function preStart() {
 
-    document.documentElement.addEventListener("click", startViewport);
 
   }
 
@@ -32,8 +31,8 @@ namespace Script {
     ƒ.AudioManager.default.update();
   }
 
-  async function startViewport() {
-    document.documentElement.removeEventListener("click", startViewport);
+  export async function startViewport() {
+    document.getElementById("start").removeEventListener("click", startViewport);
     let graphId = document.head.querySelector("meta[autoView]").getAttribute("autoView");
     
     await ƒ.Project.loadResourcesFromHTML();

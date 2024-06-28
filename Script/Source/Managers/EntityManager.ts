@@ -2,7 +2,8 @@ namespace Script {
     import ƒ = FudgeCore;
     export class EntityManager extends ƒ.Component {
         static Instance: EntityManager;
-        playerBrawler: Brawler;
+        brawlers: ComponentBrawler[] = [];
+        playerBrawler: ComponentBrawler;
 
         constructor() {
             if (EntityManager.Instance) return EntityManager.Instance;
@@ -15,16 +16,15 @@ namespace Script {
             ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.update);
         }
 
-        loadBrawler = async () => {
+        loadBrawler = async (_playerBrawler: string = "Brawler") => {
             console.log("load Brawler");
-            let brawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("Brawler")[0];
+            let defaultBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("Brawler")[0];
+            let playerBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(_playerBrawler)[0];
             let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
-            for (let i = 0; i < spawnPoints.length; i++) {
-                let instance = await ƒ.Project.createGraphInstance(brawler);
-                this.node.addChild(instance);
-                instance.mtxLocal.translation = spawnPoints[i].mtxLocal.translation.clone;
-                this.playerBrawler = instance.getComponent(Brawler);
+            for (let i = 0; i < spawnPoints.length - 1; i++) {
+                this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
             }
+            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
             let cameraGraph = <ƒ.Graph>ƒ.Project.getResourcesByName("CameraBrawler")[0];
             let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
             this.playerBrawler.node.addChild(cameraInstance);
@@ -32,8 +32,19 @@ namespace Script {
             viewport.camera = camera;
         }
 
+        private async initBrawler(_g: ƒ.Graph, _pos: ƒ.Vector3): Promise<ComponentBrawler> {
+            let instance = await ƒ.Project.createGraphInstance(_g);
+            this.node.addChild(instance);
+            instance.mtxLocal.translation = _pos;
+            let cb = <ComponentBrawler>instance.getAllComponents().find(c => c instanceof ComponentBrawler);
+            this.brawlers.push(cb);
+            return cb;
+        }
+
         update = () => {
-            this.playerBrawler?.update();
+            for(let b of this.brawlers){
+                b.update();
+            }
         }
     }
 }

@@ -2,75 +2,52 @@
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
-    class Brawler extends ƒ.ComponentScript {
-        // Register the script as component for use in the editor via drag&drop
-        static iSubclass = ƒ.Component.registerSubclass(Brawler);
-        // Properties may be mutated by users in the editor via the automatically created user interface
-        speed = 1;
-        direction = new ƒ.Vector3();
+    class Damagable extends ƒ.Component {
+        #health;
         rigidbody;
-        rotationWrapperMatrix;
         constructor() {
             super();
-            console.log("constructor brawler");
-            // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
-            // Listen to this component being added to or removed from a node
-            this.addEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
-            this.addEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
-            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
         }
-        // Activate the functions of this component as response to events
-        hndEvent = (_event) => {
-            switch (_event.type) {
-                case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
-                    break;
-                case "componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */:
-                    this.removeEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
-                    this.removeEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
-                    break;
-                case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
-                    // if deserialized the node is now fully reconstructed and access to all its components and children is possible
-                    this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
-                    this.rigidbody.effectRotation = new ƒ.Vector3();
-                    this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
-                    break;
-            }
+        initDamagable = () => {
+            this.node.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
+            this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
         };
-        setMovement(_direction) {
-            this.direction = _direction;
+        get health() {
+            return this.#health;
         }
-        update() {
-            if (!this.rigidbody)
-                return;
-            if (!this.rigidbody.isActive)
-                this.rigidbody.activate(true);
-            this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
-            if (this.direction.magnitudeSquared > 0)
-                this.rotationWrapperMatrix.lookIn(this.direction);
+        set health(_amt) {
+            this.#health = _amt;
+            if (this.#health < 0)
+                this.death();
         }
     }
-    Script.Brawler = Brawler;
+    Script.Damagable = Damagable;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class MenuManager {
         constructor() {
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
             ƒ.Project.addEventListener("resourcesLoaded" /* ƒ.EVENT.RESOURCES_LOADED */, this.resourcesLoaded);
             document.addEventListener("DOMContentLoaded", () => {
-                document.getElementById("start").addEventListener("click", async () => {
-                    document.getElementById("start-overlay").style.display = "none";
-                    await Script.EntityManager.Instance.loadBrawler();
-                    ƒ.Loop.start();
+                document.getElementById("start").addEventListener("click", Script.startViewport);
+                document.getElementById("selection-overlay").querySelectorAll("button").forEach((button) => {
+                    button.addEventListener("click", async () => {
+                        await Script.EntityManager.Instance.loadBrawler(button.dataset.brawler);
+                        ƒ.Loop.start();
+                        document.getElementById("selection-overlay").style.display = "none";
+                    });
                 });
             });
         }
         resourcesLoaded = () => {
             console.log("resources loaded");
-            document.getElementById("start").disabled = false;
+            document.getElementById("start-overlay").style.display = "none";
         };
     }
     Script.MenuManager = MenuManager;
@@ -125,6 +102,7 @@ var Script;
     var ƒ = FudgeCore;
     class EntityManager extends ƒ.Component {
         static Instance;
+        brawlers = [];
         playerBrawler;
         constructor() {
             if (EntityManager.Instance)
@@ -136,24 +114,33 @@ var Script;
                 return;
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.update);
         }
-        loadBrawler = async () => {
+        loadBrawler = async (_playerBrawler = "Brawler") => {
             console.log("load Brawler");
-            let brawler = ƒ.Project.getResourcesByName("Brawler")[0];
+            let defaultBrawler = ƒ.Project.getResourcesByName("Brawler")[0];
+            let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler)[0];
             let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
-            for (let i = 0; i < spawnPoints.length; i++) {
-                let instance = await ƒ.Project.createGraphInstance(brawler);
-                this.node.addChild(instance);
-                instance.mtxLocal.translation = spawnPoints[i].mtxLocal.translation.clone;
-                this.playerBrawler = instance.getComponent(Script.Brawler);
+            for (let i = 0; i < spawnPoints.length - 1; i++) {
+                this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
             }
+            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
             let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
             let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
             this.playerBrawler.node.addChild(cameraInstance);
             let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
             Script.viewport.camera = camera;
         };
+        async initBrawler(_g, _pos) {
+            let instance = await ƒ.Project.createGraphInstance(_g);
+            this.node.addChild(instance);
+            instance.mtxLocal.translation = _pos;
+            let cb = instance.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            this.brawlers.push(cb);
+            return cb;
+        }
         update = () => {
-            this.playerBrawler?.update();
+            for (let b of this.brawlers) {
+                b.update();
+            }
         };
     }
     Script.EntityManager = EntityManager;
@@ -172,7 +159,6 @@ var Script;
     Script.inputManager = new Script.InputManager();
     document.addEventListener("DOMContentLoaded", preStart);
     function preStart() {
-        document.documentElement.addEventListener("click", startViewport);
     }
     function start(_event) {
         Script.viewport = _event.detail;
@@ -186,7 +172,7 @@ var Script;
         ƒ.AudioManager.default.update();
     }
     async function startViewport() {
-        document.documentElement.removeEventListener("click", startViewport);
+        document.getElementById("start").removeEventListener("click", startViewport);
         let graphId = document.head.querySelector("meta[autoView]").getAttribute("autoView");
         await ƒ.Project.loadResourcesFromHTML();
         let graph = ƒ.Project.resources[graphId];
@@ -198,6 +184,7 @@ var Script;
         canvas.addEventListener("click", Script.InputManager.Instance.leftclick);
         canvas.addEventListener("contextmenu", Script.InputManager.Instance.rightclick);
     }
+    Script.startViewport = startViewport;
     function findFirstCameraInGraph(_graph) {
         let cam = _graph.getComponent(ƒ.ComponentCamera);
         if (cam)
@@ -209,5 +196,113 @@ var Script;
         }
         return undefined;
     }
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ComponentProjectile extends ƒ.Component {
+        gravity = false;
+        rotateInDirection = true;
+        damage = 100;
+        speed = 10;
+        range = 10;
+        #rb;
+        #owner;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
+        }
+        init = () => {
+            this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
+            this.#rb.effectGravity = Number(this.gravity);
+            this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
+        };
+        fire(_direction, _owner) {
+            this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
+            this.#owner = _owner;
+        }
+        onTriggerEnter = (_event) => {
+            if (_event.cmpRigidbody === this.#owner.rigidbody)
+                return;
+            //TODO do team check
+            _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable).health -= this.damage;
+            this.explode();
+        };
+        explode() {
+            this.node.getParent().removeChild(this.node);
+        }
+    }
+    Script.ComponentProjectile = ComponentProjectile;
+})(Script || (Script = {}));
+///<reference path="../Damagable.ts"/>
+var Script;
+///<reference path="../Damagable.ts"/>
+(function (Script) {
+    var ƒ = FudgeCore;
+    ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
+    class ComponentBrawler extends Script.Damagable {
+        // Register the script as component for use in the editor via drag&drop
+        static iSubclass = ƒ.Component.registerSubclass(ComponentBrawler);
+        // Properties may be mutated by users in the editor via the automatically created user interface
+        speed = 1;
+        direction = new ƒ.Vector3();
+        rotationWrapperMatrix;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            // Listen to this component being added to or removed from a node
+            this.addEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+            this.addEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
+        }
+        // Activate the functions of this component as response to events
+        hndEvent = (_event) => {
+            switch (_event.type) {
+                case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
+                    break;
+                case "componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */:
+                    this.removeEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+                    this.removeEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+                    break;
+                case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
+                    // if deserialized the node is now fully reconstructed and access to all its components and children is possible
+                    this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+                    this.rigidbody.effectRotation = new ƒ.Vector3();
+                    this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
+                    break;
+            }
+        };
+        setMovement(_direction) {
+            this.direction = _direction;
+        }
+        update() {
+            if (!this.rigidbody)
+                return;
+            if (!this.rigidbody.isActive)
+                this.rigidbody.activate(true);
+            this.move();
+        }
+        move() {
+            this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
+            if (this.direction.magnitudeSquared > 0)
+                this.rotationWrapperMatrix.lookIn(this.direction);
+        }
+        death() {
+            console.log("I died.", this);
+        }
+    }
+    Script.ComponentBrawler = ComponentBrawler;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    class Cowboy extends Script.ComponentBrawler {
+        move() {
+            super.move();
+        }
+    }
+    Script.Cowboy = Cowboy;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

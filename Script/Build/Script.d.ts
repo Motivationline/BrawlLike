@@ -1,15 +1,13 @@
 declare namespace Script {
     import ƒ = FudgeCore;
-    class Brawler extends ƒ.ComponentScript {
-        static readonly iSubclass: number;
-        speed: number;
-        private direction;
-        private rigidbody;
-        private rotationWrapperMatrix;
+    abstract class Damagable extends ƒ.Component {
+        #private;
+        rigidbody: ƒ.ComponentRigidbody;
         constructor();
-        hndEvent: (_event: Event) => void;
-        setMovement(_direction: ƒ.Vector3): void;
-        update(): void;
+        private initDamagable;
+        get health(): number;
+        set health(_amt: number);
+        protected abstract death(): void;
     }
 }
 declare namespace Script {
@@ -31,9 +29,11 @@ declare namespace Script {
     import ƒ = FudgeCore;
     class EntityManager extends ƒ.Component {
         static Instance: EntityManager;
-        playerBrawler: Brawler;
+        brawlers: ComponentBrawler[];
+        playerBrawler: ComponentBrawler;
         constructor();
-        loadBrawler: () => Promise<void>;
+        loadBrawler: (_playerBrawler?: string) => Promise<void>;
+        private initBrawler;
         update: () => void;
     }
 }
@@ -42,4 +42,41 @@ declare namespace Script {
     let viewport: ƒ.Viewport;
     const menuManager: MenuManager;
     const inputManager: InputManager;
+    function startViewport(): Promise<void>;
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class ComponentProjectile extends ƒ.Component {
+        #private;
+        gravity: boolean;
+        rotateInDirection: boolean;
+        damage: number;
+        speed: number;
+        range: number;
+        constructor();
+        private init;
+        fire(_direction: ƒ.Vector2, _owner: ComponentBrawler): void;
+        protected onTriggerEnter: (_event: ƒ.EventPhysics) => void;
+        protected explode(): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class ComponentBrawler extends Damagable {
+        static readonly iSubclass: number;
+        speed: number;
+        protected direction: ƒ.Vector3;
+        protected rotationWrapperMatrix: ƒ.Matrix4x4;
+        constructor();
+        hndEvent: (_event: Event) => void;
+        setMovement(_direction: ƒ.Vector3): void;
+        update(): void;
+        protected move(): void;
+        protected death(): void;
+    }
+}
+declare namespace Script {
+    class Cowboy extends ComponentBrawler {
+        move(): void;
+    }
 }

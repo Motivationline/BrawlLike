@@ -1,21 +1,19 @@
+///<reference path="../Damagable.ts"/>
 namespace Script {
   import ƒ = FudgeCore;
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
 
-  export class Brawler extends ƒ.ComponentScript {
+  export class ComponentBrawler extends Damagable {
     // Register the script as component for use in the editor via drag&drop
-    public static readonly iSubclass: number = ƒ.Component.registerSubclass(Brawler);
+    public static readonly iSubclass: number = ƒ.Component.registerSubclass(ComponentBrawler);
     // Properties may be mutated by users in the editor via the automatically created user interface
     public speed: number = 1;
-    private direction: ƒ.Vector3 = new ƒ.Vector3();
-    private rigidbody: ƒ.ComponentRigidbody;
-    private rotationWrapperMatrix: ƒ.Matrix4x4;
+    protected direction: ƒ.Vector3 = new ƒ.Vector3();
+    protected rotationWrapperMatrix: ƒ.Matrix4x4;
 
     constructor() {
       super();
 
-      console.log("constructor brawler")
-      // Don't start when running in editor
       if (ƒ.Project.mode == ƒ.MODE.EDITOR)
         return;
 
@@ -50,14 +48,18 @@ namespace Script {
     public update() {
       if (!this.rigidbody) return;
       if (!this.rigidbody.isActive) this.rigidbody.activate(true);
+      this.move();
+    }
+
+    protected move() {
       this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
       if (this.direction.magnitudeSquared > 0)
         this.rotationWrapperMatrix.lookIn(this.direction);
     }
 
-    // protected reduceMutator(_mutator: ƒ.Mutator): void {
-    //   // delete properties that should not be mutated
-    //   // undefined properties and private fields (#) will not be included by default
-    // }
+    
+    protected death(): void {
+      console.log("I died.", this);
+    }
   }
 }
