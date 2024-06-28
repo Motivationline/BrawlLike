@@ -5820,7 +5820,7 @@
                       "scaling": "[1, 1, 1]"
                     },
                     "Component": {
-                      "active": true
+                      "active": false
                     }
                   }
                 }
@@ -5839,8 +5839,6 @@
       "name": "Brawler",
       "active": true,
       "components": {
-        "ComponentMesh": [],
-        "ComponentMaterial": [],
         "ComponentTransform": [
           {
             "ƒ.ComponentTransform": {
@@ -5895,9 +5893,33 @@
       },
       "children": [
         {
-          "ƒ.GraphInstance": {
-            "deserializeFromSource": true,
-            "idSource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931"
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931"
+                }
+              }
+            ]
           }
         }
       ],
@@ -6005,6 +6027,44 @@
       "idResource": "MaterialGLTF|2024-06-27T13:47:35.746Z|21044",
       "name": "MatFloor",
       "url": "Assets\\Floor\\floor.glb"
+    }
+  },
+  "Graph|2024-06-28T07:32:49.098Z|23377": {
+    "ƒ.Graph": {
+      "name": "CameraBrawler",
+      "active": true,
+      "components": {
+        "ComponentCamera": [
+          {
+            "ƒ.ComponentCamera": {
+              "backgroundColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+              },
+              "backgroundEnabled": true,
+              "projection": "central",
+              "fieldOfView": 45,
+              "direction": "diagonal",
+              "near": 1,
+              "far": 2000,
+              "aspect": 1,
+              "pivot": {
+                "translation": "[0, 20, 20]",
+                "rotation": "[45, 180, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-06-28T07:32:49.098Z|23377",
+      "type": "Graph"
     }
   }
 }

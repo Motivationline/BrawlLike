@@ -5,7 +5,7 @@
 namespace Script {
   import ƒ = FudgeCore;
 
-  let viewport: ƒ.Viewport;
+  export let viewport: ƒ.Viewport;
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
   export const menuManager = new MenuManager();
   export const inputManager = new InputManager();
@@ -45,6 +45,9 @@ namespace Script {
     viewport.initialize("GameViewport", graph, camera, canvas);
 
     canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
+
+    canvas.addEventListener("click", InputManager.Instance.leftclick);
+    canvas.addEventListener("contextmenu", InputManager.Instance.rightclick);
   }
 
   function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera {

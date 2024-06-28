@@ -7,8 +7,9 @@ namespace Script {
     public static readonly iSubclass: number = ƒ.Component.registerSubclass(Brawler);
     // Properties may be mutated by users in the editor via the automatically created user interface
     public speed: number = 1;
-    private direction: ƒ.Vector2 = new ƒ.Vector2();
+    private direction: ƒ.Vector3 = new ƒ.Vector3();
     private rigidbody: ƒ.ComponentRigidbody;
+    private rotationWrapperMatrix: ƒ.Matrix4x4;
 
     constructor() {
       super();
@@ -37,19 +38,21 @@ namespace Script {
           // if deserialized the node is now fully reconstructed and access to all its components and children is possible
           this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
           this.rigidbody.effectRotation = new ƒ.Vector3();
+          this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
           break;
       }
     }
 
-    public setMovement(_direction: ƒ.Vector2){
-      this.direction.x = _direction.x;
-      this.direction.y = _direction.y;
+    public setMovement(_direction: ƒ.Vector3) {
+      this.direction = _direction;
     }
 
-    public update(){
-      if(!this.rigidbody) return;
-      if(!this.rigidbody.isActive) this.rigidbody.activate(true);
-      this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, 0, this.direction.y).scale(this.speed));
+    public update() {
+      if (!this.rigidbody) return;
+      if (!this.rigidbody.isActive) this.rigidbody.activate(true);
+      this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
+      if (this.direction.magnitudeSquared > 0)
+        this.rotationWrapperMatrix.lookIn(this.direction);
     }
 
     // protected reduceMutator(_mutator: ƒ.Mutator): void {

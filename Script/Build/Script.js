@@ -8,8 +8,9 @@ var Script;
         static iSubclass = ƒ.Component.registerSubclass(Brawler);
         // Properties may be mutated by users in the editor via the automatically created user interface
         speed = 1;
-        direction = new ƒ.Vector2();
+        direction = new ƒ.Vector3();
         rigidbody;
+        rotationWrapperMatrix;
         constructor() {
             super();
             console.log("constructor brawler");
@@ -34,19 +35,21 @@ var Script;
                     // if deserialized the node is now fully reconstructed and access to all its components and children is possible
                     this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
                     this.rigidbody.effectRotation = new ƒ.Vector3();
+                    this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
                     break;
             }
         };
         setMovement(_direction) {
-            this.direction.x = _direction.x;
-            this.direction.y = _direction.y;
+            this.direction = _direction;
         }
         update() {
             if (!this.rigidbody)
                 return;
             if (!this.rigidbody.isActive)
                 this.rigidbody.activate(true);
-            this.rigidbody.setVelocity(new ƒ.Vector3(this.direction.x, 0, this.direction.y).scale(this.speed));
+            this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
+            if (this.direction.magnitudeSquared > 0)
+                this.rotationWrapperMatrix.lookIn(this.direction);
         }
     }
     Script.Brawler = Brawler;
@@ -76,22 +79,26 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class InputManager {
+        static Instance;
         constructor() {
+            if (InputManager.Instance)
+                return InputManager.Instance;
+            InputManager.Instance = this;
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.update);
         }
         update = () => {
-            let direction = new ƒ.Vector2();
+            let direction = new ƒ.Vector3();
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
-                direction.add(new ƒ.Vector2(-1, 0));
+                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(-1, 0, 0));
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
-                direction.add(new ƒ.Vector2(1, 0));
+                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(1, 0, 0));
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]))
-                direction.add(new ƒ.Vector2(0, 1));
+                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, 1));
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
-                direction.add(new ƒ.Vector2(0, -1));
+                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, -1));
             let mgtSqrt = direction.magnitudeSquared;
             if (mgtSqrt === 0) {
                 Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
@@ -101,6 +108,14 @@ var Script;
                 direction.normalize(1);
             }
             Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
+        };
+        leftclick = (_event) => {
+            _event.preventDefault();
+            console.log("leftclick", _event);
+        };
+        rightclick = (_event) => {
+            _event.preventDefault();
+            console.log("rightclick", _event);
         };
     }
     Script.InputManager = InputManager;
@@ -131,6 +146,11 @@ var Script;
                 instance.mtxLocal.translation = spawnPoints[i].mtxLocal.translation.clone;
                 this.playerBrawler = instance.getComponent(Script.Brawler);
             }
+            let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
+            let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
+            this.playerBrawler.node.addChild(cameraInstance);
+            let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
+            Script.viewport.camera = camera;
         };
         update = () => {
             this.playerBrawler?.update();
@@ -147,7 +167,6 @@ var Script;
 ///<reference path="Managers/EntityManager.ts" />
 (function (Script) {
     var ƒ = FudgeCore;
-    let viewport;
     document.addEventListener("interactiveViewportStarted", start);
     Script.menuManager = new Script.MenuManager();
     Script.inputManager = new Script.InputManager();
@@ -156,14 +175,14 @@ var Script;
         document.documentElement.addEventListener("click", startViewport);
     }
     function start(_event) {
-        viewport = _event.detail;
-        viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
+        Script.viewport = _event.detail;
+        Script.viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         // ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
     function update(_event) {
         ƒ.Physics.simulate(); // if physics is included and used
-        viewport.draw();
+        Script.viewport.draw();
         ƒ.AudioManager.default.update();
     }
     async function startViewport() {
@@ -176,6 +195,8 @@ var Script;
         let camera = findFirstCameraInGraph(graph);
         viewport.initialize("GameViewport", graph, camera, canvas);
         canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
+        canvas.addEventListener("click", Script.InputManager.Instance.leftclick);
+        canvas.addEventListener("contextmenu", Script.InputManager.Instance.rightclick);
     }
     function findFirstCameraInGraph(_graph) {
         let cam = _graph.getComponent(ƒ.ComponentCamera);

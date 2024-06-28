@@ -5,9 +5,10 @@ declare namespace Script {
         speed: number;
         private direction;
         private rigidbody;
+        private rotationWrapperMatrix;
         constructor();
         hndEvent: (_event: Event) => void;
-        setMovement(_direction: ƒ.Vector2): void;
+        setMovement(_direction: ƒ.Vector3): void;
         update(): void;
     }
 }
@@ -19,8 +20,11 @@ declare namespace Script {
 }
 declare namespace Script {
     class InputManager {
+        static Instance: InputManager;
         constructor();
         update: () => void;
+        leftclick: (_event: MouseEvent) => void;
+        rightclick: (_event: MouseEvent) => void;
     }
 }
 declare namespace Script {
@@ -34,6 +38,8 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    let viewport: ƒ.Viewport;
     const menuManager: MenuManager;
     const inputManager: InputManager;
 }
