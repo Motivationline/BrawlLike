@@ -61,5 +61,11 @@ namespace Script {
     protected death(): void {
       console.log("I died.", this);
     }
+
+    protected reduceMutator(_mutator: ƒ.Mutator): void {
+      super.reduceMutator(_mutator);
+      delete _mutator.direction;
+      delete _mutator.rotationWrapperMatrix;
+    }
   }
 }

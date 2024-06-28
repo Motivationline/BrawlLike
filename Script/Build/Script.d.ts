@@ -8,6 +8,7 @@ declare namespace Script {
         get health(): number;
         set health(_amt: number);
         protected abstract death(): void;
+        protected reduceMutator(_mutator: ƒ.Mutator): void;
     }
 }
 declare namespace Script {
@@ -73,10 +74,13 @@ declare namespace Script {
         update(): void;
         protected move(): void;
         protected death(): void;
+        protected reduceMutator(_mutator: ƒ.Mutator): void;
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     class Cowboy extends ComponentBrawler {
         move(): void;
+        protected reduceMutator(_mutator: ƒ.Mutator): void;
     }
 }

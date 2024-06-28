@@ -93,6 +93,86 @@
       "url": "Assets\\Floor\\floor.glb"
     }
   },
+  "Animation|2024-06-28T14:49:00.996Z|86706": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2024-06-28T14:49:00.996Z|86706",
+      "name": "CloudRotationSlow",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "components": {
+          "ComponentTransform": {
+            "0": {
+              "mtxLocal": {
+                "rotation": {
+                  "y": {
+                    "keys": [
+                      {
+                        "time": 0,
+                        "value": 0,
+                        "interpolation": 2,
+                        "slopeIn": 0.0010006231949846501,
+                        "slopeOut": 0.0010006231949846501
+                      },
+                      {
+                        "time": 360200,
+                        "value": 360,
+                        "interpolation": 2,
+                        "slopeIn": 0.0009974005759991922,
+                        "slopeOut": 0.0009974005759991922
+                      }
+                    ],
+                    "animationSequence": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "Animation|2024-06-28T14:43:31.368Z|52613": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2024-06-28T14:43:31.368Z|52613",
+      "name": "CloudRotation",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "components": {
+          "ComponentTransform": {
+            "0": {
+              "mtxLocal": {
+                "rotation": {
+                  "y": {
+                    "keys": [
+                      {
+                        "time": 0,
+                        "value": 0,
+                        "interpolation": 2,
+                        "slopeIn": 0.0030095571241137075,
+                        "slopeOut": 0.0030095571241137075
+                      },
+                      {
+                        "time": 120000.00000000001,
+                        "value": 360,
+                        "interpolation": 2,
+                        "slopeIn": 0.0036093103304088883,
+                        "slopeOut": 0.0036093103304088883
+                      }
+                    ],
+                    "animationSequence": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "Graph|2024-06-26T12:09:52.220Z|08626": {
     "ƒ.Graph": {
       "name": "Map",
@@ -6408,86 +6488,6 @@
       "name": "MeshBoulder.016",
       "url": "Assets\\Decorations\\Mountain01.glb",
       "iPrimitive": 0
-    }
-  },
-  "Animation|2024-06-28T14:43:31.368Z|52613": {
-    "ƒ.Animation": {
-      "idResource": "Animation|2024-06-28T14:43:31.368Z|52613",
-      "name": "CloudRotation",
-      "labels": {},
-      "events": {},
-      "framesPerSecond": 60,
-      "animationStructure": {
-        "components": {
-          "ComponentTransform": {
-            "0": {
-              "mtxLocal": {
-                "rotation": {
-                  "y": {
-                    "keys": [
-                      {
-                        "time": 0,
-                        "value": 0,
-                        "interpolation": 2,
-                        "slopeIn": 0.0030095571241137075,
-                        "slopeOut": 0.0030095571241137075
-                      },
-                      {
-                        "time": 120000.00000000001,
-                        "value": 360,
-                        "interpolation": 2,
-                        "slopeIn": 0.0036093103304088883,
-                        "slopeOut": 0.0036093103304088883
-                      }
-                    ],
-                    "animationSequence": true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "Animation|2024-06-28T14:49:00.996Z|86706": {
-    "ƒ.Animation": {
-      "idResource": "Animation|2024-06-28T14:49:00.996Z|86706",
-      "name": "CloudRotationSlow",
-      "labels": {},
-      "events": {},
-      "framesPerSecond": 60,
-      "animationStructure": {
-        "components": {
-          "ComponentTransform": {
-            "0": {
-              "mtxLocal": {
-                "rotation": {
-                  "y": {
-                    "keys": [
-                      {
-                        "time": 0,
-                        "value": 0,
-                        "interpolation": 2,
-                        "slopeIn": 0.0010006231949846501,
-                        "slopeOut": 0.0010006231949846501
-                      },
-                      {
-                        "time": 360200,
-                        "value": 360,
-                        "interpolation": 2,
-                        "slopeIn": 0.0009974005759991922,
-                        "slopeOut": 0.0009974005759991922
-                      }
-                    ],
-                    "animationSequence": true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "MeshPyramid|2024-06-28T11:42:43.929Z|66964": {
