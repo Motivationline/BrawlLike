@@ -4,5 +4,9 @@ namespace Script {
         public move(): void {
             super.move();
         }
+
+        protected reduceMutator(_mutator: ƒ.Mutator): void {
+            super.reduceMutator(_mutator);
+        }
     }
 }

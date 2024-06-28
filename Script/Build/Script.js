@@ -3,7 +3,7 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class Damagable extends ƒ.Component {
-        #health;
+        #health = 500;
         rigidbody;
         constructor() {
             super();
@@ -22,6 +22,10 @@ var Script;
             this.#health = _amt;
             if (this.#health < 0)
                 this.death();
+        }
+        reduceMutator(_mutator) {
+            super.reduceMutator(_mutator);
+            delete _mutator.rigidbody;
         }
     }
     Script.Damagable = Damagable;
@@ -293,6 +297,11 @@ var Script;
         death() {
             console.log("I died.", this);
         }
+        reduceMutator(_mutator) {
+            super.reduceMutator(_mutator);
+            delete _mutator.direction;
+            delete _mutator.rotationWrapperMatrix;
+        }
     }
     Script.ComponentBrawler = ComponentBrawler;
 })(Script || (Script = {}));
@@ -301,6 +310,9 @@ var Script;
     class Cowboy extends Script.ComponentBrawler {
         move() {
             super.move();
+        }
+        reduceMutator(_mutator) {
+            super.reduceMutator(_mutator);
         }
     }
     Script.Cowboy = Cowboy;
