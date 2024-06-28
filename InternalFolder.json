@@ -40,6 +40,9 @@
         "entries": [
           {
             "idResource": "Graph|2024-06-26T12:09:52.220Z|08626"
+          },
+          {
+            "idResource": "MeshQuad|2024-06-28T08:24:39.947Z|87340"
           }
         ]
       },
@@ -84,6 +87,9 @@
           },
           {
             "idResource": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641"
+          },
+          {
+            "idResource": "Material|2024-06-28T08:25:00.560Z|65025"
           }
         ]
       },
