@@ -81,6 +81,34 @@
                 "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061"
               }
             ]
+          },
+          {
+            "name": "Cloud",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149"
+              },
+              {
+                "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440"
+              },
+              {
+                "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765"
+              }
+            ]
+          },
+          {
+            "name": "Mountain",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649"
+              },
+              {
+                "idResource": "MaterialGLTF|2024-06-28T14:04:16.312Z|86685"
+              },
+              {
+                "idResource": "MeshGLTF|2024-06-28T14:04:16.312Z|23791"
+              }
+            ]
           }
         ]
       },

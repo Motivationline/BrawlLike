@@ -5806,7 +5806,22 @@
           "ƒ.Node": {
             "name": "Lights",
             "active": true,
-            "components": {},
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
             "children": [
               {
                 "ƒ.Node": {
@@ -5817,9 +5832,9 @@
                       {
                         "ƒ.ComponentLight": {
                           "pivot": {
-                            "translation": "[0, 3, 0]",
+                            "translation": "[0, 20, 10]",
                             "rotation": "[130, 0, 0]",
-                            "scaling": "[10, 10, 10]"
+                            "scaling": "[200, 200, 200]"
                           },
                           "light": {
                             "ƒ.LightAmbient": {
@@ -5877,14 +5892,14 @@
         },
         {
           "ƒ.Node": {
-            "name": "Clouds",
+            "name": "Decoration",
             "active": true,
             "components": {
               "ComponentTransform": [
                 {
                   "ƒ.ComponentTransform": {
                     "local": {
-                      "translation": "[0, -27, 0]",
+                      "translation": "[0, 13, 0]",
                       "rotation": "[0, 0, 0]",
                       "scaling": "[1, 1, 1]"
                     },
@@ -5898,15 +5913,14 @@
             "children": [
               {
                 "ƒ.Node": {
-                  "name": "Cloud",
+                  "name": "Clouds",
                   "active": true,
                   "components": {
-                    "ComponentMesh": [
+                    "ComponentTransform": [
                       {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshQuad|2024-06-28T08:24:39.947Z|87340",
-                          "pivot": {
-                            "translation": "[0, 0, 0]",
+                        "ƒ.ComponentTransform": {
+                          "local": {
+                            "translation": "[0, -50, 0]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[1, 1, 1]"
                           },
@@ -5915,153 +5929,148 @@
                           }
                         }
                       }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "Material|2024-06-28T08:25:00.560Z|65025"
-                        }
-                      }
-                    ],
-                    "ComponentTransform": [
-                      {
-                        "ƒ.ComponentTransform": {
-                          "local": {
-                            "translation": "[0, -15, 0]",
-                            "rotation": "[-90, 0, 0]",
-                            "scaling": "[200, 200, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
                     ]
                   },
-                  "children": []
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Cloud",
+                        "active": true,
+                        "components": {
+                          "ComponentMesh": [
+                            {
+                              "ƒ.ComponentMesh": {
+                                "idMesh": "MeshQuad|2024-06-28T08:24:39.947Z|87340",
+                                "pivot": {
+                                  "translation": "[0, 0, 0]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "ComponentMaterial": [
+                            {
+                              "ƒ.ComponentMaterial": {
+                                "sortForAlpha": false,
+                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrSecondary": "[1, 1, 1, 1]",
+                                "pivot": {
+                                  "translation": "[0, 0]",
+                                  "rotation": 0,
+                                  "scaling": "[1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                },
+                                "idMaterial": "Material|2024-06-28T08:25:00.560Z|65025"
+                              }
+                            }
+                          ],
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, -15, 0]",
+                                  "rotation": "[-90, 0, 0]",
+                                  "scaling": "[200, 200, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "CloudDown",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 0, 0]",
+                                  "rotation": "[180, 0, 0]",
+                                  "scaling": "[200, 200, 200]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "CloudSmall",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 36, 0]",
+                                  "rotation": "[180, 180, 0]",
+                                  "scaling": "[31, 51, 41]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
-              }
-            ]
-          }
-        },
-        {
-          "ƒ.Node": {
-            "name": "Boulders",
-            "active": true,
-            "components": {},
-            "children": [
+              },
               {
                 "ƒ.Node": {
-                  "name": "Boulder",
+                  "name": "Boulders",
                   "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
-                          "pivot": {
-                            "translation": "[0, 0, 0]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[1, 1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641"
-                        }
-                      }
-                    ],
-                    "ComponentTransform": [
-                      {
-                        "ƒ.ComponentTransform": {
-                          "local": {
-                            "translation": "[-10, 2, 10]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[1, 6, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ]
-                  },
+                  "components": {},
                   "children": []
                 }
               },
               {
                 "ƒ.Node": {
-                  "name": "Boulder",
+                  "name": "Mountain",
                   "active": true,
                   "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
-                          "pivot": {
-                            "translation": "[0, 0, 0]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[1, 1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641"
-                        }
-                      }
-                    ],
                     "ComponentTransform": [
                       {
                         "ƒ.ComponentTransform": {
                           "local": {
-                            "translation": "[0, -0.20000000298023224, 0]",
+                            "translation": "[0, -44, 0]",
                             "rotation": "[0, 0, 0]",
-                            "scaling": "[7, 5, 12]"
+                            "scaling": "[0.5999999046325684, 1, 0.49999991059303284]"
                           },
                           "Component": {
                             "active": true
@@ -6070,119 +6079,14 @@
                       }
                     ]
                   },
-                  "children": []
-                }
-              },
-              {
-                "ƒ.Node": {
-                  "name": "Boulder",
-                  "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
-                          "pivot": {
-                            "translation": "[0, 0, 0]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[1, 1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
+                  "children": [
+                    {
+                      "ƒ.GraphInstance": {
+                        "deserializeFromSource": true,
+                        "idSource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649"
                       }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641"
-                        }
-                      }
-                    ],
-                    "ComponentTransform": [
-                      {
-                        "ƒ.ComponentTransform": {
-                          "local": {
-                            "translation": "[12, -5, 14]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[3, 5, 3]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "children": []
-                }
-              },
-              {
-                "ƒ.Node": {
-                  "name": "Boulder",
-                  "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
-                          "pivot": {
-                            "translation": "[0, 0, 0]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[1, 1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641"
-                        }
-                      }
-                    ],
-                    "ComponentTransform": [
-                      {
-                        "ƒ.ComponentTransform": {
-                          "local": {
-                            "translation": "[16, -2, -18]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[3, 5, 3]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "children": []
+                    }
+                  ]
                 }
               }
             ]
@@ -6413,11 +6317,73 @@
               }
             }
           }
+        ],
+        "ComponentFog": [
+          {
+            "ƒ.ComponentFog": {
+              "color": "[1, 1, 1, 0.46]",
+              "near": 30,
+              "far": 180,
+              "Component": {
+                "active": true
+              }
+            }
+          }
         ]
       },
       "children": [],
       "idResource": "Graph|2024-06-28T07:32:49.098Z|23377",
       "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-06-28T14:02:31.959Z|70149": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\Cloud.glb"
+    }
+  },
+  "MaterialGLTF|2024-06-28T14:02:31.959Z|92440": {
+    "ƒ.MaterialGLTF": {
+      "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440",
+      "name": "Cloud",
+      "url": "Assets\\Decorations\\Cloud.glb"
+    }
+  },
+  "MeshGLTF|2024-06-28T14:02:31.959Z|20765": {
+    "ƒ.MeshGLTF": {
+      "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765",
+      "name": "Cloud.003",
+      "url": "Assets\\Decorations\\Cloud.glb",
+      "iPrimitive": 0
+    }
+  },
+  "GraphGLTF|2024-06-28T14:04:16.312Z|32649": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\Mountain01.glb"
+    }
+  },
+  "MaterialGLTF|2024-06-28T14:04:16.312Z|86685": {
+    "ƒ.MaterialGLTF": {
+      "idResource": "MaterialGLTF|2024-06-28T14:04:16.312Z|86685",
+      "name": "Material.001",
+      "url": "Assets\\Decorations\\Mountain01.glb"
+    }
+  },
+  "MeshGLTF|2024-06-28T14:04:16.312Z|23791": {
+    "ƒ.MeshGLTF": {
+      "idResource": "MeshGLTF|2024-06-28T14:04:16.312Z|23791",
+      "name": "MeshBoulder.016",
+      "url": "Assets\\Decorations\\Mountain01.glb",
+      "iPrimitive": 0
     }
   }
 }
