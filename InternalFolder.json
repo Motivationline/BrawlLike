@@ -73,6 +73,14 @@
           },
           {
             "idResource": "MeshCube|2024-06-27T09:39:02.161Z|07120"
+          },
+          {
+            "name": "Boulder",
+            "entries": [
+              {
+                "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061"
+              }
+            ]
           }
         ]
       },
