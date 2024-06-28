@@ -5998,7 +5998,7 @@
                               "ƒ.ComponentTransform": {
                                 "local": {
                                   "translation": "[0, 0, 0]",
-                                  "rotation": "[180, 9.320495822241762, 0]",
+                                  "rotation": "[180, 0, 0]",
                                   "scaling": "[200, 200, 200]"
                                 },
                                 "Component": {
@@ -6435,15 +6435,15 @@
                         "time": 0,
                         "value": 0,
                         "interpolation": 2,
-                        "slopeIn": 0.0060457676719987245,
-                        "slopeOut": 0.0060457676719987245
+                        "slopeIn": 0.0030095571241137075,
+                        "slopeOut": 0.0030095571241137075
                       },
                       {
-                        "time": 60000.00000000001,
+                        "time": 120000.00000000001,
                         "value": 360,
                         "interpolation": 2,
-                        "slopeIn": 0.00595988799257161,
-                        "slopeOut": 0.00595988799257161
+                        "slopeIn": 0.0036093103304088883,
+                        "slopeOut": 0.0036093103304088883
                       }
                     ],
                     "animationSequence": true
@@ -6475,15 +6475,15 @@
                         "time": 0,
                         "value": 0,
                         "interpolation": 2,
-                        "slopeIn": 0.0030193365028667305,
-                        "slopeOut": 0.0030193365028667305
+                        "slopeIn": 0.0010006231949846501,
+                        "slopeOut": 0.0010006231949846501
                       },
                       {
-                        "time": 119850.00000000001,
+                        "time": 360200,
                         "value": 360,
                         "interpolation": 2,
-                        "slopeIn": 0.0030253346380615396,
-                        "slopeOut": 0.0030253346380615396
+                        "slopeIn": 0.0009974005759991922,
+                        "slopeOut": 0.0009974005759991922
                       }
                     ],
                     "animationSequence": true
