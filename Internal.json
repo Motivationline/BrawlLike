@@ -5905,6 +5905,34 @@
             "children": [
               {
                 "ƒ.Node": {
+                  "name": "PointLightBack",
+                  "active": true,
+                  "components": {
+                    "ComponentLight": [
+                      {
+                        "ƒ.ComponentLight": {
+                          "pivot": {
+                            "translation": "[0, -6, -11]",
+                            "rotation": "[130, 0, 0]",
+                            "scaling": "[20, 20, 20]"
+                          },
+                          "light": {
+                            "ƒ.LightPoint": {
+                              "color": "[1, 1, 1, 1]"
+                            }
+                          },
+                          "Component": {
+                            "active": true
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              },
+              {
+                "ƒ.Node": {
                   "name": "Light01",
                   "active": true,
                   "components": {
@@ -5912,12 +5940,40 @@
                       {
                         "ƒ.ComponentLight": {
                           "pivot": {
-                            "translation": "[0, 20, 10]",
-                            "rotation": "[130, 0, 0]",
-                            "scaling": "[200, 200, 200]"
+                            "translation": "[-18, 30, -4]",
+                            "rotation": "[75, 0, 20]",
+                            "scaling": "[20, 20, 20]"
                           },
                           "light": {
-                            "ƒ.LightAmbient": {
+                            "ƒ.LightDirectional": {
+                              "color": "[1, 1, 1, 1]"
+                            }
+                          },
+                          "Component": {
+                            "active": true
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "PointLightFront",
+                  "active": true,
+                  "components": {
+                    "ComponentLight": [
+                      {
+                        "ƒ.ComponentLight": {
+                          "pivot": {
+                            "translation": "[16, -16, 21]",
+                            "rotation": "[130, 0, 0]",
+                            "scaling": "[120, 120, 120]"
+                          },
+                          "light": {
+                            "ƒ.LightPoint": {
                               "color": "[1, 1, 1, 1]"
                             }
                           },
@@ -6122,9 +6178,9 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[0, 36, 0]",
+                                  "translation": "[-10, 20, 0]",
                                   "rotation": "[180, 0, 0]",
-                                  "scaling": "[31, 51, 41]"
+                                  "scaling": "[18, 53, 18]"
                                 },
                                 "Component": {
                                   "active": true
@@ -6412,8 +6468,8 @@
               "far": 2000,
               "aspect": 1.6280701754385964,
               "pivot": {
-                "translation": "[0, 10, 10]",
-                "rotation": "[45, 180, 0]",
+                "translation": "[0, 12, 9]",
+                "rotation": "[50, 180, 0]",
                 "scaling": "[1, 1, 1]"
               },
               "Component": {
@@ -6473,21 +6529,6 @@
       "idResource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649",
       "type": "GraphGLTF",
       "url": "Assets\\Decorations\\Mountain01.glb"
-    }
-  },
-  "MaterialGLTF|2024-06-28T14:04:16.312Z|86685": {
-    "ƒ.MaterialGLTF": {
-      "idResource": "MaterialGLTF|2024-06-28T14:04:16.312Z|86685",
-      "name": "Material.001",
-      "url": "Assets\\Decorations\\Mountain01.glb"
-    }
-  },
-  "MeshGLTF|2024-06-28T14:04:16.312Z|23791": {
-    "ƒ.MeshGLTF": {
-      "idResource": "MeshGLTF|2024-06-28T14:04:16.312Z|23791",
-      "name": "MeshBoulder.016",
-      "url": "Assets\\Decorations\\Mountain01.glb",
-      "iPrimitive": 0
     }
   },
   "MeshPyramid|2024-06-28T11:42:43.929Z|66964": {
