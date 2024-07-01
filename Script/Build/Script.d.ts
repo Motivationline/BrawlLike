@@ -75,6 +75,8 @@ declare namespace Script {
         protected move(): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {

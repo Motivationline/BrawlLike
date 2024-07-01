@@ -302,6 +302,18 @@ var Script;
             delete _mutator.direction;
             delete _mutator.rotationWrapperMatrix;
         }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                speed: this.speed
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            await super.deserialize(_serialization[super.constructor.name]);
+            this.speed = _serialization.speed;
+            return this;
+        }
     }
     Script.ComponentBrawler = ComponentBrawler;
 })(Script || (Script = {}));

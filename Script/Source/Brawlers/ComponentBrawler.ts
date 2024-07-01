@@ -67,5 +67,21 @@ namespace Script {
       delete _mutator.direction;
       delete _mutator.rotationWrapperMatrix;
     }
+
+    public serialize(): ƒ.Serialization {
+      let serialization: ƒ.Serialization = {
+        [super.constructor.name]: super.serialize(),
+        speed: this.speed
+      };
+
+      return serialization;
+    }
+
+    public async deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable> {
+      await super.deserialize(_serialization[super.constructor.name]);
+      this.speed = _serialization.speed;
+
+      return this;
+    }
   }
 }
