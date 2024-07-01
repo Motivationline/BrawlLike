@@ -86,20 +86,13 @@
       "iPrimitive": 0
     }
   },
-  "MaterialGLTF|2024-06-27T13:46:19.092Z|00641": {
-    "ƒ.MaterialGLTF": {
-      "idResource": "MaterialGLTF|2024-06-27T13:46:19.092Z|00641",
-      "name": "MatFloor",
-      "url": "Assets\\Floor\\floor.glb"
-    }
-  },
   "Animation|2024-06-28T14:49:00.996Z|86706": {
     "ƒ.Animation": {
       "idResource": "Animation|2024-06-28T14:49:00.996Z|86706",
       "name": "CloudRotationSlow",
       "labels": {},
       "events": {},
-      "framesPerSecond": 60,
+      "framesPerSecond": 120,
       "animationStructure": {
         "components": {
           "ComponentTransform": {
@@ -6178,9 +6171,9 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[-10, 20, 0]",
+                                  "translation": "[0, 29, 0]",
                                   "rotation": "[180, 0, 0]",
-                                  "scaling": "[18, 53, 18]"
+                                  "scaling": "[38, 53, 38]"
                                 },
                                 "Component": {
                                   "active": true
@@ -6439,13 +6432,6 @@
       "url": "Assets\\Floor\\floor.glb"
     }
   },
-  "MaterialGLTF|2024-06-27T13:47:35.746Z|21044": {
-    "ƒ.MaterialGLTF": {
-      "idResource": "MaterialGLTF|2024-06-27T13:47:35.746Z|21044",
-      "name": "MatFloor",
-      "url": "Assets\\Floor\\floor.glb"
-    }
-  },
   "Graph|2024-06-28T07:32:49.098Z|23377": {
     "ƒ.Graph": {
       "name": "CameraBrawler",
@@ -6468,7 +6454,7 @@
               "far": 2000,
               "aspect": 1.6280701754385964,
               "pivot": {
-                "translation": "[0, 12, 9]",
+                "translation": "[0, 15, 12]",
                 "rotation": "[50, 180, 0]",
                 "scaling": "[1, 1, 1]"
               },
