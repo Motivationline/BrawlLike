@@ -6136,7 +6136,7 @@
                             {
                               "ƒ.ComponentAnimator": {
                                 "Component": {
-                                  "active": false
+                                  "active": true
                                 },
                                 "idAnimation": "Animation|2024-06-28T14:43:31.368Z|52613",
                                 "playmode": "loop",
@@ -6703,7 +6703,7 @@
                     "local": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[1, 1, 1]"
+                      "scaling": "[2, 2, 2]"
                     },
                     "Component": {
                       "active": true
