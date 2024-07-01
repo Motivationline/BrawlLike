@@ -27,6 +27,25 @@ var Script;
             super.reduceMutator(_mutator);
             delete _mutator.rigidbody;
         }
+        getMutator(_extendable) {
+            let mutator = super.getMutator(true);
+            mutator.health = this.health;
+            return mutator;
+        }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                health: this.health,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.health != null)
+                this.health = _serialization.health;
+            return this;
+        }
     }
     Script.Damagable = Damagable;
 })(Script || (Script = {}));
@@ -310,8 +329,10 @@ var Script;
             return serialization;
         }
         async deserialize(_serialization) {
-            await super.deserialize(_serialization[super.constructor.name]);
-            this.speed = _serialization.speed;
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.speed != null)
+                this.speed = _serialization.speed;
             return this;
         }
     }

@@ -57,7 +57,7 @@ namespace Script {
         this.rotationWrapperMatrix.lookIn(this.direction);
     }
 
-    
+
     protected death(): void {
       console.log("I died.", this);
     }
@@ -78,8 +78,10 @@ namespace Script {
     }
 
     public async deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable> {
-      await super.deserialize(_serialization[super.constructor.name]);
-      this.speed = _serialization.speed;
+      if (_serialization[super.constructor.name] != null)
+        await super.deserialize(_serialization[super.constructor.name]);
+      if (_serialization.speed != null)
+        this.speed = _serialization.speed;
 
       return this;
     }

@@ -9,6 +9,9 @@ declare namespace Script {
         set health(_amt: number);
         protected abstract death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+        getMutator(_extendable?: boolean): ƒ.Mutator;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {
