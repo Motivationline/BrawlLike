@@ -6303,7 +6303,13 @@
         "ComponentBrawler": [
           {
             "Script.ComponentBrawler": {
-              "active": true
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 2.1
             }
           }
         ]
@@ -6542,7 +6548,7 @@
               "local": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[1, 1, 1]"
+                "scaling": "[0.5000000000000001, 0.5000000000000001, 0.5000000000000001]"
               },
               "Component": {
                 "active": true
@@ -6713,7 +6719,13 @@
         "Cowboy": [
           {
             "Script.Cowboy": {
-              "active": true
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 2
             }
           }
         ],
