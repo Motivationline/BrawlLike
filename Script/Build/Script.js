@@ -110,13 +110,21 @@ var Script;
             Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
         };
         leftclick = (_event) => {
-            _event.preventDefault();
-            console.log("leftclick", _event);
+            this.tryToAttack(Script.ATTACK_TYPE.MAIN, _event);
         };
         rightclick = (_event) => {
-            _event.preventDefault();
-            console.log("rightclick", _event);
+            this.tryToAttack(Script.ATTACK_TYPE.SPECIAL, _event);
         };
+        tryToAttack(_atk, _event) {
+            _event.preventDefault();
+            let pb = Script.EntityManager.Instance.playerBrawler;
+            if (!pb)
+                return;
+            let playerPos = Script.viewport.pointWorldToClient(pb.node.mtxWorld.translation);
+            let clientPos = Script.viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
+            let direction = ƒ.Vector2.DIFFERENCE(clientPos, playerPos).normalize();
+            Script.EntityManager.Instance.playerBrawler?.attack(_atk, direction);
+        }
     }
     Script.InputManager = InputManager;
 })(Script || (Script = {}));
@@ -127,6 +135,7 @@ var Script;
         static Instance;
         brawlers = [];
         playerBrawler;
+        projectiles = [];
         constructor() {
             if (EntityManager.Instance)
                 return EntityManager.Instance;
@@ -159,6 +168,13 @@ var Script;
             let cb = instance.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             this.brawlers.push(cb);
             return cb;
+        }
+        addProjectile(_instance, _component, _parent) {
+            if (!_parent) {
+                _parent = this.node;
+            }
+            this.projectiles.push(_component);
+            _parent.addChild(_instance);
         }
         update = () => {
             for (let b of this.brawlers) {
@@ -223,19 +239,42 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    class ComponentMainAttack extends ƒ.Component {
+        reloadTime = 1;
+        minDelayBetweenAttacks = 0.3;
+        damage = 100;
+        castTime = 0.05;
+        maxCharges = 3;
+        charges = 3;
+        attack(_direction) {
+            if (this.charges == 0)
+                return false;
+            return true;
+        }
+        reduceMutator(_mutator) {
+            delete _mutator.charges;
+        }
+    }
+    Script.ComponentMainAttack = ComponentMainAttack;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     class ComponentProjectile extends ƒ.Component {
         gravity = false;
         rotateInDirection = true;
         damage = 100;
         speed = 10;
-        range = 10;
+        range = 3;
         #rb;
         #owner;
+        #startPosition;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
+            ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
         }
         init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
@@ -243,21 +282,119 @@ var Script;
             this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
         };
         fire(_direction, _owner) {
-            this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
             this.#owner = _owner;
+            if (this.rotateInDirection) {
+                this.node.mtxLocal.lookIn(new ƒ.Vector3(_direction.x, 0, _direction.y));
+            }
+            else {
+                this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
+            }
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
                 return;
             //TODO do team check
-            _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable).health -= this.damage;
+            let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
             this.explode();
+            if (!damagable)
+                return;
+            damagable.health -= this.damage;
         };
         explode() {
             this.node.getParent().removeChild(this.node);
         }
+        moveToPosition(_pos) {
+            let rb = this.node.getComponent(ƒ.ComponentRigidbody);
+            rb.activate(false);
+            this.#startPosition = _pos;
+            this.node.mtxLocal.translation = _pos;
+            rb.activate(true);
+        }
+        loop = () => {
+            if (!this.#startPosition)
+                return;
+            let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
+            if (distance > this.range * this.range) {
+                this.node.getParent().removeChild(this.node);
+            }
+        };
     }
     Script.ComponentProjectile = ComponentProjectile;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ComponentProjectileMainAttack extends Script.ComponentMainAttack {
+        speed = 2;
+        range = 10;
+        rotateInDirection = false;
+        attachedToBrawler = false;
+        attack(_direction) {
+            if (!super.attack(_direction))
+                return false;
+            this.shootProjectile(_direction);
+        }
+        async shootProjectile(_direction) {
+            let projectile = ƒ.Project.getResourcesByName("DefaultProjectile")[0];
+            let instance = await ƒ.Project.createGraphInstance(projectile);
+            let projectileComponent = instance.getAllComponents().find(c => c instanceof Script.ComponentProjectile);
+            projectileComponent.damage = this.damage;
+            projectileComponent.speed = this.speed;
+            projectileComponent.range = this.range;
+            projectileComponent.rotateInDirection = this.rotateInDirection;
+            let parent = this.attachedToBrawler ? this.node : undefined;
+            Script.EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
+            projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
+            projectileComponent.fire(_direction, this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler));
+        }
+    }
+    Script.ComponentProjectileMainAttack = ComponentProjectileMainAttack;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ComponentSpecialAttack extends ƒ.Component {
+        damage = 100;
+        castTime = 0.05;
+        requiredCharge = 500;
+        currentCharge = 0;
+        charge(_amt) {
+            this.currentCharge = Math.min(this.currentCharge + _amt, this.requiredCharge);
+        }
+        attack(_direction) {
+            if (this.currentCharge < this.requiredCharge)
+                return false;
+            return true;
+        }
+        reduceMutator(_mutator) {
+            delete _mutator.currentCharge;
+        }
+    }
+    Script.ComponentSpecialAttack = ComponentSpecialAttack;
+})(Script || (Script = {}));
+///<reference path="../ComponentProjectileMainAttack.ts" />
+var Script;
+///<reference path="../ComponentProjectileMainAttack.ts" />
+(function (Script) {
+    class CowboyMainAttack extends Script.ComponentProjectileMainAttack {
+        attack(_direction) {
+            if (!super.attack(_direction))
+                return false;
+            return true;
+        }
+    }
+    Script.CowboyMainAttack = CowboyMainAttack;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    class CowboySpecialAttack extends Script.ComponentSpecialAttack {
+        attack(_direction) {
+            if (!super.attack(_direction))
+                return false;
+            return true;
+        }
+    }
+    Script.CowboySpecialAttack = CowboySpecialAttack;
 })(Script || (Script = {}));
 ///<reference path="../Damagable.ts"/>
 var Script;
@@ -272,6 +409,9 @@ var Script;
         speed = 1;
         direction = new ƒ.Vector3();
         rotationWrapperMatrix;
+        attackMain;
+        attackSpecial;
+        #timer;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -295,9 +435,17 @@ var Script;
                     this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
                     this.rigidbody.effectRotation = new ƒ.Vector3();
                     this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
+                    this.findAttacks();
                     break;
             }
         };
+        findAttacks() {
+            let components = this.node.getAllComponents();
+            this.attackMain = components.find(c => c instanceof Script.ComponentMainAttack);
+            this.attackSpecial = components.find(c => c instanceof Script.ComponentSpecialAttack);
+            if (!this.attackMain || !this.attackSpecial)
+                console.error(`${this.node.name} doesn't have attacks attached.`);
+        }
         setMovement(_direction) {
             this.direction = _direction;
         }
@@ -313,6 +461,16 @@ var Script;
             if (this.direction.magnitudeSquared > 0)
                 this.rotationWrapperMatrix.lookIn(this.direction);
         }
+        attack(_atk, _direction) {
+            switch (_atk) {
+                case ATTACK_TYPE.MAIN:
+                    this.attackMain.attack(_direction);
+                    break;
+                case ATTACK_TYPE.SPECIAL:
+                    this.attackSpecial.attack(_direction);
+                    break;
+            }
+        }
         death() {
             console.log("I died.", this);
         }
@@ -320,6 +478,8 @@ var Script;
             super.reduceMutator(_mutator);
             delete _mutator.direction;
             delete _mutator.rotationWrapperMatrix;
+            delete _mutator.attackMain;
+            delete _mutator.attackSpecial;
         }
         serialize() {
             let serialization = {
@@ -337,6 +497,11 @@ var Script;
         }
     }
     Script.ComponentBrawler = ComponentBrawler;
+    let ATTACK_TYPE;
+    (function (ATTACK_TYPE) {
+        ATTACK_TYPE[ATTACK_TYPE["MAIN"] = 0] = "MAIN";
+        ATTACK_TYPE[ATTACK_TYPE["SPECIAL"] = 1] = "SPECIAL";
+    })(ATTACK_TYPE = Script.ATTACK_TYPE || (Script.ATTACK_TYPE = {}));
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

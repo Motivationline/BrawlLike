@@ -37,12 +37,20 @@ namespace Script {
         }
 
         leftclick = (_event: MouseEvent) => {
-            _event.preventDefault();
-            console.log("leftclick", _event)
+            this.tryToAttack(ATTACK_TYPE.MAIN, _event);
         }
         rightclick = (_event: MouseEvent) => {
+            this.tryToAttack(ATTACK_TYPE.SPECIAL, _event);
+        }
+
+        private tryToAttack(_atk: ATTACK_TYPE, _event: MouseEvent) {
             _event.preventDefault();
-            console.log("rightclick", _event)
+            let pb = EntityManager.Instance.playerBrawler;
+            if (!pb) return;
+            let playerPos = viewport.pointWorldToClient(pb.node.mtxWorld.translation);
+            let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
+            let direction = ƒ.Vector2.DIFFERENCE(clientPos, playerPos).normalize();
+            EntityManager.Instance.playerBrawler?.attack(_atk, direction);
         }
     }
 }

@@ -4,6 +4,7 @@ namespace Script {
         static Instance: EntityManager;
         brawlers: ComponentBrawler[] = [];
         playerBrawler: ComponentBrawler;
+        projectiles: ComponentProjectile[] = [];
 
         constructor() {
             if (EntityManager.Instance) return EntityManager.Instance;
@@ -39,6 +40,14 @@ namespace Script {
             let cb = <ComponentBrawler>instance.getAllComponents().find(c => c instanceof ComponentBrawler);
             this.brawlers.push(cb);
             return cb;
+        }
+
+        public addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node){
+            if(!_parent){
+                _parent = this.node;
+            }
+            this.projectiles.push(_component);
+            _parent.addChild(_instance);
         }
 
         update = () => {

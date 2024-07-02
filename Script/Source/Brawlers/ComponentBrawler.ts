@@ -10,6 +10,9 @@ namespace Script {
     public speed: number = 1;
     protected direction: ƒ.Vector3 = new ƒ.Vector3();
     protected rotationWrapperMatrix: ƒ.Matrix4x4;
+    protected attackMain: ComponentMainAttack;
+    protected attackSpecial: ComponentSpecialAttack;
+    #timer: ƒ.Timer;
 
     constructor() {
       super();
@@ -37,8 +40,16 @@ namespace Script {
           this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
           this.rigidbody.effectRotation = new ƒ.Vector3();
           this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
+          this.findAttacks();
           break;
       }
+    }
+
+    private findAttacks() {
+      let components = this.node.getAllComponents();
+      this.attackMain = <ComponentMainAttack>components.find(c => c instanceof ComponentMainAttack);
+      this.attackSpecial = <ComponentSpecialAttack>components.find(c => c instanceof ComponentSpecialAttack);
+      if (!this.attackMain || !this.attackSpecial) console.error(`${this.node.name} doesn't have attacks attached.`);
     }
 
     public setMovement(_direction: ƒ.Vector3) {
@@ -57,6 +68,17 @@ namespace Script {
         this.rotationWrapperMatrix.lookIn(this.direction);
     }
 
+    attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector2) {
+      switch (_atk) {
+        case ATTACK_TYPE.MAIN:
+          this.attackMain.attack(_direction);
+          break;
+        case ATTACK_TYPE.SPECIAL:
+          this.attackSpecial.attack(_direction);
+          break;
+      }
+    }
+
 
     protected death(): void {
       console.log("I died.", this);
@@ -66,6 +88,8 @@ namespace Script {
       super.reduceMutator(_mutator);
       delete _mutator.direction;
       delete _mutator.rotationWrapperMatrix;
+      delete _mutator.attackMain;
+      delete _mutator.attackSpecial;
     }
 
     public serialize(): ƒ.Serialization {
@@ -85,5 +109,10 @@ namespace Script {
 
       return this;
     }
+  }
+
+  export enum ATTACK_TYPE {
+    MAIN,
+    SPECIAL
   }
 }

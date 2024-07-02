@@ -6716,6 +6716,20 @@
               "active": true
             }
           }
+        ],
+        "CowboySpecialAttack": [
+          {
+            "Script.CowboySpecialAttack": {
+              "active": true
+            }
+          }
+        ],
+        "CowboyMainAttack": [
+          {
+            "Script.CowboyMainAttack": {
+              "active": true
+            }
+          }
         ]
       },
       "children": [
