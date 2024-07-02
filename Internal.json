@@ -166,6 +166,22 @@
       }
     }
   },
+  "Material|2024-07-01T14:25:52.589Z|65245": {
+    "ƒ.Material": {
+      "name": "Rock",
+      "idResource": "Material|2024-07-01T14:25:52.589Z|65245",
+      "shader": "ShaderFlat",
+      "coat": {
+        "ƒ.CoatRemissive": {
+          "color": "[0.996078431372549, 0.7411764705882353, 0.5215686274509804, 1]",
+          "diffuse": 1,
+          "specular": 0.5,
+          "intensity": 0.7,
+          "metallic": 0
+        }
+      }
+    }
+  },
   "Graph|2024-06-26T12:09:52.220Z|08626": {
     "ƒ.Graph": {
       "name": "Map",
@@ -6028,7 +6044,7 @@
                 {
                   "ƒ.ComponentTransform": {
                     "local": {
-                      "translation": "[0, 13, 0]",
+                      "translation": "[0, 12.849995613098145, 0]",
                       "rotation": "[0, 0, 0]",
                       "scaling": "[1, 1, 1]"
                     },
@@ -6103,7 +6119,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[0, -15, 0]",
+                                  "translation": "[0, -27, 0]",
                                   "rotation": "[-90, 0, 0]",
                                   "scaling": "[200, 200, 1]"
                                 },
@@ -6126,7 +6142,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[0, 0, 0]",
+                                  "translation": "[0, -10, 0]",
                                   "rotation": "[180, 0, 0]",
                                   "scaling": "[200, 200, 200]"
                                 },
@@ -6229,7 +6245,7 @@
                           "local": {
                             "translation": "[0, -44, 0]",
                             "rotation": "[0, 0, 0]",
-                            "scaling": "[0.5999999046325684, 1, 0.49999991059303284]"
+                            "scaling": "[1, 1, 1]"
                           },
                           "Component": {
                             "active": true
@@ -6548,7 +6564,7 @@
               "local": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[0.5000000000000001, 0.5000000000000001, 0.5000000000000001]"
+                "scaling": "[0.5, 0.5, 0.5]"
               },
               "Component": {
                 "active": true
