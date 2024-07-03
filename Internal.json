@@ -6772,6 +6772,121 @@
                     "local": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-03T10:46:00.190Z|12042"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-06-28T13:29:09.815Z|45211",
+      "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-07-03T10:46:00.190Z|12042": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-03T10:46:00.190Z|12042",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\cowgirl.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-03T10:46:00.190Z|07395": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395",
+      "name": "Walk",
+      "url": "Assets\\Chars\\cowgirl.glb",
+      "framesPerSecond": 60
+    }
+  },
+  "Graph|2024-07-03T10:49:01.241Z|11869": {
+    "ƒ.Graph": {
+      "name": "BrawlerKamera",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "CAPSULE",
+              "isTrigger": false,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0.5, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5, 0.5999999642372131, 0.5999999642372131]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
                       "scaling": "[2, 2, 2]"
                     },
                     "Component": {
@@ -6792,7 +6907,7 @@
           }
         }
       ],
-      "idResource": "Graph|2024-06-28T13:29:09.815Z|45211",
+      "idResource": "Graph|2024-07-03T10:49:01.241Z|11869",
       "type": "Graph"
     }
   }
