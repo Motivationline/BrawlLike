@@ -10,6 +10,14 @@
             "entries": [
               {
                 "idResource": "Graph|2024-06-28T11:41:35.981Z|68015"
+              },
+              {
+                "name": "Potato",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-03T13:54:28.282Z|18007"
+                  }
+                ]
               }
             ]
           }
@@ -141,10 +149,26 @@
             "name": "Bush",
             "entries": [
               {
-                "idResource": "GraphGLTF|2024-07-03T11:42:32.879Z|66946"
+                "idResource": "Graph|2024-07-03T11:44:47.273Z|33490"
               },
               {
-                "idResource": "Graph|2024-07-03T11:44:47.273Z|33490"
+                "name": "With Animation",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-03T13:04:23.278Z|36622"
+                  },
+                  {
+                    "idResource": "AnimationGLTF|2024-07-03T13:04:23.278Z|23591"
+                  }
+                ]
+              },
+              {
+                "name": "No Animation",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-03T13:06:52.197Z|44245"
+                  }
+                ]
               }
             ]
           }
