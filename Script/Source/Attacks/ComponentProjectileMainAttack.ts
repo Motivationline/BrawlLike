@@ -3,7 +3,7 @@ namespace Script {
     export class ComponentProjectileMainAttack extends ComponentMainAttack {
         speed: number = 2;
         range: number = 10;
-        rotateInDirection: boolean = false;
+        rotateInDirection: boolean = true;
         attachedToBrawler: boolean = false;
 
         attack(_direction: ƒ.Vector2): boolean {

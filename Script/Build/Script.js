@@ -300,9 +300,7 @@ var Script;
             if (this.rotateInDirection) {
                 this.node.mtxLocal.lookIn(new ƒ.Vector3(_direction.x, 0, _direction.y));
             }
-            else {
-                this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
-            }
+            this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
@@ -346,7 +344,7 @@ var Script;
     class ComponentProjectileMainAttack extends Script.ComponentMainAttack {
         speed = 2;
         range = 10;
-        rotateInDirection = false;
+        rotateInDirection = true;
         attachedToBrawler = false;
         attack(_direction) {
             if (!super.attack(_direction))

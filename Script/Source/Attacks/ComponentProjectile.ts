@@ -28,10 +28,8 @@ namespace Script {
             this.#owner = _owner;
             if (this.rotateInDirection) {
                 this.node.mtxLocal.lookIn(new ƒ.Vector3(_direction.x, 0, _direction.y));
-
-            } else {
-                this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
             }
+            this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
         }
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
