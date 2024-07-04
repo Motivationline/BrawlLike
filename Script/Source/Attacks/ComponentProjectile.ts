@@ -49,7 +49,7 @@ namespace Script {
         }
 
         protected explode() {
-            this.node.getParent().removeChild(this.node);
+            EntityManager.Instance.removeProjectile(this);
         }
 
         moveToPosition(_pos: ƒ.Vector3) {
@@ -64,7 +64,7 @@ namespace Script {
             if (!this.#startPosition) return;
             let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
             if (distance > this.range * this.range) {
-                this.node.getParent().removeChild(this.node);
+                this.explode();
             }
         }
 

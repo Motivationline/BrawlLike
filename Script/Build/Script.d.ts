@@ -46,6 +46,7 @@ declare namespace Script {
         loadBrawler: (_playerBrawler?: string) => Promise<void>;
         private initBrawler;
         addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node): void;
+        removeProjectile(_proj: ComponentProjectile): void;
         update: () => void;
     }
 }

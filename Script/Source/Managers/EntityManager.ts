@@ -42,16 +42,24 @@ namespace Script {
             return cb;
         }
 
-        public addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node){
-            if(!_parent){
+        public addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node) {
+            if (!_parent) {
                 _parent = this.node;
             }
             this.projectiles.push(_component);
             _parent.addChild(_instance);
         }
 
+        public removeProjectile(_proj: ComponentProjectile) {
+            _proj.node?.getParent()?.removeChild(_proj.node);
+            let index: number = this.projectiles.indexOf(_proj);
+            if (index >= 0) {
+                this.projectiles.splice(index, 1);
+            }
+        }
+
         update = () => {
-            for(let b of this.brawlers){
+            for (let b of this.brawlers) {
                 b.update();
             }
         }

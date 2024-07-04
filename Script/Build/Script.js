@@ -183,6 +183,13 @@ var Script;
             this.projectiles.push(_component);
             _parent.addChild(_instance);
         }
+        removeProjectile(_proj) {
+            _proj.node?.getParent()?.removeChild(_proj.node);
+            let index = this.projectiles.indexOf(_proj);
+            if (index >= 0) {
+                this.projectiles.splice(index, 1);
+            }
+        }
         update = () => {
             for (let b of this.brawlers) {
                 b.update();
@@ -313,7 +320,7 @@ var Script;
             damagable.health -= this.damage;
         };
         explode() {
-            this.node.getParent().removeChild(this.node);
+            Script.EntityManager.Instance.removeProjectile(this);
         }
         moveToPosition(_pos) {
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
@@ -327,7 +334,7 @@ var Script;
                 return;
             let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
             if (distance > this.range * this.range) {
-                this.node.getParent().removeChild(this.node);
+                this.explode();
             }
         };
     }
