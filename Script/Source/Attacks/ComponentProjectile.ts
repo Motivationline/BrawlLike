@@ -26,9 +26,9 @@ namespace Script {
 
         public fire(_direction: ƒ.Vector2, _owner: ComponentBrawler) {
             this.#owner = _owner;
-            if(this.rotateInDirection) {
+            if (this.rotateInDirection) {
                 this.node.mtxLocal.lookIn(new ƒ.Vector3(_direction.x, 0, _direction.y));
-                
+
             } else {
                 this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
             }
@@ -37,9 +37,14 @@ namespace Script {
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody) return;
             //TODO do team check
+            // check if target has disable script
+            let noProjectile = _event.cmpRigidbody.node.getComponent(IgnoredByProjectiles);
+            if (noProjectile && noProjectile.isActive) return;
+
+            // check for damagable target
             let damagable: Damagable = (<Damagable>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Damagable));
             this.explode();
-            if(!damagable) return;
+            if (!damagable) return;
             damagable.health -= this.damage;
         }
 
@@ -47,7 +52,7 @@ namespace Script {
             this.node.getParent().removeChild(this.node);
         }
 
-        moveToPosition(_pos: ƒ.Vector3){
+        moveToPosition(_pos: ƒ.Vector3) {
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
             rb.activate(false);
             this.#startPosition = _pos;
@@ -56,9 +61,9 @@ namespace Script {
         }
 
         protected loop = () => {
-            if(!this.#startPosition) return;
+            if (!this.#startPosition) return;
             let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
-            if(distance > this.range * this.range) {
+            if (distance > this.range * this.range) {
                 this.node.getParent().removeChild(this.node);
             }
         }

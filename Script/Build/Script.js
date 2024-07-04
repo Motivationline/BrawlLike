@@ -52,6 +52,13 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    class IgnoredByProjectiles extends ƒ.Component {
+    }
+    Script.IgnoredByProjectiles = IgnoredByProjectiles;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     class MenuManager {
         constructor() {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -294,6 +301,11 @@ var Script;
             if (_event.cmpRigidbody === this.#owner.rigidbody)
                 return;
             //TODO do team check
+            // check if target has disable script
+            let noProjectile = _event.cmpRigidbody.node.getComponent(Script.IgnoredByProjectiles);
+            if (noProjectile && noProjectile.isActive)
+                return;
+            // check for damagable target
             let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
             this.explode();
             if (!damagable)

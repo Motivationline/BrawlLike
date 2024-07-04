@@ -15,6 +15,11 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    class IgnoredByProjectiles extends ƒ.Component {
+    }
+}
+declare namespace Script {
     class MenuManager {
         constructor();
         resourcesLoaded: () => void;

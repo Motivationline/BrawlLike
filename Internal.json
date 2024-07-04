@@ -763,6 +763,13 @@
                                       }
                                     }
                                   }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
                                 ]
                               },
                               "children": []
@@ -809,6 +816,13 @@
                                       "Component": {
                                         "active": true
                                       }
+                                    }
+                                  }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
                                     }
                                   }
                                 ]
@@ -859,6 +873,13 @@
                                       }
                                     }
                                   }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
                                 ]
                               },
                               "children": []
@@ -905,6 +926,13 @@
                                       "Component": {
                                         "active": true
                                       }
+                                    }
+                                  }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
                                     }
                                   }
                                 ]
@@ -5318,6 +5346,13 @@
               "Component": {
                 "active": true
               }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
             }
           }
         ]
