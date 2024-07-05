@@ -116,11 +116,31 @@ var Script;
             }
             Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
         };
-        leftclick = (_event) => {
-            this.tryToAttack(Script.ATTACK_TYPE.MAIN, _event);
+        mousedown = (_event) => {
+            _event.preventDefault();
+            if (_event.button == 0) {
+                Script.EntityManager.Instance.playerBrawler.showPreview(Script.ATTACK_TYPE.MAIN);
+            }
+            else if (_event.button == 2) {
+                Script.EntityManager.Instance.playerBrawler.showPreview(Script.ATTACK_TYPE.SPECIAL);
+            }
         };
-        rightclick = (_event) => {
-            this.tryToAttack(Script.ATTACK_TYPE.SPECIAL, _event);
+        mouseup = (_event) => {
+            _event.preventDefault();
+            if (_event.button == 0) {
+                this.tryToAttack(Script.ATTACK_TYPE.MAIN, _event);
+                Script.EntityManager.Instance.playerBrawler.hidePreview(Script.ATTACK_TYPE.MAIN);
+            }
+            else if (_event.button == 2) {
+                this.tryToAttack(Script.ATTACK_TYPE.SPECIAL, _event);
+                Script.EntityManager.Instance.playerBrawler.hidePreview(Script.ATTACK_TYPE.SPECIAL);
+            }
+        };
+        mousemove = (_event) => {
+            _event.preventDefault();
+            let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
+            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            Script.EntityManager.Instance.playerBrawler.mousePosition = clickPos;
         };
         tryToAttack(_atk, _event) {
             _event.preventDefault();
@@ -237,8 +257,10 @@ var Script;
         let camera = findFirstCameraInGraph(graph);
         viewport.initialize("GameViewport", graph, camera, canvas);
         canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
-        canvas.addEventListener("click", Script.InputManager.Instance.leftclick);
-        canvas.addEventListener("contextmenu", Script.InputManager.Instance.rightclick);
+        canvas.addEventListener("mousedown", Script.InputManager.Instance.mousedown);
+        canvas.addEventListener("mouseup", Script.InputManager.Instance.mouseup);
+        canvas.addEventListener("mousemove", Script.InputManager.Instance.mousemove);
+        canvas.addEventListener("contextmenu", (_e) => { _e.preventDefault(); });
     }
     Script.startViewport = startViewport;
     function findFirstCameraInGraph(_graph) {
@@ -490,7 +512,9 @@ var Script;
         rotationWrapperMatrix;
         attackMain;
         attackSpecial;
-        #timer;
+        #mainAttackPreviewActive = false;
+        #mainAttackPreview;
+        mousePosition = ƒ.Vector3.ZERO();
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -514,7 +538,10 @@ var Script;
                     this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
                     this.rigidbody.effectRotation = new ƒ.Vector3();
                     this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
+                    this.#mainAttackPreview = this.node.getChild(1);
+                    this.#mainAttackPreview?.activate(false);
                     this.findAttacks();
+                    this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
                     break;
             }
         };
@@ -534,6 +561,10 @@ var Script;
             if (!this.rigidbody.isActive)
                 this.rigidbody.activate(true);
             this.move();
+            if (this.#mainAttackPreviewActive) {
+                let newRotation = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation, this.mousePosition).rotation;
+                this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
+            }
         }
         move() {
             this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
@@ -549,6 +580,14 @@ var Script;
                     this.attackSpecial.attack(_direction);
                     break;
             }
+        }
+        showPreview(_atk) {
+            this.#mainAttackPreviewActive = true;
+            this.#mainAttackPreview.activate(true);
+        }
+        hidePreview(_atk) {
+            this.#mainAttackPreviewActive = false;
+            this.#mainAttackPreview.activate(false);
         }
         death() {
             console.log("I died.", this);

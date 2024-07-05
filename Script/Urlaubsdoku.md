@@ -16,10 +16,15 @@ Brawler
 | - ComponentMainAttack (bzw Brawlerspezifisch, z.B. CowboyMainAttack)
 | - ComponentSpecialAttack (bzw Brawlerspezifisch, z.B. CowboySpecialAttack)
 |
-└ wrapper (node so i can rotate the visuals properly)
-    | - Component Transform
-    |
-    └ GLTF Importet Scene
+├ wrapper (node so i can rotate the visuals properly)
+|   | - Component Transform
+|   |
+|   └ GLTF Importet Scene
+└ mainAttackPreview (node that has the main attack preview)
+    | - ComponentTransform
+    └ Node
+        - Comp.Mesh -> Quad
+        - Comp.Material
 ```
 
 +z ist vorwärts.

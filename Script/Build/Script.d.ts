@@ -30,8 +30,9 @@ declare namespace Script {
         static Instance: InputManager;
         constructor();
         update: () => void;
-        leftclick: (_event: MouseEvent) => void;
-        rightclick: (_event: MouseEvent) => void;
+        mousedown: (_event: MouseEvent) => void;
+        mouseup: (_event: MouseEvent) => void;
+        mousemove: (_event: MouseEvent) => void;
         private tryToAttack;
     }
 }
@@ -139,6 +140,7 @@ declare namespace Script {
         protected rotationWrapperMatrix: ƒ.Matrix4x4;
         protected attackMain: ComponentMainAttack;
         protected attackSpecial: ComponentSpecialAttack;
+        mousePosition: ƒ.Vector3;
         constructor();
         hndEvent: (_event: Event) => void;
         private findAttacks;
@@ -146,6 +148,8 @@ declare namespace Script {
         update(): void;
         protected move(): void;
         attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
+        showPreview(_atk: ATTACK_TYPE): void;
+        hidePreview(_atk: ATTACK_TYPE): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;

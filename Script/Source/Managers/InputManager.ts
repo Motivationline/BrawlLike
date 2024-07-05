@@ -36,11 +36,30 @@ namespace Script {
             EntityManager.Instance.playerBrawler?.setMovement(direction);
         }
 
-        leftclick = (_event: MouseEvent) => {
-            this.tryToAttack(ATTACK_TYPE.MAIN, _event);
+        mousedown = (_event: MouseEvent) => {
+            _event.preventDefault();
+            if(_event.button == 0){
+                EntityManager.Instance.playerBrawler.showPreview(ATTACK_TYPE.MAIN);
+            } else if(_event.button == 2){
+                EntityManager.Instance.playerBrawler.showPreview(ATTACK_TYPE.SPECIAL);
+            }
         }
-        rightclick = (_event: MouseEvent) => {
-            this.tryToAttack(ATTACK_TYPE.SPECIAL, _event);
+        mouseup = (_event: MouseEvent) => {
+            _event.preventDefault();
+            if(_event.button == 0){
+                this.tryToAttack(ATTACK_TYPE.MAIN, _event);
+                EntityManager.Instance.playerBrawler.hidePreview(ATTACK_TYPE.MAIN);
+            } else if (_event.button == 2){
+                this.tryToAttack(ATTACK_TYPE.SPECIAL, _event);
+                EntityManager.Instance.playerBrawler.hidePreview(ATTACK_TYPE.SPECIAL);
+            }
+        }
+
+        mousemove = (_event: MouseEvent) => {
+            _event.preventDefault();
+            let ray = viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
+            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            EntityManager.Instance.playerBrawler.mousePosition = clickPos;
         }
 
         private tryToAttack(_atk: ATTACK_TYPE, _event: MouseEvent) {

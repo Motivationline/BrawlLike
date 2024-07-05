@@ -12,7 +12,9 @@ namespace Script {
     protected rotationWrapperMatrix: ƒ.Matrix4x4;
     protected attackMain: ComponentMainAttack;
     protected attackSpecial: ComponentSpecialAttack;
-    #timer: ƒ.Timer;
+    #mainAttackPreviewActive: boolean = false;
+    #mainAttackPreview: ƒ.Node;
+    public mousePosition: ƒ.Vector3 = ƒ.Vector3.ZERO();
 
     constructor() {
       super();
@@ -40,7 +42,10 @@ namespace Script {
           this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
           this.rigidbody.effectRotation = new ƒ.Vector3();
           this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
+          this.#mainAttackPreview = this.node.getChild(1);
+          this.#mainAttackPreview?.activate(false);
           this.findAttacks();
+          this.#mainAttackPreview.mtxLocal.scaling.z = (<ComponentProjectileMainAttack>this.attackMain)?.range ?? 1;
           break;
       }
     }
@@ -60,6 +65,11 @@ namespace Script {
       if (!this.rigidbody) return;
       if (!this.rigidbody.isActive) this.rigidbody.activate(true);
       this.move();
+
+      if (this.#mainAttackPreviewActive) {
+        let newRotation: ƒ.Vector3 = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation,this.mousePosition).rotation;
+        this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
+      }
     }
 
     protected move() {
@@ -77,6 +87,16 @@ namespace Script {
           this.attackSpecial.attack(_direction);
           break;
       }
+    }
+
+    public showPreview(_atk: ATTACK_TYPE) {
+      this.#mainAttackPreviewActive = true;
+      this.#mainAttackPreview.activate(true);
+    }
+
+    public hidePreview(_atk: ATTACK_TYPE) {
+      this.#mainAttackPreviewActive = false;
+      this.#mainAttackPreview.activate(false);
     }
 
 

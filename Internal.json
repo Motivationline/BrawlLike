@@ -5632,6 +5632,72 @@
               }
             ]
           }
+        },
+        {
+          "ƒ.Node": {
+            "name": "mainAttackPreview",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.Node": {
+                  "name": "New Node",
+                  "active": true,
+                  "components": {
+                    "ComponentMesh": [
+                      {
+                        "ƒ.ComponentMesh": {
+                          "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+                          "pivot": {
+                            "translation": "[0, 0, 0.5]",
+                            "rotation": "[-90, 0, 0]",
+                            "scaling": "[1, 1, 1]"
+                          },
+                          "Component": {
+                            "active": true
+                          }
+                        }
+                      }
+                    ],
+                    "ComponentMaterial": [
+                      {
+                        "ƒ.ComponentMaterial": {
+                          "sortForAlpha": true,
+                          "clrPrimary": "[1, 1, 1, 1]",
+                          "clrSecondary": "[1, 1, 1, 1]",
+                          "pivot": {
+                            "translation": "[0, 0]",
+                            "rotation": 0,
+                            "scaling": "[1, 1]"
+                          },
+                          "Component": {
+                            "active": true
+                          },
+                          "idMaterial": "Material|2024-07-05T13:42:58.398Z|17443"
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              }
+            ]
+          }
         }
       ],
       "idResource": "Graph|2024-06-28T13:29:09.815Z|45211",
@@ -5889,6 +5955,37 @@
       "idResource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978",
       "type": "GraphGLTF",
       "url": "Assets\\Projectiles\\Tomato.glb"
+    }
+  },
+  "MeshQuad|2024-07-05T13:42:11.867Z|27267": {
+    "ƒ.MeshQuad": {
+      "idResource": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+      "name": "MeshQuad"
+    }
+  },
+  "TextureImage|2024-07-05T13:42:52.400Z|17225": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Projectiles\\Previews\\Default.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-07-05T13:42:52.400Z|17225",
+        "name": "Assets\\Projectiles\\Previews\\Default.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "Material|2024-07-05T13:42:58.398Z|17443": {
+    "ƒ.Material": {
+      "name": "ShaderLitTextured",
+      "idResource": "Material|2024-07-05T13:42:58.398Z|17443",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-07-05T13:42:52.400Z|17225"
+        }
+      }
     }
   }
 }

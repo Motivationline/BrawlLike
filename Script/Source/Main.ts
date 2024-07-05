@@ -45,8 +45,10 @@ namespace Script {
 
     canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
 
-    canvas.addEventListener("click", InputManager.Instance.leftclick);
-    canvas.addEventListener("contextmenu", InputManager.Instance.rightclick);
+    canvas.addEventListener("mousedown", InputManager.Instance.mousedown);
+    canvas.addEventListener("mouseup", InputManager.Instance.mouseup);
+    canvas.addEventListener("mousemove", InputManager.Instance.mousemove);
+    canvas.addEventListener("contextmenu", (_e)=>{_e.preventDefault();});
   }
 
   function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera {

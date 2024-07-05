@@ -28,6 +28,17 @@
                 ]
               }
             ]
+          },
+          {
+            "name": "Previews",
+            "entries": [
+              {
+                "idResource": "TextureImage|2024-07-05T13:42:52.400Z|17225"
+              },
+              {
+                "idResource": "Material|2024-07-05T13:42:58.398Z|17443"
+              }
+            ]
           }
         ]
       },
@@ -106,6 +117,9 @@
           },
           {
             "idResource": "MeshPyramid|2024-06-28T11:42:43.929Z|66964"
+          },
+          {
+            "idResource": "MeshQuad|2024-07-05T13:42:11.867Z|27267"
           }
         ]
       },
