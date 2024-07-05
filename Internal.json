@@ -5335,13 +5335,13 @@
               "dampRotation": 0.1,
               "effectGravity": 0,
               "typeBody": "DYNAMIC",
-              "typeCollider": "CAPSULE",
+              "typeCollider": "SPHERE",
               "isTrigger": true,
               "id": 0,
               "pivot": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[90, 0, 0]",
-                "scaling": "[0.20000001788139343, 0.20000001788139343, 0.20000001788139343]"
+                "scaling": "[0.2500000178813934, 0.20000001788139343, 0.2]"
               },
               "Component": {
                 "active": true
@@ -5583,7 +5583,21 @@
         "CowboyMainAttack": [
           {
             "Script.CowboyMainAttack": {
-              "active": true
+              "ComponentMainAttack": {
+                "Component": {
+                  "active": true
+                },
+                "reloadTime": 1,
+                "minDelayBetweenAttacks": 0.3,
+                "damage": 100,
+                "castTime": 0.05,
+                "maxCharges": 3
+              },
+              "speed": 2,
+              "range": 10,
+              "rotateInDirection": true,
+              "attachedToBrawler": false,
+              "projectile": "DefaultProjectile"
             }
           }
         ]
