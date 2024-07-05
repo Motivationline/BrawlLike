@@ -5469,7 +5469,7 @@
         {
           "ƒ.Node": {
             "name": "wrapper",
-            "active": true,
+            "active": false,
             "components": {
               "ComponentTransform": [
                 {
@@ -5491,6 +5491,21 @@
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
                   "idSource": "GraphGLTF|2024-07-03T13:54:28.282Z|18007"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978"
                 }
               }
             ]
@@ -5850,6 +5865,16 @@
       "idResource": "GraphGLTF|2024-07-03T13:54:28.282Z|18007",
       "type": "GraphGLTF",
       "url": "Assets\\Projectiles\\Kartoffel.glb"
+    }
+  },
+  "GraphGLTF|2024-07-05T07:30:50.343Z|93978": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978",
+      "type": "GraphGLTF",
+      "url": "Assets\\Projectiles\\Tomato.glb"
     }
   }
 }
