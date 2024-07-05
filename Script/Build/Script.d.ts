@@ -68,6 +68,8 @@ declare namespace Script {
         protected charges: number;
         attack(_direction: ƒ.Vector2): boolean;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {
@@ -86,6 +88,7 @@ declare namespace Script {
         protected explode(): void;
         moveToPosition(_pos: ƒ.Vector3): void;
         protected loop: () => void;
+        protected reduceMutator(_mutator: ƒ.Mutator): void;
     }
 }
 declare namespace Script {
@@ -95,8 +98,11 @@ declare namespace Script {
         range: number;
         rotateInDirection: boolean;
         attachedToBrawler: boolean;
+        projectile: string;
         attack(_direction: ƒ.Vector2): boolean;
         shootProjectile(_direction: ƒ.Vector2): Promise<void>;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {

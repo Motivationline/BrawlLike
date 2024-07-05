@@ -268,6 +268,32 @@ var Script;
         reduceMutator(_mutator) {
             delete _mutator.charges;
         }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                reloadTime: this.reloadTime,
+                minDelayBetweenAttacks: this.minDelayBetweenAttacks,
+                damage: this.damage,
+                castTime: this.castTime,
+                maxCharges: this.maxCharges,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.reloadTime)
+                this.reloadTime = _serialization.reloadTime;
+            if (_serialization.minDelayBetweenAttacks)
+                this.minDelayBetweenAttacks = _serialization.minDelayBetweenAttacks;
+            if (_serialization.damage)
+                this.damage = _serialization.damage;
+            if (_serialization.castTime)
+                this.castTime = _serialization.castTime;
+            if (_serialization.maxCharges)
+                this.maxCharges = _serialization.maxCharges;
+            return this;
+        }
     }
     Script.ComponentMainAttack = ComponentMainAttack;
 })(Script || (Script = {}));
@@ -335,6 +361,12 @@ var Script;
                 this.explode();
             }
         };
+        reduceMutator(_mutator) {
+            delete _mutator.damage;
+            delete _mutator.speed;
+            delete _mutator.range;
+            delete _mutator.rotateInDirection;
+        }
     }
     Script.ComponentProjectile = ComponentProjectile;
 })(Script || (Script = {}));
@@ -346,13 +378,14 @@ var Script;
         range = 10;
         rotateInDirection = true;
         attachedToBrawler = false;
+        projectile = "DefaultProjectile";
         attack(_direction) {
             if (!super.attack(_direction))
                 return false;
             this.shootProjectile(_direction);
         }
         async shootProjectile(_direction) {
-            let projectile = ƒ.Project.getResourcesByName("DefaultProjectile")[0];
+            let projectile = ƒ.Project.getResourcesByName(this.projectile)[0];
             let instance = await ƒ.Project.createGraphInstance(projectile);
             let projectileComponent = instance.getAllComponents().find(c => c instanceof Script.ComponentProjectile);
             projectileComponent.damage = this.damage;
@@ -363,6 +396,32 @@ var Script;
             Script.EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
             projectileComponent.fire(_direction, this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler));
+        }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                speed: this.speed,
+                range: this.range,
+                rotateInDirection: this.rotateInDirection,
+                attachedToBrawler: this.attachedToBrawler,
+                projectile: this.projectile,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.speed)
+                this.speed = _serialization.speed;
+            if (_serialization.range)
+                this.range = _serialization.range;
+            if (_serialization.rotateInDirection)
+                this.rotateInDirection = _serialization.rotateInDirection;
+            if (_serialization.attachedToBrawler)
+                this.attachedToBrawler = _serialization.attachedToBrawler;
+            if (_serialization.projectile)
+                this.projectile = _serialization.projectile;
+            return this;
         }
     }
     Script.ComponentProjectileMainAttack = ComponentProjectileMainAttack;

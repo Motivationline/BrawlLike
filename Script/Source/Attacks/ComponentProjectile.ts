@@ -66,5 +66,11 @@ namespace Script {
             }
         }
 
+        protected reduceMutator(_mutator: ƒ.Mutator): void {
+            delete _mutator.damage;
+            delete _mutator.speed;
+            delete _mutator.range;
+            delete _mutator.rotateInDirection;
+        }
     }
 }
