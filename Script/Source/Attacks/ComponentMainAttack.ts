@@ -8,7 +8,7 @@ namespace Script {
         maxCharges: number = 3;
 
         protected charges: number = 3;
-        attack(_direction: ƒ.Vector2): boolean {
+        attack(_direction: ƒ.Vector3): boolean {
             if (this.charges == 0) return false;
             return true;
         }
@@ -44,7 +44,7 @@ namespace Script {
                 this.castTime = _serialization.castTime;
             if(_serialization.maxCharges)
                 this.maxCharges = _serialization.maxCharges;
-            
+
             return this;
         }
     }

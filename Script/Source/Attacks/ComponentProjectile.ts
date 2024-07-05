@@ -24,12 +24,12 @@ namespace Script {
             this.#rb.addEventListener(ƒ.EVENT_PHYSICS.TRIGGER_ENTER, this.onTriggerEnter);
         }
 
-        public fire(_direction: ƒ.Vector2, _owner: ComponentBrawler) {
+        public fire(_direction: ƒ.Vector3, _owner: ComponentBrawler) {
             this.#owner = _owner;
             if (this.rotateInDirection) {
-                this.node.mtxLocal.lookIn(new ƒ.Vector3(_direction.x, 0, _direction.y));
+                this.node.mtxLocal.lookIn(_direction);
             }
-            this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
+            this.#rb.setVelocity(_direction.scale(this.speed));
         }
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {

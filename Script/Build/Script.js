@@ -127,9 +127,12 @@ var Script;
             let pb = Script.EntityManager.Instance.playerBrawler;
             if (!pb)
                 return;
+            Script.viewport.pointClientToProjection;
             let playerPos = Script.viewport.pointWorldToClient(pb.node.mtxWorld.translation);
             let clientPos = Script.viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let direction = ƒ.Vector2.DIFFERENCE(clientPos, playerPos).normalize();
+            let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
+            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation).normalize();
             Script.EntityManager.Instance.playerBrawler?.attack(_atk, direction);
         }
     }
@@ -324,9 +327,9 @@ var Script;
         fire(_direction, _owner) {
             this.#owner = _owner;
             if (this.rotateInDirection) {
-                this.node.mtxLocal.lookIn(new ƒ.Vector3(_direction.x, 0, _direction.y));
+                this.node.mtxLocal.lookIn(_direction);
             }
-            this.#rb.setVelocity(new ƒ.Vector3(_direction.x, 0, _direction.y).scale(this.speed));
+            this.#rb.setVelocity(_direction.scale(this.speed));
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)

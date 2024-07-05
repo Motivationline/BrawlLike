@@ -66,7 +66,7 @@ declare namespace Script {
         castTime: number;
         maxCharges: number;
         protected charges: number;
-        attack(_direction: ƒ.Vector2): boolean;
+        attack(_direction: ƒ.Vector3): boolean;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -83,7 +83,7 @@ declare namespace Script {
         range: number;
         constructor();
         private init;
-        fire(_direction: ƒ.Vector2, _owner: ComponentBrawler): void;
+        fire(_direction: ƒ.Vector3, _owner: ComponentBrawler): void;
         protected onTriggerEnter: (_event: ƒ.EventPhysics) => void;
         protected explode(): void;
         moveToPosition(_pos: ƒ.Vector3): void;
@@ -99,8 +99,8 @@ declare namespace Script {
         rotateInDirection: boolean;
         attachedToBrawler: boolean;
         projectile: string;
-        attack(_direction: ƒ.Vector2): boolean;
-        shootProjectile(_direction: ƒ.Vector2): Promise<void>;
+        attack(_direction: ƒ.Vector3): boolean;
+        shootProjectile(_direction: ƒ.Vector3): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
@@ -113,20 +113,20 @@ declare namespace Script {
         requiredCharge: number;
         protected currentCharge: number;
         charge(_amt: number): void;
-        attack(_direction: ƒ.Vector2): boolean;
+        attack(_direction: ƒ.Vector3): boolean;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
     }
 }
 declare namespace Script {
     import ƒ = FudgeCore;
     class CowboyMainAttack extends ComponentProjectileMainAttack {
-        attack(_direction: ƒ.Vector2): boolean;
+        attack(_direction: ƒ.Vector3): boolean;
     }
 }
 declare namespace Script {
     import ƒ = FudgeCore;
     class CowboySpecialAttack extends ComponentSpecialAttack {
-        attack(_direction: ƒ.Vector2): boolean;
+        attack(_direction: ƒ.Vector3): boolean;
     }
 }
 declare namespace Script {
@@ -145,7 +145,7 @@ declare namespace Script {
         setMovement(_direction: ƒ.Vector3): void;
         update(): void;
         protected move(): void;
-        attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector2): void;
+        attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;

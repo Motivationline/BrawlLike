@@ -7,13 +7,13 @@ namespace Script {
         attachedToBrawler: boolean = false;
         projectile: string = "DefaultProjectile";
 
-        attack(_direction: ƒ.Vector2): boolean {
+        attack(_direction: ƒ.Vector3): boolean {
             if (!super.attack(_direction)) return false;
 
             this.shootProjectile(_direction);
         }
 
-        async shootProjectile(_direction: ƒ.Vector2) {
+        async shootProjectile(_direction: ƒ.Vector3) {
             let projectile: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(this.projectile)[0];
             let instance = await ƒ.Project.createGraphInstance(projectile);
             let projectileComponent: ComponentProjectile = <ComponentProjectile>instance.getAllComponents().find(c => c instanceof ComponentProjectile);

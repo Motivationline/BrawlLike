@@ -68,7 +68,7 @@ namespace Script {
         this.rotationWrapperMatrix.lookIn(this.direction);
     }
 
-    attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector2) {
+    attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
           this.attackMain.attack(_direction);

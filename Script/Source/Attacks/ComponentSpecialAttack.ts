@@ -11,7 +11,7 @@ namespace Script {
             this.currentCharge = Math.min(this.currentCharge + _amt, this.requiredCharge);
         }
 
-        attack(_direction: ƒ.Vector2): boolean {
+        attack(_direction: ƒ.Vector3): boolean {
             if (this.currentCharge < this.requiredCharge) return false;
             return true;
         }
