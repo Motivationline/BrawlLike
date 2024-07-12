@@ -2,19 +2,78 @@
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    class Damagable extends ƒ.Component {
-        #health = 500;
-        rigidbody;
+    class CustomMaterial extends ƒ.Material {
+    }
+    Script.CustomMaterial = CustomMaterial;
+    class ComponentPhongToToon extends ƒ.Component {
+        static { this.iSubclass = ƒ.Component.registerSubclass(ComponentPhongToToon); }
+        static { this.materials = {}; }
         constructor() {
             super();
+            this.hndEvent = (_event) => {
+                switch (_event.type) {
+                    case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
+                        for (const node of this.node) {
+                            let cmpMaterial = node.getComponent(ƒ.ComponentMaterial);
+                            if (!cmpMaterial || !cmpMaterial.material)
+                                continue;
+                            cmpMaterial.material = this.materialToToon(cmpMaterial.material);
+                        }
+                        break;
+                }
+            };
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
+        }
+        materialToToon(_material) {
+            if (!_material.getShader().name.includes("Phong"))
+                return _material;
+            if (ComponentPhongToToon.materials[_material.idResource])
+                return ComponentPhongToToon.materials[_material.idResource];
+            let material;
+            let coatClassName = _material.coat.type
+                .replace("Normals", "")
+                .replace("Remissive", "Toon");
+            let coatClass = FudgeCore[coatClassName];
+            let coat = new coatClass();
+            this.coatToToon(_material.coat, coat);
+            let shaderClassName = _material.getShader().name
+                .replace("Normals", "")
+                .replace("Phong", "Toon");
+            let shaderClass = FudgeCore[shaderClassName];
+            material = new ƒ.Material("Toon", shaderClass, coat);
+            material.alphaClip = _material.alphaClip;
+            ƒ.Project.deregister(material);
+            material.idResource = _material.idResource;
+            ComponentPhongToToon.materials[_material.idResource] = material;
+            return material;
+        }
+        coatToToon(_coatRemissive, _coatToon) {
+            _coatToon.color = _coatRemissive.color;
+            _coatToon.diffuse = _coatRemissive.diffuse;
+            _coatToon.specular = _coatRemissive.specular;
+            _coatToon.intensity = _coatRemissive.intensity;
+            _coatToon.metallic = _coatRemissive.metallic;
+            _coatToon.texture = _coatRemissive.texture;
+        }
+    }
+    Script.ComponentPhongToToon = ComponentPhongToToon;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class Damagable extends ƒ.Component {
+        #health;
+        constructor() {
+            super();
+            this.#health = 500;
+            this.initDamagable = () => {
+                this.node.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
+                this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+            };
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
         }
-        initDamagable = () => {
-            this.node.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
-            this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
-        };
         get health() {
             return this.#health;
         }
@@ -61,6 +120,10 @@ var Script;
     var ƒ = FudgeCore;
     class MenuManager {
         constructor() {
+            this.resourcesLoaded = () => {
+                console.log("resources loaded");
+                document.getElementById("start-overlay").style.display = "none";
+            };
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             ƒ.Project.addEventListener("resourcesLoaded" /* ƒ.EVENT.RESOURCES_LOADED */, this.resourcesLoaded);
@@ -75,10 +138,6 @@ var Script;
                 });
             });
         }
-        resourcesLoaded = () => {
-            console.log("resources loaded");
-            document.getElementById("start-overlay").style.display = "none";
-        };
     }
     Script.MenuManager = MenuManager;
 })(Script || (Script = {}));
@@ -86,8 +145,53 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class InputManager {
-        static Instance;
         constructor() {
+            this.update = () => {
+                let direction = new ƒ.Vector3();
+                if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
+                    direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(-1, 0, 0));
+                if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
+                    direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(1, 0, 0));
+                if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]))
+                    direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, 1));
+                if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
+                    direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, -1));
+                let mgtSqrt = direction.magnitudeSquared;
+                if (mgtSqrt === 0) {
+                    Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
+                    return;
+                }
+                if (mgtSqrt > 1) {
+                    direction.normalize(1);
+                }
+                Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
+            };
+            this.mousedown = (_event) => {
+                _event.preventDefault();
+                if (_event.button == 0) {
+                    Script.EntityManager.Instance.playerBrawler.showPreview(Script.ATTACK_TYPE.MAIN);
+                }
+                else if (_event.button == 2) {
+                    Script.EntityManager.Instance.playerBrawler.showPreview(Script.ATTACK_TYPE.SPECIAL);
+                }
+            };
+            this.mouseup = (_event) => {
+                _event.preventDefault();
+                if (_event.button == 0) {
+                    this.tryToAttack(Script.ATTACK_TYPE.MAIN, _event);
+                    Script.EntityManager.Instance.playerBrawler.hidePreview(Script.ATTACK_TYPE.MAIN);
+                }
+                else if (_event.button == 2) {
+                    this.tryToAttack(Script.ATTACK_TYPE.SPECIAL, _event);
+                    Script.EntityManager.Instance.playerBrawler.hidePreview(Script.ATTACK_TYPE.SPECIAL);
+                }
+            };
+            this.mousemove = (_event) => {
+                _event.preventDefault();
+                let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
+                let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+                Script.EntityManager.Instance.playerBrawler.mousePosition = clickPos;
+            };
             if (InputManager.Instance)
                 return InputManager.Instance;
             InputManager.Instance = this;
@@ -96,52 +200,6 @@ var Script;
                 return;
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.update);
         }
-        update = () => {
-            let direction = new ƒ.Vector3();
-            if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(-1, 0, 0));
-            if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(1, 0, 0));
-            if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, 1));
-            if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, -1));
-            let mgtSqrt = direction.magnitudeSquared;
-            if (mgtSqrt === 0) {
-                Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
-                return;
-            }
-            if (mgtSqrt > 1) {
-                direction.normalize(1);
-            }
-            Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
-        };
-        mousedown = (_event) => {
-            _event.preventDefault();
-            if (_event.button == 0) {
-                Script.EntityManager.Instance.playerBrawler.showPreview(Script.ATTACK_TYPE.MAIN);
-            }
-            else if (_event.button == 2) {
-                Script.EntityManager.Instance.playerBrawler.showPreview(Script.ATTACK_TYPE.SPECIAL);
-            }
-        };
-        mouseup = (_event) => {
-            _event.preventDefault();
-            if (_event.button == 0) {
-                this.tryToAttack(Script.ATTACK_TYPE.MAIN, _event);
-                Script.EntityManager.Instance.playerBrawler.hidePreview(Script.ATTACK_TYPE.MAIN);
-            }
-            else if (_event.button == 2) {
-                this.tryToAttack(Script.ATTACK_TYPE.SPECIAL, _event);
-                Script.EntityManager.Instance.playerBrawler.hidePreview(Script.ATTACK_TYPE.SPECIAL);
-            }
-        };
-        mousemove = (_event) => {
-            _event.preventDefault();
-            let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
-            Script.EntityManager.Instance.playerBrawler.mousePosition = clickPos;
-        };
         tryToAttack(_atk, _event) {
             _event.preventDefault();
             let pb = Script.EntityManager.Instance.playerBrawler;
@@ -162,35 +220,38 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class EntityManager extends ƒ.Component {
-        static Instance;
-        brawlers = [];
-        playerBrawler;
-        projectiles = [];
         constructor() {
             if (EntityManager.Instance)
                 return EntityManager.Instance;
             super();
+            this.brawlers = [];
+            this.projectiles = [];
+            this.loadBrawler = async (_playerBrawler = "Brawler") => {
+                console.log("load Brawler");
+                let defaultBrawler = ƒ.Project.getResourcesByName("Brawler")[0];
+                let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler)[0];
+                let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
+                for (let i = 0; i < spawnPoints.length - 1; i++) {
+                    this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
+                }
+                this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
+                let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
+                let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
+                this.playerBrawler.node.addChild(cameraInstance);
+                let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
+                Script.viewport.camera = camera;
+            };
+            this.update = () => {
+                for (let b of this.brawlers) {
+                    b.update();
+                }
+            };
             EntityManager.Instance = this;
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.update);
         }
-        loadBrawler = async (_playerBrawler = "Brawler") => {
-            console.log("load Brawler");
-            let defaultBrawler = ƒ.Project.getResourcesByName("Brawler")[0];
-            let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler)[0];
-            let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
-            for (let i = 0; i < spawnPoints.length - 1; i++) {
-                this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
-            }
-            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
-            let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
-            let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
-            this.playerBrawler.node.addChild(cameraInstance);
-            let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
-            Script.viewport.camera = camera;
-        };
         async initBrawler(_g, _pos) {
             let instance = await ƒ.Project.createGraphInstance(_g);
             this.node.addChild(instance);
@@ -213,11 +274,6 @@ var Script;
                 this.projectiles.splice(index, 1);
             }
         }
-        update = () => {
-            for (let b of this.brawlers) {
-                b.update();
-            }
-        };
     }
     Script.EntityManager = EntityManager;
 })(Script || (Script = {}));
@@ -279,12 +335,15 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class ComponentMainAttack extends ƒ.Component {
-        reloadTime = 1;
-        minDelayBetweenAttacks = 0.3;
-        damage = 100;
-        castTime = 0.05;
-        maxCharges = 3;
-        charges = 3;
+        constructor() {
+            super(...arguments);
+            this.reloadTime = 1;
+            this.minDelayBetweenAttacks = 0.3;
+            this.damage = 100;
+            this.castTime = 0.05;
+            this.maxCharges = 3;
+            this.charges = 3;
+        }
         attack(_direction) {
             if (this.charges == 0)
                 return false;
@@ -326,26 +385,49 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class ComponentProjectile extends ƒ.Component {
-        gravity = false;
-        rotateInDirection = true;
-        damage = 100;
-        speed = 10;
-        range = 3;
         #rb;
         #owner;
         #startPosition;
         constructor() {
             super();
+            this.gravity = false;
+            this.rotateInDirection = true;
+            this.damage = 100;
+            this.speed = 10;
+            this.range = 3;
+            this.init = () => {
+                this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
+                this.#rb.effectGravity = Number(this.gravity);
+                this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
+            };
+            this.onTriggerEnter = (_event) => {
+                if (_event.cmpRigidbody === this.#owner.rigidbody)
+                    return;
+                //TODO do team check
+                // check if target has disable script
+                let noProjectile = _event.cmpRigidbody.node.getComponent(Script.IgnoredByProjectiles);
+                if (noProjectile && noProjectile.isActive)
+                    return;
+                // check for damagable target
+                let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
+                this.explode();
+                if (!damagable)
+                    return;
+                damagable.health -= this.damage;
+            };
+            this.loop = () => {
+                if (!this.#startPosition)
+                    return;
+                let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
+                if (distance > this.range * this.range) {
+                    this.explode();
+                }
+            };
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
         }
-        init = () => {
-            this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            this.#rb.effectGravity = Number(this.gravity);
-            this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
-        };
         fire(_direction, _owner) {
             this.#owner = _owner;
             if (this.rotateInDirection) {
@@ -353,21 +435,6 @@ var Script;
             }
             this.#rb.setVelocity(_direction.scale(this.speed));
         }
-        onTriggerEnter = (_event) => {
-            if (_event.cmpRigidbody === this.#owner.rigidbody)
-                return;
-            //TODO do team check
-            // check if target has disable script
-            let noProjectile = _event.cmpRigidbody.node.getComponent(Script.IgnoredByProjectiles);
-            if (noProjectile && noProjectile.isActive)
-                return;
-            // check for damagable target
-            let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
-            this.explode();
-            if (!damagable)
-                return;
-            damagable.health -= this.damage;
-        };
         explode() {
             Script.EntityManager.Instance.removeProjectile(this);
         }
@@ -378,14 +445,6 @@ var Script;
             this.node.mtxLocal.translation = _pos;
             rb.activate(true);
         }
-        loop = () => {
-            if (!this.#startPosition)
-                return;
-            let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
-            if (distance > this.range * this.range) {
-                this.explode();
-            }
-        };
         reduceMutator(_mutator) {
             delete _mutator.damage;
             delete _mutator.speed;
@@ -399,11 +458,14 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class ComponentProjectileMainAttack extends Script.ComponentMainAttack {
-        speed = 2;
-        range = 10;
-        rotateInDirection = true;
-        attachedToBrawler = false;
-        projectile = "DefaultProjectile";
+        constructor() {
+            super(...arguments);
+            this.speed = 2;
+            this.range = 10;
+            this.rotateInDirection = true;
+            this.attachedToBrawler = false;
+            this.projectile = "DefaultProjectile";
+        }
         attack(_direction) {
             if (!super.attack(_direction))
                 return false;
@@ -455,10 +517,13 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class ComponentSpecialAttack extends ƒ.Component {
-        damage = 100;
-        castTime = 0.05;
-        requiredCharge = 500;
-        currentCharge = 0;
+        constructor() {
+            super(...arguments);
+            this.damage = 100;
+            this.castTime = 0.05;
+            this.requiredCharge = 500;
+            this.currentCharge = 0;
+        }
         charge(_amt) {
             this.currentCharge = Math.min(this.currentCharge + _amt, this.requiredCharge);
         }
@@ -505,18 +570,37 @@ var Script;
     ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
     class ComponentBrawler extends Script.Damagable {
         // Register the script as component for use in the editor via drag&drop
-        static iSubclass = ƒ.Component.registerSubclass(ComponentBrawler);
-        // Properties may be mutated by users in the editor via the automatically created user interface
-        speed = 1;
-        direction = new ƒ.Vector3();
-        rotationWrapperMatrix;
-        attackMain;
-        attackSpecial;
-        #mainAttackPreviewActive = false;
+        static { this.iSubclass = ƒ.Component.registerSubclass(ComponentBrawler); }
+        #mainAttackPreviewActive;
         #mainAttackPreview;
-        mousePosition = ƒ.Vector3.ZERO();
         constructor() {
             super();
+            // Properties may be mutated by users in the editor via the automatically created user interface
+            this.speed = 1;
+            this.direction = new ƒ.Vector3();
+            this.#mainAttackPreviewActive = false;
+            this.mousePosition = ƒ.Vector3.ZERO();
+            // Activate the functions of this component as response to events
+            this.hndEvent = (_event) => {
+                switch (_event.type) {
+                    case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
+                        break;
+                    case "componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */:
+                        this.removeEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+                        this.removeEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+                        break;
+                    case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
+                        // if deserialized the node is now fully reconstructed and access to all its components and children is possible
+                        this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+                        this.rigidbody.effectRotation = new ƒ.Vector3();
+                        this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
+                        this.#mainAttackPreview = this.node.getChild(1);
+                        this.#mainAttackPreview?.activate(false);
+                        this.findAttacks();
+                        this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
+                        break;
+                }
+            };
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             // Listen to this component being added to or removed from a node
@@ -524,27 +608,6 @@ var Script;
             this.addEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
         }
-        // Activate the functions of this component as response to events
-        hndEvent = (_event) => {
-            switch (_event.type) {
-                case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
-                    break;
-                case "componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */:
-                    this.removeEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
-                    this.removeEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
-                    break;
-                case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
-                    // if deserialized the node is now fully reconstructed and access to all its components and children is possible
-                    this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
-                    this.rigidbody.effectRotation = new ƒ.Vector3();
-                    this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
-                    this.#mainAttackPreview = this.node.getChild(1);
-                    this.#mainAttackPreview?.activate(false);
-                    this.findAttacks();
-                    this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
-                    break;
-            }
-        };
         findAttacks() {
             let components = this.node.getAllComponents();
             this.attackMain = components.find(c => c instanceof Script.ComponentMainAttack);

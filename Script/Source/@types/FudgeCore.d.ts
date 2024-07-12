@@ -1125,6 +1125,11 @@ declare namespace FudgeCore {
             readonly UNIT: 33987;
             readonly INDEX: 3;
         };
+        readonly TOON: {
+            readonly UNIFORM: "u_texToon";
+            readonly UNIT: 33988;
+            readonly INDEX: 4;
+        };
     };
     /**
      * Base class for RenderManager, handling the connection to the rendering system, in this case WebGL.
@@ -1264,7 +1269,7 @@ declare namespace FudgeCore {
          * Draw a mesh buffer using the given infos and the complete projection matrix
         */
         protected static drawNode(_node: Node, _cmpCamera: ComponentCamera): void;
-        protected static drawParticles(_cmpParticleSystem: ComponentParticleSystem, _shader: ShaderInterface, _renderBuffers: RenderBuffers, _cmpFaceCamera: ComponentFaceCamera, _sortForAlpha: boolean): void;
+        protected static drawParticles(_cmpParticleSystem: ComponentParticleSystem, _shader: ShaderInterface, _renderBuffers: RenderBuffers, _cmpFaceCamera: ComponentFaceCamera): void;
         private static calcMeshToView;
         private static bindTexture;
     }
@@ -1800,7 +1805,7 @@ declare namespace FudgeCore {
     const AnimationGLTF_base: (abstract new (...args: any[]) => {
         url: RequestInfo;
         status: RESOURCE_STATUS;
-        serialize(_super?: boolean): Serialization;
+        serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         load(): Promise<any>;
         name: string;
@@ -1813,7 +1818,6 @@ declare namespace FudgeCore {
      */
     export class AnimationGLTF extends AnimationGLTF_base {
         load(_url?: RequestInfo, _name?: string): Promise<AnimationGLTF>;
-        serialize(): Serialization;
     }
     export {};
 }
@@ -2406,8 +2410,8 @@ declare namespace FudgeCore {
 }
 declare namespace FudgeCore {
     /**
-     * Attaches a {@link Material} to the node
-     * @authors Jirka Dell'Oro-Friedl, HFU, 2019 - 2021
+     * Attached to a {@link Node} with an attached {@link ComponentCamera} this causes the rendered image to receive a fog-effect.
+     * @authors Roland Heer, HFU, 2023
      */
     class ComponentFog extends Component {
         static readonly iSubclass: number;
@@ -2544,11 +2548,6 @@ declare namespace FudgeCore {
         /** Support sorting of objects with transparency when rendering, render objects in the back first. When this component is used as a part of a {@link ParticleSystem}, try enabling this when disabling {@link ComponentParticleSystem.depthMask} */
         sortForAlpha: boolean;
         constructor(_material?: Material);
-        /**
-         * Returns true if the material has any areas (color or texture) with alpha < 1.
-         * ⚠️ CAUTION: Computionally expensive for textured materials, see {@link Texture.hasTransparency}
-         */
-        get hasTransparency(): boolean;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
     }
@@ -3272,7 +3271,7 @@ declare namespace FudgeCore {
     const GraphGLTF_base: (abstract new (...args: any[]) => {
         url: RequestInfo;
         status: RESOURCE_STATUS;
-        serialize(_super?: boolean): Serialization;
+        serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         load(): Promise<any>;
         name: string;
@@ -3286,6 +3285,7 @@ declare namespace FudgeCore {
     export class GraphGLTF extends GraphGLTF_base {
         load(_url?: RequestInfo, _name?: string): Promise<GraphGLTF>;
         serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
     }
     export {};
 }
@@ -3362,7 +3362,7 @@ declare namespace FudgeCore {
 }
 declare namespace FudgeCore {
     /**
-     * The simplest {@link Coat} providing just a color
+     * A {@link Coat} providing a color and parameters for the phong shading model.
      */
     class CoatRemissive extends CoatColored {
         #private;
@@ -3415,6 +3415,31 @@ declare namespace FudgeCore {
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
     }
+}
+declare namespace FudgeCore {
+    const CoatToon_base: (abstract new (...args: any[]) => {
+        texToon: Texture;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+    }) & typeof CoatRemissive;
+    /**
+     * A {@link Coat} providing a color and parameters for the toon shading model.
+     */
+    export class CoatToon extends CoatToon_base {
+        constructor(_color?: Color, _texToon?: Texture, _diffuse?: number, _specular?: number, _intensity?: number, _metallic?: number);
+    }
+    const CoatToonTextured_base: (abstract new (...args: any[]) => {
+        texToon: Texture;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+    }) & typeof CoatRemissiveTextured;
+    /**
+     * A {@link Coat} providing a texture, a color and parameters for the toon shading model.
+     */
+    export class CoatToonTextured extends CoatToonTextured_base {
+        constructor(_color?: Color, _texture?: Texture, _texToon?: Texture, _diffuse?: number, _specular?: number, _intensity?: number, _metallic?: number);
+    }
+    export {};
 }
 declare namespace FudgeCore {
     /**
@@ -3520,6 +3545,10 @@ declare namespace FudgeCore {
         /** The name to call the Material by. */
         name: string;
         idResource: string;
+        /**
+         * Clipping threshold for alpha values, every pixel with alpha < alphaClip will be discarded.
+         */
+        alphaClip: number;
         private shaderType;
         constructor(_name: string, _shader?: typeof Shader, _coat?: Coat);
         /**
@@ -3530,11 +3559,6 @@ declare namespace FudgeCore {
          * Makes this material reference the given {@link Coat} if it is compatible with the referenced {@link Shader}
          */
         set coat(_coat: Coat);
-        /**
-         * Returns true if the material has any areas (color or texture) with alpha < 1.
-         * ⚠️ CAUTION: Computionally expensive for textured materials, see {@link Texture.hasTransparency}
-         */
-        get hasTransparency(): boolean;
         /**
          * Creates a new {@link Coat} instance that is valid for the {@link Shader} referenced by this material
          */
@@ -3559,7 +3583,7 @@ declare namespace FudgeCore {
     const MaterialGLTF_base: (abstract new (...args: any[]) => {
         url: RequestInfo;
         status: RESOURCE_STATUS;
-        serialize(_super?: boolean): Serialization;
+        serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         load(): Promise<any>;
         name: string;
@@ -4798,7 +4822,7 @@ declare namespace FudgeCore {
     const MeshFBX_base: (abstract new (...args: any[]) => {
         url: RequestInfo;
         status: RESOURCE_STATUS;
-        serialize(_super?: boolean): Serialization;
+        serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         load(): Promise<any>;
         name: string;
@@ -4837,7 +4861,7 @@ declare namespace FudgeCore {
     const MeshGLTF_base: (abstract new (...args: any[]) => {
         url: RequestInfo;
         status: RESOURCE_STATUS;
-        serialize(_super?: boolean): Serialization;
+        serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         load(): Promise<any>;
         name: string;
@@ -4860,7 +4884,7 @@ declare namespace FudgeCore {
     const MeshOBJ_base: (abstract new (...args: any[]) => {
         url: RequestInfo;
         status: RESOURCE_STATUS;
-        serialize(_super?: boolean): Serialization;
+        serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         load(): Promise<any>;
         name: string;
@@ -8256,12 +8280,41 @@ declare namespace FudgeCore {
     }
 }
 declare namespace FudgeCore {
+    abstract class ShaderToon extends Shader {
+        static readonly iSubclass: number;
+        static define: string[];
+        static getCoat(): typeof Coat;
+    }
+    abstract class ShaderToonSkin extends Shader {
+        static readonly iSubclass: number;
+        static define: string[];
+        static getCoat(): typeof Coat;
+    }
+    abstract class ShaderToonTextured extends Shader {
+        static readonly iSubclass: number;
+        static define: string[];
+        static getCoat(): typeof Coat;
+    }
+    abstract class ShaderToonTexturedSkin extends Shader {
+        static readonly iSubclass: number;
+        static define: string[];
+        static getCoat(): typeof Coat;
+    }
+}
+declare namespace FudgeCore {
     /** {@link TexImageSource} is a union type which as of now includes {@link VideoFrame}. All other parts of this union have a .width and .height property but VideoFrame does not. And since we only ever use {@link HTMLImageElement} and {@link OffscreenCanvas} currently VideoFrame can be excluded for convenience of accessing .width and .height */
     type ImageSource = Exclude<TexImageSource, VideoFrame>;
+    /**
+     * - CRISP: no mipmapping, mag filter nearest, min filter nearest
+     * - MEDIUM: mipmapping, mag filter nearest, min filter nearest_mipmap_linear
+     * - BLURRY: mipmapping, mag filter linear, min filter linear_mipmap_linear
+     * - SMOOTH: no mipmapping, mag filter linear, min filter linear
+     */
     export enum MIPMAP {
         CRISP = 0,
         MEDIUM = 1,
-        BLURRY = 2
+        BLURRY = 2,
+        SMOOTH = 3
     }
     export enum WRAP {
         REPEAT = 0,
@@ -8285,12 +8338,6 @@ declare namespace FudgeCore {
         get mipmap(): MIPMAP;
         set wrap(_wrap: WRAP);
         get wrap(): WRAP;
-        /**
-         * Returns true if the texture has any texels with alpha < 1.
-         * ⚠️ CAUTION: Has to be recomputed whenever the texture/image data changes.
-         */
-        get hasTransparency(): boolean;
-        protected set hasTransparency(_hasTransparency: boolean);
         /**
          * Returns the image source of this texture.
          */
@@ -8377,11 +8424,13 @@ declare namespace FudgeCore {
     class TextureDefault extends TextureBase64 {
         static color: TextureBase64;
         static normal: TextureBase64;
+        static toon: TextureBase64;
         static iconLight: TextureBase64;
         static iconCamera: TextureBase64;
         static iconAudio: TextureBase64;
         private static getColor;
         private static getNormal;
+        private static getToon;
         private static getIconLight;
         private static getIconCamera;
         private static getIconAudio;

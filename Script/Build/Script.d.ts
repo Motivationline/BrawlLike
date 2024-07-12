@@ -1,5 +1,18 @@
 declare namespace Script {
     import ƒ = FudgeCore;
+    class CustomMaterial extends ƒ.Material {
+    }
+    class ComponentPhongToToon extends ƒ.Component {
+        static readonly iSubclass: number;
+        private static materials;
+        constructor();
+        hndEvent: (_event: Event) => void;
+        private materialToToon;
+        private coatToToon;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     abstract class Damagable extends ƒ.Component {
         #private;
         rigidbody: ƒ.ComponentRigidbody;
