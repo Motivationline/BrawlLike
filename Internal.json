@@ -6061,13 +6061,12 @@
                 "Component": {
                   "active": true
                 },
-                "health": 500
+                "health": 5000
               },
-              "speed": 2.2
+              "speed": 0.4
             }
           }
         ],
-        "ComponentMainAttack": [],
         "CowboySpecialAttack": [
           {
             "Script.CowboySpecialAttack": {
@@ -6174,6 +6173,21 @@
               "active": true
             }
           }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-16T13:19:43.241Z|77448",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
         ]
       },
       "idResource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310",
@@ -6223,6 +6237,14 @@
       "children": [],
       "idResource": "Graph|2024-07-16T09:41:59.333Z|37668",
       "type": "Graph"
+    }
+  },
+  "AnimationGLTF|2024-07-16T13:19:43.241Z|77448": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-16T13:19:43.241Z|77448",
+      "name": "Walk",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
     }
   }
 }
