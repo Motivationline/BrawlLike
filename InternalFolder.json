@@ -37,6 +37,9 @@
               },
               {
                 "idResource": "Material|2024-07-05T13:42:58.398Z|17443"
+              },
+              {
+                "idResource": "Graph|2024-07-16T09:41:59.333Z|37668"
               }
             ]
           }
@@ -46,10 +49,16 @@
         "name": "Brawlers",
         "entries": [
           {
+            "idResource": "Graph|2024-06-28T07:32:49.098Z|23377"
+          },
+          {
             "idResource": "Graph|2024-06-26T12:42:10.698Z|62317"
           },
           {
             "idResource": "Graph|2024-06-28T13:29:09.815Z|45211"
+          },
+          {
+            "idResource": "Graph|2024-07-16T09:32:18.199Z|08157"
           },
           {
             "idResource": "Graph|2024-07-03T10:49:01.241Z|11869"
@@ -77,9 +86,6 @@
             ]
           },
           {
-            "idResource": "Graph|2024-06-28T07:32:49.098Z|23377"
-          },
-          {
             "name": "Cowgirl",
             "entries": [
               {
@@ -87,6 +93,14 @@
               },
               {
                 "idResource": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395"
+              }
+            ]
+          },
+          {
+            "name": "Frogger",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310"
               }
             ]
           }

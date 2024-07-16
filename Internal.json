@@ -86,6 +86,7 @@
     "ƒ.MeshGLTF": {
       "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
       "name": "MeshBoulder",
+      "type": "MeshGLTF",
       "url": "Assets\\Decorations\\Boulder01.glb",
       "iPrimitive": 0
     }
@@ -5085,6 +5086,48 @@
               "speed": 2.1
             }
           }
+        ],
+        "ComponentMainAttack": [
+          {
+            "Script.ComponentMainAttack": {
+              "Component": {
+                "active": true
+              },
+              "reloadTime": 1,
+              "minDelayBetweenAttacks": 0.3,
+              "damage": 100,
+              "castTime": 0.05,
+              "maxCharges": 3
+            }
+          }
+        ],
+        "ComponentProjectileMainAttack": [
+          {
+            "Script.ComponentProjectileMainAttack": {
+              "ComponentMainAttack": {
+                "Component": {
+                  "active": true
+                },
+                "reloadTime": 1,
+                "minDelayBetweenAttacks": 0.3,
+                "damage": 100,
+                "castTime": 0.05,
+                "maxCharges": 3
+              },
+              "speed": 2,
+              "range": 10,
+              "rotateInDirection": true,
+              "attachedToBrawler": false,
+              "projectile": "DefaultProjectile"
+            }
+          }
+        ],
+        "ComponentSpecialAttack": [
+          {
+            "Script.ComponentSpecialAttack": {
+              "active": true
+            }
+          }
         ]
       },
       "children": [
@@ -5127,8 +5170,8 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
       "name": "Walk",
-      "url": "Assets\\Chars\\blobbyv02.glb",
-      "framesPerSecond": 60
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\blobbyv02.glb"
     }
   },
   "GraphGLTF|2024-06-27T06:02:06.721Z|31931": {
@@ -5171,8 +5214,8 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
       "name": "Walk",
-      "url": "Assets\\Chars\\shimbo.glb",
-      "framesPerSecond": 60
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\shimbo.glb"
     }
   },
   "GraphGLTF|2024-06-27T12:08:10.156Z|98294": {
@@ -5275,6 +5318,7 @@
     "ƒ.MaterialGLTF": {
       "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440",
       "name": "Cloud",
+      "type": "MaterialGLTF",
       "url": "Assets\\Decorations\\Cloud.glb"
     }
   },
@@ -5282,6 +5326,7 @@
     "ƒ.MeshGLTF": {
       "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765",
       "name": "Cloud.003",
+      "type": "MeshGLTF",
       "url": "Assets\\Decorations\\Cloud.glb",
       "iPrimitive": 0
     }
@@ -5692,45 +5737,9 @@
             },
             "children": [
               {
-                "ƒ.Node": {
-                  "name": "New Node",
-                  "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
-                          "pivot": {
-                            "translation": "[0, 0, 0.5]",
-                            "rotation": "[-90, 0, 0]",
-                            "scaling": "[1, 1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": true,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "Material|2024-07-05T13:42:58.398Z|17443"
-                        }
-                      }
-                    ]
-                  },
-                  "children": []
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "Graph|2024-07-16T09:41:59.333Z|37668"
                 }
               }
             ]
@@ -5745,8 +5754,8 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395",
       "name": "Walk",
-      "url": "Assets\\Chars\\cowgirl.glb",
-      "framesPerSecond": 60
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\cowgirl.glb"
     }
   },
   "GraphGLTF|2024-07-03T10:46:00.190Z|12042": {
@@ -5766,6 +5775,13 @@
               "scale": 1,
               "scaleWithGameTime": true,
               "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
             }
           }
         ]
@@ -5934,8 +5950,8 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-03T13:04:23.278Z|23591",
       "name": "Wind",
-      "url": "Assets\\Decorations\\bush.glb",
-      "framesPerSecond": 60
+      "type": "AnimationGLTF",
+      "url": "Assets\\Decorations\\bush.glb"
     }
   },
   "GraphGLTF|2024-07-03T13:04:23.278Z|36622": {
@@ -5992,6 +6008,221 @@
       "idResource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978",
       "type": "GraphGLTF",
       "url": "Assets\\Projectiles\\Tomato.glb"
+    }
+  },
+  "Graph|2024-07-16T09:32:18.199Z|08157": {
+    "ƒ.Graph": {
+      "name": "BrawlerFrogger",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "CAPSULE",
+              "isTrigger": false,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0.5, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5000000000000001, 0.6000000000000001, 0.6000000000000001]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentBrawler": [
+          {
+            "Script.ComponentBrawler": {
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 2.2
+            }
+          }
+        ],
+        "ComponentMainAttack": [],
+        "CowboySpecialAttack": [
+          {
+            "Script.CowboySpecialAttack": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentProjectileMainAttack": [
+          {
+            "Script.ComponentProjectileMainAttack": {
+              "ComponentMainAttack": {
+                "Component": {
+                  "active": true
+                },
+                "reloadTime": 2,
+                "minDelayBetweenAttacks": 0.3,
+                "damage": 100,
+                "castTime": 0.05,
+                "maxCharges": 3
+              },
+              "speed": 5,
+              "range": 10,
+              "rotateInDirection": true,
+              "attachedToBrawler": false,
+              "projectile": "DefaultProjectile"
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "mainAttackPreview",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "Graph|2024-07-16T09:41:59.333Z|37668"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-07-16T09:32:18.199Z|08157",
+      "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-07-16T09:34:35.855Z|82310": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
+  "Graph|2024-07-16T09:41:59.333Z|37668": {
+    "ƒ.Graph": {
+      "name": "preview",
+      "active": true,
+      "components": {
+        "ComponentMesh": [
+          {
+            "ƒ.ComponentMesh": {
+              "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+              "pivot": {
+                "translation": "[0, 0, 0.5]",
+                "rotation": "[-90, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentMaterial": [
+          {
+            "ƒ.ComponentMaterial": {
+              "sortForAlpha": true,
+              "clrPrimary": "[1, 1, 1, 1]",
+              "clrSecondary": "[1, 1, 1, 1]",
+              "pivot": {
+                "translation": "[0, 0]",
+                "rotation": 0,
+                "scaling": "[1, 1]"
+              },
+              "Component": {
+                "active": true
+              },
+              "idMaterial": "Material|2024-07-05T13:42:58.398Z|17443"
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-07-16T09:41:59.333Z|37668",
+      "type": "Graph"
     }
   }
 }
