@@ -100,10 +100,13 @@
             "name": "Frogger",
             "entries": [
               {
-                "idResource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310"
+                "idResource": "GraphGLTF|2024-07-17T09:02:28.039Z|57758"
               },
               {
-                "idResource": "AnimationGLTF|2024-07-16T13:19:43.241Z|77448"
+                "idResource": "AnimationGLTF|2024-07-17T09:02:28.039Z|19233"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-17T09:02:28.044Z|11253"
               }
             ]
           }

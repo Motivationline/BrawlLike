@@ -3552,7 +3552,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 1]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3582,7 +3582,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 0]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3612,7 +3612,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3642,7 +3642,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -2]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3672,7 +3672,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[-1, 0, -2]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3702,7 +3702,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 2]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3756,7 +3756,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 1]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3786,7 +3786,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 0]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3816,7 +3816,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3846,7 +3846,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -2]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3876,7 +3876,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[1, 0, -2]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -3906,7 +3906,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 2]",
-                                              "rotation": "[0, 0, 0]",
+                                              "rotation": "[0, 180, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4164,7 +4164,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 1]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4194,7 +4194,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4224,7 +4224,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[1, 0, 0]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4254,7 +4254,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[-1, 0, 0]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4308,7 +4308,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 0]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4338,7 +4338,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4392,7 +4392,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 0]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4422,7 +4422,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4476,7 +4476,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 0]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4506,7 +4506,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4560,7 +4560,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, 0]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -4590,7 +4590,7 @@
                                           "ƒ.ComponentTransform": {
                                             "local": {
                                               "translation": "[0, 0, -1]",
-                                              "rotation": "[0, -90, 0]",
+                                              "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
@@ -6063,7 +6063,7 @@
                 },
                 "health": 5000
               },
-              "speed": 0.4
+              "speed": 1
             }
           }
         ],
@@ -6121,7 +6121,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310"
+                  "idSource": "GraphGLTF|2024-07-17T09:02:28.039Z|57758"
                 }
               }
             ]
@@ -6160,39 +6160,6 @@
       ],
       "idResource": "Graph|2024-07-16T09:32:18.199Z|08157",
       "type": "Graph"
-    }
-  },
-  "GraphGLTF|2024-07-16T09:34:35.855Z|82310": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentPhongToToon": [
-          {
-            "Script.ComponentPhongToToon": {
-              "active": true
-            }
-          }
-        ],
-        "ComponentAnimator": [
-          {
-            "ƒ.ComponentAnimator": {
-              "Component": {
-                "active": true
-              },
-              "idAnimation": "AnimationGLTF|2024-07-16T13:19:43.241Z|77448",
-              "playmode": "loop",
-              "quantization": "continous",
-              "scale": 1,
-              "scaleWithGameTime": true,
-              "animateInEditor": true
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2024-07-16T09:34:35.855Z|82310",
-      "type": "GraphGLTF",
-      "url": "Assets\\Chars\\frog.glb"
     }
   },
   "Graph|2024-07-16T09:41:59.333Z|37668": {
@@ -6239,9 +6206,50 @@
       "type": "Graph"
     }
   },
-  "AnimationGLTF|2024-07-16T13:19:43.241Z|77448": {
+  "GraphGLTF|2024-07-17T09:02:28.039Z|57758": {
+    "ƒ.GraphGLTF": {
+      "name": "Frogger",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-17T09:02:28.044Z|11253",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-17T09:02:28.039Z|57758",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-17T09:02:28.044Z|11253": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-16T13:19:43.241Z|77448",
+      "idResource": "AnimationGLTF|2024-07-17T09:02:28.044Z|11253",
+      "name": "WalkV3Blocking",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-17T09:02:28.039Z|19233": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-17T09:02:28.039Z|19233",
       "name": "Walk",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
