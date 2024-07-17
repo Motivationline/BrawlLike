@@ -51,13 +51,13 @@ namespace Script {
           this.#mainAttackPreview?.activate(false);
           this.findAttacks();
           this.#mainAttackPreview.mtxLocal.scaling.z = (<ComponentProjectileMainAttack>this.attackMain)?.range ?? 1;
-          this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.resourcesLoaded, true);
+          this.node.addEventListener(ƒ.EVENT.CHILD_APPEND, this.resourcesLoaded);
           break;
+        }
       }
-    }
-
-    resourcesLoaded = () => {
-      ƒ.Project.removeEventListener(ƒ.EVENT.RESOURCES_LOADED, this.resourcesLoaded);
+      
+      resourcesLoaded = () => {
+      this.node.removeEventListener(ƒ.EVENT.CHILD_APPEND, this.resourcesLoaded);
       this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
     }
 
@@ -66,7 +66,7 @@ namespace Script {
       if (!this.#animations.has(_name)) {
         let animationName: string = this.animationIdleName;
         if (_name == "walk") animationName = this.animationWalkName;
-        if (animationName) return;
+        // if (!animationName) return;
         this.#animations.set(_name, <ƒ.Animation>ƒ.Project.getResourcesByName(animationName)[0])
       }
       this.#animator.animation = this.#animations.get(_name);

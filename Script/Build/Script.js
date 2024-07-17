@@ -629,12 +629,12 @@ var Script;
                     this.#mainAttackPreview?.activate(false);
                     this.findAttacks();
                     this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
-                    this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.resourcesLoaded, true);
+                    this.node.addEventListener("childAppend" /* ƒ.EVENT.CHILD_APPEND */, this.resourcesLoaded);
                     break;
             }
         };
         resourcesLoaded = () => {
-            ƒ.Project.removeEventListener("resourcesLoaded" /* ƒ.EVENT.RESOURCES_LOADED */, this.resourcesLoaded);
+            this.node.removeEventListener("childAppend" /* ƒ.EVENT.CHILD_APPEND */, this.resourcesLoaded);
             this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
         };
         playAnimation(_name) {
@@ -644,8 +644,7 @@ var Script;
                 let animationName = this.animationIdleName;
                 if (_name == "walk")
                     animationName = this.animationWalkName;
-                if (animationName)
-                    return;
+                // if (!animationName) return;
                 this.#animations.set(_name, ƒ.Project.getResourcesByName(animationName)[0]);
             }
             this.#animator.animation = this.#animations.get(_name);
