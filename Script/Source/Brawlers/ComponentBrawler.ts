@@ -14,7 +14,12 @@ namespace Script {
     protected attackSpecial: ComponentSpecialAttack;
     #mainAttackPreviewActive: boolean = false;
     #mainAttackPreview: ƒ.Node;
+    #animator: ƒ.ComponentAnimator;
+    #animations: Map<string, ƒ.Animation> = new Map();
+    #currentlyActiveAnimation: string = "idle";
     public mousePosition: ƒ.Vector3 = ƒ.Vector3.ZERO();
+    public animationIdleName: string;
+    public animationWalkName: string;
 
     constructor() {
       super();
@@ -46,8 +51,26 @@ namespace Script {
           this.#mainAttackPreview?.activate(false);
           this.findAttacks();
           this.#mainAttackPreview.mtxLocal.scaling.z = (<ComponentProjectileMainAttack>this.attackMain)?.range ?? 1;
+          this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.resourcesLoaded, true);
           break;
       }
+    }
+
+    resourcesLoaded = () => {
+      ƒ.Project.removeEventListener(ƒ.EVENT.RESOURCES_LOADED, this.resourcesLoaded);
+      this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
+    }
+
+    private playAnimation(_name: string) {
+      if (_name === this.#currentlyActiveAnimation) return;
+      if (!this.#animations.has(_name)) {
+        let animationName: string = this.animationIdleName;
+        if (_name == "walk") animationName = this.animationWalkName;
+        if (animationName) return;
+        this.#animations.set(_name, <ƒ.Animation>ƒ.Project.getResourcesByName(animationName)[0])
+      }
+      this.#animator.animation = this.#animations.get(_name);
+      this.#currentlyActiveAnimation = _name;
     }
 
     private findAttacks() {
@@ -67,15 +90,19 @@ namespace Script {
       this.move();
 
       if (this.#mainAttackPreviewActive) {
-        let newRotation: ƒ.Vector3 = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation,this.mousePosition).rotation;
+        let newRotation: ƒ.Vector3 = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation, this.mousePosition).rotation;
         this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
       }
     }
 
     protected move() {
       this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
-      if (this.direction.magnitudeSquared > 0)
+      if (this.direction.magnitudeSquared > 0) {
         this.rotationWrapperMatrix.lookIn(this.direction);
+        this.playAnimation("walk");
+      } else {
+        this.playAnimation("idle");
+      }
     }
 
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
@@ -110,12 +137,15 @@ namespace Script {
       delete _mutator.rotationWrapperMatrix;
       delete _mutator.attackMain;
       delete _mutator.attackSpecial;
+      delete _mutator.mousePosition;
     }
 
     public serialize(): ƒ.Serialization {
       let serialization: ƒ.Serialization = {
         [super.constructor.name]: super.serialize(),
-        speed: this.speed
+        speed: this.speed,
+        animationIdleName: this.animationIdleName,
+        animationWalkName: this.animationWalkName,
       };
 
       return serialization;
@@ -126,7 +156,8 @@ namespace Script {
         await super.deserialize(_serialization[super.constructor.name]);
       if (_serialization.speed != null)
         this.speed = _serialization.speed;
-
+      this.animationIdleName = _serialization.animationIdleName;
+      this.animationWalkName = _serialization.animationWalkName;
       return this;
     }
   }

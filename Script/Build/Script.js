@@ -64,14 +64,25 @@ var Script;
     class Damagable extends ƒ.Component {
         #health = 500;
         rigidbody;
+        #healthBar;
+        #maxHealth = 500;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
+            this.#maxHealth = this.#health;
         }
+        initHealthbar = async () => {
+            this.node.removeEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initHealthbar, true);
+            let healthbar = ƒ.Project.getResourcesByName("Healthbar")[0];
+            let instance = await ƒ.Project.createGraphInstance(healthbar);
+            this.node.addChild(instance);
+            this.#healthBar = instance.getChild(0).getComponent(ƒ.ComponentMesh);
+        };
         initDamagable = () => {
-            this.node.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
+            this.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
+            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initHealthbar, true);
             this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
         };
         get health() {
@@ -81,6 +92,9 @@ var Script;
             this.#health = _amt;
             if (this.#health < 0)
                 this.death();
+            if (!this.#healthBar)
+                return;
+            this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(this.#health / this.#maxHealth, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -582,7 +596,12 @@ var Script;
         attackSpecial;
         #mainAttackPreviewActive = false;
         #mainAttackPreview;
+        #animator;
+        #animations = new Map();
+        #currentlyActiveAnimation = "idle";
         mousePosition = ƒ.Vector3.ZERO();
+        animationIdleName;
+        animationWalkName;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -610,9 +629,28 @@ var Script;
                     this.#mainAttackPreview?.activate(false);
                     this.findAttacks();
                     this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
+                    this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.resourcesLoaded, true);
                     break;
             }
         };
+        resourcesLoaded = () => {
+            ƒ.Project.removeEventListener("resourcesLoaded" /* ƒ.EVENT.RESOURCES_LOADED */, this.resourcesLoaded);
+            this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
+        };
+        playAnimation(_name) {
+            if (_name === this.#currentlyActiveAnimation)
+                return;
+            if (!this.#animations.has(_name)) {
+                let animationName = this.animationIdleName;
+                if (_name == "walk")
+                    animationName = this.animationWalkName;
+                if (animationName)
+                    return;
+                this.#animations.set(_name, ƒ.Project.getResourcesByName(animationName)[0]);
+            }
+            this.#animator.animation = this.#animations.get(_name);
+            this.#currentlyActiveAnimation = _name;
+        }
         findAttacks() {
             let components = this.node.getAllComponents();
             this.attackMain = components.find(c => c instanceof Script.ComponentMainAttack);
@@ -636,8 +674,13 @@ var Script;
         }
         move() {
             this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
-            if (this.direction.magnitudeSquared > 0)
+            if (this.direction.magnitudeSquared > 0) {
                 this.rotationWrapperMatrix.lookIn(this.direction);
+                this.playAnimation("walk");
+            }
+            else {
+                this.playAnimation("idle");
+            }
         }
         attack(_atk, _direction) {
             switch (_atk) {
@@ -666,11 +709,14 @@ var Script;
             delete _mutator.rotationWrapperMatrix;
             delete _mutator.attackMain;
             delete _mutator.attackSpecial;
+            delete _mutator.mousePosition;
         }
         serialize() {
             let serialization = {
                 [super.constructor.name]: super.serialize(),
-                speed: this.speed
+                speed: this.speed,
+                animationIdleName: this.animationIdleName,
+                animationWalkName: this.animationWalkName,
             };
             return serialization;
         }
@@ -679,6 +725,8 @@ var Script;
                 await super.deserialize(_serialization[super.constructor.name]);
             if (_serialization.speed != null)
                 this.speed = _serialization.speed;
+            this.animationIdleName = _serialization.animationIdleName;
+            this.animationWalkName = _serialization.animationWalkName;
             return this;
         }
     }

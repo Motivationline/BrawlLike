@@ -17,6 +17,7 @@ declare namespace Script {
         #private;
         rigidbody: ƒ.ComponentRigidbody;
         constructor();
+        private initHealthbar;
         private initDamagable;
         get health(): number;
         set health(_amt: number);
@@ -156,8 +157,12 @@ declare namespace Script {
         protected attackMain: ComponentMainAttack;
         protected attackSpecial: ComponentSpecialAttack;
         mousePosition: ƒ.Vector3;
+        animationIdleName: string;
+        animationWalkName: string;
         constructor();
         hndEvent: (_event: Event) => void;
+        resourcesLoaded: () => void;
+        private playAnimation;
         private findAttacks;
         setMovement(_direction: ƒ.Vector3): void;
         update(): void;

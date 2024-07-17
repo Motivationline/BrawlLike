@@ -15,8 +15,7 @@
         "ƒ.CoatTextured": {
           "color": "[1, 1, 1, 1]"
         }
-      },
-      "alphaClip": 0.01
+      }
     }
   },
   "MeshCube|2024-06-26T12:37:06.268Z|15864": {
@@ -42,8 +41,7 @@
         "ƒ.CoatColored": {
           "color": "[0.30196078431372547, 0.1843137254901961, 0.0784313725490196, 1]"
         }
-      },
-      "alphaClip": 0.01
+      }
     }
   },
   "Material|2024-06-27T11:36:07.188Z|68061": {
@@ -55,8 +53,7 @@
         "ƒ.CoatColored": {
           "color": "[0.26666666666666666, 0.4980392156862745, 0.20392156862745098, 1]"
         }
-      },
-      "alphaClip": 0.01
+      }
     }
   },
   "MeshQuad|2024-06-28T08:24:39.947Z|87340": {
@@ -78,15 +75,13 @@
           "intensity": 0.7,
           "metallic": 0
         }
-      },
-      "alphaClip": 0.01
+      }
     }
   },
   "MeshGLTF|2024-06-28T08:50:53.601Z|91061": {
     "ƒ.MeshGLTF": {
       "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
       "name": "MeshBoulder",
-      "type": "MeshGLTF",
       "url": "Assets\\Decorations\\Boulder01.glb",
       "iPrimitive": 0
     }
@@ -184,8 +179,7 @@
           "intensity": 0.7,
           "metallic": 0
         }
-      },
-      "alphaClip": 0.01
+      }
     }
   },
   "Graph|2024-06-26T12:09:52.220Z|08626": {
@@ -674,7 +668,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[0, 0, -9]",
+                                  "translation": "[0, 0, -6]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -697,7 +691,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[0, 0, 9]",
+                                  "translation": "[0, 0, 6]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -5170,7 +5164,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
       "name": "Walk",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\blobbyv02.glb"
     }
   },
@@ -5214,7 +5207,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
       "name": "Walk",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\shimbo.glb"
     }
   },
@@ -5318,7 +5310,6 @@
     "ƒ.MaterialGLTF": {
       "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440",
       "name": "Cloud",
-      "type": "MaterialGLTF",
       "url": "Assets\\Decorations\\Cloud.glb"
     }
   },
@@ -5326,7 +5317,6 @@
     "ƒ.MeshGLTF": {
       "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765",
       "name": "Cloud.003",
-      "type": "MeshGLTF",
       "url": "Assets\\Decorations\\Cloud.glb",
       "iPrimitive": 0
     }
@@ -5582,8 +5572,7 @@
           "color": "[1, 1, 1, 1]",
           "idTexture": "TextureImage|2024-07-05T13:42:52.400Z|17225"
         }
-      },
-      "alphaClip": 0.01
+      }
     }
   },
   "TextureImage|2024-07-05T13:42:52.400Z|17225": {
@@ -5754,7 +5743,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395",
       "name": "Walk",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\cowgirl.glb"
     }
   },
@@ -5950,7 +5938,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-03T13:04:23.278Z|23591",
       "name": "Wind",
-      "type": "AnimationGLTF",
       "url": "Assets\\Decorations\\bush.glb"
     }
   },
@@ -6063,7 +6050,9 @@
                 },
                 "health": 5000
               },
-              "speed": 1
+              "speed": 1,
+              "animationIdleName": "FroggerIdle",
+              "animationWalkName": "FroggerWalking"
             }
           }
         ],
@@ -6117,7 +6106,14 @@
                 }
               ]
             },
-            "children": []
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-17T11:01:47.507Z|01165"
+                }
+              }
+            ]
           }
         },
         {
@@ -6199,6 +6195,13 @@
       "type": "Graph"
     }
   },
+  "AnimationGLTF|2024-07-17T11:01:47.507Z|29477": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-17T11:01:47.507Z|29477",
+      "name": "FroggerIdle",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
   "GraphGLTF|2024-07-17T11:01:47.507Z|01165": {
     "ƒ.GraphGLTF": {
       "name": "Frogger",
@@ -6232,20 +6235,140 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T11:01:47.507Z|29477": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T11:01:47.507Z|29477",
-      "name": "FroggerIdle",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\frog.glb"
-    }
-  },
   "AnimationGLTF|2024-07-17T11:01:47.523Z|74078": {
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T11:01:47.523Z|74078",
       "name": "FroggerWalking",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
+    }
+  },
+  "Graph|2024-07-17T11:26:37.372Z|92706": {
+    "ƒ.Graph": {
+      "name": "Healthbar",
+      "active": true,
+      "components": {
+        "ComponentFaceCamera": [
+          {
+            "ƒ.ComponentFaceCamera": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 1, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "Health",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[0.9999999999999999, 0.1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[0.1411764705882353, 0.9411764705882353, 0.27450980392156865, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-07-17T11:29:03.022Z|50220"
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Background",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+                    "pivot": {
+                      "translation": "[0, 0, -0.01]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 0.10000000000000014, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-07-17T11:29:03.022Z|50220"
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-07-17T11:26:37.372Z|92706",
+      "type": "Graph"
+    }
+  },
+  "Material|2024-07-17T11:29:03.022Z|50220": {
+    "ƒ.Material": {
+      "name": "ShaderLitHealthbar",
+      "idResource": "Material|2024-07-17T11:29:03.022Z|50220",
+      "shader": "ShaderLit",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[1, 1, 1, 1]"
+        }
+      }
     }
   }
 }

@@ -140,6 +140,9 @@
           },
           {
             "idResource": "MeshQuad|2024-07-05T13:42:11.867Z|27267"
+          },
+          {
+            "idResource": "Graph|2024-07-17T11:26:37.372Z|92706"
           }
         ]
       },
@@ -254,6 +257,14 @@
           },
           {
             "idResource": "Animation|2024-06-28T14:49:00.996Z|86706"
+          }
+        ]
+      },
+      {
+        "name": "IngameUI",
+        "entries": [
+          {
+            "idResource": "Material|2024-07-17T11:29:03.022Z|50220"
           }
         ]
       }
