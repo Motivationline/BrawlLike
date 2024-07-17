@@ -28,4 +28,23 @@ div.overlay {
 button{
   min-height: 50%;
   width: 50%;
+  font-size: 48px;
+  color: rgb(39, 39, 39);
+  font-family:"Poppins";
+}
+
+#start{
+  background-color: rgb(176, 237, 176);
+}
+
+#b1 {
+  background-color: rgb(225, 210, 97);
+}
+
+
+#b2 {
+  background-color: rgb(97, 212, 225);
+}
+#b1:hover , #b2:hover, #start:hover{
+  background-color: rgb(238, 238, 238);
 }

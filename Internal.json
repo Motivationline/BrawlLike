@@ -5151,53 +5151,12 @@
                 }
               ]
             },
-            "children": [
-              {
-                "ƒ.GraphInstance": {
-                  "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931"
-                }
-              }
-            ]
+            "children": []
           }
         }
       ],
       "idResource": "Graph|2024-06-26T12:42:10.698Z|62317",
       "type": "Graph"
-    }
-  },
-  "AnimationGLTF|2024-06-27T06:02:06.721Z|53114": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
-      "name": "Walk",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\blobbyv02.glb"
-    }
-  },
-  "GraphGLTF|2024-06-27T06:02:06.721Z|31931": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentAnimator": [
-          {
-            "ƒ.ComponentAnimator": {
-              "Component": {
-                "active": true
-              },
-              "idAnimation": "AnimationGLTF|2024-06-27T06:02:06.721Z|53114",
-              "playmode": "loop",
-              "quantization": "continous",
-              "scale": 1,
-              "scaleWithGameTime": true,
-              "animateInEditor": true
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2024-06-27T06:02:06.721Z|31931",
-      "type": "GraphGLTF",
-      "url": "Assets\\Chars\\blobbyv02.glb"
     }
   },
   "GraphGLTF|2024-06-27T07:16:42.618Z|60213": {
@@ -5208,40 +5167,6 @@
       "idResource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213",
       "type": "GraphGLTF",
       "url": "Assets\\Decorations\\Crate.glb"
-    }
-  },
-  "AnimationGLTF|2024-06-27T12:08:10.156Z|09227": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
-      "name": "Walk",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\shimbo.glb"
-    }
-  },
-  "GraphGLTF|2024-06-27T12:08:10.156Z|98294": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentAnimator": [
-          {
-            "ƒ.ComponentAnimator": {
-              "Component": {
-                "active": true
-              },
-              "idAnimation": "AnimationGLTF|2024-06-27T12:08:10.156Z|09227",
-              "playmode": "loop",
-              "quantization": "continous",
-              "scale": 1,
-              "scaleWithGameTime": true,
-              "animateInEditor": true
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2024-06-27T12:08:10.156Z|98294",
-      "type": "GraphGLTF",
-      "url": "Assets\\Chars\\shimbo.glb"
     }
   },
   "GraphGLTF|2024-06-27T13:47:35.746Z|44149": {
@@ -5651,7 +5576,9 @@
                 },
                 "health": 500
               },
-              "speed": 2
+              "speed": 2,
+              "animationIdleName": "CowgirlIdle",
+              "animationWalkName": "CowgirlWalk"
             }
           }
         ],
@@ -5709,7 +5636,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-03T10:46:00.190Z|12042"
+                  "idSource": "GraphGLTF|2024-07-17T14:53:53.041Z|79792"
                 }
               }
             ]
@@ -5747,128 +5674,6 @@
         }
       ],
       "idResource": "Graph|2024-06-28T13:29:09.815Z|45211",
-      "type": "Graph"
-    }
-  },
-  "AnimationGLTF|2024-07-03T10:46:00.190Z|07395": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395",
-      "name": "Walk",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\cowgirl.glb"
-    }
-  },
-  "GraphGLTF|2024-07-03T10:46:00.190Z|12042": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentAnimator": [
-          {
-            "ƒ.ComponentAnimator": {
-              "Component": {
-                "active": true
-              },
-              "idAnimation": "AnimationGLTF|2024-07-03T10:46:00.190Z|07395",
-              "playmode": "loop",
-              "quantization": "continous",
-              "scale": 1,
-              "scaleWithGameTime": true,
-              "animateInEditor": true
-            }
-          }
-        ],
-        "ComponentPhongToToon": [
-          {
-            "Script.ComponentPhongToToon": {
-              "active": true
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2024-07-03T10:46:00.190Z|12042",
-      "type": "GraphGLTF",
-      "url": "Assets\\Chars\\cowgirl.glb"
-    }
-  },
-  "Graph|2024-07-03T10:49:01.241Z|11869": {
-    "ƒ.Graph": {
-      "name": "BrawlerKamera",
-      "active": true,
-      "components": {
-        "ComponentTransform": [
-          {
-            "ƒ.ComponentTransform": {
-              "local": {
-                "translation": "[0, 0, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[1, 1, 1]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "ComponentRigidbody": [
-          {
-            "ƒ.ComponentRigidbody": {
-              "initialization": "TO_PIVOT",
-              "friction": 0.2,
-              "restitution": 0.2,
-              "mass": 1,
-              "dampTranslation": 0.1,
-              "dampRotation": 0.1,
-              "effectGravity": 1,
-              "typeBody": "DYNAMIC",
-              "typeCollider": "CAPSULE",
-              "isTrigger": false,
-              "id": 0,
-              "pivot": {
-                "translation": "[0, 0.5, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[0.5, 0.5999999642372131, 0.5999999642372131]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ]
-      },
-      "children": [
-        {
-          "ƒ.Node": {
-            "name": "wrapper",
-            "active": true,
-            "components": {
-              "ComponentTransform": [
-                {
-                  "ƒ.ComponentTransform": {
-                    "local": {
-                      "translation": "[0, 0, 0]",
-                      "rotation": "[0, 0, 0]",
-                      "scaling": "[2, 2, 2]"
-                    },
-                    "Component": {
-                      "active": true
-                    }
-                  }
-                }
-              ]
-            },
-            "children": [
-              {
-                "ƒ.GraphInstance": {
-                  "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-06-27T12:08:10.156Z|98294"
-                }
-              }
-            ]
-          }
-        }
-      ],
-      "idResource": "Graph|2024-07-03T10:49:01.241Z|11869",
       "type": "Graph"
     }
   },
@@ -6371,6 +6176,14 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
+  "AnimationGLTF|2024-07-17T14:03:22.586Z|78596": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
+      "name": "FroggerIdle",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
   "AnimationGLTF|2024-07-17T14:03:22.604Z|18473": {
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
@@ -6379,12 +6192,53 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T14:03:22.586Z|78596": {
+  "GraphGLTF|2024-07-17T14:53:53.041Z|79792": {
+    "ƒ.GraphGLTF": {
+      "name": "Cowgirl",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-17T14:53:53.041Z|37225",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": false
+            }
+          }
+        ],
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-17T14:53:53.041Z|79792",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\cowgirl.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-17T14:53:53.041Z|37225": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
-      "name": "FroggerIdle",
+      "idResource": "AnimationGLTF|2024-07-17T14:53:53.041Z|37225",
+      "name": "CowgirlIdle",
       "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\frog.glb"
+      "url": "Assets\\Chars\\cowgirl.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-17T14:53:53.042Z|49552": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-17T14:53:53.042Z|49552",
+      "name": "CowgirlWalk",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\cowgirl.glb"
     }
   }
 }
