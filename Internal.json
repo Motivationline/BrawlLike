@@ -6117,14 +6117,7 @@
                 }
               ]
             },
-            "children": [
-              {
-                "ƒ.GraphInstance": {
-                  "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-17T09:02:28.039Z|57758"
-                }
-              }
-            ]
+            "children": []
           }
         },
         {
@@ -6206,7 +6199,7 @@
       "type": "Graph"
     }
   },
-  "GraphGLTF|2024-07-17T09:02:28.039Z|57758": {
+  "GraphGLTF|2024-07-17T11:01:47.507Z|01165": {
     "ƒ.GraphGLTF": {
       "name": "Frogger",
       "active": true,
@@ -6224,7 +6217,7 @@
               "Component": {
                 "active": true
               },
-              "idAnimation": "AnimationGLTF|2024-07-17T09:02:28.044Z|11253",
+              "idAnimation": "AnimationGLTF|2024-07-17T11:01:47.507Z|29477",
               "playmode": "loop",
               "quantization": "continous",
               "scale": 1,
@@ -6234,23 +6227,23 @@
           }
         ]
       },
-      "idResource": "GraphGLTF|2024-07-17T09:02:28.039Z|57758",
+      "idResource": "GraphGLTF|2024-07-17T11:01:47.507Z|01165",
       "type": "GraphGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T09:02:28.044Z|11253": {
+  "AnimationGLTF|2024-07-17T11:01:47.507Z|29477": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T09:02:28.044Z|11253",
-      "name": "WalkV3Blocking",
+      "idResource": "AnimationGLTF|2024-07-17T11:01:47.507Z|29477",
+      "name": "FroggerIdle",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T09:02:28.039Z|19233": {
+  "AnimationGLTF|2024-07-17T11:01:47.523Z|74078": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T09:02:28.039Z|19233",
-      "name": "Walk",
+      "idResource": "AnimationGLTF|2024-07-17T11:01:47.523Z|74078",
+      "name": "FroggerWalking",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
