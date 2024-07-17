@@ -11,6 +11,7 @@ namespace Script {
             if (!super.attack(_direction)) return false;
 
             this.shootProjectile(_direction);
+            return true;
         }
 
         async shootProjectile(_direction: ƒ.Vector3) {

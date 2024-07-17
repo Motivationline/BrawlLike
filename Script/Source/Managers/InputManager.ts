@@ -36,20 +36,29 @@ namespace Script {
             EntityManager.Instance.playerBrawler?.setMovement(direction);
         }
 
+        mainPreviewTimeout: number;
+        specialPreviewTimeout: number;
+
         mousedown = (_event: MouseEvent) => {
             _event.preventDefault();
             if(_event.button == 0){
-                EntityManager.Instance.playerBrawler.showPreview(ATTACK_TYPE.MAIN);
+                this.mainPreviewTimeout = setTimeout(()=>{
+                    EntityManager.Instance.playerBrawler.showPreview(ATTACK_TYPE.MAIN);
+                }, 100);
             } else if(_event.button == 2){
-                EntityManager.Instance.playerBrawler.showPreview(ATTACK_TYPE.SPECIAL);
+                this.specialPreviewTimeout = setTimeout(()=>{
+                    EntityManager.Instance.playerBrawler.showPreview(ATTACK_TYPE.SPECIAL);
+                }, 100);
             }
         }
         mouseup = (_event: MouseEvent) => {
             _event.preventDefault();
             if(_event.button == 0){
+                clearTimeout(this.mainPreviewTimeout);
                 this.tryToAttack(ATTACK_TYPE.MAIN, _event);
                 EntityManager.Instance.playerBrawler.hidePreview(ATTACK_TYPE.MAIN);
             } else if (_event.button == 2){
+                clearTimeout(this.specialPreviewTimeout);
                 this.tryToAttack(ATTACK_TYPE.SPECIAL, _event);
                 EntityManager.Instance.playerBrawler.hidePreview(ATTACK_TYPE.SPECIAL);
             }

@@ -43,6 +43,8 @@ declare namespace Script {
         static Instance: InputManager;
         constructor();
         update: () => void;
+        mainPreviewTimeout: number;
+        specialPreviewTimeout: number;
         mousedown: (_event: MouseEvent) => void;
         mouseup: (_event: MouseEvent) => void;
         mousemove: (_event: MouseEvent) => void;
