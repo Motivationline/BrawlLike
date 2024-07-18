@@ -5195,14 +5195,14 @@
               },
               "backgroundEnabled": true,
               "projection": "central",
-              "fieldOfView": 45,
+              "fieldOfView": 80,
               "direction": "diagonal",
               "near": 1,
               "far": 2000,
-              "aspect": 1.6280701754385964,
+              "aspect": 1.1854460093896713,
               "pivot": {
-                "translation": "[0, 15, 12]",
-                "rotation": "[50, 180, 0]",
+                "translation": "[0, 7, 4]",
+                "rotation": "[60, 180, 0]",
                 "scaling": "[1, 1, 1]"
               },
               "Component": {
@@ -5480,7 +5480,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978"
+                  "idSource": "GraphGLTF|2024-07-18T10:06:25.240Z|03086"
                 }
               }
             ]
@@ -5805,16 +5805,6 @@
       "url": "Assets\\Projectiles\\Kartoffel.glb"
     }
   },
-  "GraphGLTF|2024-07-05T07:30:50.343Z|93978": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {},
-      "idResource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978",
-      "type": "GraphGLTF",
-      "url": "Assets\\Projectiles\\Tomato.glb"
-    }
-  },
   "Graph|2024-07-16T09:32:18.199Z|08157": {
     "ƒ.Graph": {
       "name": "BrawlerFrogger",
@@ -5868,7 +5858,7 @@
                 },
                 "health": 5000
               },
-              "speed": 1,
+              "speed": 0.7000000000000001,
               "animationIdleName": "FroggerIdle",
               "animationWalkName": "FroggerWalkingV2"
             }
@@ -6154,7 +6144,7 @@
               "Component": {
                 "active": true
               },
-              "idAnimation": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
+              "idAnimation": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
               "playmode": "loop",
               "quantization": "continous",
               "scale": 1,
@@ -6176,18 +6166,18 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T14:03:22.586Z|78596": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
-      "name": "FroggerIdle",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\frog.glb"
-    }
-  },
   "AnimationGLTF|2024-07-17T14:03:22.604Z|18473": {
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
       "name": "FroggerWalkingV2",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-17T14:03:22.586Z|78596": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
+      "name": "FroggerIdle",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
@@ -6239,6 +6229,47 @@
       "name": "CowgirlWalk",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\cowgirl.glb"
+    }
+  },
+  "GraphGLTF|2024-07-18T10:06:25.240Z|03086": {
+    "ƒ.GraphGLTF": {
+      "name": "TomatoScene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-18T10:06:25.240Z|03086",
+      "type": "GraphGLTF",
+      "url": "Assets\\Projectiles\\Tomato.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-18T10:06:25.240Z|84164": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
+      "name": "TomatoSpin",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Projectiles\\Tomato.glb"
     }
   }
 }

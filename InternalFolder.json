@@ -23,7 +23,10 @@
                 "name": "Tomato",
                 "entries": [
                   {
-                    "idResource": "GraphGLTF|2024-07-05T07:30:50.343Z|93978"
+                    "idResource": "GraphGLTF|2024-07-18T10:06:25.240Z|03086"
+                  },
+                  {
+                    "idResource": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164"
                   }
                 ]
               }
