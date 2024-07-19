@@ -106,6 +106,14 @@
           },
           {
             "idResource": "MeshQuad|2024-06-28T08:24:39.947Z|87340"
+          },
+          {
+            "name": "MapV2",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-18T14:43:35.986Z|90349"
+              }
+            ]
           }
         ]
       },
@@ -136,47 +144,6 @@
         "name": "Decoration",
         "entries": [
           {
-            "name": "Crate",
-            "entries": [
-              {
-                "idResource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-              }
-            ]
-          },
-          {
-            "idResource": "MeshCube|2024-06-27T09:39:02.161Z|07120"
-          },
-          {
-            "name": "Boulder",
-            "entries": [
-              {
-                "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061"
-              }
-            ]
-          },
-          {
-            "name": "Cloud",
-            "entries": [
-              {
-                "idResource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149"
-              },
-              {
-                "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440"
-              },
-              {
-                "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765"
-              }
-            ]
-          },
-          {
-            "name": "Mountain",
-            "entries": [
-              {
-                "idResource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649"
-              }
-            ]
-          },
-          {
             "name": "Bush",
             "entries": [
               {
@@ -200,6 +167,76 @@
                     "idResource": "GraphGLTF|2024-07-03T13:06:52.197Z|44245"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "Boulder",
+            "entries": [
+              {
+                "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061"
+              }
+            ]
+          },
+          {
+            "name": "Crate",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
+              }
+            ]
+          },
+          {
+            "name": "Cloud",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149"
+              },
+              {
+                "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440"
+              },
+              {
+                "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765"
+              }
+            ]
+          },
+          {
+            "name": "Fence",
+            "entries": [
+              {
+                "name": "FenceSolo",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-19T11:35:56.088Z|29355"
+                  }
+                ]
+              },
+              {
+                "name": "FenceShort",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-19T12:07:33.012Z|85162"
+                  }
+                ]
+              },
+              {
+                "name": "FenceLong",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "idResource": "MeshCube|2024-06-27T09:39:02.161Z|07120"
+          },
+          {
+            "name": "Mountain",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649"
               }
             ]
           }

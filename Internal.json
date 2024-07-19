@@ -53,7 +53,7 @@
       "shader": "ShaderLit",
       "coat": {
         "ƒ.CoatColored": {
-          "color": "[0.26666666666666666, 0.4980392156862745, 0.20392156862745098, 1]"
+          "color": "[0.050980392156862744, 0.5254901960784314, 0.09019607843137255, 1]"
         }
       },
       "alphaClip": 0.01
@@ -4664,14 +4664,7 @@
                       }
                     ]
                   },
-                  "children": [
-                    {
-                      "ƒ.GraphInstance": {
-                        "deserializeFromSource": true,
-                        "idSource": "GraphGLTF|2024-06-27T13:47:35.746Z|44149"
-                      }
-                    }
-                  ]
+                  "children": []
                 }
               }
             ]
@@ -4837,62 +4830,6 @@
                   "children": [
                     {
                       "ƒ.Node": {
-                        "name": "Cloud",
-                        "active": true,
-                        "components": {
-                          "ComponentMesh": [
-                            {
-                              "ƒ.ComponentMesh": {
-                                "idMesh": "MeshQuad|2024-06-28T08:24:39.947Z|87340",
-                                "pivot": {
-                                  "translation": "[0, 0, 0]",
-                                  "rotation": "[0, 0, 0]",
-                                  "scaling": "[1, 1, 1]"
-                                },
-                                "Component": {
-                                  "active": true
-                                }
-                              }
-                            }
-                          ],
-                          "ComponentMaterial": [
-                            {
-                              "ƒ.ComponentMaterial": {
-                                "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
-                                "clrSecondary": "[1, 1, 1, 1]",
-                                "pivot": {
-                                  "translation": "[0, 0]",
-                                  "rotation": 0,
-                                  "scaling": "[1, 1]"
-                                },
-                                "Component": {
-                                  "active": true
-                                },
-                                "idMaterial": "Material|2024-06-28T08:25:00.560Z|65025"
-                              }
-                            }
-                          ],
-                          "ComponentTransform": [
-                            {
-                              "ƒ.ComponentTransform": {
-                                "local": {
-                                  "translation": "[0, -27, 0]",
-                                  "rotation": "[-90, 0, 0]",
-                                  "scaling": "[200, 200, 1]"
-                                },
-                                "Component": {
-                                  "active": true
-                                }
-                              }
-                            }
-                          ]
-                        },
-                        "children": []
-                      }
-                    },
-                    {
-                      "ƒ.Node": {
                         "name": "CloudDown",
                         "active": true,
                         "components": {
@@ -5016,7 +4953,136 @@
                     {
                       "ƒ.GraphInstance": {
                         "deserializeFromSource": true,
-                        "idSource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649"
+                        "idSource": "GraphGLTF|2024-07-18T14:43:35.986Z|90349"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Fence",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "FenceShort",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-5, -12.750000000000005, 9.699999999999998]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-07-19T12:07:33.012Z|85162"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "FenceShort",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[5, -12.75, -9.7]",
+                                  "rotation": "[0, 180, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-07-19T12:07:33.012Z|85162"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "FenceLong",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[5.65, -12.75, 9]",
+                                  "rotation": "[0, 90, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "FenceLong",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-5.6499999999999995, -12.75, -9]",
+                                  "rotation": "[0, -90, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -6144,7 +6210,7 @@
               "Component": {
                 "active": true
               },
-              "idAnimation": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
+              "idAnimation": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
               "playmode": "loop",
               "quantization": "continous",
               "scale": 1,
@@ -6166,18 +6232,18 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T14:03:22.604Z|18473": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
-      "name": "FroggerWalkingV2",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\frog.glb"
-    }
-  },
   "AnimationGLTF|2024-07-17T14:03:22.586Z|78596": {
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
       "name": "FroggerIdle",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-17T14:03:22.604Z|18473": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
+      "name": "FroggerWalkingV2",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
@@ -6270,6 +6336,46 @@
       "name": "TomatoSpin",
       "type": "AnimationGLTF",
       "url": "Assets\\Projectiles\\Tomato.glb"
+    }
+  },
+  "GraphGLTF|2024-07-18T14:43:35.986Z|90349": {
+    "ƒ.GraphGLTF": {
+      "name": "SkyMapScene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-07-18T14:43:35.986Z|90349",
+      "type": "GraphGLTF",
+      "url": "Assets\\Floor\\Map04.glb"
+    }
+  },
+  "GraphGLTF|2024-07-19T11:35:56.088Z|29355": {
+    "ƒ.GraphGLTF": {
+      "name": "FenceScene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-07-19T11:35:56.088Z|29355",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\fence.glb"
+    }
+  },
+  "GraphGLTF|2024-07-19T12:07:33.012Z|85162": {
+    "ƒ.GraphGLTF": {
+      "name": "FenceScene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-07-19T12:07:33.012Z|85162",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\fenceShort.glb"
+    }
+  },
+  "GraphGLTF|2024-07-19T12:07:37.088Z|61000": {
+    "ƒ.GraphGLTF": {
+      "name": "FenceScene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\fenceLong.glb"
     }
   }
 }
