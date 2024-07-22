@@ -25,8 +25,8 @@ declare namespace Script {
         #private;
         rigidbody: ƒ.ComponentRigidbody;
         constructor();
-        private initHealthbar;
         private initDamagable;
+        private initHealthbar;
         get health(): number;
         set health(_amt: number);
         protected abstract death(): void;
@@ -85,13 +85,19 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     abstract class ComponentMainAttack extends ƒ.Component {
+        #private;
         reloadTime: number;
         minDelayBetweenAttacks: number;
         damage: number;
         castTime: number;
         maxCharges: number;
         protected charges: number;
+        protected chargeMoment: number;
+        constructor();
+        private initMainAttack;
+        private initVisuals;
         attack(_direction: ƒ.Vector3): boolean;
+        update(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;

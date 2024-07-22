@@ -13,19 +13,19 @@ namespace Script {
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
             this.#maxHealth = this.#health;
         }
-        
+
+        private initDamagable = () => {
+            // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
+            this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
+            this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+        }
+
         private initHealthbar = async () => {
-            this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
+            // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
             let healthbar: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("Healthbar")[0];
             let instance = await ƒ.Project.createGraphInstance(healthbar);
             this.node.addChild(instance);
             this.#healthBar = instance.getChild(0).getComponent(ƒ.ComponentMesh);
-        }
-        
-        private initDamagable = () => {
-            this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
-            this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
-            this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
         }
 
         get health(): number {

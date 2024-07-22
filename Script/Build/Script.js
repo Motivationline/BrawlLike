@@ -105,17 +105,17 @@ var Script;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
             this.#maxHealth = this.#health;
         }
+        initDamagable = () => {
+            // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
+            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initHealthbar, true);
+            this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+        };
         initHealthbar = async () => {
-            this.node.removeEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initHealthbar, true);
+            // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
             let healthbar = ƒ.Project.getResourcesByName("Healthbar")[0];
             let instance = await ƒ.Project.createGraphInstance(healthbar);
             this.node.addChild(instance);
             this.#healthBar = instance.getChild(0).getComponent(ƒ.ComponentMesh);
-        };
-        initDamagable = () => {
-            this.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
-            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initHealthbar, true);
-            this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
         };
         get health() {
             return this.#health;
@@ -261,8 +261,8 @@ var Script;
             if (!pb)
                 return;
             Script.viewport.pointClientToProjection;
-            let playerPos = Script.viewport.pointWorldToClient(pb.node.mtxWorld.translation);
-            let clientPos = Script.viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
+            // let playerPos = viewport.pointWorldToClient(pb.node.mtxWorld.translation);
+            // let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
             let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
             let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
             let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation).normalize();
@@ -397,11 +397,61 @@ var Script;
         damage = 100;
         castTime = 0.05;
         maxCharges = 3;
-        charges = 3;
+        charges = this.maxCharges;
+        chargeMoment = -1;
+        #attackBars = [];
+        #attackBarColor;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initMainAttack);
+        }
+        initMainAttack = () => {
+            // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
+            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initVisuals, true);
+        };
+        initVisuals = async () => {
+            // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
+            let attackbar = ƒ.Project.getResourcesByName("BasicAttackBar")[0];
+            for (let i = 0; i < this.maxCharges; i++) {
+                let instance = await ƒ.Project.createGraphInstance(attackbar);
+                this.node.addChild(instance);
+                let translateBy = (1 / this.maxCharges) * (i - 1);
+                instance.mtxLocal.translateX(translateBy);
+                instance.mtxLocal.scaleX(0.9 / this.maxCharges);
+                this.#attackBars.push(instance.getChild(0));
+                this.#attackBarColor = instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary;
+            }
+        };
         attack(_direction) {
             if (this.charges == 0)
                 return false;
+            if (this.charges < this.#attackBars.length) {
+                let pivot = this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot;
+                pivot.scaling = new ƒ.Vector3(0, pivot.scaling.y, pivot.scaling.z);
+            }
+            this.charges--;
+            this.#attackBars[this.charges].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
+            if (this.chargeMoment < 0)
+                this.chargeMoment = ƒ.Time.game.get();
             return true;
+        }
+        update() {
+            if (this.charges < this.maxCharges) {
+                let currentTime = ƒ.Time.game.get();
+                let reloadRatio = (currentTime - this.chargeMoment) / (this.reloadTime * 1000);
+                let scaling = this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, reloadRatio), scaling.y, scaling.z);
+                if (reloadRatio >= 1) {
+                    this.#attackBars[this.charges].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
+                    this.charges++;
+                    this.chargeMoment = currentTime;
+                    if (this.charges >= this.maxCharges) {
+                        this.chargeMoment = -1;
+                    }
+                }
+            }
         }
         reduceMutator(_mutator) {
             delete _mutator.charges;
@@ -658,9 +708,11 @@ var Script;
                     this.rigidbody.effectRotation = new ƒ.Vector3();
                     this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
                     this.#mainAttackPreview = this.node.getChild(1);
-                    this.#mainAttackPreview?.activate(false);
-                    this.findAttacks();
-                    this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
+                    if (this.#mainAttackPreview) {
+                        this.#mainAttackPreview.activate(false);
+                        this.findAttacks();
+                        this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
+                    }
                     this.node.addEventListener("childAppend" /* ƒ.EVENT.CHILD_APPEND */, this.resourcesLoaded);
                     break;
             }
@@ -702,6 +754,7 @@ var Script;
                 let newRotation = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation, this.mousePosition).rotation;
                 this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
             }
+            this.attackMain?.update();
         }
         move() {
             this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));

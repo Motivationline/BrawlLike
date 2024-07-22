@@ -76,8 +76,8 @@ namespace Script {
             let pb = EntityManager.Instance.playerBrawler;
             if (!pb) return;
             viewport.pointClientToProjection
-            let playerPos = viewport.pointWorldToClient(pb.node.mtxWorld.translation);
-            let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
+            // let playerPos = viewport.pointWorldToClient(pb.node.mtxWorld.translation);
+            // let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
             let ray = viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
             let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
             let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation).normalize();

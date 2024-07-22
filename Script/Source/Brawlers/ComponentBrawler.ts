@@ -48,15 +48,17 @@ namespace Script {
           this.rigidbody.effectRotation = new ƒ.Vector3();
           this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
           this.#mainAttackPreview = this.node.getChild(1);
-          this.#mainAttackPreview?.activate(false);
-          this.findAttacks();
-          this.#mainAttackPreview.mtxLocal.scaling.z = (<ComponentProjectileMainAttack>this.attackMain)?.range ?? 1;
+          if (this.#mainAttackPreview) {
+            this.#mainAttackPreview.activate(false);
+            this.findAttacks();
+            this.#mainAttackPreview.mtxLocal.scaling.z = (<ComponentProjectileMainAttack>this.attackMain)?.range ?? 1;
+          }
           this.node.addEventListener(ƒ.EVENT.CHILD_APPEND, this.resourcesLoaded);
           break;
-        }
       }
-      
-      resourcesLoaded = () => {
+    }
+
+    resourcesLoaded = () => {
       this.node.removeEventListener(ƒ.EVENT.CHILD_APPEND, this.resourcesLoaded);
       this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
     }
@@ -93,6 +95,7 @@ namespace Script {
         let newRotation: ƒ.Vector3 = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation, this.mousePosition).rotation;
         this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
       }
+      this.attackMain?.update();
     }
 
     protected move() {
