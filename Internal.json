@@ -3149,7 +3149,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0, 0]",
+                                              "translation": "[0.1, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -3179,7 +3179,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0, -1]",
+                                              "translation": "[0.1, 0, -0.9]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -3959,7 +3959,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0, 1]",
+                                              "translation": "[0.1, 0, 1]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -4079,7 +4079,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[1, 0, -2]",
+                                              "translation": "[1, 0, -1.9]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -4223,7 +4223,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[1, 0, 0]",
+                                              "translation": "[1, 0, 0.20000000000000004]",
                                               "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -4253,7 +4253,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[-1, 0, 0]",
+                                              "translation": "[-1, 0, -0.2]",
                                               "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -4307,7 +4307,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0, 0]",
+                                              "translation": "[-0.1, 0, 0]",
                                               "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -4421,7 +4421,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0, -1]",
+                                              "translation": "[0, 0, -0.9]",
                                               "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -5080,6 +5080,120 @@
                             "ƒ.GraphInstance": {
                               "deserializeFromSource": true,
                               "idSource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Grass Outside",
+                  "active": true,
+                  "components": {
+                    "ComponentTransform": [
+                      {
+                        "ƒ.ComponentTransform": {
+                          "local": {
+                            "translation": "[0, -12.8, 0]",
+                            "rotation": "[0, 0, 0]",
+                            "scaling": "[1, 1, 1]"
+                          },
+                          "Component": {
+                            "active": true
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[6.199999999999999, 0, -4.500000000000002]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-07-03T11:44:47.273Z|33490"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[6.199999999999999, 0, -3.5000000000000018]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-07-03T11:44:47.273Z|33490"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[5.700000000000001, 0, 10]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-07-03T11:44:47.273Z|33490"
                             }
                           }
                         ]
@@ -5767,7 +5881,7 @@
         {
           "ƒ.Node": {
             "name": "GrassFloor",
-            "active": true,
+            "active": false,
             "components": {
               "ComponentMesh": [
                 {
@@ -5809,7 +5923,7 @@
         {
           "ƒ.GraphInstance": {
             "deserializeFromSource": true,
-            "idSource": "GraphGLTF|2024-07-03T13:06:52.197Z|44245"
+            "idSource": "GraphGLTF|2024-07-22T12:03:49.917Z|81675"
           }
         }
       ],
@@ -6362,7 +6476,15 @@
     "ƒ.GraphGLTF": {
       "name": "FenceScene",
       "active": true,
-      "components": {},
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
       "idResource": "GraphGLTF|2024-07-19T12:07:33.012Z|85162",
       "type": "GraphGLTF",
       "url": "Assets\\Decorations\\fenceShort.glb"
@@ -6372,10 +6494,59 @@
     "ƒ.GraphGLTF": {
       "name": "FenceScene",
       "active": true,
-      "components": {},
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
       "idResource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000",
       "type": "GraphGLTF",
       "url": "Assets\\Decorations\\fenceLong.glb"
+    }
+  },
+  "GraphGLTF|2024-07-22T12:03:49.917Z|81675": {
+    "ƒ.GraphGLTF": {
+      "name": "RoundBushScene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-22T12:03:49.917Z|35082",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentOffsetAnimation": [
+          {
+            "Script.ComponentOffsetAnimation": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-22T12:03:49.917Z|81675",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\BushRound.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-22T12:03:49.917Z|35082": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-22T12:03:49.917Z|35082",
+      "name": "RoundBushWind",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Decorations\\BushRound.glb"
     }
   }
 }

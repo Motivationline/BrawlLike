@@ -1,5 +1,13 @@
 declare namespace Script {
     import ƒ = FudgeCore;
+    class ComponentOffsetAnimation extends ƒ.Component {
+        offsetFactor: number;
+        constructor();
+        hndEvent: (_event: Event) => void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     class CustomMaterial extends ƒ.Material {
     }
     class ComponentPhongToToon extends ƒ.Component {

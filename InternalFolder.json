@@ -167,6 +167,17 @@
                     "idResource": "GraphGLTF|2024-07-03T13:06:52.197Z|44245"
                   }
                 ]
+              },
+              {
+                "name": "RoundBush",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-22T12:03:49.917Z|81675"
+                  },
+                  {
+                    "idResource": "AnimationGLTF|2024-07-22T12:03:49.917Z|35082"
+                  }
+                ]
               }
             ]
           },

@@ -2,6 +2,38 @@
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    class ComponentOffsetAnimation extends ƒ.Component {
+        offsetFactor = 1;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            // Listen to this component being added to or removed from a node
+            this.addEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+            this.addEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
+        }
+        hndEvent = (_event) => {
+            switch (_event.type) {
+                case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
+                    break;
+                case "componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */:
+                    this.removeEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+                    this.removeEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+                    break;
+                case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
+                    let animator = this.node.getComponent(ƒ.ComponentAnimator);
+                    let randomTime = Math.round(Math.random() * animator.animation.totalTime * this.offsetFactor);
+                    animator.jumpTo(randomTime);
+                    break;
+            }
+        };
+    }
+    Script.ComponentOffsetAnimation = ComponentOffsetAnimation;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     class CustomMaterial extends ƒ.Material {
     }
     Script.CustomMaterial = CustomMaterial;
