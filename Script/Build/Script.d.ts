@@ -84,7 +84,22 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    abstract class ComponentMainAttack extends ƒ.Component {
+    enum AttackPreviewType {
+        LINE = 0,
+        CONE = 1,
+        AREA = 2
+    }
+    abstract class ComponentAttack extends ƒ.Component {
+        previewType: AttackPreviewType;
+        constructor();
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        getMutatorAttributeTypes(_mutator: ƒ.Mutator): ƒ.MutatorAttributeTypes;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    abstract class ComponentMainAttack extends ComponentAttack {
         #private;
         reloadTime: number;
         minDelayBetweenAttacks: number;
@@ -138,7 +153,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    abstract class ComponentSpecialAttack extends ƒ.Component {
+    abstract class ComponentSpecialAttack extends ComponentAttack {
         damage: number;
         castTime: number;
         requiredCharge: number;

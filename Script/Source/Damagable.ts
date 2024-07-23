@@ -34,7 +34,7 @@ namespace Script {
 
         set health(_amt) {
             this.#health = _amt;
-            if (this.#health < 0) this.death();
+            if (this.#health <= 0) this.death();
             if (!this.#healthBar) return;
             this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(this.#health / this.#maxHealth, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
         }

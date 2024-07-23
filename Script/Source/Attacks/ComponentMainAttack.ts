@@ -1,6 +1,7 @@
+/// <reference path="ComponentAttack.ts"/>
 namespace Script {
     import ƒ = FudgeCore;
-    export abstract class ComponentMainAttack extends ƒ.Component {
+    export abstract class ComponentMainAttack extends ComponentAttack {
         reloadTime: number = 1;
         minDelayBetweenAttacks: number = 0.3;
         damage: number = 100;

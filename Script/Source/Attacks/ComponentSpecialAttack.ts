@@ -1,6 +1,6 @@
 namespace Script {
     import ƒ = FudgeCore;
-    export abstract class ComponentSpecialAttack extends ƒ.Component {
+    export abstract class ComponentSpecialAttack extends ComponentAttack {
         damage: number = 100;
         castTime: number = 0.05;
         requiredCharge: number = 500;

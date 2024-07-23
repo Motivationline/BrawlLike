@@ -122,7 +122,7 @@ var Script;
         }
         set health(_amt) {
             this.#health = _amt;
-            if (this.#health < 0)
+            if (this.#health <= 0)
                 this.death();
             if (!this.#healthBar)
                 return;
@@ -391,7 +391,48 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    class ComponentMainAttack extends ƒ.Component {
+    let AttackPreviewType;
+    (function (AttackPreviewType) {
+        AttackPreviewType[AttackPreviewType["LINE"] = 0] = "LINE";
+        AttackPreviewType[AttackPreviewType["CONE"] = 1] = "CONE";
+        AttackPreviewType[AttackPreviewType["AREA"] = 2] = "AREA";
+    })(AttackPreviewType = Script.AttackPreviewType || (Script.AttackPreviewType = {}));
+    class ComponentAttack extends ƒ.Component {
+        previewType = AttackPreviewType.LINE;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+        }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                previewType: this.previewType,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.previewType)
+                this.previewType = _serialization.previewType;
+            return this;
+        }
+        getMutatorAttributeTypes(_mutator) {
+            let types = super.getMutatorAttributeTypes(_mutator);
+            if (types.previewType)
+                types.previewType = AttackPreviewType;
+            return types;
+        }
+    }
+    Script.ComponentAttack = ComponentAttack;
+})(Script || (Script = {}));
+/// <reference path="ComponentAttack.ts"/>
+var Script;
+/// <reference path="ComponentAttack.ts"/>
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ComponentMainAttack extends Script.ComponentAttack {
         reloadTime = 1;
         minDelayBetweenAttacks = 0.3;
         damage = 100;
@@ -617,8 +658,7 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
-    var ƒ = FudgeCore;
-    class ComponentSpecialAttack extends ƒ.Component {
+    class ComponentSpecialAttack extends Script.ComponentAttack {
         damage = 100;
         castTime = 0.05;
         requiredCharge = 500;

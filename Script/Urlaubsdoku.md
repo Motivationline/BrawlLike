@@ -11,7 +11,7 @@ Damit ein Brawler richtig geladen werden kann, muss der Brawler Graph wie folgt 
 ```
 Brawler
 | - ComponentTransform
-| - ComponentRigidbody (typeBody: dynamic)
+| - ComponentRigidbody (typeBody: dynamic, effectGravity: 0)
 | - ComponentBrawler (bzw. Brawlerspezifisch, z.B. Cowboy)
 | - ComponentMainAttack (bzw Brawlerspezifisch, z.B. CowboyMainAttack)
 | - ComponentSpecialAttack (bzw Brawlerspezifisch, z.B. CowboySpecialAttack)
