@@ -90,8 +90,15 @@ declare namespace Script {
         AREA = 2
     }
     abstract class ComponentAttack extends ƒ.Component {
+        #private;
         previewType: AttackPreviewType;
+        previewWidth: number;
+        range: number;
         constructor();
+        showPreview(): void;
+        hidePreview(): void;
+        updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3): void;
+        private initPreviewHandler;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
         getMutatorAttributeTypes(_mutator: ƒ.Mutator): ƒ.MutatorAttributeTypes;

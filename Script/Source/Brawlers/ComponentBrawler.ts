@@ -12,8 +12,6 @@ namespace Script {
     protected rotationWrapperMatrix: ƒ.Matrix4x4;
     protected attackMain: ComponentMainAttack;
     protected attackSpecial: ComponentSpecialAttack;
-    #mainAttackPreviewActive: boolean = false;
-    #mainAttackPreview: ƒ.Node;
     #animator: ƒ.ComponentAnimator;
     #animations: Map<string, ƒ.Animation> = new Map();
     #currentlyActiveAnimation: string = "idle";
@@ -47,12 +45,7 @@ namespace Script {
           this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
           this.rigidbody.effectRotation = new ƒ.Vector3();
           this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
-          this.#mainAttackPreview = this.node.getChild(1);
-          if (this.#mainAttackPreview) {
-            this.#mainAttackPreview.activate(false);
-            this.findAttacks();
-            this.#mainAttackPreview.mtxLocal.scaling.z = (<ComponentProjectileMainAttack>this.attackMain)?.range ?? 1;
-          }
+          this.findAttacks();
           this.node.addEventListener(ƒ.EVENT.CHILD_APPEND, this.resourcesLoaded);
           break;
       }
@@ -91,11 +84,11 @@ namespace Script {
       if (!this.rigidbody.isActive) this.rigidbody.activate(true);
       this.move();
 
-      if (this.#mainAttackPreviewActive) {
-        let newRotation: ƒ.Vector3 = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation, this.mousePosition).rotation;
-        this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
+      if (EntityManager.Instance.playerBrawler === this) {
+        this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+        this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+        this.attackMain?.update();
       }
-      this.attackMain?.update();
     }
 
     protected move() {
@@ -120,13 +113,25 @@ namespace Script {
     }
 
     public showPreview(_atk: ATTACK_TYPE) {
-      this.#mainAttackPreviewActive = true;
-      this.#mainAttackPreview.activate(true);
+      switch (_atk) {
+        case ATTACK_TYPE.MAIN:
+          this.attackMain.showPreview();
+          break;
+        case ATTACK_TYPE.SPECIAL:
+          this.attackSpecial.showPreview();
+          break;
+      }
     }
 
     public hidePreview(_atk: ATTACK_TYPE) {
-      this.#mainAttackPreviewActive = false;
-      this.#mainAttackPreview.activate(false);
+      switch (_atk) {
+        case ATTACK_TYPE.MAIN:
+          this.attackMain.hidePreview();
+          break;
+        case ATTACK_TYPE.SPECIAL:
+          this.attackSpecial.hidePreview();
+          break;
+      }
     }
 
 

@@ -399,15 +399,89 @@ var Script;
     })(AttackPreviewType = Script.AttackPreviewType || (Script.AttackPreviewType = {}));
     class ComponentAttack extends ƒ.Component {
         previewType = AttackPreviewType.LINE;
+        previewWidth = 1;
+        range = 5;
+        #previewNode;
+        #previewActive = false;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, () => {
+                this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initPreviewHandler, true);
+            });
         }
+        showPreview() {
+            this.#previewNode.activate(true);
+            this.#previewActive = true;
+        }
+        hidePreview() {
+            this.#previewNode.activate(false);
+            this.#previewActive = false;
+        }
+        updatePreview(_brawlerPosition, _mousePosition) {
+            if (!this.#previewActive)
+                return;
+            switch (this.previewType) {
+                case AttackPreviewType.LINE:
+                case AttackPreviewType.CONE:
+                    let newRotation = ƒ.Matrix4x4.LOOK_AT(_brawlerPosition, _mousePosition).rotation;
+                    this.#previewNode.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
+                    break;
+                case AttackPreviewType.AREA:
+                    let newPosition = ƒ.Vector3.DIFFERENCE(_mousePosition, _brawlerPosition);
+                    if (newPosition.magnitude > this.range)
+                        newPosition.normalize(this.range);
+                    this.#previewNode.mtxLocal.translation = newPosition;
+                    break;
+            }
+        }
+        initPreviewHandler = () => {
+            let quad = ƒ.Project.getResourcesByType(ƒ.MeshQuad)[0];
+            let texture;
+            switch (this.previewType) {
+                case AttackPreviewType.LINE:
+                    texture = ƒ.Project.getResourcesByName("PreviewLine")[0];
+                    break;
+                case AttackPreviewType.CONE:
+                    texture = ƒ.Project.getResourcesByName("PreviewCone")[0];
+                    break;
+                case AttackPreviewType.AREA:
+                    texture = ƒ.Project.getResourcesByName("PreviewArea")[0];
+                    break;
+            }
+            if (!quad || !texture) {
+                console.error("Failed to load preview resources.");
+                return;
+            }
+            let node = new ƒ.Node("preview");
+            node.addComponent(new ƒ.ComponentTransform());
+            let childNode = new ƒ.Node("preview");
+            let mesh = new ƒ.ComponentMesh(quad);
+            childNode.addComponent(mesh);
+            let mat = new ƒ.ComponentMaterial(texture);
+            childNode.addComponent(mat);
+            mat.sortForAlpha = true;
+            if (this.previewType === AttackPreviewType.CONE || this.previewType === AttackPreviewType.LINE) {
+                mesh.mtxPivot.scaleX(this.previewWidth);
+                mesh.mtxPivot.translateZ(0.5);
+                node.mtxLocal.scaling.z = this.range;
+            }
+            else if (this.previewType === AttackPreviewType.AREA) {
+                mesh.mtxPivot.scaling.x = mesh.mtxPivot.scaling.z = this.previewWidth;
+            }
+            mesh.mtxPivot.rotateX(-90);
+            node.addChild(childNode);
+            this.#previewNode = node;
+            this.node.addChild(node);
+            this.hidePreview();
+        };
         serialize() {
             let serialization = {
                 [super.constructor.name]: super.serialize(),
                 previewType: this.previewType,
+                previewWidth: this.previewWidth,
+                range: this.range,
             };
             return serialization;
         }
@@ -416,6 +490,10 @@ var Script;
                 await super.deserialize(_serialization[super.constructor.name]);
             if (_serialization.previewType)
                 this.previewType = _serialization.previewType;
+            if (_serialization.previewWidth)
+                this.previewWidth = _serialization.previewWidth;
+            if (_serialization.range)
+                this.range = _serialization.range;
             return this;
         }
         getMutatorAttributeTypes(_mutator) {
@@ -716,8 +794,6 @@ var Script;
         rotationWrapperMatrix;
         attackMain;
         attackSpecial;
-        #mainAttackPreviewActive = false;
-        #mainAttackPreview;
         #animator;
         #animations = new Map();
         #currentlyActiveAnimation = "idle";
@@ -747,12 +823,7 @@ var Script;
                     this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
                     this.rigidbody.effectRotation = new ƒ.Vector3();
                     this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
-                    this.#mainAttackPreview = this.node.getChild(1);
-                    if (this.#mainAttackPreview) {
-                        this.#mainAttackPreview.activate(false);
-                        this.findAttacks();
-                        this.#mainAttackPreview.mtxLocal.scaling.z = this.attackMain?.range ?? 1;
-                    }
+                    this.findAttacks();
                     this.node.addEventListener("childAppend" /* ƒ.EVENT.CHILD_APPEND */, this.resourcesLoaded);
                     break;
             }
@@ -790,11 +861,11 @@ var Script;
             if (!this.rigidbody.isActive)
                 this.rigidbody.activate(true);
             this.move();
-            if (this.#mainAttackPreviewActive) {
-                let newRotation = ƒ.Matrix4x4.LOOK_AT(this.node.mtxLocal.translation, this.mousePosition).rotation;
-                this.#mainAttackPreview.mtxLocal.rotation = ƒ.Vector3.Y(newRotation.y);
+            if (Script.EntityManager.Instance.playerBrawler === this) {
+                this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+                this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+                this.attackMain?.update();
             }
-            this.attackMain?.update();
         }
         move() {
             this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
@@ -817,12 +888,24 @@ var Script;
             }
         }
         showPreview(_atk) {
-            this.#mainAttackPreviewActive = true;
-            this.#mainAttackPreview.activate(true);
+            switch (_atk) {
+                case ATTACK_TYPE.MAIN:
+                    this.attackMain.showPreview();
+                    break;
+                case ATTACK_TYPE.SPECIAL:
+                    this.attackSpecial.showPreview();
+                    break;
+            }
         }
         hidePreview(_atk) {
-            this.#mainAttackPreviewActive = false;
-            this.#mainAttackPreview.activate(false);
+            switch (_atk) {
+                case ATTACK_TYPE.MAIN:
+                    this.attackMain.hidePreview();
+                    break;
+                case ATTACK_TYPE.SPECIAL:
+                    this.attackSpecial.hidePreview();
+                    break;
+            }
         }
         death() {
             console.log("I died.", this);

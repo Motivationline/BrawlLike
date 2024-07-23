@@ -16,15 +16,10 @@ Brawler
 | - ComponentMainAttack (bzw Brawlerspezifisch, z.B. CowboyMainAttack)
 | - ComponentSpecialAttack (bzw Brawlerspezifisch, z.B. CowboySpecialAttack)
 |
-├ wrapper (node so i can rotate the visuals properly)
-|   | - Component Transform
-|   |
-|   └ GLTF Importet Scene
-└ mainAttackPreview (node that has the main attack preview)
-    | - ComponentTransform
-    └ Node
-        - Comp.Mesh -> Quad
-        - Comp.Material
+└ wrapper (node so i can rotate the visuals properly)
+    | - Component Transform
+    |
+    └ GLTF Importet Scene
 ```
 
 +z ist vorwärts.
@@ -35,7 +30,14 @@ Die Angriffe der Brawler müssen lediglich auf den Brawlerknoten als Component h
 
 Es gibt bereits eine `ComponentProjectileMainAttack` Komponente welche als Hauptangriff ein Projektil verschießt. Welches Projektil verschossen werden soll kann wiederum als string (Name des Graphs) in der Komponente verändert werden. Die `CowboyMainAttack` zum Beispiel verwendet derzeit ausschließlich diese Klasse.
 
-Viele Eigenschaften von Angriffen haben noch keine Auswirkung wie Cooldowns, Aufladungen, Delays, etc.
+Viele Eigenschaften von Angriffen haben noch keine Auswirkung wie Delays, etc.
+
+### Vorschau
+Angriffe haben drei Möglichkeiten für eine Vorschau: `LINE` (gerade Linie), `CONE` (Dreieck) und `AREA` (Kreis).
+
+Die Parameter sind:  
+_previewWidth_ sorgt bei LINE und CONE für die (End-)Breite, während es bei AREA der Durchmesser ist.  
+_range_ ist bei LINE und CONE die Länge der Vorschau, bei AREA ist es der maximale Abstand des Mittelpunktes des Kreises.
 
 ## Projektile
 
