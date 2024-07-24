@@ -196,6 +196,8 @@ declare namespace Script {
         mousePosition: ƒ.Vector3;
         animationIdleName: string;
         animationWalkName: string;
+        animationAttackName: string;
+        animationSpecialName: string;
         constructor();
         hndEvent: (_event: Event) => void;
         resourcesLoaded: () => void;

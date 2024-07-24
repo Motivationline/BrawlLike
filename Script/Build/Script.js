@@ -805,10 +805,12 @@ var Script;
         attackSpecial;
         #animator;
         #animations = new Map();
-        #currentlyActiveAnimation = "idle";
+        #currentlyActiveAnimation = { name: "idle", lock: false };
         mousePosition = ƒ.Vector3.ZERO();
         animationIdleName;
         animationWalkName;
+        animationAttackName;
+        animationSpecialName;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -841,18 +843,35 @@ var Script;
             this.node.removeEventListener("childAppend" /* ƒ.EVENT.CHILD_APPEND */, this.resourcesLoaded);
             this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
         };
-        playAnimation(_name) {
-            if (_name === this.#currentlyActiveAnimation)
+        playAnimation(_name, _lockAndSwitchToIdleAfter = false) {
+            if (_name === this.#currentlyActiveAnimation.name)
+                return;
+            if (this.#currentlyActiveAnimation.lock)
                 return;
             if (!this.#animations.has(_name)) {
                 let animationName = this.animationIdleName;
                 if (_name == "walk")
                     animationName = this.animationWalkName;
-                // if (!animationName) return;
-                this.#animations.set(_name, ƒ.Project.getResourcesByName(animationName)[0]);
+                if (_name == "attack")
+                    animationName = this.animationAttackName;
+                if (_name == "special")
+                    animationName = this.animationSpecialName;
+                if (!animationName)
+                    return;
+                let animation = ƒ.Project.getResourcesByName(animationName)[0];
+                if (!animation)
+                    return;
+                this.#animations.set(_name, animation);
             }
             this.#animator.animation = this.#animations.get(_name);
-            this.#currentlyActiveAnimation = _name;
+            this.#currentlyActiveAnimation.name = _name;
+            this.#currentlyActiveAnimation.lock = _lockAndSwitchToIdleAfter;
+            if (_lockAndSwitchToIdleAfter) {
+                setTimeout(() => {
+                    this.#currentlyActiveAnimation.lock = false;
+                    this.playAnimation("idle");
+                }, this.#animations.get(_name).totalTime);
+            }
         }
         findAttacks() {
             let components = this.node.getAllComponents();
@@ -890,9 +909,11 @@ var Script;
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
                     this.attackMain.attack(_direction);
+                    this.playAnimation("attack", true);
                     break;
                 case ATTACK_TYPE.SPECIAL:
                     this.attackSpecial.attack(_direction);
+                    this.playAnimation("special", true);
                     break;
             }
         }
@@ -933,6 +954,8 @@ var Script;
                 speed: this.speed,
                 animationIdleName: this.animationIdleName,
                 animationWalkName: this.animationWalkName,
+                animationAttackName: this.animationAttackName,
+                animationSpecialName: this.animationSpecialName,
             };
             return serialization;
         }
@@ -943,6 +966,8 @@ var Script;
                 this.speed = _serialization.speed;
             this.animationIdleName = _serialization.animationIdleName;
             this.animationWalkName = _serialization.animationWalkName;
+            this.animationAttackName = _serialization.animationAttackName;
+            this.animationSpecialName = _serialization.animationSpecialName;
             return this;
         }
     }

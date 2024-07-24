@@ -2,6 +2,7 @@
 namespace Script {
   import ƒ = FudgeCore;
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
+  type AnimationType = "idle"| "walk" | "attack" | "special";
 
   export class ComponentBrawler extends Damagable {
     // Register the script as component for use in the editor via drag&drop
@@ -14,10 +15,12 @@ namespace Script {
     protected attackSpecial: ComponentSpecialAttack;
     #animator: ƒ.ComponentAnimator;
     #animations: Map<string, ƒ.Animation> = new Map();
-    #currentlyActiveAnimation: string = "idle";
+    #currentlyActiveAnimation: { name: string, lock: boolean } = { name: "idle", lock: false };
     public mousePosition: ƒ.Vector3 = ƒ.Vector3.ZERO();
     public animationIdleName: string;
     public animationWalkName: string;
+    public animationAttackName: string;
+    public animationSpecialName: string;
 
     constructor() {
       super();
@@ -56,16 +59,28 @@ namespace Script {
       this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
     }
 
-    private playAnimation(_name: string) {
-      if (_name === this.#currentlyActiveAnimation) return;
+    private playAnimation(_name: AnimationType, _lockAndSwitchToIdleAfter: boolean = false) {
+      if (_name === this.#currentlyActiveAnimation.name) return;
+      if (this.#currentlyActiveAnimation.lock) return;
       if (!this.#animations.has(_name)) {
         let animationName: string = this.animationIdleName;
         if (_name == "walk") animationName = this.animationWalkName;
-        // if (!animationName) return;
-        this.#animations.set(_name, <ƒ.Animation>ƒ.Project.getResourcesByName(animationName)[0])
+        if (_name == "attack") animationName = this.animationAttackName;
+        if (_name == "special") animationName = this.animationSpecialName;
+        if (!animationName) return;
+        let animation = <ƒ.Animation>ƒ.Project.getResourcesByName(animationName)[0];
+        if (!animation) return;
+        this.#animations.set(_name, animation);
       }
       this.#animator.animation = this.#animations.get(_name);
-      this.#currentlyActiveAnimation = _name;
+      this.#currentlyActiveAnimation.name = _name;
+      this.#currentlyActiveAnimation.lock = _lockAndSwitchToIdleAfter;
+      if (_lockAndSwitchToIdleAfter) {
+        setTimeout(() => {
+          this.#currentlyActiveAnimation.lock = false;
+          this.playAnimation("idle");
+        }, this.#animations.get(_name).totalTime);
+      }
     }
 
     private findAttacks() {
@@ -105,9 +120,11 @@ namespace Script {
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
           this.attackMain.attack(_direction);
+          this.playAnimation("attack", true);
           break;
         case ATTACK_TYPE.SPECIAL:
           this.attackSpecial.attack(_direction);
+          this.playAnimation("special", true);
           break;
       }
     }
@@ -154,6 +171,8 @@ namespace Script {
         speed: this.speed,
         animationIdleName: this.animationIdleName,
         animationWalkName: this.animationWalkName,
+        animationAttackName: this.animationAttackName,
+        animationSpecialName: this.animationSpecialName,
       };
 
       return serialization;
@@ -166,6 +185,8 @@ namespace Script {
         this.speed = _serialization.speed;
       this.animationIdleName = _serialization.animationIdleName;
       this.animationWalkName = _serialization.animationWalkName;
+      this.animationAttackName = _serialization.animationAttackName;
+      this.animationSpecialName = _serialization.animationSpecialName;
       return this;
     }
   }
