@@ -692,6 +692,7 @@ var Script;
     class ComponentProjectileMainAttack extends Script.ComponentMainAttack {
         speed = 2;
         range = 10;
+        recoil = 0;
         rotateInDirection = true;
         attachedToBrawler = false;
         projectile = "DefaultProjectile";
@@ -713,6 +714,11 @@ var Script;
             Script.EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
             projectileComponent.fire(_direction, this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler));
+            if (this.recoil !== 0) {
+                let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+                let recoil = new ƒ.Vector3(-_direction.x, 0, -_direction.z).normalize(this.recoil);
+                brawlerComp.addVelocity(recoil, 0.25);
+            }
         }
         serialize() {
             let serialization = {
@@ -722,6 +728,7 @@ var Script;
                 rotateInDirection: this.rotateInDirection,
                 attachedToBrawler: this.attachedToBrawler,
                 projectile: this.projectile,
+                recoil: this.recoil,
             };
             return serialization;
         }
@@ -738,6 +745,8 @@ var Script;
                 this.attachedToBrawler = _serialization.attachedToBrawler;
             if (_serialization.projectile)
                 this.projectile = _serialization.projectile;
+            if (_serialization.recoil)
+                this.recoil = _serialization.recoil;
             return this;
         }
     }
@@ -811,6 +820,7 @@ var Script;
         animationWalkName;
         animationAttackName;
         animationSpecialName;
+        #velocityOverrides = [];
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -896,7 +906,19 @@ var Script;
             }
         }
         move() {
-            this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
+            let now = ƒ.Time.game.get();
+            let combinedVelocity = new ƒ.Vector3();
+            for (let i = 0; i < this.#velocityOverrides.length; i++) {
+                let vo = this.#velocityOverrides[i];
+                if (vo.until < now) {
+                    this.#velocityOverrides.splice(i, 1);
+                    i--;
+                    continue;
+                }
+                combinedVelocity.add(vo.velocity);
+            }
+            combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
+            this.rigidbody.setVelocity(combinedVelocity);
             if (this.direction.magnitudeSquared > 0) {
                 this.rotationWrapperMatrix.lookIn(this.direction);
                 this.playAnimation("walk");
@@ -936,6 +958,13 @@ var Script;
                     this.attackSpecial.hidePreview();
                     break;
             }
+        }
+        addVelocity(_velocity, _duration) {
+            _duration *= 1000;
+            this.#velocityOverrides.push({
+                velocity: _velocity,
+                until: ƒ.Time.game.get() + _duration,
+            });
         }
         death() {
             console.log("I died.", this);

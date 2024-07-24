@@ -150,6 +150,7 @@ declare namespace Script {
     class ComponentProjectileMainAttack extends ComponentMainAttack {
         speed: number;
         range: number;
+        recoil: number;
         rotateInDirection: boolean;
         attachedToBrawler: boolean;
         projectile: string;
@@ -209,6 +210,7 @@ declare namespace Script {
         attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
         showPreview(_atk: ATTACK_TYPE): void;
         hidePreview(_atk: ATTACK_TYPE): void;
+        addVelocity(_velocity: ƒ.Vector3, _duration: number): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;

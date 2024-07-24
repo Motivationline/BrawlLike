@@ -2,7 +2,11 @@
 namespace Script {
   import ƒ = FudgeCore;
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
-  type AnimationType = "idle"| "walk" | "attack" | "special";
+  type AnimationType = "idle" | "walk" | "attack" | "special";
+  interface VelocityOverride {
+    velocity: ƒ.Vector3,
+    until: number,
+  }
 
   export class ComponentBrawler extends Damagable {
     // Register the script as component for use in the editor via drag&drop
@@ -21,6 +25,7 @@ namespace Script {
     public animationWalkName: string;
     public animationAttackName: string;
     public animationSpecialName: string;
+    #velocityOverrides: VelocityOverride[] = [];
 
     constructor() {
       super();
@@ -107,7 +112,20 @@ namespace Script {
     }
 
     protected move() {
-      this.rigidbody.setVelocity(ƒ.Vector3.SCALE(this.direction, this.speed));
+      let now = ƒ.Time.game.get();
+      let combinedVelocity: ƒ.Vector3 = new ƒ.Vector3();
+      for (let i: number = 0; i < this.#velocityOverrides.length; i++) {
+        let vo = this.#velocityOverrides[i];
+        if (vo.until < now) {
+          this.#velocityOverrides.splice(i, 1);
+          i--;
+          continue;
+        }
+        combinedVelocity.add(vo.velocity);
+      }
+
+      combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
+      this.rigidbody.setVelocity(combinedVelocity);
       if (this.direction.magnitudeSquared > 0) {
         this.rotationWrapperMatrix.lookIn(this.direction);
         this.playAnimation("walk");
@@ -151,6 +169,13 @@ namespace Script {
       }
     }
 
+    public addVelocity(_velocity: ƒ.Vector3, _duration: number) {
+      _duration *= 1000;
+      this.#velocityOverrides.push({
+        velocity: _velocity,
+        until: ƒ.Time.game.get() + _duration,
+      });
+    }
 
     protected death(): void {
       console.log("I died.", this);

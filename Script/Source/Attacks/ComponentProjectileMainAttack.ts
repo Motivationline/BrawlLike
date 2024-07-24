@@ -3,6 +3,7 @@ namespace Script {
     export class ComponentProjectileMainAttack extends ComponentMainAttack {
         speed: number = 2;
         range: number = 10;
+        recoil: number = 0;
         rotateInDirection: boolean = true;
         attachedToBrawler: boolean = false;
         projectile: string = "DefaultProjectile";
@@ -27,6 +28,12 @@ namespace Script {
             EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
             projectileComponent.fire(_direction, <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler));
+
+            if (this.recoil !== 0) {
+                let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
+                let recoil = new ƒ.Vector3(-_direction.x, 0, -_direction.z).normalize(this.recoil);
+                brawlerComp.addVelocity(recoil, 0.25);
+            }
         }
 
         public serialize(): ƒ.Serialization {
@@ -37,6 +44,7 @@ namespace Script {
                 rotateInDirection: this.rotateInDirection,
                 attachedToBrawler: this.attachedToBrawler,
                 projectile: this.projectile,
+                recoil: this.recoil,
             }
             return serialization;
         }
@@ -56,6 +64,8 @@ namespace Script {
                 this.attachedToBrawler = _serialization.attachedToBrawler;
             if (_serialization.projectile)
                 this.projectile = _serialization.projectile;
+            if (_serialization.recoil)
+                this.recoil = _serialization.recoil;
             return this;
         }
     }
