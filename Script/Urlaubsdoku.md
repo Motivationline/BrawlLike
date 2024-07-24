@@ -30,7 +30,7 @@ Die Angriffe der Brawler müssen lediglich auf den Brawlerknoten als Component h
 
 Es gibt bereits eine `ComponentProjectileMainAttack` Komponente welche als Hauptangriff ein Projektil verschießt. Welches Projektil verschossen werden soll kann wiederum als string (Name des Graphs) in der Komponente verändert werden. Die `CowboyMainAttack` zum Beispiel verwendet derzeit ausschließlich diese Klasse.
 
-Viele Eigenschaften von Angriffen haben noch keine Auswirkung wie Delays, etc.
+Einige Eigenschaften von Angriffen haben eventuell noch keine Auswirkung.
 
 ### Vorschau
 Angriffe haben drei Möglichkeiten für eine Vorschau: `LINE` (gerade Linie), `CONE` (Dreieck) und `AREA` (Kreis).

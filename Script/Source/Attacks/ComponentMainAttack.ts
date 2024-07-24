@@ -8,8 +8,9 @@ namespace Script {
         castTime: number = 0.05;
         maxCharges: number = 3;
 
-        protected charges: number = this.maxCharges;
+        protected charges: number;
         protected chargeMoment: number = -1;
+        protected nextAttackAllowedAt: number = -1;
         #attackBars: ƒ.Node[] = [];
         #attackBarColor: ƒ.Color;
 
@@ -18,6 +19,7 @@ namespace Script {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
+            this.charges = this.maxCharges;
         }
 
         private initMainAttack = () => {
@@ -29,12 +31,13 @@ namespace Script {
             // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
             let attackbar: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("BasicAttackBar")[0];
 
+            let width: number = 1 / this.maxCharges;
             for (let i: number = 0; i < this.maxCharges; i++) {
                 let instance = await ƒ.Project.createGraphInstance(attackbar);
                 this.node.addChild(instance);
-                let translateBy = (1 / this.maxCharges) * (i - 1);
+                let translateBy = width * i - 0.5 + 0.5 * width;
                 instance.mtxLocal.translateX(translateBy);
-                instance.mtxLocal.scaleX(0.9 / this.maxCharges);
+                instance.mtxLocal.scaleX(0.9 * width);
                 this.#attackBars.push(instance.getChild(0));
                 this.#attackBarColor = instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary;
             }
@@ -42,13 +45,16 @@ namespace Script {
 
         attack(_direction: ƒ.Vector3): boolean {
             if (this.charges == 0) return false;
+            let timeNow: number = ƒ.Time.game.get();
+            if (this.nextAttackAllowedAt > timeNow) return false;
             if (this.charges < this.#attackBars.length) {
                 let pivot = this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot;
                 pivot.scaling = new ƒ.Vector3(0, pivot.scaling.y, pivot.scaling.z);
             }
             this.charges--;
             this.#attackBars[this.charges].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
-            if (this.chargeMoment < 0) this.chargeMoment = ƒ.Time.game.get();
+            if (this.chargeMoment < 0) this.chargeMoment = timeNow;
+            this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             return true;
         }
 
@@ -71,6 +77,8 @@ namespace Script {
 
         protected reduceMutator(_mutator: ƒ.Mutator): void {
             delete _mutator.charges;
+            delete _mutator.chargeMoment;
+            delete _mutator.nextAttackAllowedAt;
         }
 
 

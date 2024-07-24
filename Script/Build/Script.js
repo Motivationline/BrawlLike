@@ -516,8 +516,9 @@ var Script;
         damage = 100;
         castTime = 0.05;
         maxCharges = 3;
-        charges = this.maxCharges;
+        charges;
         chargeMoment = -1;
+        nextAttackAllowedAt = -1;
         #attackBars = [];
         #attackBarColor;
         constructor() {
@@ -525,6 +526,7 @@ var Script;
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initMainAttack);
+            this.charges = this.maxCharges;
         }
         initMainAttack = () => {
             // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
@@ -533,18 +535,22 @@ var Script;
         initVisuals = async () => {
             // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
             let attackbar = ƒ.Project.getResourcesByName("BasicAttackBar")[0];
+            let width = 1 / this.maxCharges;
             for (let i = 0; i < this.maxCharges; i++) {
                 let instance = await ƒ.Project.createGraphInstance(attackbar);
                 this.node.addChild(instance);
-                let translateBy = (1 / this.maxCharges) * (i - 1);
+                let translateBy = width * i - 0.5 + 0.5 * width;
                 instance.mtxLocal.translateX(translateBy);
-                instance.mtxLocal.scaleX(0.9 / this.maxCharges);
+                instance.mtxLocal.scaleX(0.9 * width);
                 this.#attackBars.push(instance.getChild(0));
                 this.#attackBarColor = instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary;
             }
         };
         attack(_direction) {
             if (this.charges == 0)
+                return false;
+            let timeNow = ƒ.Time.game.get();
+            if (this.nextAttackAllowedAt > timeNow)
                 return false;
             if (this.charges < this.#attackBars.length) {
                 let pivot = this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot;
@@ -553,7 +559,8 @@ var Script;
             this.charges--;
             this.#attackBars[this.charges].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             if (this.chargeMoment < 0)
-                this.chargeMoment = ƒ.Time.game.get();
+                this.chargeMoment = timeNow;
+            this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             return true;
         }
         update() {
@@ -574,6 +581,8 @@ var Script;
         }
         reduceMutator(_mutator) {
             delete _mutator.charges;
+            delete _mutator.chargeMoment;
+            delete _mutator.nextAttackAllowedAt;
         }
         serialize() {
             let serialization = {

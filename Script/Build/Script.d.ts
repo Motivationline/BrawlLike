@@ -115,6 +115,7 @@ declare namespace Script {
         maxCharges: number;
         protected charges: number;
         protected chargeMoment: number;
+        protected nextAttackAllowedAt: number;
         constructor();
         private initMainAttack;
         private initVisuals;
