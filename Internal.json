@@ -6105,7 +6105,6 @@
             }
           }
         ],
-        "CowboySpecialAttack": [],
         "ComponentBrawler": [
           {
             "Script.ComponentBrawler": {
@@ -6823,7 +6822,7 @@
                     "active": true
                   },
                   "previewType": 0,
-                  "previewWidth": 0.5000000000000001,
+                  "previewWidth": 0.30000000000000016,
                   "range": 10
                 },
                 "reloadTime": 1,
@@ -6832,12 +6831,12 @@
                 "castTime": 0.05,
                 "maxCharges": 3
               },
-              "speed": 2,
+              "speed": 8,
               "range": 10,
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
-              "recoil": 1,
+              "recoil": 0.5000000000000001,
               "gravity": false
             }
           }
