@@ -74,6 +74,9 @@
               },
               {
                 "idResource": "Graph|2024-07-16T09:32:18.199Z|08157"
+              },
+              {
+                "idResource": "Graph|2024-07-24T09:56:45.797Z|36518"
               }
             ]
           },
@@ -105,6 +108,20 @@
               },
               {
                 "idResource": "AnimationGLTF|2024-07-22T14:43:09.326Z|54251"
+              }
+            ]
+          },
+          {
+            "name": "Bugsy",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-24T09:56:04.310Z|95218"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-24T09:56:04.310Z|69177"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-24T13:37:21.308Z|77399"
               }
             ]
           }

@@ -5445,10 +5445,10 @@
               "direction": "diagonal",
               "near": 1,
               "far": 2000,
-              "aspect": 1.1854460093896713,
+              "aspect": 1.4213615023474178,
               "pivot": {
-                "translation": "[0, 7, 4]",
-                "rotation": "[60, 180, 0]",
+                "translation": "[0, 5, 4]",
+                "rotation": "[55, 180, 0]",
                 "scaling": "[1, 1, 1]"
               },
               "Component": {
@@ -6100,23 +6100,12 @@
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
-              "recoil": 0,
+              "recoil": 3,
               "gravity": true
             }
           }
         ],
-        "CowboySpecialAttack": [
-          {
-            "Script.CowboySpecialAttack": {
-              "Component": {
-                "active": true
-              },
-              "previewType": 0,
-              "previewWidth": 1,
-              "range": 5
-            }
-          }
-        ],
+        "CowboySpecialAttack": [],
         "ComponentBrawler": [
           {
             "Script.ComponentBrawler": {
@@ -6126,9 +6115,21 @@
                 },
                 "health": 5000
               },
-              "speed": 0.7000000000000001,
+              "speed": 1,
               "animationIdleName": "FroggerIdle",
               "animationWalkName": "FroggerWalkingV3Smooth"
+            }
+          }
+        ],
+        "ComponentSpecialAttack": [
+          {
+            "Script.ComponentSpecialAttack": {
+              "Component": {
+                "active": true
+              },
+              "previewType": 0,
+              "previewWidth": 1,
+              "range": 5
             }
           }
         ]
@@ -6710,6 +6711,192 @@
         }
       },
       "alphaClip": 0.01
+    }
+  },
+  "GraphGLTF|2024-07-24T09:56:04.310Z|95218": {
+    "ƒ.GraphGLTF": {
+      "name": "InsektScene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-24T09:56:04.310Z|69177",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-24T09:56:04.310Z|95218",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\buggy.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-24T09:56:04.310Z|69177": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-24T09:56:04.310Z|69177",
+      "name": "BugsyIdle",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\buggy.glb"
+    }
+  },
+  "Graph|2024-07-24T09:56:45.797Z|36518": {
+    "ƒ.Graph": {
+      "name": "BrawlerBugsy",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 0,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "CAPSULE",
+              "isTrigger": false,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0.5, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5000000000000001, 0.6000000000000001, 0.6000000000000001]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "Cowboy": [
+          {
+            "Script.Cowboy": {
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 1.5000000000000004,
+              "animationIdleName": "BugsyIdle",
+              "animationAttackName": "BugsyShoot",
+              "animationSpecialName": "BugsyShoot"
+            }
+          }
+        ],
+        "CowboyMainAttack": [
+          {
+            "Script.CowboyMainAttack": {
+              "ComponentMainAttack": {
+                "ComponentAttack": {
+                  "Component": {
+                    "active": true
+                  },
+                  "previewType": 0,
+                  "previewWidth": 0.5000000000000001,
+                  "range": 10
+                },
+                "reloadTime": 1,
+                "minDelayBetweenAttacks": 0.3,
+                "damage": 100,
+                "castTime": 0.05,
+                "maxCharges": 3
+              },
+              "speed": 2,
+              "range": 10,
+              "rotateInDirection": true,
+              "attachedToBrawler": false,
+              "projectile": "DefaultProjectile",
+              "recoil": 1,
+              "gravity": false
+            }
+          }
+        ],
+        "CowboySpecialAttack": [
+          {
+            "Script.CowboySpecialAttack": {
+              "Component": {
+                "active": true
+              },
+              "previewType": 0,
+              "previewWidth": 1,
+              "range": 5
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-24T09:56:04.310Z|95218"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-07-24T09:56:45.797Z|36518",
+      "type": "Graph"
+    }
+  },
+  "AnimationGLTF|2024-07-24T13:37:21.308Z|77399": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-24T13:37:21.308Z|77399",
+      "name": "BugsyShoot",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\buggy.glb"
     }
   }
 }
