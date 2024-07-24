@@ -265,7 +265,7 @@ var Script;
             // let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
             let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
             let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
-            let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation).normalize();
+            let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation);
             Script.EntityManager.Instance.playerBrawler?.attack(_atk, direction);
         }
     }
@@ -634,15 +634,29 @@ var Script;
         }
         init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            this.#rb.effectGravity = Number(this.gravity);
             this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
         };
         fire(_direction, _owner) {
             this.#owner = _owner;
+            this.#rb.effectGravity = Number(this.gravity);
             if (this.rotateInDirection) {
                 this.node.mtxLocal.lookIn(_direction);
             }
-            this.#rb.setVelocity(_direction.scale(this.speed));
+            if (this.gravity) {
+                // calculate arc as desired
+                let timeToImpact = this.speed;
+                let desiredHeight = 3;
+                let g = ƒ.Physics.getGravity().y;
+                let desiredG = -8 * desiredHeight / Math.pow(timeToImpact, 2);
+                this.#rb.effectGravity = desiredG / g;
+                let velocityY = -desiredG * timeToImpact / 2;
+                _direction.scale(1 / timeToImpact);
+                _direction.y = velocityY;
+                this.#rb.setVelocity(_direction);
+            }
+            else {
+                this.#rb.setVelocity(_direction.scale(this.speed));
+            }
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
@@ -672,6 +686,8 @@ var Script;
         loop = () => {
             if (!this.#startPosition)
                 return;
+            if (this.gravity)
+                return;
             let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
             if (distance > this.range * this.range) {
                 this.explode();
@@ -696,6 +712,7 @@ var Script;
         rotateInDirection = true;
         attachedToBrawler = false;
         projectile = "DefaultProjectile";
+        gravity = false;
         attack(_direction) {
             if (!super.attack(_direction))
                 return false;
@@ -710,12 +727,20 @@ var Script;
             projectileComponent.speed = this.speed;
             projectileComponent.range = this.range;
             projectileComponent.rotateInDirection = this.rotateInDirection;
+            projectileComponent.gravity = this.gravity;
             let parent = this.attachedToBrawler ? this.node : undefined;
             Script.EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
-            projectileComponent.fire(_direction, this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler));
+            let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            if (this.gravity) {
+                if (_direction.magnitude > this.range)
+                    _direction.normalize(this.range);
+            }
+            else {
+                _direction.normalize();
+            }
+            projectileComponent.fire(_direction, brawlerComp);
             if (this.recoil !== 0) {
-                let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
                 let recoil = new ƒ.Vector3(-_direction.x, 0, -_direction.z).normalize(this.recoil);
                 brawlerComp.addVelocity(recoil, 0.25);
             }
@@ -729,6 +754,7 @@ var Script;
                 attachedToBrawler: this.attachedToBrawler,
                 projectile: this.projectile,
                 recoil: this.recoil,
+                gravity: this.gravity,
             };
             return serialization;
         }
@@ -747,6 +773,8 @@ var Script;
                 this.projectile = _serialization.projectile;
             if (_serialization.recoil)
                 this.recoil = _serialization.recoil;
+            if (_serialization.gravity)
+                this.gravity = _serialization.gravity;
             return this;
         }
     }

@@ -20,16 +20,31 @@ namespace Script {
 
         private init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            this.#rb.effectGravity = Number(this.gravity);
             this.#rb.addEventListener(ƒ.EVENT_PHYSICS.TRIGGER_ENTER, this.onTriggerEnter);
         }
-
+        
         public fire(_direction: ƒ.Vector3, _owner: ComponentBrawler) {
             this.#owner = _owner;
+            this.#rb.effectGravity = Number(this.gravity);
             if (this.rotateInDirection) {
                 this.node.mtxLocal.lookIn(_direction);
             }
-            this.#rb.setVelocity(_direction.scale(this.speed));
+            if (this.gravity) {
+                // calculate arc as desired
+                let timeToImpact = this.speed;
+                let desiredHeight = 3;
+                
+                let g = ƒ.Physics.getGravity().y;
+                let desiredG = -8 * desiredHeight / Math.pow(timeToImpact, 2);
+
+                this.#rb.effectGravity = desiredG / g;
+                let velocityY = -desiredG * timeToImpact / 2;
+                _direction.scale(1 / timeToImpact);
+                _direction.y = velocityY;
+                this.#rb.setVelocity(_direction);
+            } else {
+                this.#rb.setVelocity(_direction.scale(this.speed));
+            }
         }
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
@@ -60,6 +75,7 @@ namespace Script {
 
         protected loop = () => {
             if (!this.#startPosition) return;
+            if (this.gravity) return;
             let distance = ƒ.Vector3.DIFFERENCE(this.node.mtxWorld.translation, this.#startPosition).magnitudeSquared;
             if (distance > this.range * this.range) {
                 this.explode();

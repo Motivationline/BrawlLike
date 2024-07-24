@@ -154,6 +154,7 @@ declare namespace Script {
         rotateInDirection: boolean;
         attachedToBrawler: boolean;
         projectile: string;
+        gravity: boolean;
         attack(_direction: ƒ.Vector3): boolean;
         shootProjectile(_direction: ƒ.Vector3): Promise<void>;
         serialize(): ƒ.Serialization;

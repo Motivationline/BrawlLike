@@ -5299,7 +5299,9 @@
               "range": 10,
               "rotateInDirection": true,
               "attachedToBrawler": false,
-              "projectile": "DefaultProjectile"
+              "projectile": "DefaultProjectile",
+              "recoil": 0,
+              "gravity": false
             }
           }
         ],
@@ -5860,7 +5862,9 @@
               "range": 8,
               "rotateInDirection": true,
               "attachedToBrawler": false,
-              "projectile": "DefaultProjectile"
+              "projectile": "DefaultProjectile",
+              "recoil": 0,
+              "gravity": false
             }
           }
         ]
@@ -6081,9 +6085,9 @@
                   "Component": {
                     "active": true
                   },
-                  "previewType": 0,
+                  "previewType": 2,
                   "previewWidth": 1,
-                  "range": 10
+                  "range": 5
                 },
                 "reloadTime": 2,
                 "minDelayBetweenAttacks": 0.3,
@@ -6091,11 +6095,13 @@
                 "castTime": 0.05,
                 "maxCharges": 3
               },
-              "speed": 5,
-              "range": 10,
+              "speed": 2,
+              "range": 5,
               "rotateInDirection": true,
               "attachedToBrawler": false,
-              "projectile": "DefaultProjectile"
+              "projectile": "DefaultProjectile",
+              "recoil": 0,
+              "gravity": true
             }
           }
         ],

@@ -7,6 +7,7 @@ namespace Script {
         rotateInDirection: boolean = true;
         attachedToBrawler: boolean = false;
         projectile: string = "DefaultProjectile";
+        gravity: boolean = false;
 
         attack(_direction: ƒ.Vector3): boolean {
             if (!super.attack(_direction)) return false;
@@ -23,14 +24,22 @@ namespace Script {
             projectileComponent.speed = this.speed;
             projectileComponent.range = this.range;
             projectileComponent.rotateInDirection = this.rotateInDirection;
+            projectileComponent.gravity = this.gravity;
 
             let parent: ƒ.Node = this.attachedToBrawler ? this.node : undefined;
             EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
-            projectileComponent.fire(_direction, <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler));
+            let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
+
+            if (this.gravity) {
+                if(_direction.magnitude > this.range)
+                _direction.normalize(this.range);
+            } else {
+                _direction.normalize();
+            }
+            projectileComponent.fire(_direction, brawlerComp);
 
             if (this.recoil !== 0) {
-                let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
                 let recoil = new ƒ.Vector3(-_direction.x, 0, -_direction.z).normalize(this.recoil);
                 brawlerComp.addVelocity(recoil, 0.25);
             }
@@ -45,6 +54,7 @@ namespace Script {
                 attachedToBrawler: this.attachedToBrawler,
                 projectile: this.projectile,
                 recoil: this.recoil,
+                gravity: this.gravity,
             }
             return serialization;
         }
@@ -66,6 +76,8 @@ namespace Script {
                 this.projectile = _serialization.projectile;
             if (_serialization.recoil)
                 this.recoil = _serialization.recoil;
+            if (_serialization.gravity)
+                this.gravity = _serialization.gravity;
             return this;
         }
     }

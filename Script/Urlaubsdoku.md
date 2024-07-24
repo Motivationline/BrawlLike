@@ -59,6 +59,9 @@ Die `IgnoredByProjectiles` Komponente sorgt dafür, dass Projektile nicht mit de
 
 Die Eigenschaften des Projektils (`rotateInDirection`, `damage`, `speed`, `range`) werden vom Angriff überschrieben, sollten also dort gesetzt werden, nicht im Projektil selbst.
 
+> [!INFO]  
+> wenn die Gravitation für ein Projektil eingeschaltet ist, dann gibt `speed` nicht die Geschwindigkeit sondern die Zeit bis zur Landung des Projektils an.
+
 +z ist vorwärts.
 
 ## Sonstiges
