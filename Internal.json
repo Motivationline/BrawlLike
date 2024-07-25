@@ -5434,20 +5434,20 @@
           {
             "ƒ.ComponentCamera": {
               "backgroundColor": {
-                "r": 0,
-                "g": 0,
-                "b": 0,
+                "r": 0.6274509803921569,
+                "g": 0.6823529411764706,
+                "b": 0.9529411764705882,
                 "a": 1
               },
               "backgroundEnabled": true,
-              "projection": "central",
-              "fieldOfView": 80,
+              "projection": "orthographic",
+              "fieldOfView": 60,
               "direction": "diagonal",
               "near": 1,
               "far": 2000,
-              "aspect": 1.4213615023474178,
+              "aspect": 1.4000000000000001,
               "pivot": {
-                "translation": "[0, 5, 4]",
+                "translation": "[0, 6.099999999999998, 4.199999999999999]",
                 "rotation": "[55, 180, 0]",
                 "scaling": "[1, 1, 1]"
               },
@@ -5969,9 +5969,18 @@
           }
         },
         {
-          "ƒ.GraphInstance": {
-            "deserializeFromSource": true,
-            "idSource": "GraphGLTF|2024-07-22T12:03:49.917Z|81675"
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-22T12:03:49.917Z|81675"
+                }
+              }
+            ]
           }
         }
       ],
@@ -6808,6 +6817,7 @@
               },
               "speed": 1.5000000000000004,
               "animationIdleName": "BugsyIdle",
+              "animationWalkName": "BugsyWalk",
               "animationAttackName": "BugsyShoot",
               "animationSpecialName": "BugsyShoot"
             }
@@ -6823,20 +6833,20 @@
                   },
                   "previewType": 0,
                   "previewWidth": 0.30000000000000016,
-                  "range": 10
+                  "range": 4
                 },
-                "reloadTime": 1,
+                "reloadTime": 1.2000000000000002,
                 "minDelayBetweenAttacks": 0.3,
                 "damage": 100,
                 "castTime": 0.05,
-                "maxCharges": 3
+                "maxCharges": 2
               },
-              "speed": 8,
-              "range": 10,
+              "speed": 6,
+              "range": 4,
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
-              "recoil": 0.5000000000000001,
+              "recoil": 0.10000000000000014,
               "gravity": false
             }
           }
@@ -6890,10 +6900,18 @@
       "type": "Graph"
     }
   },
-  "AnimationGLTF|2024-07-24T13:37:21.308Z|77399": {
+  "AnimationGLTF|2024-07-25T09:44:56.262Z|15297": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-24T13:37:21.308Z|77399",
+      "idResource": "AnimationGLTF|2024-07-25T09:44:56.262Z|15297",
       "name": "BugsyShoot",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\buggy.glb"
+    }
+  },
+  "AnimationGLTF|2024-07-25T09:45:21.882Z|78079": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-25T09:45:21.882Z|78079",
+      "name": "BugsyWalk",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\buggy.glb"
     }
