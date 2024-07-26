@@ -4749,7 +4749,7 @@
                         "ƒ.ComponentLight": {
                           "pivot": {
                             "translation": "[-18, 30, -4]",
-                            "rotation": "[114, 1, -20]",
+                            "rotation": "[85, 1, -20]",
                             "scaling": "[20, 20, 20]"
                           },
                           "light": {
@@ -4782,7 +4782,7 @@
                           },
                           "light": {
                             "ƒ.LightAmbient": {
-                              "color": "[0.2196078431372549, 0.2196078431372549, 0.2196078431372549, 1]"
+                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]"
                             }
                           },
                           "Component": {
@@ -5516,6 +5516,20 @@
               }
             }
           }
+        ],
+        "ComponentAmbientOcclusion": [
+          {
+            "ƒ.ComponentAmbientOcclusion": {
+              "sampleRadius": 16,
+              "bias": 0.07,
+              "attenuationConstant": 2.5,
+              "attenuationLinear": 1,
+              "attenuationQuadratic": 1,
+              "Component": {
+                "active": false
+              }
+            }
+          }
         ]
       },
       "children": [],
@@ -5630,151 +5644,13 @@
         {
           "ƒ.Node": {
             "name": "wrapper",
-            "active": false,
-            "components": {
-              "ComponentTransform": [
-                {
-                  "ƒ.ComponentTransform": {
-                    "local": {
-                      "translation": "[0, 0, 0]",
-                      "rotation": "[0, 0, 0]",
-                      "scaling": "[0.49999991059303284, 0.49999991059303284, 0.49999991059303284]"
-                    },
-                    "Component": {
-                      "active": true
-                    }
-                  }
-                }
-              ]
-            },
-            "children": [
-              {
-                "ƒ.Node": {
-                  "name": "Tip",
-                  "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshPyramid|2024-06-28T11:42:43.929Z|66964",
-                          "pivot": {
-                            "translation": "[0, 0, 0.05000000074505806]",
-                            "rotation": "[90, 0, 0]",
-                            "scaling": "[0.5, 0.5, 0.5]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "Material|2024-06-26T12:32:41.145Z|10871"
-                        }
-                      }
-                    ]
-                  },
-                  "children": []
-                }
-              },
-              {
-                "ƒ.Node": {
-                  "name": "Body",
-                  "active": true,
-                  "components": {
-                    "ComponentMesh": [
-                      {
-                        "ƒ.ComponentMesh": {
-                          "idMesh": "MeshCube|2024-06-26T12:31:46.705Z|83523",
-                          "pivot": {
-                            "translation": "[0, 0, -0.20000000298023224]",
-                            "rotation": "[0, 0, 0]",
-                            "scaling": "[0.5, 0.5, 0.5]"
-                          },
-                          "Component": {
-                            "active": true
-                          }
-                        }
-                      }
-                    ],
-                    "ComponentMaterial": [
-                      {
-                        "ƒ.ComponentMaterial": {
-                          "sortForAlpha": false,
-                          "clrPrimary": "[1, 1, 1, 1]",
-                          "clrSecondary": "[1, 1, 1, 1]",
-                          "pivot": {
-                            "translation": "[0, 0]",
-                            "rotation": 0,
-                            "scaling": "[1, 1]"
-                          },
-                          "Component": {
-                            "active": true
-                          },
-                          "idMaterial": "Material|2024-06-26T12:32:41.145Z|10871"
-                        }
-                      }
-                    ]
-                  },
-                  "children": []
-                }
-              }
-            ]
-          }
-        },
-        {
-          "ƒ.Node": {
-            "name": "wrapper",
-            "active": false,
-            "components": {
-              "ComponentTransform": [
-                {
-                  "ƒ.ComponentTransform": {
-                    "local": {
-                      "translation": "[0, 0, 0]",
-                      "rotation": "[0, 0, 0]",
-                      "scaling": "[1, 1, 1]"
-                    },
-                    "Component": {
-                      "active": true
-                    }
-                  }
-                }
-              ]
-            },
-            "children": [
-              {
-                "ƒ.GraphInstance": {
-                  "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-03T13:54:28.282Z|18007"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "ƒ.Node": {
-            "name": "wrapper",
             "active": true,
             "components": {},
             "children": [
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-18T10:06:25.240Z|03086"
+                  "idSource": "GraphGLTF|2024-07-26T08:26:06.036Z|19405"
                 }
               }
             ]
@@ -6080,16 +5956,6 @@
       "url": "Assets\\Decorations\\bushNoSkeleton.glb"
     }
   },
-  "GraphGLTF|2024-07-03T13:54:28.282Z|18007": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {},
-      "idResource": "GraphGLTF|2024-07-03T13:54:28.282Z|18007",
-      "type": "GraphGLTF",
-      "url": "Assets\\Projectiles\\Kartoffel.glb"
-    }
-  },
   "Graph|2024-07-16T09:32:18.199Z|08157": {
     "ƒ.Graph": {
       "name": "BrawlerFrogger",
@@ -6156,7 +6022,7 @@
               "range": 5,
               "rotateInDirection": true,
               "attachedToBrawler": false,
-              "projectile": "DefaultProjectile",
+              "projectile": "PotatoProjectile",
               "recoil": 3,
               "gravity": true
             }
@@ -6173,7 +6039,9 @@
               },
               "speed": 1,
               "animationIdleName": "FroggerIdle",
-              "animationWalkName": "FroggerWalkingV3Smooth"
+              "animationWalkName": "FroggerWalkingV3Smooth",
+              "animationAttackName": "FrogShoot",
+              "animationSpecialName": "FrogShoot"
             }
           }
         ],
@@ -6397,14 +6265,6 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "AnimationGLTF|2024-07-17T14:03:22.604Z|18473": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-17T14:03:22.604Z|18473",
-      "name": "FroggerWalkingV2",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\frog.glb"
-    }
-  },
   "AnimationGLTF|2024-07-17T14:53:53.041Z|37225": {
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:53:53.041Z|37225",
@@ -6459,39 +6319,6 @@
       "idResource": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
       "name": "TomatoSpin",
       "type": "AnimationGLTF",
-      "url": "Assets\\Projectiles\\Tomato.glb"
-    }
-  },
-  "GraphGLTF|2024-07-18T10:06:25.240Z|03086": {
-    "ƒ.GraphGLTF": {
-      "name": "TomatoScene",
-      "active": true,
-      "components": {
-        "ComponentAnimator": [
-          {
-            "ƒ.ComponentAnimator": {
-              "Component": {
-                "active": true
-              },
-              "idAnimation": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
-              "playmode": "loop",
-              "quantization": "continous",
-              "scale": 1,
-              "scaleWithGameTime": true,
-              "animateInEditor": true
-            }
-          }
-        ],
-        "ComponentPhongToToon": [
-          {
-            "Script.ComponentPhongToToon": {
-              "active": true
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2024-07-18T10:06:25.240Z|03086",
-      "type": "GraphGLTF",
       "url": "Assets\\Projectiles\\Tomato.glb"
     }
   },
@@ -6962,6 +6789,160 @@
       "name": "BugsyWalk",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\buggy.glb"
+    }
+  },
+  "GraphGLTF|2024-07-26T08:26:01.771Z|62446": {
+    "ƒ.GraphGLTF": {
+      "name": "ProjectileScene",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": false
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-26T08:26:01.771Z|62446",
+      "type": "GraphGLTF",
+      "url": "Assets\\Projectiles\\Kartoffel.glb"
+    }
+  },
+  "GraphGLTF|2024-07-26T08:26:06.036Z|19405": {
+    "ƒ.GraphGLTF": {
+      "name": "ProjectileScene",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": false
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-07-26T08:26:06.036Z|19405",
+      "type": "GraphGLTF",
+      "url": "Assets\\Projectiles\\Tomato.glb"
+    }
+  },
+  "Graph|2024-07-26T08:27:01.462Z|90648": {
+    "ƒ.Graph": {
+      "name": "PotatoProjectile",
+      "active": true,
+      "components": {
+        "ComponentProjectile": [
+          {
+            "Script.ComponentProjectile": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.20000000000000004,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "SPHERE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5000000000000001, 0.30000000000000016, 0.30000000000000016]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-26T08:26:01.771Z|62446"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-07-26T08:27:01.462Z|90648",
+      "type": "Graph"
+    }
+  },
+  "AnimationGLTF|2024-07-26T10:09:00.180Z|57835": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-26T10:09:00.180Z|57835",
+      "name": "FrogShoot",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
     }
   }
 }
