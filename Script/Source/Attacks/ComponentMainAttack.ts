@@ -19,15 +19,15 @@ namespace Script {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
-            this.charges = this.maxCharges;
         }
-
+        
         private initMainAttack = () => {
             // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
             this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
         }
-
+        
         private initVisuals = async () => {
+            this.charges = this.maxCharges;
             // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
             let attackbar: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("BasicAttackBar")[0];
 

@@ -526,13 +526,13 @@ var Script;
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initMainAttack);
-            this.charges = this.maxCharges;
         }
         initMainAttack = () => {
             // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
             this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initVisuals, true);
         };
         initVisuals = async () => {
+            this.charges = this.maxCharges;
             // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
             let attackbar = ƒ.Project.getResourcesByName("BasicAttackBar")[0];
             let width = 1 / this.maxCharges;
@@ -881,10 +881,12 @@ var Script;
             this.node.removeEventListener("childAppend" /* ƒ.EVENT.CHILD_APPEND */, this.resourcesLoaded);
             this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
         };
-        playAnimation(_name, _lockAndSwitchToIdleAfter = false) {
-            if (_name === this.#currentlyActiveAnimation.name)
+        #animationTimeout = -1;
+        playAnimation(_name, _options) {
+            _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false }, ..._options };
+            if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter)
                 return;
-            if (this.#currentlyActiveAnimation.lock)
+            if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter)
                 return;
             if (!this.#animations.has(_name)) {
                 let animationName = this.animationIdleName;
@@ -902,10 +904,14 @@ var Script;
                 this.#animations.set(_name, animation);
             }
             this.#animator.animation = this.#animations.get(_name);
+            if (_options.playFromStart) {
+                this.#animator.jumpTo(0);
+            }
             this.#currentlyActiveAnimation.name = _name;
-            this.#currentlyActiveAnimation.lock = _lockAndSwitchToIdleAfter;
-            if (_lockAndSwitchToIdleAfter) {
-                setTimeout(() => {
+            this.#currentlyActiveAnimation.lock = _options.lockAndSwitchToIdleAfter;
+            if (_options.lockAndSwitchToIdleAfter) {
+                clearTimeout(this.#animationTimeout);
+                this.#animationTimeout = setTimeout(() => {
                     this.#currentlyActiveAnimation.lock = false;
                     this.playAnimation("idle");
                 }, this.#animations.get(_name).totalTime);
@@ -948,7 +954,8 @@ var Script;
             combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
             this.rigidbody.setVelocity(combinedVelocity);
             if (this.direction.magnitudeSquared > 0) {
-                this.rotationWrapperMatrix.lookIn(this.direction);
+                if (!this.#currentlyActiveAnimation.lock)
+                    this.rotationWrapperMatrix.lookIn(this.direction);
                 this.playAnimation("walk");
             }
             else {
@@ -959,13 +966,14 @@ var Script;
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
                     this.attackMain.attack(_direction);
-                    this.playAnimation("attack", true);
+                    this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true });
                     break;
                 case ATTACK_TYPE.SPECIAL:
                     this.attackSpecial.attack(_direction);
-                    this.playAnimation("special", true);
+                    this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true });
                     break;
             }
+            this.rotationWrapperMatrix.lookIn(_direction);
         }
         showPreview(_atk) {
             switch (_atk) {

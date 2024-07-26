@@ -64,9 +64,13 @@ namespace Script {
       this.#animator = this.node.getChild(0).getChild(0).getComponent(ƒ.ComponentAnimator);
     }
 
-    private playAnimation(_name: AnimationType, _lockAndSwitchToIdleAfter: boolean = false) {
-      if (_name === this.#currentlyActiveAnimation.name) return;
-      if (this.#currentlyActiveAnimation.lock) return;
+    #animationTimeout: number = -1;
+    private playAnimation(_name: AnimationType, _options?: {lockAndSwitchToIdleAfter: boolean, playFromStart: boolean}) {
+      _options = {...{lockAndSwitchToIdleAfter: false, playFromStart: false}, ..._options};
+
+      if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter) return;
+      if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter) return;
+
       if (!this.#animations.has(_name)) {
         let animationName: string = this.animationIdleName;
         if (_name == "walk") animationName = this.animationWalkName;
@@ -78,10 +82,14 @@ namespace Script {
         this.#animations.set(_name, animation);
       }
       this.#animator.animation = this.#animations.get(_name);
+      if(_options.playFromStart){
+        this.#animator.jumpTo(0);
+      }
       this.#currentlyActiveAnimation.name = _name;
-      this.#currentlyActiveAnimation.lock = _lockAndSwitchToIdleAfter;
-      if (_lockAndSwitchToIdleAfter) {
-        setTimeout(() => {
+      this.#currentlyActiveAnimation.lock = _options.lockAndSwitchToIdleAfter;
+      if (_options.lockAndSwitchToIdleAfter) {
+        clearTimeout(this.#animationTimeout);
+        this.#animationTimeout = setTimeout(() => {
           this.#currentlyActiveAnimation.lock = false;
           this.playAnimation("idle");
         }, this.#animations.get(_name).totalTime);
@@ -127,7 +135,8 @@ namespace Script {
       combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
       this.rigidbody.setVelocity(combinedVelocity);
       if (this.direction.magnitudeSquared > 0) {
-        this.rotationWrapperMatrix.lookIn(this.direction);
+        if (!this.#currentlyActiveAnimation.lock)
+          this.rotationWrapperMatrix.lookIn(this.direction);
         this.playAnimation("walk");
       } else {
         this.playAnimation("idle");
@@ -138,13 +147,14 @@ namespace Script {
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
           this.attackMain.attack(_direction);
-          this.playAnimation("attack", true);
+          this.playAnimation("attack", {lockAndSwitchToIdleAfter: true, playFromStart: true});
           break;
         case ATTACK_TYPE.SPECIAL:
           this.attackSpecial.attack(_direction);
-          this.playAnimation("special", true);
+          this.playAnimation("special", {lockAndSwitchToIdleAfter: true, playFromStart: true});
           break;
       }
+      this.rotationWrapperMatrix.lookIn(_direction);
     }
 
     public showPreview(_atk: ATTACK_TYPE) {
