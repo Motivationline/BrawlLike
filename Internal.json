@@ -86,7 +86,6 @@
     "ƒ.MeshGLTF": {
       "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061",
       "name": "MeshBoulder",
-      "type": "MeshGLTF",
       "url": "Assets\\Decorations\\Boulder01.glb",
       "iPrimitive": 0
     }
@@ -5556,7 +5555,6 @@
     "ƒ.MaterialGLTF": {
       "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440",
       "name": "Cloud",
-      "type": "MaterialGLTF",
       "url": "Assets\\Decorations\\Cloud.glb"
     }
   },
@@ -5564,7 +5562,6 @@
     "ƒ.MeshGLTF": {
       "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765",
       "name": "Cloud.003",
-      "type": "MeshGLTF",
       "url": "Assets\\Decorations\\Cloud.glb",
       "iPrimitive": 0
     }
@@ -5833,6 +5830,12 @@
               }
             ]
           }
+        },
+        {
+          "ƒ.GraphInstance": {
+            "deserializeFromSource": true,
+            "idSource": "Graph|2024-07-29T08:49:22.847Z|21081"
+          }
         }
       ],
       "idResource": "Graph|2024-06-28T13:29:09.815Z|45211",
@@ -5926,7 +5929,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-03T13:04:23.278Z|23591",
       "name": "Wind",
-      "type": "AnimationGLTF",
       "url": "Assets\\Decorations\\bush.glb"
     }
   },
@@ -6103,6 +6105,12 @@
               }
             ]
           }
+        },
+        {
+          "ƒ.GraphInstance": {
+            "deserializeFromSource": true,
+            "idSource": "Graph|2024-07-29T08:49:22.847Z|21081"
+          }
         }
       ],
       "idResource": "Graph|2024-07-16T09:32:18.199Z|08157",
@@ -6243,7 +6251,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596",
       "name": "FroggerIdle",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
   },
@@ -6284,7 +6291,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:53:53.041Z|37225",
       "name": "CowgirlIdle",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\cowgirl.glb"
     }
   },
@@ -6325,7 +6331,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-17T14:53:53.042Z|49552",
       "name": "CowgirlWalk",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\cowgirl.glb"
     }
   },
@@ -6333,7 +6338,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164",
       "name": "TomatoSpin",
-      "type": "AnimationGLTF",
       "url": "Assets\\Projectiles\\Tomato.glb"
     }
   },
@@ -6397,7 +6401,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-22T12:03:49.917Z|35082",
       "name": "RoundBushWind",
-      "type": "AnimationGLTF",
       "url": "Assets\\Decorations\\BushRound.glb"
     }
   },
@@ -6555,7 +6558,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-22T14:43:09.326Z|54251",
       "name": "FroggerWalkingV3Smooth",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
   },
@@ -6611,6 +6613,13 @@
       "alphaClip": 0.01
     }
   },
+  "AnimationGLTF|2024-07-24T09:56:04.310Z|69177": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-24T09:56:04.310Z|69177",
+      "name": "BugsyIdle",
+      "url": "Assets\\Chars\\buggy.glb"
+    }
+  },
   "GraphGLTF|2024-07-24T09:56:04.310Z|95218": {
     "ƒ.GraphGLTF": {
       "name": "InsektScene",
@@ -6641,14 +6650,6 @@
       },
       "idResource": "GraphGLTF|2024-07-24T09:56:04.310Z|95218",
       "type": "GraphGLTF",
-      "url": "Assets\\Chars\\buggy.glb"
-    }
-  },
-  "AnimationGLTF|2024-07-24T09:56:04.310Z|69177": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-07-24T09:56:04.310Z|69177",
-      "name": "BugsyIdle",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\buggy.glb"
     }
   },
@@ -6789,6 +6790,12 @@
               }
             ]
           }
+        },
+        {
+          "ƒ.GraphInstance": {
+            "deserializeFromSource": true,
+            "idSource": "Graph|2024-07-29T08:49:22.847Z|21081"
+          }
         }
       ],
       "idResource": "Graph|2024-07-24T09:56:45.797Z|36518",
@@ -6799,7 +6806,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-25T09:44:56.262Z|15297",
       "name": "BugsyShoot",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\buggy.glb"
     }
   },
@@ -6807,7 +6813,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-25T09:45:21.882Z|78079",
       "name": "BugsyWalk",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\buggy.glb"
     }
   },
@@ -6961,7 +6966,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2024-07-26T10:09:00.180Z|57835",
       "name": "FrogShoot",
-      "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
   },
@@ -7017,7 +7021,7 @@
               "local": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[1, 1, 1]"
+                "scaling": "[0.40000000000000013, 0.40000000000000013, 0.40000000000000013]"
               },
               "Component": {
                 "active": true
