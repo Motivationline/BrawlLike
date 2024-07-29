@@ -65,8 +65,8 @@ namespace Script {
     }
 
     #animationTimeout: number = -1;
-    private playAnimation(_name: AnimationType, _options?: {lockAndSwitchToIdleAfter: boolean, playFromStart: boolean}) {
-      _options = {...{lockAndSwitchToIdleAfter: false, playFromStart: false}, ..._options};
+    private playAnimation(_name: AnimationType, _options?: { lockAndSwitchToIdleAfter: boolean, playFromStart: boolean }) {
+      _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false }, ..._options };
 
       if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter) return;
       if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter) return;
@@ -82,7 +82,7 @@ namespace Script {
         this.#animations.set(_name, animation);
       }
       this.#animator.animation = this.#animations.get(_name);
-      if(_options.playFromStart){
+      if (_options.playFromStart) {
         this.#animator.jumpTo(0);
       }
       this.#currentlyActiveAnimation.name = _name;
@@ -147,12 +147,14 @@ namespace Script {
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
-          this.attackMain.attack(_direction);
-          this.playAnimation("attack", {lockAndSwitchToIdleAfter: true, playFromStart: true});
+          if (this.attackMain.attack(_direction)) {
+            this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+          }
           break;
         case ATTACK_TYPE.SPECIAL:
-          this.attackSpecial.attack(_direction);
-          this.playAnimation("special", {lockAndSwitchToIdleAfter: true, playFromStart: true});
+          if (this.attackSpecial.attack(_direction)) {
+            this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+          }
           break;
       }
       this.rotationWrapperMatrix.lookIn(_direction);

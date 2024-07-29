@@ -118,6 +118,8 @@ namespace Script {
             let attackbar: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("BasicAttackBar")[0];
 
             let width: number = 1 / this.maxCharges;
+            this.#attackBarColor = ƒ.Color.CSS("Orange");
+            if (this.attackType === AttackType.SPECIAL) this.#attackBarColor = ƒ.Color.CSS("Gold");
             for (let i: number = 0; i < this.maxCharges; i++) {
                 let instance = await ƒ.Project.createGraphInstance(attackbar);
                 this.node.addChild(instance);
@@ -126,9 +128,9 @@ namespace Script {
                 if (this.attackType === AttackType.SPECIAL) instance.mtxLocal.translateY(-0.1);
                 instance.mtxLocal.scaleX(0.9 * width);
                 this.#attackBars.push(instance.getChild(0));
+                if (i * this.energyNeededPerCharge < this.currentEnergy)
+                    instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
             }
-            this.#attackBarColor = ƒ.Color.CSS("Orange");
-            if (this.attackType === AttackType.SPECIAL) this.#attackBarColor = ƒ.Color.CSS("Gold");
         }
 
         attack(_direction: ƒ.Vector3): boolean {

@@ -492,6 +492,9 @@ var Script;
                 this.currentEnergy = 0;
             let attackbar = ƒ.Project.getResourcesByName("BasicAttackBar")[0];
             let width = 1 / this.maxCharges;
+            this.#attackBarColor = ƒ.Color.CSS("Orange");
+            if (this.attackType === AttackType.SPECIAL)
+                this.#attackBarColor = ƒ.Color.CSS("Gold");
             for (let i = 0; i < this.maxCharges; i++) {
                 let instance = await ƒ.Project.createGraphInstance(attackbar);
                 this.node.addChild(instance);
@@ -501,10 +504,9 @@ var Script;
                     instance.mtxLocal.translateY(-0.1);
                 instance.mtxLocal.scaleX(0.9 * width);
                 this.#attackBars.push(instance.getChild(0));
+                if (i * this.energyNeededPerCharge < this.currentEnergy)
+                    instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
             }
-            this.#attackBarColor = ƒ.Color.CSS("Orange");
-            if (this.attackType === AttackType.SPECIAL)
-                this.#attackBarColor = ƒ.Color.CSS("Gold");
         };
         attack(_direction) {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
@@ -929,12 +931,14 @@ var Script;
         attack(_atk, _direction) {
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
-                    this.attackMain.attack(_direction);
-                    this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+                    if (this.attackMain.attack(_direction)) {
+                        this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+                    }
                     break;
                 case ATTACK_TYPE.SPECIAL:
-                    this.attackSpecial.attack(_direction);
-                    this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+                    if (this.attackSpecial.attack(_direction)) {
+                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+                    }
                     break;
             }
             this.rotationWrapperMatrix.lookIn(_direction);

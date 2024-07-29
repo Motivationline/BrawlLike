@@ -6067,7 +6067,7 @@
               "maxCharges": 2,
               "damage": 100,
               "minDelayBetweenAttacks": 0.3,
-              "energyGenerationPerSecond": 1,
+              "energyGenerationPerSecond": 0.1,
               "energyNeededPerCharge": 1
             }
           }
