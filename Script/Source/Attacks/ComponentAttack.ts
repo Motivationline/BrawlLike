@@ -159,6 +159,8 @@ namespace Script {
                     let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
                     let thisChargePercentage: number = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
                     this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
+                    let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
+                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation = new ƒ.Vector3(Math.min(1, thisChargePercentage) / 2 - 0.5, translation.y, translation.z);
                     if (thisChargePercentage >= 1) {
                         this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
                     }

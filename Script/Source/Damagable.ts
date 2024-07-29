@@ -36,7 +36,9 @@ namespace Script {
             this.#health = _amt;
             if (this.#health <= 0) this.death();
             if (!this.#healthBar) return;
-            this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(this.#health / this.#maxHealth, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
+            let scale: number = this.#health / this.#maxHealth;
+            this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(scale, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
+            this.#healthBar.mtxPivot.translation = new ƒ.Vector3(scale / 2 - 0.5, this.#healthBar.mtxPivot.translation.y, this.#healthBar.mtxPivot.translation.z);
         }
 
         protected abstract death(): void;

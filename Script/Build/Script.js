@@ -126,7 +126,9 @@ var Script;
                 this.death();
             if (!this.#healthBar)
                 return;
-            this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(this.#health / this.#maxHealth, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
+            let scale = this.#health / this.#maxHealth;
+            this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(scale, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
+            this.#healthBar.mtxPivot.translation = new ƒ.Vector3(scale / 2 - 0.5, this.#healthBar.mtxPivot.translation.y, this.#healthBar.mtxPivot.translation.z);
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -534,6 +536,8 @@ var Script;
                     let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
                     let thisChargePercentage = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
                     this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
+                    let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
+                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation = new ƒ.Vector3(Math.min(1, thisChargePercentage) / 2 - 0.5, translation.y, translation.z);
                     if (thisChargePercentage >= 1) {
                         this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
                     }
