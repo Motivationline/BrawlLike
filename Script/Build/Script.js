@@ -159,6 +159,16 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    class Destructible extends ƒ.Component {
+        destroy() {
+            this.node.getParent().removeChild(this.node);
+        }
+    }
+    Script.Destructible = Destructible;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     class MenuManager {
         constructor() {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -607,6 +617,7 @@ var Script;
         damage = 100;
         speed = 10;
         range = 3;
+        destructive = false;
         #rb;
         #owner;
         #startPosition;
@@ -647,17 +658,24 @@ var Script;
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
                 return;
-            //TODO do team check
+            // TODO do team check
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(Script.IgnoredByProjectiles);
             if (noProjectile && noProjectile.isActive)
                 return;
             // check for damagable target
             let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
+            if (damagable) {
+                damagable.health -= this.damage;
+            }
+            // check for destructible target
+            if (this.destructive) {
+                let destructible = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Destructible);
+                if (destructible) {
+                    destructible.destroy();
+                }
+            }
             this.explode();
-            if (!damagable)
-                return;
-            damagable.health -= this.damage;
         };
         explode() {
             Script.EntityManager.Instance.removeProjectile(this);
@@ -684,6 +702,7 @@ var Script;
             delete _mutator.speed;
             delete _mutator.range;
             delete _mutator.rotateInDirection;
+            delete _mutator.destructive;
         }
         initShadow = async () => {
             let shadow = ƒ.Project.getResourcesByName("Shadow")[0];
@@ -705,6 +724,7 @@ var Script;
         attachedToBrawler = false;
         projectile = "DefaultProjectile";
         gravity = false;
+        destructive = false;
         attack(_direction) {
             if (!super.attack(_direction))
                 return false;
@@ -720,6 +740,7 @@ var Script;
             projectileComponent.range = this.range;
             projectileComponent.rotateInDirection = this.rotateInDirection;
             projectileComponent.gravity = this.gravity;
+            projectileComponent.destructive = this.destructive;
             let parent = this.attachedToBrawler ? this.node : undefined;
             Script.EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
@@ -747,6 +768,7 @@ var Script;
                 projectile: this.projectile,
                 recoil: this.recoil,
                 gravity: this.gravity,
+                destructive: this.destructive,
             };
             return serialization;
         }
@@ -767,6 +789,8 @@ var Script;
                 this.recoil = _serialization.recoil;
             if (_serialization.gravity)
                 this.gravity = _serialization.gravity;
+            if (_serialization.destructive)
+                this.destructive = _serialization.destructive;
             return this;
         }
     }

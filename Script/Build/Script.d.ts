@@ -37,6 +37,12 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    class Destructible extends ƒ.Component {
+        destroy(): void;
+    }
+}
+declare namespace Script {
     class MenuManager {
         constructor();
         resourcesLoaded: () => void;
@@ -124,6 +130,7 @@ declare namespace Script {
         damage: number;
         speed: number;
         range: number;
+        destructive: boolean;
         constructor();
         private init;
         fire(_direction: ƒ.Vector3, _owner: ComponentBrawler): void;
@@ -145,6 +152,7 @@ declare namespace Script {
         attachedToBrawler: boolean;
         projectile: string;
         gravity: boolean;
+        destructive: boolean;
         attack(_direction: ƒ.Vector3): boolean;
         shootProjectile(_direction: ƒ.Vector3): Promise<void>;
         serialize(): ƒ.Serialization;

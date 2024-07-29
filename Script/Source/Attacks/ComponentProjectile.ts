@@ -6,6 +6,7 @@ namespace Script {
         damage: number = 100;
         speed: number = 10;
         range: number = 3;
+        destructive: boolean = false;
         #rb: ƒ.ComponentRigidbody;
         #owner: ComponentBrawler;
         #startPosition: ƒ.Vector3;
@@ -50,16 +51,24 @@ namespace Script {
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody) return;
-            //TODO do team check
+            // TODO do team check
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(IgnoredByProjectiles);
             if (noProjectile && noProjectile.isActive) return;
 
             // check for damagable target
             let damagable: Damagable = (<Damagable>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Damagable));
+            if (damagable) {
+                damagable.health -= this.damage;
+            }
+            // check for destructible target
+            if(this.destructive){
+                let destructible: Destructible = (<Destructible>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Destructible));
+                if (destructible) {
+                    destructible.destroy();
+                }
+            }
             this.explode();
-            if (!damagable) return;
-            damagable.health -= this.damage;
         }
 
         protected explode() {
@@ -88,6 +97,7 @@ namespace Script {
             delete _mutator.speed;
             delete _mutator.range;
             delete _mutator.rotateInDirection;
+            delete _mutator.destructive;
         }
 
         private initShadow = async () => {

@@ -8,6 +8,7 @@ namespace Script {
         attachedToBrawler: boolean = false;
         projectile: string = "DefaultProjectile";
         gravity: boolean = false;
+        destructive: boolean = false;
 
         attack(_direction: ƒ.Vector3): boolean {
             if (!super.attack(_direction)) return false;
@@ -25,6 +26,7 @@ namespace Script {
             projectileComponent.range = this.range;
             projectileComponent.rotateInDirection = this.rotateInDirection;
             projectileComponent.gravity = this.gravity;
+            projectileComponent.destructive = this.destructive;
 
             let parent: ƒ.Node = this.attachedToBrawler ? this.node : undefined;
             EntityManager.Instance.addProjectile(instance, projectileComponent, parent);
@@ -55,6 +57,7 @@ namespace Script {
                 projectile: this.projectile,
                 recoil: this.recoil,
                 gravity: this.gravity,
+                destructive: this.destructive,
             }
             return serialization;
         }
@@ -78,6 +81,8 @@ namespace Script {
                 this.recoil = _serialization.recoil;
             if (_serialization.gravity)
                 this.gravity = _serialization.gravity;
+            if (_serialization.destructive)
+                this.destructive = _serialization.destructive;
             return this;
         }
     }
