@@ -157,13 +157,6 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    class IgnoredByProjectiles extends ƒ.Component {
-    }
-    Script.IgnoredByProjectiles = IgnoredByProjectiles;
-})(Script || (Script = {}));
-var Script;
-(function (Script) {
-    var ƒ = FudgeCore;
     class MenuManager {
         constructor() {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -635,6 +628,7 @@ var Script;
         init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
             this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
+            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initShadow, true);
         };
         fire(_direction, _owner) {
             this.#owner = _owner;
@@ -699,6 +693,12 @@ var Script;
             delete _mutator.range;
             delete _mutator.rotateInDirection;
         }
+        initShadow = async () => {
+            let shadow = ƒ.Project.getResourcesByName("Shadow")[0];
+            let instance = await ƒ.Project.createGraphInstance(shadow);
+            instance.mtxLocal.scaling = ƒ.Vector3.ONE(0.5);
+            this.node.addChild(instance);
+        };
     }
     Script.ComponentProjectile = ComponentProjectile;
 })(Script || (Script = {}));
@@ -1054,5 +1054,31 @@ var Script;
         }
     }
     Script.Cowboy = Cowboy;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class IgnoredByProjectiles extends ƒ.Component {
+    }
+    Script.IgnoredByProjectiles = IgnoredByProjectiles;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class Shadow extends ƒ.Component {
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.moveShadow);
+        }
+        moveShadow = () => {
+            let currentY = this.node.mtxWorld.translation.y;
+            if (currentY !== 0) {
+                this.node.mtxLocal.translateY(-currentY);
+            }
+        };
+    }
+    Script.Shadow = Shadow;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

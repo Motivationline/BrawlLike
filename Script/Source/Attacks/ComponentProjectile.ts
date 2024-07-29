@@ -21,8 +21,9 @@ namespace Script {
         private init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
             this.#rb.addEventListener(ƒ.EVENT_PHYSICS.TRIGGER_ENTER, this.onTriggerEnter);
+            this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initShadow, true);
         }
-        
+
         public fire(_direction: ƒ.Vector3, _owner: ComponentBrawler) {
             this.#owner = _owner;
             this.#rb.effectGravity = Number(this.gravity);
@@ -33,7 +34,7 @@ namespace Script {
                 // calculate arc as desired
                 let timeToImpact = this.speed;
                 let desiredHeight = 3;
-                
+
                 let g = ƒ.Physics.getGravity().y;
                 let desiredG = -8 * desiredHeight / Math.pow(timeToImpact, 2);
 
@@ -87,6 +88,13 @@ namespace Script {
             delete _mutator.speed;
             delete _mutator.range;
             delete _mutator.rotateInDirection;
+        }
+
+        private initShadow = async () => {
+            let shadow = <ƒ.Graph>ƒ.Project.getResourcesByName("Shadow")[0];
+            let instance = await ƒ.Project.createGraphInstance(shadow);
+            instance.mtxLocal.scaling = ƒ.Vector3.ONE(0.5);
+            this.node.addChild(instance);
         }
     }
 }

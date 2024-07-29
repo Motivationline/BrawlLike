@@ -6944,5 +6944,96 @@
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\frog.glb"
     }
+  },
+  "Material|2024-07-29T08:52:16.915Z|22981": {
+    "ƒ.Material": {
+      "name": "ShadowTexture",
+      "idResource": "Material|2024-07-29T08:52:16.915Z|22981",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-07-29T08:51:51.735Z|84230"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "TextureImage|2024-07-29T08:51:51.735Z|84230": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Shadow.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-07-29T08:51:51.735Z|84230",
+        "name": "Assets\\Shadow.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "Graph|2024-07-29T08:49:22.847Z|21081": {
+    "ƒ.Graph": {
+      "name": "Shadow",
+      "active": true,
+      "components": {
+        "ComponentMesh": [
+          {
+            "ƒ.ComponentMesh": {
+              "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[-90, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentMaterial": [
+          {
+            "ƒ.ComponentMaterial": {
+              "sortForAlpha": true,
+              "clrPrimary": "[1, 1, 1, 1]",
+              "clrSecondary": "[1, 1, 1, 1]",
+              "pivot": {
+                "translation": "[0, 0]",
+                "rotation": 0,
+                "scaling": "[1, 1]"
+              },
+              "Component": {
+                "active": true
+              },
+              "idMaterial": "Material|2024-07-29T08:52:16.915Z|22981"
+            }
+          }
+        ],
+        "Shadow": [
+          {
+            "Script.Shadow": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-07-29T08:49:22.847Z|21081",
+      "type": "Graph"
+    }
   }
 }

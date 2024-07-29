@@ -37,11 +37,6 @@ declare namespace Script {
     }
 }
 declare namespace Script {
-    import ƒ = FudgeCore;
-    class IgnoredByProjectiles extends ƒ.Component {
-    }
-}
-declare namespace Script {
     class MenuManager {
         constructor();
         resourcesLoaded: () => void;
@@ -143,6 +138,7 @@ declare namespace Script {
         moveToPosition(_pos: ƒ.Vector3): void;
         protected loop: () => void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+        private initShadow;
     }
 }
 declare namespace Script {
@@ -227,5 +223,17 @@ declare namespace Script {
     class Cowboy extends ComponentBrawler {
         move(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class IgnoredByProjectiles extends ƒ.Component {
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class Shadow extends ƒ.Component {
+        constructor();
+        moveShadow: () => void;
     }
 }
