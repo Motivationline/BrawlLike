@@ -390,10 +390,26 @@ var Script;
         AttackPreviewType[AttackPreviewType["CONE"] = 1] = "CONE";
         AttackPreviewType[AttackPreviewType["AREA"] = 2] = "AREA";
     })(AttackPreviewType = Script.AttackPreviewType || (Script.AttackPreviewType = {}));
+    let AttackType;
+    (function (AttackType) {
+        AttackType[AttackType["MAIN"] = 0] = "MAIN";
+        AttackType[AttackType["SPECIAL"] = 1] = "SPECIAL";
+    })(AttackType = Script.AttackType || (Script.AttackType = {}));
     class ComponentAttack extends ƒ.Component {
         previewType = AttackPreviewType.LINE;
         previewWidth = 1;
         range = 5;
+        attackType = AttackType.MAIN;
+        maxCharges = 3;
+        damage = 100;
+        minDelayBetweenAttacks = 0.3;
+        energyGenerationPerSecond = 0;
+        energyNeededPerCharge = 1;
+        maxEnergy = 0;
+        currentEnergy = 0;
+        nextAttackAllowedAt = -1;
+        #attackBars = [];
+        #attackBarColor;
         #previewNode;
         #previewActive = false;
         constructor() {
@@ -401,7 +417,7 @@ var Script;
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, () => {
-                this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initPreviewHandler, true);
+                this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initAttack, true);
             });
         }
         showPreview() {
@@ -429,7 +445,8 @@ var Script;
                     break;
             }
         }
-        initPreviewHandler = () => {
+        initAttack = async () => {
+            // Preview
             let quad = ƒ.Project.getResourcesByType(ƒ.MeshQuad)[0];
             let texture;
             switch (this.previewType) {
@@ -468,65 +485,11 @@ var Script;
             this.#previewNode = node;
             this.node.addChild(node);
             this.hidePreview();
-        };
-        serialize() {
-            let serialization = {
-                [super.constructor.name]: super.serialize(),
-                previewType: this.previewType,
-                previewWidth: this.previewWidth,
-                range: this.range,
-            };
-            return serialization;
-        }
-        async deserialize(_serialization) {
-            if (_serialization[super.constructor.name] != null)
-                await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.previewType)
-                this.previewType = _serialization.previewType;
-            if (_serialization.previewWidth)
-                this.previewWidth = _serialization.previewWidth;
-            if (_serialization.range)
-                this.range = _serialization.range;
-            return this;
-        }
-        getMutatorAttributeTypes(_mutator) {
-            let types = super.getMutatorAttributeTypes(_mutator);
-            if (types.previewType)
-                types.previewType = AttackPreviewType;
-            return types;
-        }
-    }
-    Script.ComponentAttack = ComponentAttack;
-})(Script || (Script = {}));
-/// <reference path="ComponentAttack.ts"/>
-var Script;
-/// <reference path="ComponentAttack.ts"/>
-(function (Script) {
-    var ƒ = FudgeCore;
-    class ComponentMainAttack extends Script.ComponentAttack {
-        reloadTime = 1;
-        minDelayBetweenAttacks = 0.3;
-        damage = 100;
-        castTime = 0.05;
-        maxCharges = 3;
-        charges;
-        chargeMoment = -1;
-        nextAttackAllowedAt = -1;
-        #attackBars = [];
-        #attackBarColor;
-        constructor() {
-            super();
-            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
-                return;
-            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initMainAttack);
-        }
-        initMainAttack = () => {
-            // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initMainAttack);
-            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initVisuals, true);
-        };
-        initVisuals = async () => {
-            this.charges = this.maxCharges;
-            // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initVisuals, true);
+            // Chargebar
+            this.maxEnergy = this.maxCharges * this.energyNeededPerCharge;
+            this.currentEnergy = this.maxEnergy;
+            if (this.attackType === AttackType.SPECIAL)
+                this.currentEnergy = 0;
             let attackbar = ƒ.Project.getResourcesByName("BasicAttackBar")[0];
             let width = 1 / this.maxCharges;
             for (let i = 0; i < this.maxCharges; i++) {
@@ -534,77 +497,98 @@ var Script;
                 this.node.addChild(instance);
                 let translateBy = width * i - 0.5 + 0.5 * width;
                 instance.mtxLocal.translateX(translateBy);
+                if (this.attackType === AttackType.SPECIAL)
+                    instance.mtxLocal.translateY(-0.1);
                 instance.mtxLocal.scaleX(0.9 * width);
                 this.#attackBars.push(instance.getChild(0));
-                this.#attackBarColor = instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary;
             }
+            this.#attackBarColor = ƒ.Color.CSS("Orange");
+            if (this.attackType === AttackType.SPECIAL)
+                this.#attackBarColor = ƒ.Color.CSS("Gold");
         };
         attack(_direction) {
-            if (this.charges == 0)
+            let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
+            if (charges < 1)
                 return false;
             let timeNow = ƒ.Time.game.get();
             if (this.nextAttackAllowedAt > timeNow)
                 return false;
-            if (this.charges < this.#attackBars.length) {
-                let pivot = this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot;
+            if (charges < this.#attackBars.length) {
+                let pivot = this.#attackBars[charges].getComponent(ƒ.ComponentMesh).mtxPivot;
                 pivot.scaling = new ƒ.Vector3(0, pivot.scaling.y, pivot.scaling.z);
             }
-            this.charges--;
-            this.#attackBars[this.charges].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
-            if (this.chargeMoment < 0)
-                this.chargeMoment = timeNow;
+            this.currentEnergy -= this.energyNeededPerCharge;
+            this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             return true;
         }
         update() {
-            if (this.charges < this.maxCharges) {
-                let currentTime = ƒ.Time.game.get();
-                let reloadRatio = (currentTime - this.chargeMoment) / (this.reloadTime * 1000);
-                let scaling = this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
-                this.#attackBars[this.charges].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, reloadRatio), scaling.y, scaling.z);
-                if (reloadRatio >= 1) {
-                    this.#attackBars[this.charges].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
-                    this.charges++;
-                    this.chargeMoment = currentTime;
-                    if (this.charges >= this.maxCharges) {
-                        this.chargeMoment = -1;
+            let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
+            if (charges < this.maxCharges) {
+                let deltaTime = ƒ.Loop.timeFrameGame / 1000;
+                let energyCharge = deltaTime * this.energyGenerationPerSecond;
+                this.currentEnergy = Math.min(this.maxEnergy, energyCharge + this.currentEnergy);
+                for (let charge = 0; charge < this.maxCharges; charge++) {
+                    let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                    let thisChargePercentage = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
+                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
+                    if (thisChargePercentage >= 1) {
+                        this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
                     }
                 }
             }
         }
-        reduceMutator(_mutator) {
-            delete _mutator.charges;
-            delete _mutator.chargeMoment;
-            delete _mutator.nextAttackAllowedAt;
-        }
         serialize() {
             let serialization = {
                 [super.constructor.name]: super.serialize(),
-                reloadTime: this.reloadTime,
-                minDelayBetweenAttacks: this.minDelayBetweenAttacks,
-                damage: this.damage,
-                castTime: this.castTime,
+                previewType: this.previewType,
+                previewWidth: this.previewWidth,
+                range: this.range,
+                attackType: this.attackType,
                 maxCharges: this.maxCharges,
+                damage: this.damage,
+                minDelayBetweenAttacks: this.minDelayBetweenAttacks,
+                energyGenerationPerSecond: this.energyGenerationPerSecond,
+                energyNeededPerCharge: this.energyNeededPerCharge,
             };
             return serialization;
         }
         async deserialize(_serialization) {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.reloadTime)
-                this.reloadTime = _serialization.reloadTime;
-            if (_serialization.minDelayBetweenAttacks)
-                this.minDelayBetweenAttacks = _serialization.minDelayBetweenAttacks;
-            if (_serialization.damage)
-                this.damage = _serialization.damage;
-            if (_serialization.castTime)
-                this.castTime = _serialization.castTime;
-            if (_serialization.maxCharges)
+            if (_serialization.previewType !== undefined)
+                this.previewType = _serialization.previewType;
+            if (_serialization.previewWidth !== undefined)
+                this.previewWidth = _serialization.previewWidth;
+            if (_serialization.attackType !== undefined)
+                this.attackType = _serialization.attackType;
+            if (_serialization.maxCharges !== undefined)
                 this.maxCharges = _serialization.maxCharges;
+            if (_serialization.damage !== undefined)
+                this.damage = _serialization.damage;
+            if (_serialization.minDelayBetweenAttacks !== undefined)
+                this.minDelayBetweenAttacks = _serialization.minDelayBetweenAttacks;
+            if (_serialization.energyGenerationPerSecond !== undefined)
+                this.energyGenerationPerSecond = _serialization.energyGenerationPerSecond;
+            if (_serialization.energyNeededPerCharge !== undefined)
+                this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
             return this;
         }
+        getMutatorAttributeTypes(_mutator) {
+            let types = super.getMutatorAttributeTypes(_mutator);
+            if (types.previewType)
+                types.previewType = AttackPreviewType;
+            if (types.attackType)
+                types.attackType = AttackType;
+            return types;
+        }
+        reduceMutator(_mutator) {
+            delete _mutator.maxEnergy;
+            delete _mutator.currentEnergy;
+            delete _mutator.nextAttackAllowedAt;
+        }
     }
-    Script.ComponentMainAttack = ComponentMainAttack;
+    Script.ComponentAttack = ComponentAttack;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -705,7 +689,7 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    class ComponentProjectileMainAttack extends Script.ComponentMainAttack {
+    class ComponentProjectileAttack extends Script.ComponentAttack {
         speed = 2;
         range = 10;
         recoil = 0;
@@ -778,34 +762,13 @@ var Script;
             return this;
         }
     }
-    Script.ComponentProjectileMainAttack = ComponentProjectileMainAttack;
+    Script.ComponentProjectileAttack = ComponentProjectileAttack;
 })(Script || (Script = {}));
+///<reference path="../ComponentProjectileAttack.ts" />
 var Script;
+///<reference path="../ComponentProjectileAttack.ts" />
 (function (Script) {
-    class ComponentSpecialAttack extends Script.ComponentAttack {
-        damage = 100;
-        castTime = 0.05;
-        requiredCharge = 500;
-        currentCharge = 0;
-        charge(_amt) {
-            this.currentCharge = Math.min(this.currentCharge + _amt, this.requiredCharge);
-        }
-        attack(_direction) {
-            if (this.currentCharge < this.requiredCharge)
-                return false;
-            return true;
-        }
-        reduceMutator(_mutator) {
-            delete _mutator.currentCharge;
-        }
-    }
-    Script.ComponentSpecialAttack = ComponentSpecialAttack;
-})(Script || (Script = {}));
-///<reference path="../ComponentProjectileMainAttack.ts" />
-var Script;
-///<reference path="../ComponentProjectileMainAttack.ts" />
-(function (Script) {
-    class CowboyMainAttack extends Script.ComponentProjectileMainAttack {
+    class CowboyMainAttack extends Script.ComponentProjectileAttack {
         attack(_direction) {
             if (!super.attack(_direction))
                 return false;
@@ -816,7 +779,7 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
-    class CowboySpecialAttack extends Script.ComponentSpecialAttack {
+    class CowboySpecialAttack extends Script.ComponentAttack {
         attack(_direction) {
             if (!super.attack(_direction))
                 return false;
@@ -919,10 +882,10 @@ var Script;
         }
         findAttacks() {
             let components = this.node.getAllComponents();
-            this.attackMain = components.find(c => c instanceof Script.ComponentMainAttack);
-            this.attackSpecial = components.find(c => c instanceof Script.ComponentSpecialAttack);
+            this.attackMain = components.find(c => c instanceof Script.ComponentAttack && c.attackType === Script.AttackType.MAIN);
+            this.attackSpecial = components.find(c => c instanceof Script.ComponentAttack && c.attackType === Script.AttackType.SPECIAL);
             if (!this.attackMain || !this.attackSpecial)
-                console.error(`${this.node.name} doesn't have attacks attached.`);
+                console.error(`${this.node.name} doesn't have a main and a special attack attached.`);
         }
         setMovement(_direction) {
             this.direction = _direction;
@@ -935,6 +898,7 @@ var Script;
             this.move();
             if (Script.EntityManager.Instance.playerBrawler === this) {
                 this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+                this.attackSpecial?.update();
                 this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
                 this.attackMain?.update();
             }

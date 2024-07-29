@@ -1,6 +1,6 @@
 namespace Script {
     import ƒ = FudgeCore;
-    export class ComponentProjectileMainAttack extends ComponentMainAttack {
+    export class ComponentProjectileAttack extends ComponentAttack {
         speed: number = 2;
         range: number = 10;
         recoil: number = 0;

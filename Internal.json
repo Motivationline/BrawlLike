@@ -5325,23 +5325,22 @@
             }
           }
         ],
-        "ComponentProjectileMainAttack": [
+        "ComponentProjectileAttack": [
           {
-            "Script.ComponentProjectileMainAttack": {
-              "ComponentMainAttack": {
-                "ComponentAttack": {
-                  "Component": {
-                    "active": true
-                  },
-                  "previewType": 0,
-                  "previewWidth": 1,
-                  "range": 10
+            "Script.ComponentProjectileAttack": {
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
                 },
-                "reloadTime": 1,
-                "minDelayBetweenAttacks": 0.3,
+                "previewType": 0,
+                "previewWidth": 1,
+                "range": 10,
+                "attackType": 0,
+                "maxCharges": 3,
                 "damage": 100,
-                "castTime": 0.05,
-                "maxCharges": 3
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 1,
+                "energyNeededPerCharge": 1
               },
               "speed": 2,
               "range": 10,
@@ -5353,15 +5352,21 @@
             }
           }
         ],
-        "ComponentSpecialAttack": [
+        "ComponentAttack": [
           {
-            "Script.ComponentSpecialAttack": {
+            "Script.ComponentAttack": {
               "Component": {
                 "active": true
               },
               "previewType": 0,
               "previewWidth": 1,
-              "range": 5
+              "range": 5,
+              "attackType": 0,
+              "maxCharges": 3,
+              "damage": 100,
+              "minDelayBetweenAttacks": 0.3,
+              "energyGenerationPerSecond": 1,
+              "energyNeededPerCharge": 1
             }
           }
         ]
@@ -5760,27 +5765,32 @@
               },
               "previewType": 1,
               "previewWidth": 1.6,
-              "range": 3
+              "range": 5,
+              "attackType": 1,
+              "maxCharges": 1,
+              "damage": 100,
+              "minDelayBetweenAttacks": 0.3,
+              "energyGenerationPerSecond": 1,
+              "energyNeededPerCharge": 1
             }
           }
         ],
         "CowboyMainAttack": [
           {
             "Script.CowboyMainAttack": {
-              "ComponentMainAttack": {
-                "ComponentAttack": {
-                  "Component": {
-                    "active": true
-                  },
-                  "previewType": 0,
-                  "previewWidth": 0.30000000000000016,
-                  "range": 8
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
                 },
-                "reloadTime": 1,
-                "minDelayBetweenAttacks": 0.3,
+                "previewType": 0,
+                "previewWidth": 1,
+                "range": 8,
+                "attackType": 0,
+                "maxCharges": 3,
                 "damage": 100,
-                "castTime": 0.05,
-                "maxCharges": 3
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 1,
+                "energyNeededPerCharge": 1
               },
               "speed": 6,
               "range": 8,
@@ -6000,23 +6010,22 @@
             }
           }
         ],
-        "ComponentProjectileMainAttack": [
+        "ComponentProjectileAttack": [
           {
-            "Script.ComponentProjectileMainAttack": {
-              "ComponentMainAttack": {
-                "ComponentAttack": {
-                  "Component": {
-                    "active": true
-                  },
-                  "previewType": 2,
-                  "previewWidth": 1,
-                  "range": 5
+            "Script.ComponentProjectileAttack": {
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
                 },
-                "reloadTime": 2,
-                "minDelayBetweenAttacks": 0.3,
+                "previewType": 2,
+                "previewWidth": 1,
+                "range": 5,
+                "attackType": 0,
+                "maxCharges": 3,
                 "damage": 100,
-                "castTime": 0.05,
-                "maxCharges": 3
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 1,
+                "energyNeededPerCharge": 1
               },
               "speed": 2,
               "range": 5,
@@ -6045,15 +6054,21 @@
             }
           }
         ],
-        "ComponentSpecialAttack": [
+        "ComponentAttack": [
           {
-            "Script.ComponentSpecialAttack": {
+            "Script.ComponentAttack": {
               "Component": {
                 "active": true
               },
               "previewType": 0,
               "previewWidth": 1,
-              "range": 5
+              "range": 5,
+              "attackType": 1,
+              "maxCharges": 2,
+              "damage": 100,
+              "minDelayBetweenAttacks": 0.3,
+              "energyGenerationPerSecond": 1,
+              "energyNeededPerCharge": 1
             }
           }
         ]
@@ -6471,7 +6486,7 @@
                 {
                   "ƒ.ComponentMaterial": {
                     "sortForAlpha": false,
-                    "clrPrimary": "[0.996078431372549, 0.5450980392156862, 0.12549019607843137, 1]",
+                    "clrPrimary": "[0.5019607843137255, 0.5019607843137255, 0.5019607843137255, 1]",
                     "clrSecondary": "[1, 1, 1, 1]",
                     "pivot": {
                       "translation": "[0, 0]",
@@ -6701,20 +6716,19 @@
         "CowboyMainAttack": [
           {
             "Script.CowboyMainAttack": {
-              "ComponentMainAttack": {
-                "ComponentAttack": {
-                  "Component": {
-                    "active": true
-                  },
-                  "previewType": 0,
-                  "previewWidth": 0.30000000000000016,
-                  "range": 4
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
                 },
-                "reloadTime": 1.2000000000000002,
-                "minDelayBetweenAttacks": 0.3,
+                "previewType": 0,
+                "previewWidth": 1,
+                "range": 4,
+                "attackType": 0,
+                "maxCharges": 2,
                 "damage": 100,
-                "castTime": 0.05,
-                "maxCharges": 2
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 1,
+                "energyNeededPerCharge": 1
               },
               "speed": 6,
               "range": 4,
@@ -6734,7 +6748,13 @@
               },
               "previewType": 0,
               "previewWidth": 1,
-              "range": 5
+              "range": 5,
+              "attackType": 1,
+              "maxCharges": 3,
+              "damage": 100,
+              "minDelayBetweenAttacks": 0.3,
+              "energyGenerationPerSecond": 0,
+              "energyNeededPerCharge": 1
             }
           }
         ]

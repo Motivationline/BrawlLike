@@ -84,41 +84,35 @@ declare namespace Script {
         CONE = 1,
         AREA = 2
     }
+    enum AttackType {
+        MAIN = 0,
+        SPECIAL = 1
+    }
     abstract class ComponentAttack extends ƒ.Component {
         #private;
         previewType: AttackPreviewType;
         previewWidth: number;
         range: number;
+        attackType: AttackType;
+        maxCharges: number;
+        damage: number;
+        minDelayBetweenAttacks: number;
+        energyGenerationPerSecond: number;
+        energyNeededPerCharge: number;
+        protected maxEnergy: number;
+        protected currentEnergy: number;
+        protected nextAttackAllowedAt: number;
         constructor();
         showPreview(): void;
         hidePreview(): void;
         updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3): void;
-        private initPreviewHandler;
+        private initAttack;
+        attack(_direction: ƒ.Vector3): boolean;
+        update(): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
         getMutatorAttributeTypes(_mutator: ƒ.Mutator): ƒ.MutatorAttributeTypes;
-    }
-}
-declare namespace Script {
-    import ƒ = FudgeCore;
-    abstract class ComponentMainAttack extends ComponentAttack {
-        #private;
-        reloadTime: number;
-        minDelayBetweenAttacks: number;
-        damage: number;
-        castTime: number;
-        maxCharges: number;
-        protected charges: number;
-        protected chargeMoment: number;
-        protected nextAttackAllowedAt: number;
-        constructor();
-        private initMainAttack;
-        private initVisuals;
-        attack(_direction: ƒ.Vector3): boolean;
-        update(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
-        serialize(): ƒ.Serialization;
-        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {
@@ -143,7 +137,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    class ComponentProjectileMainAttack extends ComponentMainAttack {
+    class ComponentProjectileAttack extends ComponentAttack {
         speed: number;
         range: number;
         recoil: number;
@@ -159,25 +153,13 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    abstract class ComponentSpecialAttack extends ComponentAttack {
-        damage: number;
-        castTime: number;
-        requiredCharge: number;
-        protected currentCharge: number;
-        charge(_amt: number): void;
-        attack(_direction: ƒ.Vector3): boolean;
-        protected reduceMutator(_mutator: ƒ.Mutator): void;
-    }
-}
-declare namespace Script {
-    import ƒ = FudgeCore;
-    class CowboyMainAttack extends ComponentProjectileMainAttack {
+    class CowboyMainAttack extends ComponentProjectileAttack {
         attack(_direction: ƒ.Vector3): boolean;
     }
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    class CowboySpecialAttack extends ComponentSpecialAttack {
+    class CowboySpecialAttack extends ComponentAttack {
         attack(_direction: ƒ.Vector3): boolean;
     }
 }
@@ -189,8 +171,8 @@ declare namespace Script {
         speed: number;
         protected direction: ƒ.Vector3;
         protected rotationWrapperMatrix: ƒ.Matrix4x4;
-        protected attackMain: ComponentMainAttack;
-        protected attackSpecial: ComponentSpecialAttack;
+        protected attackMain: ComponentAttack;
+        protected attackSpecial: ComponentAttack;
         mousePosition: ƒ.Vector3;
         animationIdleName: string;
         animationWalkName: string;

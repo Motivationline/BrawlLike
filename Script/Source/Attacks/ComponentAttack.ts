@@ -5,10 +5,28 @@ namespace Script {
         CONE,
         AREA,
     }
+
+    export enum AttackType {
+        MAIN,
+        SPECIAL,
+    }
+
     export abstract class ComponentAttack extends ƒ.Component {
         public previewType: AttackPreviewType = AttackPreviewType.LINE;
         public previewWidth: number = 1;
         public range: number = 5;
+        public attackType: AttackType = AttackType.MAIN;
+        public maxCharges: number = 3;
+        public damage: number = 100;
+        public minDelayBetweenAttacks: number = 0.3;
+        public energyGenerationPerSecond: number = 0;
+        public energyNeededPerCharge: number = 1;
+
+        protected maxEnergy: number = 0;
+        protected currentEnergy: number = 0;
+        protected nextAttackAllowedAt: number = -1;
+        #attackBars: ƒ.Node[] = [];
+        #attackBarColor: ƒ.Color;
         #previewNode: ƒ.Node;
         #previewActive: boolean = false;
 
@@ -18,7 +36,7 @@ namespace Script {
                 return;
 
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, () => {
-                this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initPreviewHandler, true);
+                this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initAttack, true);
             });
         }
 
@@ -48,7 +66,8 @@ namespace Script {
             }
         }
 
-        private initPreviewHandler = () => {
+        private initAttack = async () => {
+            // Preview
             let quad: ƒ.MeshQuad = <ƒ.MeshQuad>ƒ.Project.getResourcesByType(ƒ.MeshQuad)[0];
             let texture: ƒ.Material;
             switch (this.previewType) {
@@ -90,7 +109,61 @@ namespace Script {
             this.#previewNode = node;
             this.node.addChild(node);
             this.hidePreview();
+
+            // Chargebar
+
+            this.maxEnergy = this.maxCharges * this.energyNeededPerCharge;
+            this.currentEnergy = this.maxEnergy;
+            if (this.attackType === AttackType.SPECIAL) this.currentEnergy = 0;
+            let attackbar: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("BasicAttackBar")[0];
+
+            let width: number = 1 / this.maxCharges;
+            for (let i: number = 0; i < this.maxCharges; i++) {
+                let instance = await ƒ.Project.createGraphInstance(attackbar);
+                this.node.addChild(instance);
+                let translateBy = width * i - 0.5 + 0.5 * width;
+                instance.mtxLocal.translateX(translateBy);
+                if (this.attackType === AttackType.SPECIAL) instance.mtxLocal.translateY(-0.1);
+                instance.mtxLocal.scaleX(0.9 * width);
+                this.#attackBars.push(instance.getChild(0));
+            }
+            this.#attackBarColor = ƒ.Color.CSS("Orange");
+            if (this.attackType === AttackType.SPECIAL) this.#attackBarColor = ƒ.Color.CSS("Gold");
         }
+
+        attack(_direction: ƒ.Vector3): boolean {
+            let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
+            if (charges < 1) return false;
+            let timeNow: number = ƒ.Time.game.get();
+            if (this.nextAttackAllowedAt > timeNow) return false;
+            if (charges < this.#attackBars.length) {
+                let pivot = this.#attackBars[charges].getComponent(ƒ.ComponentMesh).mtxPivot;
+                pivot.scaling = new ƒ.Vector3(0, pivot.scaling.y, pivot.scaling.z);
+            }
+            this.currentEnergy -= this.energyNeededPerCharge;
+            this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
+            this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
+            return true;
+        }
+
+        update(): void {
+            let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
+            if (charges < this.maxCharges) {
+                let deltaTime = ƒ.Loop.timeFrameGame / 1000;
+                let energyCharge = deltaTime * this.energyGenerationPerSecond;
+                this.currentEnergy = Math.min(this.maxEnergy, energyCharge + this.currentEnergy);
+
+                for (let charge = 0; charge < this.maxCharges; charge++) {
+                    let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                    let thisChargePercentage: number = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
+                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
+                    if (thisChargePercentage >= 1) {
+                        this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
+                    }
+                }
+            }
+        }
+
 
         public serialize(): ƒ.Serialization {
             let serialization: ƒ.Serialization = {
@@ -98,6 +171,12 @@ namespace Script {
                 previewType: this.previewType,
                 previewWidth: this.previewWidth,
                 range: this.range,
+                attackType: this.attackType,
+                maxCharges: this.maxCharges,
+                damage: this.damage,
+                minDelayBetweenAttacks: this.minDelayBetweenAttacks,
+                energyGenerationPerSecond: this.energyGenerationPerSecond,
+                energyNeededPerCharge: this.energyNeededPerCharge,
             }
             return serialization;
         }
@@ -105,12 +184,22 @@ namespace Script {
         public async deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable> {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.previewType)
+            if (_serialization.previewType !== undefined)
                 this.previewType = _serialization.previewType;
-            if (_serialization.previewWidth)
+            if (_serialization.previewWidth !== undefined)
                 this.previewWidth = _serialization.previewWidth;
-            if (_serialization.range)
-                this.range = _serialization.range;
+            if (_serialization.attackType !== undefined)
+                this.attackType = _serialization.attackType;
+            if (_serialization.maxCharges !== undefined)
+                this.maxCharges = _serialization.maxCharges;
+            if (_serialization.damage !== undefined)
+                this.damage = _serialization.damage;
+            if (_serialization.minDelayBetweenAttacks !== undefined)
+                this.minDelayBetweenAttacks = _serialization.minDelayBetweenAttacks;
+            if (_serialization.energyGenerationPerSecond !== undefined)
+                this.energyGenerationPerSecond = _serialization.energyGenerationPerSecond;
+            if (_serialization.energyNeededPerCharge !== undefined)
+                this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
 
             return this;
         }
@@ -119,7 +208,16 @@ namespace Script {
             let types: ƒ.MutatorAttributeTypes = super.getMutatorAttributeTypes(_mutator);
             if (types.previewType)
                 types.previewType = AttackPreviewType;
+            if (types.attackType)
+                types.attackType = AttackType;
             return types;
+        }
+
+
+        protected reduceMutator(_mutator: ƒ.Mutator): void {
+            delete _mutator.maxEnergy;
+            delete _mutator.currentEnergy;
+            delete _mutator.nextAttackAllowedAt;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Script {
     public speed: number = 1;
     protected direction: ƒ.Vector3 = new ƒ.Vector3();
     protected rotationWrapperMatrix: ƒ.Matrix4x4;
-    protected attackMain: ComponentMainAttack;
-    protected attackSpecial: ComponentSpecialAttack;
+    protected attackMain: ComponentAttack;
+    protected attackSpecial: ComponentAttack;
     #animator: ƒ.ComponentAnimator;
     #animations: Map<string, ƒ.Animation> = new Map();
     #currentlyActiveAnimation: { name: string, lock: boolean } = { name: "idle", lock: false };
@@ -98,9 +98,9 @@ namespace Script {
 
     private findAttacks() {
       let components = this.node.getAllComponents();
-      this.attackMain = <ComponentMainAttack>components.find(c => c instanceof ComponentMainAttack);
-      this.attackSpecial = <ComponentSpecialAttack>components.find(c => c instanceof ComponentSpecialAttack);
-      if (!this.attackMain || !this.attackSpecial) console.error(`${this.node.name} doesn't have attacks attached.`);
+      this.attackMain = <ComponentAttack>components.find(c => c instanceof ComponentAttack && c.attackType === AttackType.MAIN);
+      this.attackSpecial = <ComponentAttack>components.find(c => c instanceof ComponentAttack && c.attackType === AttackType.SPECIAL);
+      if (!this.attackMain || !this.attackSpecial) console.error(`${this.node.name} doesn't have a main and a special attack attached.`);
     }
 
     public setMovement(_direction: ƒ.Vector3) {
@@ -114,6 +114,7 @@ namespace Script {
 
       if (EntityManager.Instance.playerBrawler === this) {
         this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+        this.attackSpecial?.update();
         this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
         this.attackMain?.update();
       }
