@@ -118,6 +118,8 @@ namespace Script {
             let attackbar: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("BasicAttackBar")[0];
 
             let width: number = 1 / this.maxCharges;
+            let gap: number = width * 0.1;
+            let visibleWidth: number = (1 - (this.maxCharges - 1) * gap) / this.maxCharges;
             this.#attackBarColor = ƒ.Color.CSS("Orange");
             if (this.attackType === AttackType.SPECIAL) this.#attackBarColor = ƒ.Color.CSS("Gold");
             for (let i: number = 0; i < this.maxCharges; i++) {
@@ -126,7 +128,7 @@ namespace Script {
                 let translateBy = width * i - 0.5 + 0.5 * width;
                 instance.mtxLocal.translateX(translateBy);
                 if (this.attackType === AttackType.SPECIAL) instance.mtxLocal.translateY(-0.1);
-                instance.mtxLocal.scaleX(0.9 * width);
+                instance.mtxLocal.scaleX(visibleWidth);
                 this.#attackBars.push(instance.getChild(0));
                 if (i * this.energyNeededPerCharge < this.currentEnergy)
                     instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;

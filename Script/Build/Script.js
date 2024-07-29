@@ -494,6 +494,8 @@ var Script;
                 this.currentEnergy = 0;
             let attackbar = ƒ.Project.getResourcesByName("BasicAttackBar")[0];
             let width = 1 / this.maxCharges;
+            let gap = width * 0.1;
+            let visibleWidth = (1 - (this.maxCharges - 1) * gap) / this.maxCharges;
             this.#attackBarColor = ƒ.Color.CSS("Orange");
             if (this.attackType === AttackType.SPECIAL)
                 this.#attackBarColor = ƒ.Color.CSS("Gold");
@@ -504,7 +506,7 @@ var Script;
                 instance.mtxLocal.translateX(translateBy);
                 if (this.attackType === AttackType.SPECIAL)
                     instance.mtxLocal.translateY(-0.1);
-                instance.mtxLocal.scaleX(0.9 * width);
+                instance.mtxLocal.scaleX(visibleWidth);
                 this.#attackBars.push(instance.getChild(0));
                 if (i * this.energyNeededPerCharge < this.currentEnergy)
                     instance.getChild(0).getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
