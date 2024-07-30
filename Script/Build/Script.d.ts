@@ -153,8 +153,8 @@ declare namespace Script {
         projectile: string;
         gravity: boolean;
         destructive: boolean;
-        attack(_direction: ƒ.Vector3): boolean;
-        shootProjectile(_direction: ƒ.Vector3): Promise<void>;
+        attack(_direction: ƒ.Vector3, _shootProjectile?: boolean): boolean;
+        shootProjectile(_direction: ƒ.Vector3, _ignoreRange?: boolean): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
@@ -169,6 +169,17 @@ declare namespace Script {
     import ƒ = FudgeCore;
     class CowboySpecialAttack extends ComponentAttack {
         attack(_direction: ƒ.Vector3): boolean;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class FroggerSpecialAttack extends ComponentProjectileAttack {
+        radius: number;
+        amtProjectiles: number;
+        attack(_direction: ƒ.Vector3): boolean;
+        shootProjectiles(_direction: ƒ.Vector3): Promise<void>;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {

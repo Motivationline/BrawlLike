@@ -23,7 +23,7 @@ namespace Script {
             let playerBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(_playerBrawler)[0];
             let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
             for (let i = 0; i < spawnPoints.length - 1; i++) {
-                this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
+                await this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
             }
             this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
             let cameraGraph = <ƒ.Graph>ƒ.Project.getResourcesByName("CameraBrawler")[0];

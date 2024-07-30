@@ -10,14 +10,14 @@ namespace Script {
         gravity: boolean = false;
         destructive: boolean = false;
 
-        attack(_direction: ƒ.Vector3): boolean {
+        attack(_direction: ƒ.Vector3, _shootProjectile: boolean = true): boolean {
             if (!super.attack(_direction)) return false;
 
-            this.shootProjectile(_direction);
+            if (_shootProjectile) this.shootProjectile(_direction);
             return true;
         }
 
-        async shootProjectile(_direction: ƒ.Vector3) {
+        async shootProjectile(_direction: ƒ.Vector3, _ignoreRange: boolean = false) {
             let projectile: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(this.projectile)[0];
             let instance = await ƒ.Project.createGraphInstance(projectile);
             let projectileComponent: ComponentProjectile = <ComponentProjectile>instance.getAllComponents().find(c => c instanceof ComponentProjectile);
@@ -34,8 +34,8 @@ namespace Script {
             let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
 
             if (this.gravity) {
-                if(_direction.magnitude > this.range)
-                _direction.normalize(this.range);
+                if (_direction.magnitude > this.range && !_ignoreRange)
+                    _direction.normalize(this.range);
             } else {
                 _direction.normalize();
             }
@@ -67,21 +67,21 @@ namespace Script {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
 
-            if (_serialization.speed)
+            if (_serialization.speed !== undefined)
                 this.speed = _serialization.speed;
-            if (_serialization.range)
+            if (_serialization.range !== undefined)
                 this.range = _serialization.range;
-            if (_serialization.rotateInDirection)
+            if (_serialization.rotateInDirection !== undefined)
                 this.rotateInDirection = _serialization.rotateInDirection;
-            if (_serialization.attachedToBrawler)
+            if (_serialization.attachedToBrawler !== undefined)
                 this.attachedToBrawler = _serialization.attachedToBrawler;
-            if (_serialization.projectile)
+            if (_serialization.projectile !== undefined)
                 this.projectile = _serialization.projectile;
-            if (_serialization.recoil)
+            if (_serialization.recoil !== undefined)
                 this.recoil = _serialization.recoil;
-            if (_serialization.gravity)
+            if (_serialization.gravity !== undefined)
                 this.gravity = _serialization.gravity;
-            if (_serialization.destructive)
+            if (_serialization.destructive !== undefined)
                 this.destructive = _serialization.destructive;
             return this;
         }

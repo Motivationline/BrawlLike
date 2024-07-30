@@ -180,6 +180,7 @@ var Script;
                     button.addEventListener("click", async () => {
                         await Script.EntityManager.Instance.loadBrawler(button.dataset.brawler);
                         ƒ.Loop.start();
+                        // ƒ.Time.game.setScale(0.2);
                         document.getElementById("selection-overlay").style.display = "none";
                     });
                 });
@@ -300,7 +301,7 @@ var Script;
             let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler)[0];
             let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
             for (let i = 0; i < spawnPoints.length - 1; i++) {
-                this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
+                await this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
             }
             this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
             let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
@@ -725,13 +726,14 @@ var Script;
         projectile = "DefaultProjectile";
         gravity = false;
         destructive = false;
-        attack(_direction) {
+        attack(_direction, _shootProjectile = true) {
             if (!super.attack(_direction))
                 return false;
-            this.shootProjectile(_direction);
+            if (_shootProjectile)
+                this.shootProjectile(_direction);
             return true;
         }
-        async shootProjectile(_direction) {
+        async shootProjectile(_direction, _ignoreRange = false) {
             let projectile = ƒ.Project.getResourcesByName(this.projectile)[0];
             let instance = await ƒ.Project.createGraphInstance(projectile);
             let projectileComponent = instance.getAllComponents().find(c => c instanceof Script.ComponentProjectile);
@@ -746,7 +748,7 @@ var Script;
             projectileComponent.moveToPosition(this.node.mtxWorld.translation.clone.add(ƒ.Vector3.Y(0.5)));
             let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             if (this.gravity) {
-                if (_direction.magnitude > this.range)
+                if (_direction.magnitude > this.range && !_ignoreRange)
                     _direction.normalize(this.range);
             }
             else {
@@ -775,21 +777,21 @@ var Script;
         async deserialize(_serialization) {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.speed)
+            if (_serialization.speed !== undefined)
                 this.speed = _serialization.speed;
-            if (_serialization.range)
+            if (_serialization.range !== undefined)
                 this.range = _serialization.range;
-            if (_serialization.rotateInDirection)
+            if (_serialization.rotateInDirection !== undefined)
                 this.rotateInDirection = _serialization.rotateInDirection;
-            if (_serialization.attachedToBrawler)
+            if (_serialization.attachedToBrawler !== undefined)
                 this.attachedToBrawler = _serialization.attachedToBrawler;
-            if (_serialization.projectile)
+            if (_serialization.projectile !== undefined)
                 this.projectile = _serialization.projectile;
-            if (_serialization.recoil)
+            if (_serialization.recoil !== undefined)
                 this.recoil = _serialization.recoil;
-            if (_serialization.gravity)
+            if (_serialization.gravity !== undefined)
                 this.gravity = _serialization.gravity;
-            if (_serialization.destructive)
+            if (_serialization.destructive !== undefined)
                 this.destructive = _serialization.destructive;
             return this;
         }
@@ -819,6 +821,53 @@ var Script;
         }
     }
     Script.CowboySpecialAttack = CowboySpecialAttack;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class FroggerSpecialAttack extends Script.ComponentProjectileAttack {
+        radius = 1.5;
+        amtProjectiles = 5;
+        attack(_direction) {
+            if (!super.attack(_direction, false))
+                return false;
+            this.shootProjectiles(_direction);
+            return true;
+        }
+        async shootProjectiles(_direction) {
+            if (_direction.magnitude > this.range)
+                _direction.normalize(this.range);
+            //shoot one in the center
+            await this.shootProjectile(_direction.clone);
+            //shoot other projectiles in radius around with random start angle
+            let projAmt = this.amtProjectiles - 1;
+            let angle = Math.random() * Math.PI;
+            let angleBetweenProjectiles = Math.PI * 2 / projAmt;
+            for (let proj = 0; proj < projAmt; proj++) {
+                let newPosition = ƒ.Vector3.SUM(_direction, new ƒ.Vector3(Math.cos(angle), 0, Math.sin(angle)).normalize(this.radius));
+                await this.shootProjectile(newPosition, true);
+                angle += angleBetweenProjectiles;
+            }
+        }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                radius: this.radius,
+                amtProjectiles: this.amtProjectiles,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.radius !== undefined)
+                this.radius = _serialization.radius;
+            if (_serialization.amtProjectiles !== undefined)
+                this.amtProjectiles = _serialization.amtProjectiles;
+            return this;
+        }
+    }
+    Script.FroggerSpecialAttack = FroggerSpecialAttack;
 })(Script || (Script = {}));
 ///<reference path="../Damagable.ts"/>
 var Script;

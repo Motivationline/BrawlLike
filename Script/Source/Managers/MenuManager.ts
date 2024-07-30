@@ -12,6 +12,7 @@ namespace Script {
                     button.addEventListener("click", async () => {
                         await EntityManager.Instance.loadBrawler(button.dataset.brawler);
                         ƒ.Loop.start();
+                        // ƒ.Time.game.setScale(0.2);
                         document.getElementById("selection-overlay").style.display = "none";
                     });
                 })
