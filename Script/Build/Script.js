@@ -860,7 +860,7 @@ var Script;
         speed = 10;
         range = 3;
         destructive = false;
-        impactAOE;
+        impactAOE = "";
         #rb;
         #owner;
         #startPosition;

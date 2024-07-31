@@ -7,7 +7,7 @@ namespace Script {
         speed: number = 10;
         range: number = 3;
         destructive: boolean = false;
-        impactAOE: string;
+        impactAOE: string = "";
 
         #rb: ƒ.ComponentRigidbody;
         #owner: ComponentBrawler;
