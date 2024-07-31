@@ -95,7 +95,7 @@ namespace Script {
           this.playAnimation("idle");
         }, this.#animations.get(_name).totalTime);
       }
-      if(_options.lockMovement) this.lockPlayerFor(this.#animations.get(_name).totalTime);
+      if (_options.lockMovement) this.lockPlayerFor(this.#animations.get(_name).totalTime);
     }
 
     private findAttacks() {
@@ -149,6 +149,7 @@ namespace Script {
     }
 
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
+      if (this.#currentlyActiveAnimation.lock) return;
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
           if (this.attackMain.attack(_direction)) {

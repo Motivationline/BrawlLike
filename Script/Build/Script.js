@@ -1206,6 +1206,8 @@ var Script;
             }
         }
         attack(_atk, _direction) {
+            if (this.#currentlyActiveAnimation.lock)
+                return;
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
                     if (this.attackMain.attack(_direction)) {
