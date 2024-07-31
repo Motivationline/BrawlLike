@@ -1153,6 +1153,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -1197,13 +1211,6 @@
                                                   "Component": {
                                                     "active": true
                                                   }
-                                                }
-                                              }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
                                                 }
                                               }
                                             ]
@@ -1266,6 +1273,13 @@
                                           }
                                         }
                                       ],
+                                      "ComponentGraphFilter": [
+                                        {
+                                          "ƒ.ComponentGraphFilter": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
                                       "IgnoredByProjectiles": [
                                         {
                                           "Script.IgnoredByProjectiles": {
@@ -1273,9 +1287,9 @@
                                           }
                                         }
                                       ],
-                                      "ComponentGraphFilter": [
+                                      "Destructible": [
                                         {
-                                          "ƒ.ComponentGraphFilter": {
+                                          "Script.Destructible": {
                                             "active": true
                                           }
                                         }
@@ -1323,13 +1337,6 @@
                                                   "Component": {
                                                     "active": true
                                                   }
-                                                }
-                                              }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
                                                 }
                                               }
                                             ]
@@ -1392,6 +1399,13 @@
                                           }
                                         }
                                       ],
+                                      "ComponentGraphFilter": [
+                                        {
+                                          "ƒ.ComponentGraphFilter": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
                                       "IgnoredByProjectiles": [
                                         {
                                           "Script.IgnoredByProjectiles": {
@@ -1399,9 +1413,9 @@
                                           }
                                         }
                                       ],
-                                      "ComponentGraphFilter": [
+                                      "Destructible": [
                                         {
-                                          "ƒ.ComponentGraphFilter": {
+                                          "Script.Destructible": {
                                             "active": true
                                           }
                                         }
@@ -1451,14 +1465,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -1548,6 +1555,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -1594,14 +1615,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -1667,6 +1681,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -1713,14 +1741,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -1786,6 +1807,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -1832,14 +1867,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -1929,6 +1957,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -1975,14 +2017,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2048,6 +2083,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2094,14 +2143,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2167,6 +2209,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2213,14 +2269,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2286,6 +2335,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2332,14 +2395,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2429,6 +2485,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2475,14 +2545,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2548,6 +2611,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2594,14 +2671,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2667,6 +2737,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2713,14 +2797,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2786,6 +2863,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2832,14 +2923,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -2929,6 +3013,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -2975,14 +3073,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3048,6 +3139,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3094,14 +3199,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3191,6 +3289,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3237,14 +3349,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3310,6 +3415,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3356,14 +3475,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3572,6 +3684,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3618,14 +3744,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3691,6 +3810,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3737,14 +3870,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3810,6 +3936,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3856,14 +3996,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -3929,6 +4062,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -3975,14 +4122,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -4072,6 +4212,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -4118,14 +4272,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -4191,6 +4338,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -4237,14 +4398,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -4310,6 +4464,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -4356,14 +4524,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
@@ -4429,6 +4590,20 @@
                                             "active": true
                                           }
                                         }
+                                      ],
+                                      "IgnoredByProjectiles": [
+                                        {
+                                          "Script.IgnoredByProjectiles": {
+                                            "active": true
+                                          }
+                                        }
+                                      ],
+                                      "Destructible": [
+                                        {
+                                          "Script.Destructible": {
+                                            "active": true
+                                          }
+                                        }
                                       ]
                                     },
                                     "children": [
@@ -4475,14 +4650,7 @@
                                                   }
                                                 }
                                               }
-                                            ],
-                                            "Destructible": [
-                                              {
-                                                "Script.Destructible": {
-                                                  "active": true
-                                                }
-                                              }
-                                            ]
+                                            ]  
                                           },
                                           "children": [
                                             {
