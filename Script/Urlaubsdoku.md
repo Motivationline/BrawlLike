@@ -61,10 +61,34 @@ Die `IgnoredByProjectiles` Komponente sorgt dafür, dass Projektile nicht mit de
 
 Die Eigenschaften des Projektils (`rotateInDirection`, `damage`, `speed`, `range`) werden vom Angriff überschrieben, sollten also dort gesetzt werden, nicht im Projektil selbst.
 
+Damit ein Projektil ein AOE spawnt, muss der Name des AOE Graphen in das Projektil (nicht in den Angriff) eingetragen werden.
+
 > [!INFO]  
 > wenn die Gravitation für ein Projektil eingeschaltet ist, dann gibt `speed` nicht die Geschwindigkeit sondern die Zeit bis zur Landung des Projektils an.
 
 +z ist vorwärts.
+
+## Area of Effects
+
+Um ein AOE zu erstellen, muss folgende Hierarchie eingehalten sein:
+```
+AOE
+| - ComponentAOE
+| - ComponentTransform
+| - ComponentRigidbody (typeBody: kinematic)
+| - IgnoredByProjectiles
+```
+
+Die Größe der Transform wird beim Erstellen um den `radius` Wert der `ComponentAOE` skaliert. Also am besten nur eines von beidem verändern!
+
+AOEs werden immer auf Höhe 0 (Bodenhöhe) gespawnt.
+
+Die (runde) Vorschau wird automatisch eingefügt.
+
+`duration` ist in Sekunden angegeben während die beiden `delay`s in Millisekunden angegeben werden.
+
+> [!IMPORTANT]  
+> Im Gegensatz zu den Projektilen werden die Werte der AOEs nicht von den Angriffen überschrieben!
 
 ## Sonstiges
 

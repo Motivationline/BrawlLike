@@ -7,6 +7,8 @@ namespace Script {
         speed: number = 10;
         range: number = 3;
         destructive: boolean = false;
+        impactAOE: string;
+
         #rb: ƒ.ComponentRigidbody;
         #owner: ComponentBrawler;
         #startPosition: ƒ.Vector3;
@@ -62,7 +64,7 @@ namespace Script {
                 damagable.health -= this.damage;
             }
             // check for destructible target
-            if(this.destructive){
+            if (this.destructive) {
                 let destructible: Destructible = (<Destructible>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Destructible));
                 if (destructible) {
                     destructible.destroy();
@@ -71,7 +73,16 @@ namespace Script {
             this.explode();
         }
 
-        protected explode() {
+        protected async explode() {
+            if (this.impactAOE) {
+                let aoe = <ƒ.Graph> ƒ.Project.getResourcesByName(this.impactAOE)[0];
+                let instance = await ƒ.Project.createGraphInstance(aoe);
+
+                this.node.getParent().addChild(instance);
+
+                let compAOE = <ComponentAOE>instance.getAllComponents().find(c => c instanceof ComponentAOE);
+                compAOE.setup(this.#owner, this.node.mtxLocal.translation);
+            }
             EntityManager.Instance.removeProjectile(this);
         }
 
@@ -105,6 +116,22 @@ namespace Script {
             let instance = await ƒ.Project.createGraphInstance(shadow);
             instance.mtxLocal.scaling = ƒ.Vector3.ONE(0.5);
             this.node.addChild(instance);
+        }
+
+        public serialize(): ƒ.Serialization {
+            let serialization: ƒ.Serialization = {
+                [super.constructor.name]: super.serialize(),
+                impactAOE: this.impactAOE,
+            }
+            return serialization;
+        }
+
+        public async deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable> {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.impactAOE !== undefined)
+                this.impactAOE = _serialization.impactAOE;
+            return this;
         }
     }
 }

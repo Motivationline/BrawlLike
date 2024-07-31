@@ -5510,9 +5510,7 @@
               }
             }
           }
-        ],
-        "ComponentFog": [],
-        "ComponentAmbientOcclusion": []
+        ]
       },
       "children": [],
       "idResource": "Graph|2024-06-28T07:32:49.098Z|23377",
@@ -5571,7 +5569,9 @@
         "ComponentProjectile": [
           {
             "Script.ComponentProjectile": {
-              "active": true
+              "Component": {
+                "active": true
+              }
             }
           }
         ],
@@ -6029,7 +6029,7 @@
                 "Component": {
                   "active": true
                 },
-                "health": 5000
+                "health": 500
               },
               "speed": 1,
               "animationIdleName": "FroggerIdle",
@@ -6897,7 +6897,10 @@
         "ComponentProjectile": [
           {
             "Script.ComponentProjectile": {
-              "active": true
+              "Component": {
+                "active": true
+              },
+              "impactAOE": "PotatoAOE"
             }
           }
         ],
@@ -7065,6 +7068,139 @@
       },
       "children": [],
       "idResource": "Graph|2024-07-29T08:49:22.847Z|21081",
+      "type": "Graph"
+    }
+  },
+  "Material|2024-07-31T06:54:14.355Z|80884": {
+    "ƒ.Material": {
+      "name": "AOECircleTexture",
+      "idResource": "Material|2024-07-31T06:54:14.355Z|80884",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-07-23T12:12:47.386Z|82109"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "Graph|2024-07-31T06:53:41.465Z|95392": {
+    "ƒ.Graph": {
+      "name": "AOECircle",
+      "active": true,
+      "components": {
+        "ComponentMesh": [
+          {
+            "ƒ.ComponentMesh": {
+              "idMesh": "MeshQuad|2024-07-05T13:42:11.867Z|27267",
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[-90, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentMaterial": [
+          {
+            "ƒ.ComponentMaterial": {
+              "sortForAlpha": true,
+              "clrPrimary": "[1, 1, 1, 1]",
+              "clrSecondary": "[1, 1, 1, 1]",
+              "pivot": {
+                "translation": "[0, 0]",
+                "rotation": 0,
+                "scaling": "[1, 1]"
+              },
+              "Component": {
+                "active": true
+              },
+              "idMaterial": "Material|2024-07-31T06:54:14.355Z|80884"
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-07-31T06:53:41.465Z|95392",
+      "type": "Graph"
+    }
+  },
+  "Graph|2024-07-31T07:10:31.978Z|51570": {
+    "ƒ.Graph": {
+      "name": "PotatoAOE",
+      "active": true,
+      "components": {
+        "ComponentAOE": [
+          {
+            "Script.ComponentAOE": {
+              "Component": {
+                "active": true
+              },
+              "damage": 100,
+              "maxTicksPerEnemy": null,
+              "delayBetweenTicksInMS": 1000,
+              "delayBeforeFirstTickInMS": 0,
+              "attachedToBrawler": false,
+              "radius": 2,
+              "destructive": false,
+              "duration": 1,
+              "areaVisible": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "KINEMATIC",
+              "typeCollider": "SPHERE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-07-31T07:10:31.978Z|51570",
       "type": "Graph"
     }
   }

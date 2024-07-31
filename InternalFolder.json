@@ -57,6 +57,20 @@
                 "idResource": "Material|2024-07-23T12:14:53.678Z|90605"
               }
             ]
+          },
+          {
+            "name": "AOEs",
+            "entries": [
+              {
+                "idResource": "Graph|2024-07-31T06:53:41.465Z|95392"
+              },
+              {
+                "idResource": "Material|2024-07-31T06:54:14.355Z|80884"
+              },
+              {
+                "idResource": "Graph|2024-07-31T07:10:31.978Z|51570"
+              }
+            ]
           }
         ]
       },

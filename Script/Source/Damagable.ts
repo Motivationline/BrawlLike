@@ -33,7 +33,7 @@ namespace Script {
         }
 
         set health(_amt) {
-            this.#health = _amt;
+            this.#health = Math.min(_amt, this.#maxHealth);
             if (this.#health <= 0) this.death();
             if (!this.#healthBar) return;
             let scale: number = this.#health / this.#maxHealth;

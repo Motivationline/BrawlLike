@@ -85,6 +85,30 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    class ComponentAOE extends ƒ.Component {
+        #private;
+        damage: number;
+        maxTicksPerEnemy: number;
+        delayBetweenTicksInMS: number;
+        delayBeforeFirstTickInMS: number;
+        attachedToBrawler: boolean;
+        radius: number;
+        destructive: boolean;
+        duration: number;
+        areaVisible: boolean;
+        constructor();
+        private init;
+        setup(_owner: ComponentBrawler, _pos: ƒ.Vector3): void;
+        protected initVisuals: () => Promise<void>;
+        protected loop: () => void;
+        protected onTriggerEnter: (_event: ƒ.EventPhysics) => void;
+        protected onTriggerExit: (_event: ƒ.EventPhysics) => void;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     enum AttackPreviewType {
         LINE = 0,
         CONE = 1,
@@ -131,15 +155,18 @@ declare namespace Script {
         speed: number;
         range: number;
         destructive: boolean;
+        impactAOE: string;
         constructor();
         private init;
         fire(_direction: ƒ.Vector3, _owner: ComponentBrawler): void;
         protected onTriggerEnter: (_event: ƒ.EventPhysics) => void;
-        protected explode(): void;
+        protected explode(): Promise<void>;
         moveToPosition(_pos: ƒ.Vector3): void;
         protected loop: () => void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         private initShadow;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {

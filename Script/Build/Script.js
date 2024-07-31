@@ -121,7 +121,7 @@ var Script;
             return this.#health;
         }
         set health(_amt) {
-            this.#health = _amt;
+            this.#health = Math.min(_amt, this.#maxHealth);
             if (this.#health <= 0)
                 this.death();
             if (!this.#healthBar)
@@ -397,6 +397,159 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    class ComponentAOE extends ƒ.Component {
+        damage = 50;
+        maxTicksPerEnemy = Infinity;
+        delayBetweenTicksInMS = 500;
+        delayBeforeFirstTickInMS = 0;
+        attachedToBrawler = false;
+        radius = 1;
+        destructive = false;
+        duration = 1;
+        areaVisible = true;
+        #rb;
+        #damagables = [];
+        #owner;
+        #circle;
+        #endTime;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
+            ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
+        }
+        init = () => {
+            this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
+            this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
+            this.#rb.addEventListener("TriggerLeftCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_EXIT */, this.onTriggerExit);
+            this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initVisuals, true);
+        };
+        setup(_owner, _pos) {
+            this.#owner = _owner;
+            this.node.mtxLocal.translation = new ƒ.Vector3(_pos.x, 0, _pos.z);
+            this.#endTime = ƒ.Time.game.get() + this.duration * 1000;
+        }
+        initVisuals = async () => {
+            let aoeCircle = ƒ.Project.getResourcesByName("AOECircle")[0];
+            let instance = await ƒ.Project.createGraphInstance(aoeCircle);
+            this.node.addChild(instance);
+            this.node.mtxLocal.scale(ƒ.Vector3.ONE(this.radius));
+            this.#circle = instance;
+            if (this.areaVisible) {
+                this.#circle.activate(true);
+                let mat = this.#circle.getComponent(ƒ.ComponentMaterial);
+                if (this.#owner === Script.EntityManager.Instance.playerBrawler) {
+                    mat.clrPrimary = ƒ.Color.CSS("aqua");
+                }
+                else {
+                    mat.clrPrimary = ƒ.Color.CSS("crimson");
+                }
+            }
+            else {
+                this.#circle.activate(false);
+            }
+        };
+        loop = () => {
+            if (this.maxTicksPerEnemy === null || this.maxTicksPerEnemy === undefined)
+                this.maxTicksPerEnemy = Infinity;
+            let currentTime = ƒ.Time.game.get();
+            for (let pair of this.#damagables) {
+                if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
+                    pair.target.health -= this.damage;
+                    pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
+                    pair.amtTicks++;
+                }
+            }
+            if (this.#endTime < currentTime) {
+                this.node.getParent()?.removeChild(this.node);
+                ƒ.Loop.removeEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
+            }
+        };
+        onTriggerEnter = (_event) => {
+            // if (_event.cmpRigidbody === this.#owner.rigidbody) return;
+            // TODO: Team check
+            // check if damagable
+            let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
+            if (damagable) {
+                let amtTicks = 0;
+                if (this.delayBeforeFirstTickInMS === 0) {
+                    damagable.health -= this.damage;
+                    amtTicks++;
+                }
+                let dInArray = this.#damagables.find((d) => d.target === damagable);
+                if (!dInArray) {
+                    this.#damagables.push({
+                        target: damagable,
+                        nextDamage: this.delayBeforeFirstTickInMS > 0 ? ƒ.Time.game.get() + this.delayBeforeFirstTickInMS : ƒ.Time.game.get() + this.delayBetweenTicksInMS,
+                        amtTicks,
+                    });
+                }
+            }
+            // check for destructible target
+            if (this.destructive) {
+                let destructible = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Destructible);
+                if (destructible) {
+                    destructible.destroy();
+                }
+            }
+        };
+        onTriggerExit = (_event) => {
+            let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
+            if (damagable) {
+                for (let i = 0; i < this.#damagables.length; i++) {
+                    let d = this.#damagables[i].target;
+                    if (d === damagable) {
+                        this.#damagables.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        };
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                damage: this.damage,
+                maxTicksPerEnemy: this.maxTicksPerEnemy,
+                delayBetweenTicksInMS: this.delayBetweenTicksInMS,
+                delayBeforeFirstTickInMS: this.delayBeforeFirstTickInMS,
+                attachedToBrawler: this.attachedToBrawler,
+                radius: this.radius,
+                destructive: this.destructive,
+                duration: this.duration,
+                areaVisible: this.areaVisible,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.damage !== undefined)
+                this.damage = _serialization.damage;
+            if (_serialization.maxTicksPerEnemy !== undefined)
+                this.maxTicksPerEnemy = _serialization.maxTicksPerEnemy;
+            if (_serialization.delayBetweenTicksInMS !== undefined)
+                this.delayBetweenTicksInMS = _serialization.delayBetweenTicksInMS;
+            if (_serialization.delayBeforeFirstTickInMS !== undefined)
+                this.delayBeforeFirstTickInMS = _serialization.delayBeforeFirstTickInMS;
+            if (_serialization.attachedToBrawler !== undefined)
+                this.attachedToBrawler = _serialization.attachedToBrawler;
+            if (_serialization.radius !== undefined)
+                this.radius = _serialization.radius;
+            if (_serialization.destructive !== undefined)
+                this.destructive = _serialization.destructive;
+            if (_serialization.duration !== undefined)
+                this.duration = _serialization.duration;
+            if (_serialization.areaVisible !== undefined)
+                this.areaVisible = _serialization.areaVisible;
+            return this;
+        }
+    }
+    Script.ComponentAOE = ComponentAOE;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     let AttackPreviewType;
     (function (AttackPreviewType) {
         AttackPreviewType[AttackPreviewType["LINE"] = 0] = "LINE";
@@ -619,6 +772,7 @@ var Script;
         speed = 10;
         range = 3;
         destructive = false;
+        impactAOE;
         #rb;
         #owner;
         #startPosition;
@@ -678,7 +832,14 @@ var Script;
             }
             this.explode();
         };
-        explode() {
+        async explode() {
+            if (this.impactAOE) {
+                let aoe = ƒ.Project.getResourcesByName(this.impactAOE)[0];
+                let instance = await ƒ.Project.createGraphInstance(aoe);
+                this.node.getParent().addChild(instance);
+                let compAOE = instance.getAllComponents().find(c => c instanceof Script.ComponentAOE);
+                compAOE.setup(this.#owner, this.node.mtxLocal.translation);
+            }
             Script.EntityManager.Instance.removeProjectile(this);
         }
         moveToPosition(_pos) {
@@ -711,6 +872,20 @@ var Script;
             instance.mtxLocal.scaling = ƒ.Vector3.ONE(0.5);
             this.node.addChild(instance);
         };
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                impactAOE: this.impactAOE,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.impactAOE !== undefined)
+                this.impactAOE = _serialization.impactAOE;
+            return this;
+        }
     }
     Script.ComponentProjectile = ComponentProjectile;
 })(Script || (Script = {}));
