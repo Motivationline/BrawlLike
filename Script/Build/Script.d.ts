@@ -131,6 +131,7 @@ declare namespace Script {
         energyNeededPerCharge: number;
         castingTime: number;
         lockBrawlerDuringAttack: boolean;
+        protected singleton: boolean;
         protected maxEnergy: number;
         protected currentEnergy: number;
         protected nextAttackAllowedAt: number;

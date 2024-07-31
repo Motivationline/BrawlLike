@@ -28,7 +28,7 @@ Brawler
 
 Alle Angriffe haben ein "Energielevel" welches erreicht werden muss, damit dieser Angriff ausgeführt werden kann. Angriffe können automatisch pro Sekunde Energie generieren um sich aufzuladen und/oder mit Energie von außen versorgt werden (kommt noch).
 
-Die Angriffe der Brawler müssen lediglich auf den Brawlerknoten als Component hinzugefügt werden, dann sucht sich die `ComponentBrawler` die richtigen Komponenten heraus. Ein Error wird in der Konsole ausgegeben, wenn ein Brawler nicht zwei `ComponentAttack` (oder eine Subklasse) hat von denen je eine `attackType = MAIN` und eine `attackType = SPECIAL` hat.
+Die Angriffe der Brawler müssen lediglich auf den Brawlerknoten als Component hinzugefügt werden, dann sucht sich die `ComponentBrawler` die richtigen Komponenten heraus. Ein Error wird in der Konsole ausgegeben, wenn ein Brawler nicht zwei `ComponentAttack` (oder wahrscheinlich eher eine Subklasse) hat von denen je eine `attackType = MAIN` und eine `attackType = SPECIAL` hat.
 
 Es gibt bereits eine `ComponentProjectileAttack` Komponente welche als Angriff ein Projektil verschießt. Welches Projektil verschossen werden soll kann wiederum als string (Name des Graphs) in der Komponente verändert werden. Die `CowboyMainAttack` zum Beispiel verwendet derzeit ausschließlich diese Klasse.
 

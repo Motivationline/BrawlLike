@@ -548,6 +548,14 @@ var Script;
     }
     Script.ComponentAOE = ComponentAOE;
 })(Script || (Script = {}));
+// /// <reference path="ComponentAttack.ts"/>
+// namespace Script {
+//     import ƒ = FudgeCore;
+//     export class ComponentAOEAttack extends ComponentAttack {
+//         offset: ƒ.Vector3 = ƒ.Vector3.ZERO();
+//         executeAttack: ƒ.TimerHandler;
+//     }
+// }
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
@@ -574,6 +582,7 @@ var Script;
         energyNeededPerCharge = 1;
         castingTime = 0;
         lockBrawlerDuringAttack = false;
+        singleton = false;
         maxEnergy = 0;
         currentEnergy = 0;
         nextAttackAllowedAt = -1;
@@ -635,7 +644,7 @@ var Script;
             }
             let node = new ƒ.Node("preview");
             node.addComponent(new ƒ.ComponentTransform());
-            let childNode = new ƒ.Node("preview");
+            let childNode = new ƒ.Node("previewInner");
             let mesh = new ƒ.ComponentMesh(quad);
             childNode.addComponent(mesh);
             let mat = new ƒ.ComponentMaterial(texture);
@@ -647,7 +656,8 @@ var Script;
                 node.mtxLocal.scaling.z = this.range;
             }
             else if (this.previewType === AttackPreviewType.AREA) {
-                mesh.mtxPivot.scaling.x = mesh.mtxPivot.scaling.z = this.previewWidth;
+                mesh.mtxPivot.scaleX(this.previewWidth);
+                mesh.mtxPivot.scaleZ(this.previewWidth);
             }
             mesh.mtxPivot.rotateX(-90);
             node.addChild(childNode);
@@ -740,6 +750,8 @@ var Script;
                 this.previewWidth = _serialization.previewWidth;
             if (_serialization.attackType !== undefined)
                 this.attackType = _serialization.attackType;
+            if (_serialization.range !== undefined)
+                this.range = _serialization.range;
             if (_serialization.maxCharges !== undefined)
                 this.maxCharges = _serialization.maxCharges;
             if (_serialization.damage !== undefined)
@@ -768,6 +780,7 @@ var Script;
             delete _mutator.maxEnergy;
             delete _mutator.currentEnergy;
             delete _mutator.nextAttackAllowedAt;
+            delete _mutator.singleton;
         }
     }
     Script.ComponentAttack = ComponentAttack;

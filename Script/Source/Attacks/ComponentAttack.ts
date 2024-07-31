@@ -23,7 +23,8 @@ namespace Script {
         public energyNeededPerCharge: number = 1;
         public castingTime: number = 0;
         public lockBrawlerDuringAttack: boolean = false;
-
+        
+        protected singleton: boolean = false;
         protected maxEnergy: number = 0;
         protected currentEnergy: number = 0;
         protected nextAttackAllowedAt: number = -1;
@@ -90,7 +91,7 @@ namespace Script {
             let node = new ƒ.Node("preview");
             node.addComponent(new ƒ.ComponentTransform());
 
-            let childNode = new ƒ.Node("preview");
+            let childNode = new ƒ.Node("previewInner");
             let mesh = new ƒ.ComponentMesh(quad);
             childNode.addComponent(mesh);
             let mat = new ƒ.ComponentMaterial(texture)
@@ -102,7 +103,8 @@ namespace Script {
                 mesh.mtxPivot.translateZ(0.5);
                 node.mtxLocal.scaling.z = this.range;
             } else if (this.previewType === AttackPreviewType.AREA) {
-                mesh.mtxPivot.scaling.x = mesh.mtxPivot.scaling.z = this.previewWidth;
+                mesh.mtxPivot.scaleX(this.previewWidth); 
+                mesh.mtxPivot.scaleZ(this.previewWidth);
             }
             mesh.mtxPivot.rotateX(-90);
 
@@ -203,6 +205,8 @@ namespace Script {
                 this.previewWidth = _serialization.previewWidth;
             if (_serialization.attackType !== undefined)
                 this.attackType = _serialization.attackType;
+            if (_serialization.range !== undefined)
+                this.range = _serialization.range;
             if (_serialization.maxCharges !== undefined)
                 this.maxCharges = _serialization.maxCharges;
             if (_serialization.damage !== undefined)
@@ -235,6 +239,7 @@ namespace Script {
             delete _mutator.maxEnergy;
             delete _mutator.currentEnergy;
             delete _mutator.nextAttackAllowedAt;
+            delete _mutator.singleton;
         }
     }
 }
