@@ -6045,7 +6045,7 @@
               "animationIdleName": "FroggerIdle",
               "animationWalkName": "FroggerWalkingV3Smooth",
               "animationAttackName": "FrogShoot",
-              "animationSpecialName": "FrogShoot"
+              "animationSpecialName": "FrogSpecialShoot"
             }
           }
         ],
@@ -6066,8 +6066,8 @@
                   "minDelayBetweenAttacks": 0.3,
                   "energyGenerationPerSecond": 10,
                   "energyNeededPerCharge": 1,
-                  "castingTime": 0,
-                  "lockBrawlerDuringAttack": false
+                  "castingTime": 0.4,
+                  "lockBrawlerDuringAttack": true
                 },
                 "speed": 2,
                 "range": 6,
@@ -6747,7 +6747,7 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0.05,
-                "lockBrawlerDuringAttack": false
+                "lockBrawlerDuringAttack": true
               },
               "speed": 6,
               "range": 4,
@@ -7218,6 +7218,14 @@
       "children": [],
       "idResource": "Graph|2024-07-31T07:10:31.978Z|51570",
       "type": "Graph"
+    }
+  },
+  "AnimationGLTF|2024-07-31T12:08:33.568Z|53860": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-07-31T12:08:33.568Z|53860",
+      "name": "FrogSpecialShoot",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\frog.glb"
     }
   }
 }
