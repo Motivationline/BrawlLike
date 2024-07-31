@@ -75,7 +75,7 @@ Um ein AOE zu erstellen, muss folgende Hierarchie eingehalten sein:
 AOE
 | - ComponentAOE
 | - ComponentTransform
-| - ComponentRigidbody (typeBody: kinematic)
+| - ComponentRigidbody (typeBody: kinematic, isTrigger: true)
 | - IgnoredByProjectiles
 ```
 

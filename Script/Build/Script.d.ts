@@ -39,6 +39,7 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class Destructible extends ƒ.Component {
+        constructor();
         destroy(): void;
     }
 }
@@ -147,6 +148,16 @@ declare namespace Script {
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
         getMutatorAttributeTypes(_mutator: ƒ.Mutator): ƒ.MutatorAttributeTypes;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class ComponentAOEAttack extends ComponentAttack {
+        offset: ƒ.Vector3;
+        aoeGraph: string;
+        executeAttack: ƒ.TimerHandler;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {

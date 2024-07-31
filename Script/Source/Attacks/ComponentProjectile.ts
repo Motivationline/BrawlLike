@@ -66,10 +66,7 @@ namespace Script {
             }
             // check for destructible target
             if (this.destructive) {
-                let destructible: Destructible = (<Destructible>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Destructible));
-                if (destructible) {
-                    destructible.destroy();
-                }
+                _event.cmpRigidbody.node.dispatchEvent(new CustomEvent("destruction", { bubbles: true }))
             }
             this.explode();
         }
