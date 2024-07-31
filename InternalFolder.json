@@ -71,6 +71,10 @@
                 "idResource": "Graph|2024-07-31T07:10:31.978Z|51570"
               }
             ]
+          },
+          {
+            "name": "Explosions",
+            "entries": []
           }
         ]
       },
@@ -258,6 +262,14 @@
               },
               {
                 "idResource": "Graph|2024-07-31T13:03:20.902Z|13065"
+              },
+              {
+                "name": "Destructed",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-31T14:36:51.660Z|18912"
+                  }
+                ]
               }
             ]
           },
