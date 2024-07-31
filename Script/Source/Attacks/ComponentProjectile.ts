@@ -53,6 +53,7 @@ namespace Script {
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody) return;
+            if (this.gravity && this.#rb.getVelocity().y > 0) return;
             // TODO do team check
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(IgnoredByProjectiles);
@@ -75,7 +76,7 @@ namespace Script {
 
         protected async explode() {
             if (this.impactAOE) {
-                let aoe = <ƒ.Graph> ƒ.Project.getResourcesByName(this.impactAOE)[0];
+                let aoe = <ƒ.Graph>ƒ.Project.getResourcesByName(this.impactAOE)[0];
                 let instance = await ƒ.Project.createGraphInstance(aoe);
 
                 this.node.getParent().addChild(instance);

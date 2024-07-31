@@ -553,7 +553,8 @@ var Script;
 //     import ƒ = FudgeCore;
 //     export class ComponentAOEAttack extends ComponentAttack {
 //         offset: ƒ.Vector3 = ƒ.Vector3.ZERO();
-//         executeAttack: ƒ.TimerHandler;
+//         executeAttack: ƒ.TimerHandler = () => {
+//         };
 //     }
 // }
 var Script;
@@ -835,6 +836,8 @@ var Script;
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
+                return;
+            if (this.gravity && this.#rb.getVelocity().y > 0)
                 return;
             // TODO do team check
             // check if target has disable script
