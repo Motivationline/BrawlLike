@@ -238,6 +238,13 @@
               "active": true
             }
           }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
         ]
       },
       "children": [
@@ -8146,7 +8153,7 @@
               "projectile": "PotatoProjectile",
               "recoil": 3,
               "gravity": true,
-              "destructive": false
+              "destructive": true
             }
           }
         ],
@@ -9083,7 +9090,8 @@
               "active": true
             }
           }
-        ]
+        ],
+        "ComponentProjectileAttack": []
       },
       "children": [
         {
