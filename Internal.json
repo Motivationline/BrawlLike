@@ -5340,7 +5340,9 @@
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 1,
-                "energyNeededPerCharge": 1
+                "energyNeededPerCharge": 1,
+                "castingTime": 0,
+                "lockBrawlerDuringAttack": false
               },
               "speed": 2,
               "range": 10,
@@ -5367,7 +5369,9 @@
               "damage": 100,
               "minDelayBetweenAttacks": 0.3,
               "energyGenerationPerSecond": 1,
-              "energyNeededPerCharge": 1
+              "energyNeededPerCharge": 1,
+              "castingTime": 0,
+              "lockBrawlerDuringAttack": false
             }
           }
         ]
@@ -5748,7 +5752,9 @@
               "damage": 100,
               "minDelayBetweenAttacks": 0.3,
               "energyGenerationPerSecond": 1,
-              "energyNeededPerCharge": 1
+              "energyNeededPerCharge": 1,
+              "castingTime": 0,
+              "lockBrawlerDuringAttack": false
             }
           }
         ],
@@ -5767,7 +5773,9 @@
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 1,
-                "energyNeededPerCharge": 1
+                "energyNeededPerCharge": 1,
+                "castingTime": 0,
+                "lockBrawlerDuringAttack": false
               },
               "speed": 6,
               "range": 8,
@@ -6009,7 +6017,9 @@
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 1,
-                "energyNeededPerCharge": 1
+                "energyNeededPerCharge": 1,
+                "castingTime": 0,
+                "lockBrawlerDuringAttack": false
               },
               "speed": 2,
               "range": 5,
@@ -6055,7 +6065,9 @@
                   "damage": 100,
                   "minDelayBetweenAttacks": 0.3,
                   "energyGenerationPerSecond": 10,
-                  "energyNeededPerCharge": 1
+                  "energyNeededPerCharge": 1,
+                  "castingTime": 0,
+                  "lockBrawlerDuringAttack": false
                 },
                 "speed": 2,
                 "range": 6,
@@ -6733,7 +6745,9 @@
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 1,
-                "energyNeededPerCharge": 1
+                "energyNeededPerCharge": 1,
+                "castingTime": 0.05,
+                "lockBrawlerDuringAttack": false
               },
               "speed": 6,
               "range": 4,
@@ -6760,7 +6774,9 @@
               "damage": 100,
               "minDelayBetweenAttacks": 0.3,
               "energyGenerationPerSecond": 1,
-              "energyNeededPerCharge": 1
+              "energyNeededPerCharge": 1,
+              "castingTime": 0,
+              "lockBrawlerDuringAttack": false
             }
           }
         ]
@@ -7141,8 +7157,8 @@
                 "active": true
               },
               "damage": 100,
-              "maxTicksPerEnemy": null,
-              "delayBetweenTicksInMS": 1000,
+              "maxTicksPerEnemy": 1000,
+              "delayBetweenTicksInMS": 500,
               "delayBeforeFirstTickInMS": 0,
               "attachedToBrawler": false,
               "radius": 2,

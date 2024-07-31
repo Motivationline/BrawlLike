@@ -2,7 +2,7 @@ namespace Script {
     import ƒ = FudgeCore;
     export class ComponentAOE extends ƒ.Component {
         damage: number = 50;
-        maxTicksPerEnemy: number = Infinity;
+        maxTicksPerEnemy: number = 1000;
         delayBetweenTicksInMS: number = 500;
         delayBeforeFirstTickInMS: number = 0;
         attachedToBrawler: boolean = false;
@@ -76,7 +76,7 @@ namespace Script {
         }
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
-            // if (_event.cmpRigidbody === this.#owner.rigidbody) return;
+            if (_event.cmpRigidbody === this.#owner.rigidbody) return;
             // TODO: Team check
             // check if damagable
             let damagable: Damagable = (<Damagable>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Damagable));

@@ -26,6 +26,7 @@ namespace Script {
     public animationAttackName: string;
     public animationSpecialName: string;
     #velocityOverrides: VelocityOverride[] = [];
+    #playerMovementLockedUntil: number = -1;
 
     constructor() {
       super();
@@ -65,8 +66,8 @@ namespace Script {
     }
 
     #animationTimeout: number = -1;
-    private playAnimation(_name: AnimationType, _options?: { lockAndSwitchToIdleAfter: boolean, playFromStart: boolean }) {
-      _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false }, ..._options };
+    private playAnimation(_name: AnimationType, _options?: { lockAndSwitchToIdleAfter: boolean, playFromStart: boolean, lockMovement: boolean }) {
+      _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false, lockMovement: false }, ..._options };
 
       if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter) return;
       if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter) return;
@@ -94,6 +95,7 @@ namespace Script {
           this.playAnimation("idle");
         }, this.#animations.get(_name).totalTime);
       }
+      if(_options.lockMovement) this.lockPlayerFor(this.#animations.get(_name).totalTime);
     }
 
     private findAttacks() {
@@ -133,7 +135,9 @@ namespace Script {
         combinedVelocity.add(vo.velocity);
       }
 
-      combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
+      if (this.#playerMovementLockedUntil < now) {
+        combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
+      }
       this.rigidbody.setVelocity(combinedVelocity);
       if (this.direction.magnitudeSquared > 0) {
         if (!this.#currentlyActiveAnimation.lock)
@@ -148,12 +152,12 @@ namespace Script {
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
           if (this.attackMain.attack(_direction)) {
-            this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+            this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerDuringAttack });
           }
           break;
         case ATTACK_TYPE.SPECIAL:
           if (this.attackSpecial.attack(_direction)) {
-            this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+            this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerDuringAttack });
           }
           break;
       }
@@ -188,6 +192,10 @@ namespace Script {
         velocity: _velocity,
         until: ƒ.Time.game.get() + _duration,
       });
+    }
+
+    public lockPlayerFor(_time: number) {
+      this.#playerMovementLockedUntil = Math.max(ƒ.Time.game.get() + _time, this.#playerMovementLockedUntil);
     }
 
     protected death(): void {
@@ -227,6 +235,7 @@ namespace Script {
       this.animationSpecialName = _serialization.animationSpecialName;
       return this;
     }
+
   }
 
   export enum ATTACK_TYPE {

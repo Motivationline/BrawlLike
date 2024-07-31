@@ -21,6 +21,8 @@ namespace Script {
         public minDelayBetweenAttacks: number = 0.3;
         public energyGenerationPerSecond: number = 0;
         public energyNeededPerCharge: number = 1;
+        public castingTime: number = 0;
+        public lockBrawlerDuringAttack: boolean = false;
 
         protected maxEnergy: number = 0;
         protected currentEnergy: number = 0;
@@ -147,8 +149,11 @@ namespace Script {
             this.currentEnergy -= this.energyNeededPerCharge;
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
+            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
             return true;
         }
+
+        abstract executeAttack: ƒ.TimerHandler;
 
         update(): void {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
@@ -183,6 +188,8 @@ namespace Script {
                 minDelayBetweenAttacks: this.minDelayBetweenAttacks,
                 energyGenerationPerSecond: this.energyGenerationPerSecond,
                 energyNeededPerCharge: this.energyNeededPerCharge,
+                castingTime: this.castingTime,
+                lockBrawlerDuringAttack: this.lockBrawlerDuringAttack,
             }
             return serialization;
         }
@@ -206,6 +213,10 @@ namespace Script {
                 this.energyGenerationPerSecond = _serialization.energyGenerationPerSecond;
             if (_serialization.energyNeededPerCharge !== undefined)
                 this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
+            if (_serialization.castingTime !== undefined)
+                this.castingTime = _serialization.castingTime;
+            if (_serialization.lockBrawlerDuringAttack !== undefined)
+                this.lockBrawlerDuringAttack = _serialization.lockBrawlerDuringAttack;
 
             return this;
         }

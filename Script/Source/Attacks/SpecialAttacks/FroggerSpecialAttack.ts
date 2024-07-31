@@ -3,10 +3,10 @@ namespace Script {
     export class FroggerSpecialAttack extends ComponentProjectileAttack {
         radius: number = 1.5;
         amtProjectiles: number = 5;
-        attack(_direction: ƒ.Vector3): boolean {
-            if (!super.attack(_direction, false)) return false;
-            this.shootProjectiles(_direction);
-            return true;
+
+        executeAttack: ƒ.TimerHandler = (_event: ƒ.EventTimer) => {
+            let direction = <ƒ.Vector3>_event.arguments[0];
+            this.shootProjectiles(direction);
         }
 
         async shootProjectiles(_direction: ƒ.Vector3): Promise<void> {

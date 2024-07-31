@@ -10,11 +10,9 @@ namespace Script {
         gravity: boolean = false;
         destructive: boolean = false;
 
-        attack(_direction: ƒ.Vector3, _shootProjectile: boolean = true): boolean {
-            if (!super.attack(_direction)) return false;
-
-            if (_shootProjectile) this.shootProjectile(_direction);
-            return true;
+        executeAttack: ƒ.TimerHandler = (_event: ƒ.EventTimer) => {
+            let direction = <ƒ.Vector3>_event.arguments[0];
+            this.shootProjectile(direction);
         }
 
         async shootProjectile(_direction: ƒ.Vector3, _ignoreRange: boolean = false) {

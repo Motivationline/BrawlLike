@@ -61,7 +61,7 @@ Die `IgnoredByProjectiles` Komponente sorgt dafür, dass Projektile nicht mit de
 
 Die Eigenschaften des Projektils (`rotateInDirection`, `damage`, `speed`, `range`) werden vom Angriff überschrieben, sollten also dort gesetzt werden, nicht im Projektil selbst.
 
-Damit ein Projektil ein AOE spawnt, muss der Name des AOE Graphen in das Projektil (nicht in den Angriff) eingetragen werden.
+Damit ein Projektil ein AOE spawnt, muss der Name des AOE Graphen in das Projektil (nicht in den Angriff) eingetragen werden. _Ein Projektil mit AOE fügt seinen Schaden trotzdem beim Aufprallen zu! Wenn der Schaden also nur durch die Explosion / das AOE passieren soll, muss der Projektilschaden auf 0 gesetzt werden!_
 
 > [!INFO]  
 > wenn die Gravitation für ein Projektil eingeschaltet ist, dann gibt `speed` nicht die Geschwindigkeit sondern die Zeit bis zur Landung des Projektils an.

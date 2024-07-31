@@ -399,7 +399,7 @@ var Script;
     var ƒ = FudgeCore;
     class ComponentAOE extends ƒ.Component {
         damage = 50;
-        maxTicksPerEnemy = Infinity;
+        maxTicksPerEnemy = 1000;
         delayBetweenTicksInMS = 500;
         delayBeforeFirstTickInMS = 0;
         attachedToBrawler = false;
@@ -467,7 +467,8 @@ var Script;
             }
         };
         onTriggerEnter = (_event) => {
-            // if (_event.cmpRigidbody === this.#owner.rigidbody) return;
+            if (_event.cmpRigidbody === this.#owner.rigidbody)
+                return;
             // TODO: Team check
             // check if damagable
             let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
@@ -571,6 +572,8 @@ var Script;
         minDelayBetweenAttacks = 0.3;
         energyGenerationPerSecond = 0;
         energyNeededPerCharge = 1;
+        castingTime = 0;
+        lockBrawlerDuringAttack = false;
         maxEnergy = 0;
         currentEnergy = 0;
         nextAttackAllowedAt = -1;
@@ -690,6 +693,7 @@ var Script;
             this.currentEnergy -= this.energyNeededPerCharge;
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
+            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
             return true;
         }
         update() {
@@ -722,6 +726,8 @@ var Script;
                 minDelayBetweenAttacks: this.minDelayBetweenAttacks,
                 energyGenerationPerSecond: this.energyGenerationPerSecond,
                 energyNeededPerCharge: this.energyNeededPerCharge,
+                castingTime: this.castingTime,
+                lockBrawlerDuringAttack: this.lockBrawlerDuringAttack,
             };
             return serialization;
         }
@@ -744,6 +750,10 @@ var Script;
                 this.energyGenerationPerSecond = _serialization.energyGenerationPerSecond;
             if (_serialization.energyNeededPerCharge !== undefined)
                 this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
+            if (_serialization.castingTime !== undefined)
+                this.castingTime = _serialization.castingTime;
+            if (_serialization.lockBrawlerDuringAttack !== undefined)
+                this.lockBrawlerDuringAttack = _serialization.lockBrawlerDuringAttack;
             return this;
         }
         getMutatorAttributeTypes(_mutator) {
@@ -901,13 +911,10 @@ var Script;
         projectile = "DefaultProjectile";
         gravity = false;
         destructive = false;
-        attack(_direction, _shootProjectile = true) {
-            if (!super.attack(_direction))
-                return false;
-            if (_shootProjectile)
-                this.shootProjectile(_direction);
-            return true;
-        }
+        executeAttack = (_event) => {
+            let direction = _event.arguments[0];
+            this.shootProjectile(direction);
+        };
         async shootProjectile(_direction, _ignoreRange = false) {
             let projectile = ƒ.Project.getResourcesByName(this.projectile)[0];
             let instance = await ƒ.Project.createGraphInstance(projectile);
@@ -1003,12 +1010,10 @@ var Script;
     class FroggerSpecialAttack extends Script.ComponentProjectileAttack {
         radius = 1.5;
         amtProjectiles = 5;
-        attack(_direction) {
-            if (!super.attack(_direction, false))
-                return false;
-            this.shootProjectiles(_direction);
-            return true;
-        }
+        executeAttack = (_event) => {
+            let direction = _event.arguments[0];
+            this.shootProjectiles(direction);
+        };
         async shootProjectiles(_direction) {
             if (_direction.magnitude > this.range)
                 _direction.normalize(this.range);
@@ -1068,6 +1073,7 @@ var Script;
         animationAttackName;
         animationSpecialName;
         #velocityOverrides = [];
+        #playerMovementLockedUntil = -1;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -1102,7 +1108,7 @@ var Script;
         };
         #animationTimeout = -1;
         playAnimation(_name, _options) {
-            _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false }, ..._options };
+            _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false, lockMovement: false }, ..._options };
             if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter)
                 return;
             if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter)
@@ -1135,6 +1141,8 @@ var Script;
                     this.playAnimation("idle");
                 }, this.#animations.get(_name).totalTime);
             }
+            if (_options.lockMovement)
+                this.lockPlayerFor(this.#animations.get(_name).totalTime);
         }
         findAttacks() {
             let components = this.node.getAllComponents();
@@ -1171,7 +1179,9 @@ var Script;
                 }
                 combinedVelocity.add(vo.velocity);
             }
-            combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
+            if (this.#playerMovementLockedUntil < now) {
+                combinedVelocity.add(ƒ.Vector3.SCALE(this.direction, this.speed));
+            }
             this.rigidbody.setVelocity(combinedVelocity);
             if (this.direction.magnitudeSquared > 0) {
                 if (!this.#currentlyActiveAnimation.lock)
@@ -1186,12 +1196,12 @@ var Script;
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
                     if (this.attackMain.attack(_direction)) {
-                        this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+                        this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerDuringAttack });
                     }
                     break;
                 case ATTACK_TYPE.SPECIAL:
                     if (this.attackSpecial.attack(_direction)) {
-                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true });
+                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerDuringAttack });
                     }
                     break;
             }
@@ -1223,6 +1233,9 @@ var Script;
                 velocity: _velocity,
                 until: ƒ.Time.game.get() + _duration,
             });
+        }
+        lockPlayerFor(_time) {
+            this.#playerMovementLockedUntil = Math.max(ƒ.Time.game.get() + _time, this.#playerMovementLockedUntil);
         }
         death() {
             console.log("I died.", this);

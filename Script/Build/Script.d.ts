@@ -129,6 +129,8 @@ declare namespace Script {
         minDelayBetweenAttacks: number;
         energyGenerationPerSecond: number;
         energyNeededPerCharge: number;
+        castingTime: number;
+        lockBrawlerDuringAttack: boolean;
         protected maxEnergy: number;
         protected currentEnergy: number;
         protected nextAttackAllowedAt: number;
@@ -138,6 +140,7 @@ declare namespace Script {
         updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3): void;
         private initAttack;
         attack(_direction: ƒ.Vector3): boolean;
+        abstract executeAttack: ƒ.TimerHandler;
         update(): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -180,7 +183,7 @@ declare namespace Script {
         projectile: string;
         gravity: boolean;
         destructive: boolean;
-        attack(_direction: ƒ.Vector3, _shootProjectile?: boolean): boolean;
+        executeAttack: ƒ.TimerHandler;
         shootProjectile(_direction: ƒ.Vector3, _ignoreRange?: boolean): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -203,7 +206,7 @@ declare namespace Script {
     class FroggerSpecialAttack extends ComponentProjectileAttack {
         radius: number;
         amtProjectiles: number;
-        attack(_direction: ƒ.Vector3): boolean;
+        executeAttack: ƒ.TimerHandler;
         shootProjectiles(_direction: ƒ.Vector3): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -236,6 +239,7 @@ declare namespace Script {
         showPreview(_atk: ATTACK_TYPE): void;
         hidePreview(_atk: ATTACK_TYPE): void;
         addVelocity(_velocity: ƒ.Vector3, _duration: number): void;
+        lockPlayerFor(_time: number): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;
