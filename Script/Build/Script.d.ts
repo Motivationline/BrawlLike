@@ -132,6 +132,7 @@ declare namespace Script {
         energyNeededPerCharge: number;
         castingTime: number;
         lockBrawlerDuringAttack: boolean;
+        recoil: number;
         protected singleton: boolean;
         protected maxEnergy: number;
         protected currentEnergy: number;
@@ -142,7 +143,7 @@ declare namespace Script {
         updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3): void;
         private initAttack;
         attack(_direction: ƒ.Vector3): boolean;
-        abstract executeAttack: ƒ.TimerHandler;
+        executeAttack(_event: ƒ.EventTimer): void;
         update(): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -189,7 +190,6 @@ declare namespace Script {
     class ComponentProjectileAttack extends ComponentAttack {
         speed: number;
         range: number;
-        recoil: number;
         rotateInDirection: boolean;
         attachedToBrawler: boolean;
         projectile: string;

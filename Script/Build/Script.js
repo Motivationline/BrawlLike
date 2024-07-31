@@ -582,6 +582,7 @@ var Script;
         energyNeededPerCharge = 1;
         castingTime = 0;
         lockBrawlerDuringAttack = false;
+        recoil = 0;
         singleton = false;
         maxEnergy = 0;
         currentEnergy = 0;
@@ -706,6 +707,15 @@ var Script;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
             return true;
         }
+        executeAttack(_event) {
+            let direction = _event.arguments[0];
+            let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            if (this.recoil !== 0) {
+                let recoil = new ƒ.Vector3(-direction.x, 0, -direction.z).normalize(this.recoil);
+                brawlerComp.addVelocity(recoil, 0.25);
+            }
+        }
+        ;
         update() {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
             if (charges < this.maxCharges) {
@@ -738,6 +748,7 @@ var Script;
                 energyNeededPerCharge: this.energyNeededPerCharge,
                 castingTime: this.castingTime,
                 lockBrawlerDuringAttack: this.lockBrawlerDuringAttack,
+                recoil: this.recoil,
             };
             return serialization;
         }
@@ -766,6 +777,8 @@ var Script;
                 this.castingTime = _serialization.castingTime;
             if (_serialization.lockBrawlerDuringAttack !== undefined)
                 this.lockBrawlerDuringAttack = _serialization.lockBrawlerDuringAttack;
+            if (_serialization.recoil !== undefined)
+                this.recoil = _serialization.recoil;
             return this;
         }
         getMutatorAttributeTypes(_mutator) {
@@ -794,6 +807,7 @@ var Script;
         offset = ƒ.Vector3.ZERO();
         aoeGraph = "";
         executeAttack = async (_event) => {
+            super.executeAttack(_event);
             let direction = _event.arguments[0];
             if (!direction)
                 return;
@@ -804,14 +818,16 @@ var Script;
             let compAOE = instance.getAllComponents().find(c => c instanceof Script.ComponentAOE);
             let owner = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             let angle = ƒ.Vector3.ANGLE(new ƒ.Vector3(direction.x, 0, direction.z), ƒ.Vector3.Z());
-            // let rotatedOffset = 
+            angle *= Math.PI / 180 * Math.sign(direction.x);
+            // see https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
+            let rotatedOffset = new ƒ.Vector3(this.offset.x * Math.cos(angle) + this.offset.z * Math.sin(angle), this.offset.y, -this.offset.x * Math.sin(angle) + this.offset.z * Math.cos(angle));
             if (compAOE.attachedToBrawler) {
                 this.node.addChild(instance);
-                compAOE.setup(owner, this.offset);
+                compAOE.setup(owner, rotatedOffset);
             }
             else {
                 this.node.getParent().addChild(instance);
-                compAOE.setup(owner, ƒ.Vector3.SUM(this.node.mtxLocal.translation, this.offset));
+                compAOE.setup(owner, ƒ.Vector3.SUM(this.node.mtxLocal.translation, rotatedOffset));
             }
         };
         serialize() {
@@ -966,7 +982,6 @@ var Script;
     class ComponentProjectileAttack extends Script.ComponentAttack {
         speed = 2;
         range = 10;
-        recoil = 0;
         rotateInDirection = true;
         attachedToBrawler = false;
         projectile = "DefaultProjectile";
@@ -975,6 +990,7 @@ var Script;
         executeAttack = (_event) => {
             let direction = _event.arguments[0];
             this.shootProjectile(direction);
+            super.executeAttack(_event);
         };
         async shootProjectile(_direction, _ignoreRange = false) {
             let projectile = ƒ.Project.getResourcesByName(this.projectile)[0];
@@ -998,10 +1014,6 @@ var Script;
                 _direction.normalize();
             }
             projectileComponent.fire(_direction, brawlerComp);
-            if (this.recoil !== 0) {
-                let recoil = new ƒ.Vector3(-_direction.x, 0, -_direction.z).normalize(this.recoil);
-                brawlerComp.addVelocity(recoil, 0.25);
-            }
         }
         serialize() {
             let serialization = {
@@ -1011,7 +1023,6 @@ var Script;
                 rotateInDirection: this.rotateInDirection,
                 attachedToBrawler: this.attachedToBrawler,
                 projectile: this.projectile,
-                recoil: this.recoil,
                 gravity: this.gravity,
                 destructive: this.destructive,
             };
@@ -1030,8 +1041,6 @@ var Script;
                 this.attachedToBrawler = _serialization.attachedToBrawler;
             if (_serialization.projectile !== undefined)
                 this.projectile = _serialization.projectile;
-            if (_serialization.recoil !== undefined)
-                this.recoil = _serialization.recoil;
             if (_serialization.gravity !== undefined)
                 this.gravity = _serialization.gravity;
             if (_serialization.destructive !== undefined)

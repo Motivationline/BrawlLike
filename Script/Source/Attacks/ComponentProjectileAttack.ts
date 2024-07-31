@@ -3,7 +3,6 @@ namespace Script {
     export class ComponentProjectileAttack extends ComponentAttack {
         speed: number = 2;
         range: number = 10;
-        recoil: number = 0;
         rotateInDirection: boolean = true;
         attachedToBrawler: boolean = false;
         projectile: string = "DefaultProjectile";
@@ -13,6 +12,7 @@ namespace Script {
         executeAttack: ƒ.TimerHandler = (_event: ƒ.EventTimer) => {
             let direction = <ƒ.Vector3>_event.arguments[0];
             this.shootProjectile(direction);
+            super.executeAttack(_event);
         }
 
         async shootProjectile(_direction: ƒ.Vector3, _ignoreRange: boolean = false) {
@@ -38,11 +38,6 @@ namespace Script {
                 _direction.normalize();
             }
             projectileComponent.fire(_direction, brawlerComp);
-
-            if (this.recoil !== 0) {
-                let recoil = new ƒ.Vector3(-_direction.x, 0, -_direction.z).normalize(this.recoil);
-                brawlerComp.addVelocity(recoil, 0.25);
-            }
         }
 
         public serialize(): ƒ.Serialization {
@@ -53,7 +48,6 @@ namespace Script {
                 rotateInDirection: this.rotateInDirection,
                 attachedToBrawler: this.attachedToBrawler,
                 projectile: this.projectile,
-                recoil: this.recoil,
                 gravity: this.gravity,
                 destructive: this.destructive,
             }
@@ -75,8 +69,6 @@ namespace Script {
                 this.attachedToBrawler = _serialization.attachedToBrawler;
             if (_serialization.projectile !== undefined)
                 this.projectile = _serialization.projectile;
-            if (_serialization.recoil !== undefined)
-                this.recoil = _serialization.recoil;
             if (_serialization.gravity !== undefined)
                 this.gravity = _serialization.gravity;
             if (_serialization.destructive !== undefined)

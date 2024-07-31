@@ -23,6 +23,7 @@ namespace Script {
         public energyNeededPerCharge: number = 1;
         public castingTime: number = 0;
         public lockBrawlerDuringAttack: boolean = false;
+        public recoil: number = 0;
         
         protected singleton: boolean = false;
         protected maxEnergy: number = 0;
@@ -155,7 +156,14 @@ namespace Script {
             return true;
         }
 
-        abstract executeAttack: ƒ.TimerHandler;
+        public executeAttack (_event: ƒ.EventTimer) {
+            let direction = <ƒ.Vector3>_event.arguments[0];
+            let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
+            if (this.recoil !== 0) {
+                let recoil = new ƒ.Vector3(-direction.x, 0, -direction.z).normalize(this.recoil);
+                brawlerComp.addVelocity(recoil, 0.25);
+            }
+        };
 
         update(): void {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
@@ -192,6 +200,7 @@ namespace Script {
                 energyNeededPerCharge: this.energyNeededPerCharge,
                 castingTime: this.castingTime,
                 lockBrawlerDuringAttack: this.lockBrawlerDuringAttack,
+                recoil: this.recoil,
             }
             return serialization;
         }
@@ -221,6 +230,8 @@ namespace Script {
                 this.castingTime = _serialization.castingTime;
             if (_serialization.lockBrawlerDuringAttack !== undefined)
                 this.lockBrawlerDuringAttack = _serialization.lockBrawlerDuringAttack;
+            if (_serialization.recoil !== undefined)
+                this.recoil = _serialization.recoil;
 
             return this;
         }

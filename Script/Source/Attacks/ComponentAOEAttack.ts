@@ -7,6 +7,7 @@ namespace Script {
         aoeGraph: string = "";
 
         executeAttack: ƒ.TimerHandler = async (_event: ƒ.EventTimer) => {
+            super.executeAttack(_event);
             let direction: ƒ.Vector3 = <ƒ.Vector3>_event.arguments[0];
             if (!direction) return;
 
@@ -17,14 +18,18 @@ namespace Script {
             let compAOE = <ComponentAOE>instance.getAllComponents().find(c => c instanceof ComponentAOE);
 
             let owner = this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
-            let angle = ƒ.Vector3.ANGLE(new ƒ.Vector3(direction.x, 0, direction.z), ƒ.Vector3.Z())
-            // let rotatedOffset = 
+            let angle = ƒ.Vector3.ANGLE(new ƒ.Vector3(direction.x, 0, direction.z), ƒ.Vector3.Z());
+            angle *= Math.PI / 180 * Math.sign(direction.x);
+
+            // see https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
+            let rotatedOffset = new ƒ.Vector3(this.offset.x * Math.cos(angle) + this.offset.z * Math.sin(angle), this.offset.y, -this.offset.x * Math.sin(angle) + this.offset.z * Math.cos(angle))
+            
             if (compAOE.attachedToBrawler) {
                 this.node.addChild(instance);
-                compAOE.setup(owner, this.offset);
+                compAOE.setup(owner, rotatedOffset);
             } else {
                 this.node.getParent().addChild(instance);
-                compAOE.setup(owner, ƒ.Vector3.SUM(this.node.mtxLocal.translation, this.offset));
+                compAOE.setup(owner, ƒ.Vector3.SUM(this.node.mtxLocal.translation, rotatedOffset));
             }
 
         };
