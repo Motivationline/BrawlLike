@@ -26,7 +26,7 @@ namespace Script {
         public lockTime: number = 0;
         public recoil: number = 0;
         public invulerableTime: number = 0;
-        
+
         protected singleton: boolean = false;
         protected maxEnergy: number = 0;
         protected currentEnergy: number = 0;
@@ -106,7 +106,7 @@ namespace Script {
                 mesh.mtxPivot.translateZ(0.5);
                 node.mtxLocal.scaling.z = this.range;
             } else if (this.previewType === AttackPreviewType.AREA) {
-                mesh.mtxPivot.scaleX(this.previewWidth); 
+                mesh.mtxPivot.scaleX(this.previewWidth);
                 mesh.mtxPivot.scaleZ(this.previewWidth);
             }
             mesh.mtxPivot.rotateX(-90);
@@ -155,19 +155,24 @@ namespace Script {
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
+            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeRecoil, _direction);
             let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
-            if(this.invulerableTime) brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
+            if (this.invulerableTime) brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
             return true;
         }
 
-        public executeAttack (_event: ƒ.EventTimer) {
+        executeAttack = (_event: ƒ.EventTimer) => {
+
+        }
+
+        executeRecoil = (_event: ƒ.EventTimer) => {
             let direction = <ƒ.Vector3>_event.arguments[0];
             let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
             if (this.recoil !== 0) {
                 let recoil = new ƒ.Vector3(-direction.x, 0, -direction.z).normalize(this.recoil);
                 brawlerComp.addVelocity(recoil, 0.25);
             }
-        };
+        }
 
         update(): void {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);

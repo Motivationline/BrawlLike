@@ -146,7 +146,8 @@ declare namespace Script {
         updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3): void;
         private initAttack;
         attack(_direction: ƒ.Vector3): boolean;
-        executeAttack(_event: ƒ.EventTimer): void;
+        executeAttack: (_event: ƒ.EventTimer) => void;
+        executeRecoil: (_event: ƒ.EventTimer) => void;
         update(): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -211,9 +212,7 @@ declare namespace Script {
     }
 }
 declare namespace Script {
-    import ƒ = FudgeCore;
     class CowboySpecialAttack extends ComponentAttack {
-        attack(_direction: ƒ.Vector3): boolean;
     }
 }
 declare namespace Script {

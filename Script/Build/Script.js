@@ -710,20 +710,22 @@ var Script;
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
+            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeRecoil, _direction);
             let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             if (this.invulerableTime)
                 brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
             return true;
         }
-        executeAttack(_event) {
+        executeAttack = (_event) => {
+        };
+        executeRecoil = (_event) => {
             let direction = _event.arguments[0];
             let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             if (this.recoil !== 0) {
                 let recoil = new ƒ.Vector3(-direction.x, 0, -direction.z).normalize(this.recoil);
                 brawlerComp.addVelocity(recoil, 0.25);
             }
-        }
-        ;
+        };
         update() {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
             if (charges < this.maxCharges) {
@@ -821,7 +823,6 @@ var Script;
         offset = ƒ.Vector3.ZERO();
         aoeGraph = "";
         executeAttack = async (_event) => {
-            super.executeAttack(_event);
             let direction = _event.arguments[0];
             if (!direction)
                 return;
@@ -1004,7 +1005,6 @@ var Script;
         executeAttack = (_event) => {
             let direction = _event.arguments[0];
             this.shootProjectile(direction);
-            super.executeAttack(_event);
         };
         async shootProjectile(_direction, _ignoreRange = false) {
             let projectile = ƒ.Project.getResourcesByName(this.projectile)[0];
@@ -1080,11 +1080,6 @@ var Script;
 var Script;
 (function (Script) {
     class CowboySpecialAttack extends Script.ComponentAttack {
-        attack(_direction) {
-            if (!super.attack(_direction))
-                return false;
-            return true;
-        }
     }
     Script.CowboySpecialAttack = CowboySpecialAttack;
 })(Script || (Script = {}));

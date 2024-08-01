@@ -12,7 +12,6 @@ namespace Script {
         executeAttack: ƒ.TimerHandler = (_event: ƒ.EventTimer) => {
             let direction = <ƒ.Vector3>_event.arguments[0];
             this.shootProjectile(direction);
-            super.executeAttack(_event);
         }
 
         async shootProjectile(_direction: ƒ.Vector3, _ignoreRange: boolean = false) {

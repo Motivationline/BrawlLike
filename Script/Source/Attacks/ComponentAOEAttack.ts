@@ -7,7 +7,6 @@ namespace Script {
         aoeGraph: string = "";
 
         executeAttack: ƒ.TimerHandler = async (_event: ƒ.EventTimer) => {
-            super.executeAttack(_event);
             let direction: ƒ.Vector3 = <ƒ.Vector3>_event.arguments[0];
             if (!direction) return;
 
@@ -17,8 +16,8 @@ namespace Script {
             let instance = await ƒ.Project.createGraphInstance(aoe);
             let compAOE = <ComponentAOE>instance.getAllComponents().find(c => c instanceof ComponentAOE);
 
-            let owner = this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
-            let angle = ƒ.Vector3.ANGLE(new ƒ.Vector3(direction.x, 0, direction.z), ƒ.Vector3.Z());
+            let owner = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
+            let angle: number = ƒ.Vector3.ANGLE(new ƒ.Vector3(direction.x, 0, direction.z), ƒ.Vector3.Z());
             angle *= Math.PI / 180 * Math.sign(direction.x);
 
             // see https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
