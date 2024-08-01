@@ -21,10 +21,10 @@ namespace Script {
     #animations: Map<string, ƒ.Animation> = new Map();
     #currentlyActiveAnimation: { name: string, lock: boolean } = { name: "idle", lock: false };
     public mousePosition: ƒ.Vector3 = ƒ.Vector3.ZERO();
-    public animationIdleName: string;
-    public animationWalkName: string;
-    public animationAttackName: string;
-    public animationSpecialName: string;
+    public animationIdleName: string = "";
+    public animationWalkName: string = "";
+    public animationAttackName: string = "";
+    public animationSpecialName: string = "";
     #invulnerable: boolean = false
     #velocityOverrides: VelocityOverride[] = [];
     #playerMovementLockedUntil: number = -1;
@@ -123,6 +123,12 @@ namespace Script {
         this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
         this.attackMain?.update();
       }
+
+      if (this.#invulnerable) {
+        if (this.#invulUntil < ƒ.Time.game.get()) {
+          this.#invulnerable = false;
+        }
+      }
     }
 
     protected move() {
@@ -151,9 +157,10 @@ namespace Script {
       }
     }
 
-    set health(_amt: number){
-      if (!this.#invulnerable) super.health = _amt;
+    dealDamage(_amt: number) {
+      if (!this.#invulnerable) super.dealDamage(_amt);
     }
+
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
       if (this.#currentlyActiveAnimation.lock) return;
       switch (_atk) {
@@ -203,6 +210,12 @@ namespace Script {
 
     public lockPlayerFor(_time: number) {
       this.#playerMovementLockedUntil = Math.max(ƒ.Time.game.get() + _time, this.#playerMovementLockedUntil);
+    }
+
+    #invulUntil: number;
+    public makeInvulnerableFor(_timeInMS: number) {
+      this.#invulnerable = true;
+      this.#invulUntil = Math.max(this.#invulUntil, ƒ.Time.game.get() + _timeInMS);
     }
 
     protected death(): void {

@@ -7709,7 +7709,8 @@
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 0
+                "recoil": 0,
+                "invulerableTime": 0
               },
               "speed": 2,
               "range": 10,
@@ -7739,7 +7740,8 @@
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
               "lockTime": 0,
-              "recoil": 0
+              "recoil": 0,
+              "invulerableTime": 0
             }
           }
         ]
@@ -8125,7 +8127,8 @@
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
               "lockTime": 1,
-              "recoil": 0
+              "recoil": 0,
+              "invulerableTime": 0
             }
           }
         ],
@@ -8148,7 +8151,8 @@
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 0
+                "recoil": 0,
+                "invulerableTime": 0
               },
               "speed": 6,
               "range": 8,
@@ -8425,7 +8429,8 @@
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 3
+                "recoil": 3,
+                "invulerableTime": 0
               },
               "speed": 2,
               "range": 3,
@@ -8474,7 +8479,8 @@
                   "castingTime": 0.4,
                   "lockBrawlerForAnimationTime": true,
                   "lockTime": 0,
-                  "recoil": 0
+                  "recoil": 0,
+                  "invulerableTime": 11
                 },
                 "speed": 2,
                 "range": 3,
@@ -9155,7 +9161,8 @@
                 "castingTime": 0.05,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0.1,
-                "recoil": 0
+                "recoil": 0,
+                "invulerableTime": 0
               },
               "speed": 6,
               "range": 4,
@@ -9185,7 +9192,8 @@
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
               "lockTime": 0,
-              "recoil": 0
+              "recoil": 0,
+              "invulerableTime": 0
             }
           }
         ]

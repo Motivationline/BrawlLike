@@ -120,8 +120,8 @@ var Script;
         get health() {
             return this.#health;
         }
-        set health(_amt) {
-            this.#health = Math.min(_amt, this.#maxHealth);
+        dealDamage(_amt) {
+            this.#health = Math.min(this.#health - _amt, this.#maxHealth);
             if (this.#health <= 0)
                 this.death();
             if (!this.#healthBar)
@@ -129,6 +129,9 @@ var Script;
             let scale = this.#health / this.#maxHealth;
             this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(scale, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
             this.#healthBar.mtxPivot.translation = new ƒ.Vector3(scale / 2 - 0.5, this.#healthBar.mtxPivot.translation.y, this.#healthBar.mtxPivot.translation.z);
+        }
+        set health(_amt) {
+            this.dealDamage(this.#health - _amt);
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -584,6 +587,7 @@ var Script;
         lockBrawlerForAnimationTime = false;
         lockTime = 0;
         recoil = 0;
+        invulerableTime = 0;
         singleton = false;
         maxEnergy = 0;
         currentEnergy = 0;
@@ -706,6 +710,9 @@ var Script;
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
+            let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            if (this.invulerableTime)
+                brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
             return true;
         }
         executeAttack(_event) {
@@ -751,6 +758,7 @@ var Script;
                 lockBrawlerForAnimationTime: this.lockBrawlerForAnimationTime,
                 lockTime: this.lockTime,
                 recoil: this.recoil,
+                invulerableTime: this.invulerableTime,
             };
             return serialization;
         }
@@ -783,6 +791,8 @@ var Script;
                 this.lockTime = _serialization.lockTime;
             if (_serialization.recoil !== undefined)
                 this.recoil = _serialization.recoil;
+            if (_serialization.invulerableTime !== undefined)
+                this.invulerableTime = _serialization.invulerableTime;
             return this;
         }
         getMutatorAttributeTypes(_mutator) {
@@ -1142,10 +1152,10 @@ var Script;
         #animations = new Map();
         #currentlyActiveAnimation = { name: "idle", lock: false };
         mousePosition = ƒ.Vector3.ZERO();
-        animationIdleName;
-        animationWalkName;
-        animationAttackName;
-        animationSpecialName;
+        animationIdleName = "";
+        animationWalkName = "";
+        animationAttackName = "";
+        animationSpecialName = "";
         #invulnerable = false;
         #velocityOverrides = [];
         #playerMovementLockedUntil = -1;
@@ -1244,6 +1254,11 @@ var Script;
                 this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
                 this.attackMain?.update();
             }
+            if (this.#invulnerable) {
+                if (this.#invulUntil < ƒ.Time.game.get()) {
+                    this.#invulnerable = false;
+                }
+            }
         }
         move() {
             let now = ƒ.Time.game.get();
@@ -1270,9 +1285,9 @@ var Script;
                 this.playAnimation("idle");
             }
         }
-        set health(_amt) {
+        dealDamage(_amt) {
             if (!this.#invulnerable)
-                super.health = _amt;
+                super.dealDamage(_amt);
         }
         attack(_atk, _direction) {
             if (this.#currentlyActiveAnimation.lock)
@@ -1320,6 +1335,11 @@ var Script;
         }
         lockPlayerFor(_time) {
             this.#playerMovementLockedUntil = Math.max(ƒ.Time.game.get() + _time, this.#playerMovementLockedUntil);
+        }
+        #invulUntil;
+        makeInvulnerableFor(_timeInMS) {
+            this.#invulnerable = true;
+            this.#invulUntil = Math.max(this.#invulUntil, ƒ.Time.game.get() + _timeInMS);
         }
         death() {
             console.log("I died.", this);

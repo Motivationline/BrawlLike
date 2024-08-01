@@ -28,6 +28,7 @@ declare namespace Script {
         private initDamagable;
         private initHealthbar;
         get health(): number;
+        dealDamage(_amt: number): void;
         set health(_amt: number);
         protected abstract death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
@@ -134,6 +135,7 @@ declare namespace Script {
         lockBrawlerForAnimationTime: boolean;
         lockTime: number;
         recoil: number;
+        invulerableTime: number;
         protected singleton: boolean;
         protected maxEnergy: number;
         protected currentEnergy: number;
@@ -248,12 +250,13 @@ declare namespace Script {
         setMovement(_direction: ƒ.Vector3): void;
         update(): void;
         protected move(): void;
-        set health(_amt: number);
+        dealDamage(_amt: number): void;
         attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
         showPreview(_atk: ATTACK_TYPE): void;
         hidePreview(_atk: ATTACK_TYPE): void;
         addVelocity(_velocity: ƒ.Vector3, _duration: number): void;
         lockPlayerFor(_time: number): void;
+        makeInvulnerableFor(_timeInMS: number): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;

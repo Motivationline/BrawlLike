@@ -25,6 +25,7 @@ namespace Script {
         public lockBrawlerForAnimationTime: boolean = false;
         public lockTime: number = 0;
         public recoil: number = 0;
+        public invulerableTime: number = 0;
         
         protected singleton: boolean = false;
         protected maxEnergy: number = 0;
@@ -154,6 +155,8 @@ namespace Script {
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
+            let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
+            if(this.invulerableTime) brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
             return true;
         }
 
@@ -203,6 +206,7 @@ namespace Script {
                 lockBrawlerForAnimationTime: this.lockBrawlerForAnimationTime,
                 lockTime: this.lockTime,
                 recoil: this.recoil,
+                invulerableTime: this.invulerableTime,
             }
             return serialization;
         }
@@ -236,6 +240,8 @@ namespace Script {
                 this.lockTime = _serialization.lockTime;
             if (_serialization.recoil !== undefined)
                 this.recoil = _serialization.recoil;
+            if (_serialization.invulerableTime !== undefined)
+                this.invulerableTime = _serialization.invulerableTime;
 
             return this;
         }
