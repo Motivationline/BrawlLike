@@ -39,7 +39,7 @@ namespace Script {
             let serialization: ƒ.Serialization = {
                 [super.constructor.name]: super.serialize(),
                 aoeGraph: this.aoeGraph,
-                offset: this.offset,
+                offset: this.offset.serialize(),
             }
             return serialization;
         }
@@ -50,7 +50,7 @@ namespace Script {
             if (_serialization.aoeGraph !== undefined)
                 this.aoeGraph = _serialization.aoeGraph;
             if (_serialization.offset !== undefined)
-                this.offset = _serialization.offset;
+                this.offset.deserialize(_serialization.offset);
             return this;
         }
     }
