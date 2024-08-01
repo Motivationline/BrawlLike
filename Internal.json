@@ -7110,7 +7110,8 @@
                           },
                           "light": {
                             "ƒ.LightDirectional": {
-                              "color": "[1, 1, 1, 1]"
+                              "color": "[1, 1, 1, 1]",
+                              "intensity": 1
                             }
                           },
                           "Component": {
@@ -7138,7 +7139,8 @@
                           },
                           "light": {
                             "ƒ.LightAmbient": {
-                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]"
+                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]",
+                              "intensity": 1
                             }
                           },
                           "Component": {
@@ -15795,7 +15797,8 @@
                           },
                           "light": {
                             "ƒ.LightDirectional": {
-                              "color": "[1, 1, 1, 1]"
+                              "color": "[1, 1, 1, 1]",
+                              "intensity": 1
                             }
                           },
                           "Component": {
@@ -15823,7 +15826,8 @@
                           },
                           "light": {
                             "ƒ.LightAmbient": {
-                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]"
+                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]",
+                              "intensity": 1
                             }
                           },
                           "Component": {
@@ -18315,7 +18319,23 @@
           }
         ]
       },
-      "children": [],
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-08-01T14:29:16.075Z|82016"
+                }
+              }
+            ]
+          }
+        }
+      ],
       "idResource": "Graph|2024-07-31T07:10:31.978Z|51570",
       "type": "Graph"
     }
@@ -18502,6 +18522,47 @@
       "name": "BugsyRoll",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\buggy.glb"
+    }
+  },
+  "GraphGLTF|2024-08-01T14:29:16.075Z|82016": {
+    "ƒ.GraphGLTF": {
+      "name": "BoomScene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-08-01T14:29:16.075Z|80798",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-08-01T14:29:16.075Z|82016",
+      "type": "GraphGLTF",
+      "url": "Assets\\Explosion\\Boom.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-01T14:29:16.075Z|80798": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-01T14:29:16.075Z|80798",
+      "name": "Boom",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Explosion\\Boom.glb"
     }
   }
 }

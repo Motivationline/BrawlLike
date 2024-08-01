@@ -80,7 +80,14 @@
           },
           {
             "name": "Explosions",
-            "entries": []
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-08-01T14:29:16.075Z|82016"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-01T14:29:16.075Z|80798"
+              }
+            ]
           }
         ]
       },
