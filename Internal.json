@@ -17874,9 +17874,9 @@
               "energyNeededPerCharge": 1,
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
-              "lockTime": 0,
+              "lockTime": 0.7999999999999999,
               "recoil": -5,
-              "invulerableTime": 0
+              "invulerableTime": 0.7999999999999999
             }
           }
         ]
