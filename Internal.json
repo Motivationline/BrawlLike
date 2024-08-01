@@ -7117,7 +7117,8 @@
                           },
                           "light": {
                             "ƒ.LightDirectional": {
-                              "color": "[1, 1, 1, 1]"
+                              "color": "[1, 1, 1, 1]",
+                              "intensity": 1
                             }
                           },
                           "Component": {
@@ -7145,7 +7146,8 @@
                           },
                           "light": {
                             "ƒ.LightAmbient": {
-                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]"
+                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]",
+                              "intensity": 1
                             }
                           },
                           "Component": {
@@ -7705,7 +7707,8 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerDuringAttack": false,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0,
                 "recoil": 0
               },
               "speed": 2,
@@ -7734,7 +7737,8 @@
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
-              "lockBrawlerDuringAttack": false,
+              "lockBrawlerForAnimationTime": false,
+              "lockTime": 0,
               "recoil": 0
             }
           }
@@ -8119,7 +8123,8 @@
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
-              "lockBrawlerDuringAttack": false,
+              "lockBrawlerForAnimationTime": false,
+              "lockTime": 1,
               "recoil": 0
             }
           }
@@ -8141,7 +8146,8 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerDuringAttack": false,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0,
                 "recoil": 0
               },
               "speed": 6,
@@ -8417,7 +8423,8 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerDuringAttack": false,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0,
                 "recoil": 3
               },
               "speed": 2,
@@ -8465,7 +8472,8 @@
                   "energyGenerationPerSecond": 0.25000000000000006,
                   "energyNeededPerCharge": 1,
                   "castingTime": 0.4,
-                  "lockBrawlerDuringAttack": true,
+                  "lockBrawlerForAnimationTime": true,
+                  "lockTime": 0,
                   "recoil": 0
                 },
                 "speed": 2,
@@ -9145,7 +9153,8 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0.05,
-                "lockBrawlerDuringAttack": false,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0.1,
                 "recoil": 0
               },
               "speed": 6,
@@ -9174,7 +9183,8 @@
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
-              "lockBrawlerDuringAttack": false,
+              "lockBrawlerForAnimationTime": false,
+              "lockTime": 0,
               "recoil": 0
             }
           }

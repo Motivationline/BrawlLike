@@ -22,7 +22,8 @@ namespace Script {
         public energyGenerationPerSecond: number = 0;
         public energyNeededPerCharge: number = 1;
         public castingTime: number = 0;
-        public lockBrawlerDuringAttack: boolean = false;
+        public lockBrawlerForAnimationTime: boolean = false;
+        public lockTime: number = 0;
         public recoil: number = 0;
         
         protected singleton: boolean = false;
@@ -199,7 +200,8 @@ namespace Script {
                 energyGenerationPerSecond: this.energyGenerationPerSecond,
                 energyNeededPerCharge: this.energyNeededPerCharge,
                 castingTime: this.castingTime,
-                lockBrawlerDuringAttack: this.lockBrawlerDuringAttack,
+                lockBrawlerForAnimationTime: this.lockBrawlerForAnimationTime,
+                lockTime: this.lockTime,
                 recoil: this.recoil,
             }
             return serialization;
@@ -228,8 +230,10 @@ namespace Script {
                 this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
             if (_serialization.castingTime !== undefined)
                 this.castingTime = _serialization.castingTime;
-            if (_serialization.lockBrawlerDuringAttack !== undefined)
-                this.lockBrawlerDuringAttack = _serialization.lockBrawlerDuringAttack;
+            if (_serialization.lockBrawlerForAnimationTime !== undefined)
+                this.lockBrawlerForAnimationTime = _serialization.lockBrawlerForAnimationTime;
+            if (_serialization.lockTime !== undefined)
+                this.lockTime = _serialization.lockTime;
             if (_serialization.recoil !== undefined)
                 this.recoil = _serialization.recoil;
 

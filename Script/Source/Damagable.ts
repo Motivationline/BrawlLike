@@ -32,7 +32,7 @@ namespace Script {
             return this.#health;
         }
 
-        set health(_amt) {
+        set health(_amt: number) {
             this.#health = Math.min(_amt, this.#maxHealth);
             if (this.#health <= 0) this.death();
             if (!this.#healthBar) return;

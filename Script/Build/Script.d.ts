@@ -131,7 +131,8 @@ declare namespace Script {
         energyGenerationPerSecond: number;
         energyNeededPerCharge: number;
         castingTime: number;
-        lockBrawlerDuringAttack: boolean;
+        lockBrawlerForAnimationTime: boolean;
+        lockTime: number;
         recoil: number;
         protected singleton: boolean;
         protected maxEnergy: number;
@@ -247,6 +248,7 @@ declare namespace Script {
         setMovement(_direction: ƒ.Vector3): void;
         update(): void;
         protected move(): void;
+        set health(_amt: number);
         attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
         showPreview(_atk: ATTACK_TYPE): void;
         hidePreview(_atk: ATTACK_TYPE): void;

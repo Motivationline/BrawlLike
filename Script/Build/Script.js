@@ -581,7 +581,8 @@ var Script;
         energyGenerationPerSecond = 0;
         energyNeededPerCharge = 1;
         castingTime = 0;
-        lockBrawlerDuringAttack = false;
+        lockBrawlerForAnimationTime = false;
+        lockTime = 0;
         recoil = 0;
         singleton = false;
         maxEnergy = 0;
@@ -747,7 +748,8 @@ var Script;
                 energyGenerationPerSecond: this.energyGenerationPerSecond,
                 energyNeededPerCharge: this.energyNeededPerCharge,
                 castingTime: this.castingTime,
-                lockBrawlerDuringAttack: this.lockBrawlerDuringAttack,
+                lockBrawlerForAnimationTime: this.lockBrawlerForAnimationTime,
+                lockTime: this.lockTime,
                 recoil: this.recoil,
             };
             return serialization;
@@ -775,8 +777,10 @@ var Script;
                 this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
             if (_serialization.castingTime !== undefined)
                 this.castingTime = _serialization.castingTime;
-            if (_serialization.lockBrawlerDuringAttack !== undefined)
-                this.lockBrawlerDuringAttack = _serialization.lockBrawlerDuringAttack;
+            if (_serialization.lockBrawlerForAnimationTime !== undefined)
+                this.lockBrawlerForAnimationTime = _serialization.lockBrawlerForAnimationTime;
+            if (_serialization.lockTime !== undefined)
+                this.lockTime = _serialization.lockTime;
             if (_serialization.recoil !== undefined)
                 this.recoil = _serialization.recoil;
             return this;
@@ -1142,6 +1146,7 @@ var Script;
         animationWalkName;
         animationAttackName;
         animationSpecialName;
+        #invulnerable = false;
         #velocityOverrides = [];
         #playerMovementLockedUntil = -1;
         constructor() {
@@ -1178,7 +1183,7 @@ var Script;
         };
         #animationTimeout = -1;
         playAnimation(_name, _options) {
-            _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false, lockMovement: false }, ..._options };
+            _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false, lockMovement: false, lockTime: 0 }, ..._options };
             if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter)
                 return;
             if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter)
@@ -1211,8 +1216,11 @@ var Script;
                     this.playAnimation("idle");
                 }, this.#animations.get(_name).totalTime);
             }
+            let newLockTime = _options.lockTime * 1000;
             if (_options.lockMovement)
-                this.lockPlayerFor(this.#animations.get(_name).totalTime);
+                newLockTime = this.#animations.get(_name).totalTime;
+            if (newLockTime > 0)
+                this.lockPlayerFor(newLockTime);
         }
         findAttacks() {
             let components = this.node.getAllComponents();
@@ -1262,18 +1270,22 @@ var Script;
                 this.playAnimation("idle");
             }
         }
+        set health(_amt) {
+            if (!this.#invulnerable)
+                super.health = _amt;
+        }
         attack(_atk, _direction) {
             if (this.#currentlyActiveAnimation.lock)
                 return;
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
                     if (this.attackMain.attack(_direction)) {
-                        this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerDuringAttack });
+                        this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime });
                     }
                     break;
                 case ATTACK_TYPE.SPECIAL:
                     if (this.attackSpecial.attack(_direction)) {
-                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerDuringAttack });
+                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime });
                     }
                     break;
             }
