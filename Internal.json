@@ -7117,8 +7117,7 @@
                           },
                           "light": {
                             "ƒ.LightDirectional": {
-                              "color": "[1, 1, 1, 1]",
-                              "intensity": 1
+                              "color": "[1, 1, 1, 1]"
                             }
                           },
                           "Component": {
@@ -7146,8 +7145,7 @@
                           },
                           "light": {
                             "ƒ.LightAmbient": {
-                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]",
-                              "intensity": 1
+                              "color": "[0.32941176470588235, 0.32941176470588235, 0.32941176470588235, 1]"
                             }
                           },
                           "Component": {
@@ -7683,8 +7681,7 @@
               "Damagable": {
                 "Component": {
                   "active": true
-                },
-                "health": 500
+                }
               },
               "speed": 2.1
             }
@@ -7709,8 +7706,7 @@
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 0,
-                "invulerableTime": 0
+                "recoil": 0
               },
               "speed": 2,
               "range": 10,
@@ -7740,8 +7736,7 @@
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
               "lockTime": 0,
-              "recoil": 0,
-              "invulerableTime": 0
+              "recoil": 0
             }
           }
         ]
@@ -8100,8 +8095,7 @@
               "Damagable": {
                 "Component": {
                   "active": true
-                },
-                "health": 500
+                }
               },
               "speed": 2,
               "animationIdleName": "CowgirlIdle",
@@ -8127,8 +8121,7 @@
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
               "lockTime": 1,
-              "recoil": 0,
-              "invulerableTime": 0
+              "recoil": 0
             }
           }
         ],
@@ -8151,8 +8144,7 @@
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 0,
-                "invulerableTime": 0
+                "recoil": 0
               },
               "speed": 6,
               "range": 8,
@@ -8255,6 +8247,13 @@
               "Component": {
                 "active": true
               }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
             }
           }
         ]
@@ -8429,8 +8428,7 @@
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 3,
-                "invulerableTime": 0
+                "recoil": 3
               },
               "speed": 2,
               "range": 3,
@@ -8448,8 +8446,7 @@
               "Damagable": {
                 "Component": {
                   "active": true
-                },
-                "health": 500
+                }
               },
               "speed": 1,
               "animationIdleName": "FroggerIdle",
@@ -8479,8 +8476,7 @@
                   "castingTime": 0.4,
                   "lockBrawlerForAnimationTime": true,
                   "lockTime": 0,
-                  "recoil": 0,
-                  "invulerableTime": 11
+                  "recoil": 0
                 },
                 "speed": 2,
                 "range": 3,
@@ -9131,8 +9127,7 @@
               "Damagable": {
                 "Component": {
                   "active": true
-                },
-                "health": 500
+                }
               },
               "speed": 1.5000000000000004,
               "animationIdleName": "BugsyIdle",
@@ -9150,7 +9145,7 @@
                   "active": true
                 },
                 "previewType": 0,
-                "previewWidth": 1,
+                "previewWidth": 0.20000000000000015,
                 "range": 4,
                 "attackType": 0,
                 "maxCharges": 2,
@@ -9161,8 +9156,7 @@
                 "castingTime": 0.05,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0.1,
-                "recoil": 0,
-                "invulerableTime": 0
+                "recoil": 0
               },
               "speed": 6,
               "range": 4,
@@ -9181,19 +9175,18 @@
                 "active": true
               },
               "previewType": 0,
-              "previewWidth": 1,
-              "range": 5,
+              "previewWidth": 0.8,
+              "range": 1.5000000000000004,
               "attackType": 1,
-              "maxCharges": 3,
-              "damage": 100,
+              "maxCharges": 1,
+              "damage": 0,
               "minDelayBetweenAttacks": 0.3,
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
               "lockTime": 0,
-              "recoil": 0,
-              "invulerableTime": 0
+              "recoil": -5
             }
           }
         ]
