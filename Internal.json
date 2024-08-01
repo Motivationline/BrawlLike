@@ -7674,7 +7674,7 @@
               {
                 "ƒ.Node": {
                   "name": "References",
-                  "active": true,
+                  "active": false,
                   "components": {
                     "ComponentTransform": [
                       {
@@ -15136,7 +15136,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[1, 0, 0.20000000000000004]",
+                                              "translation": "[1, 0, 0]",
                                               "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -15166,7 +15166,7 @@
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[-1, 0, -0.2]",
+                                              "translation": "[-1, 0, 0]",
                                               "rotation": "[0, 90, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
@@ -17838,10 +17838,10 @@
                 "attackType": 0,
                 "maxCharges": 2,
                 "damage": 100,
-                "minDelayBetweenAttacks": 0.3,
-                "energyGenerationPerSecond": 1,
+                "minDelayBetweenAttacks": 0.04999999999999999,
+                "energyGenerationPerSecond": 0.8,
                 "energyNeededPerCharge": 1,
-                "castingTime": 0.05,
+                "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0.1,
                 "recoil": 0,
@@ -17869,7 +17869,7 @@
               "attackType": 1,
               "maxCharges": 1,
               "damage": 0,
-              "minDelayBetweenAttacks": 0.3,
+              "minDelayBetweenAttacks": 0.04999999999999999,
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
