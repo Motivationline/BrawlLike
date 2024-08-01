@@ -1465,7 +1465,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -1615,7 +1615,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -1741,7 +1741,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -1867,7 +1867,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2017,7 +2017,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2143,7 +2143,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2269,7 +2269,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2395,7 +2395,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2545,7 +2545,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2671,7 +2671,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2797,7 +2797,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -2923,7 +2923,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3073,7 +3073,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3199,7 +3199,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3349,7 +3349,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3475,7 +3475,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3541,6 +3541,20 @@
                                 "ComponentGraphFilter": [
                                   {
                                     "ƒ.ComponentGraphFilter": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "Destructible": [
+                                  {
+                                    "Script.Destructible": {
                                       "active": true
                                     }
                                   }
@@ -3744,7 +3758,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3870,7 +3884,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -3996,7 +4010,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -4122,7 +4136,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -4272,7 +4286,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -4398,7 +4412,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -4524,7 +4538,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -4650,7 +4664,7 @@
                                                   }
                                                 }
                                               }
-                                            ]  
+                                            ]
                                           },
                                           "children": [
                                             {
@@ -4716,6 +4730,20 @@
                                 "ComponentGraphFilter": [
                                   {
                                     "ƒ.ComponentGraphFilter": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "Destructible": [
+                                  {
+                                    "Script.Destructible": {
                                       "active": true
                                     }
                                   }
@@ -4838,6 +4866,20 @@
                                       "active": true
                                     }
                                   }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "Destructible": [
+                                  {
+                                    "Script.Destructible": {
+                                      "active": true
+                                    }
+                                  }
                                 ]
                               },
                               "children": [
@@ -4957,6 +4999,20 @@
                                       "active": true
                                     }
                                   }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "Destructible": [
+                                  {
+                                    "Script.Destructible": {
+                                      "active": true
+                                    }
+                                  }
                                 ]
                               },
                               "children": [
@@ -5073,6 +5129,20 @@
                                 "ComponentGraphFilter": [
                                   {
                                     "ƒ.ComponentGraphFilter": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "IgnoredByProjectiles": [
+                                  {
+                                    "Script.IgnoredByProjectiles": {
+                                      "active": true
+                                    }
+                                  }
+                                ],
+                                "Destructible": [
+                                  {
+                                    "Script.Destructible": {
                                       "active": true
                                     }
                                   }
@@ -7635,14 +7705,14 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerDuringAttack": false
+                "lockBrawlerDuringAttack": false,
+                "recoil": 0
               },
               "speed": 2,
               "range": 10,
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
-              "recoil": 0,
               "gravity": false,
               "destructive": false
             }
@@ -7664,7 +7734,8 @@
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
-              "lockBrawlerDuringAttack": false
+              "lockBrawlerDuringAttack": false,
+              "recoil": 0
             }
           }
         ]
@@ -7868,7 +7939,8 @@
             "Script.ComponentProjectile": {
               "Component": {
                 "active": true
-              }
+              },
+              "impactAOE": ""
             }
           }
         ],
@@ -8047,7 +8119,8 @@
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
-              "lockBrawlerDuringAttack": false
+              "lockBrawlerDuringAttack": false,
+              "recoil": 0
             }
           }
         ],
@@ -8068,14 +8141,14 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerDuringAttack": false
+                "lockBrawlerDuringAttack": false,
+                "recoil": 0
               },
               "speed": 6,
               "range": 8,
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
-              "recoil": 0,
               "gravity": false,
               "destructive": false
             }
@@ -8136,6 +8209,38 @@
                 "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
                 "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "Destructible": [
+          {
+            "Script.Destructible": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "STATIC",
+              "typeCollider": "CUBE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1.1, 1, 1.100000000000001]"
               },
               "Component": {
                 "active": true
@@ -8304,7 +8409,7 @@
                 },
                 "previewType": 2,
                 "previewWidth": 1,
-                "range": 5,
+                "range": 3,
                 "attackType": 0,
                 "maxCharges": 3,
                 "damage": 100,
@@ -8312,16 +8417,16 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerDuringAttack": false
+                "lockBrawlerDuringAttack": false,
+                "recoil": 3
               },
               "speed": 2,
-              "range": 5,
+              "range": 3,
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "PotatoProjectile",
-              "recoil": 3,
               "gravity": true,
-              "destructive": true
+              "destructive": false
             }
           }
         ],
@@ -8352,26 +8457,26 @@
                   },
                   "previewType": 2,
                   "previewWidth": 3,
-                  "range": 6,
+                  "range": 3,
                   "attackType": 1,
                   "maxCharges": 1,
                   "damage": 100,
                   "minDelayBetweenAttacks": 0.3,
-                  "energyGenerationPerSecond": 10,
+                  "energyGenerationPerSecond": 0.25000000000000006,
                   "energyNeededPerCharge": 1,
                   "castingTime": 0.4,
-                  "lockBrawlerDuringAttack": true
+                  "lockBrawlerDuringAttack": true,
+                  "recoil": 0
                 },
                 "speed": 2,
-                "range": 6,
+                "range": 3,
                 "rotateInDirection": false,
                 "attachedToBrawler": false,
-                "projectile": "PotatoProjectile",
-                "recoil": 0,
+                "projectile": "SpecialPotatoProjectile",
                 "gravity": true,
                 "destructive": true
               },
-              "radius": 1.5000000000000004,
+              "radius": 1.2000000000000002,
               "amtProjectiles": 5
             }
           }
@@ -9040,14 +9145,14 @@
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0.05,
-                "lockBrawlerDuringAttack": true
+                "lockBrawlerDuringAttack": false,
+                "recoil": 0
               },
               "speed": 6,
               "range": 4,
               "rotateInDirection": true,
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
-              "recoil": 0.10000000000000014,
               "gravity": false,
               "destructive": false
             }
@@ -9069,7 +9174,8 @@
               "energyGenerationPerSecond": 1,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
-              "lockBrawlerDuringAttack": false
+              "lockBrawlerDuringAttack": false,
+              "recoil": 0
             }
           }
         ]
@@ -9258,8 +9364,7 @@
               "active": true
             }
           }
-        ],
-        "ComponentProjectileAttack": []
+        ]
       },
       "children": [
         {
@@ -9451,13 +9556,13 @@
                 "active": true
               },
               "damage": 100,
-              "maxTicksPerEnemy": 1000,
+              "maxTicksPerEnemy": 1,
               "delayBetweenTicksInMS": 500,
               "delayBeforeFirstTickInMS": 0,
               "attachedToBrawler": false,
               "radius": 2,
               "destructive": false,
-              "duration": 1,
+              "duration": 0.5,
               "areaVisible": true
             }
           }
@@ -9530,6 +9635,164 @@
       "idResource": "GraphGLTF|2024-07-31T14:36:51.660Z|18912",
       "type": "GraphGLTF",
       "url": "Assets\\Decorations\\CrateDestroyed.glb"
+    }
+  },
+  "Graph|2024-07-31T15:33:39.293Z|88979": {
+    "ƒ.Graph": {
+      "name": "SpecialPotatoProjectile",
+      "active": true,
+      "components": {
+        "ComponentProjectile": [
+          {
+            "Script.ComponentProjectile": {
+              "Component": {
+                "active": true
+              },
+              "impactAOE": "SpecialPotatoAOE"
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "SPHERE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5000000000000001, 0.30000000000000004, 0.30000000000000004]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-26T08:26:01.771Z|62446"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-07-31T15:33:39.293Z|88979",
+      "type": "Graph"
+    }
+  },
+  "Graph|2024-08-01T08:52:29.540Z|78870": {
+    "ƒ.Graph": {
+      "name": "SpecialPotatoAOE",
+      "active": true,
+      "components": {
+        "ComponentAOE": [
+          {
+            "Script.ComponentAOE": {
+              "Component": {
+                "active": true
+              },
+              "damage": 100,
+              "maxTicksPerEnemy": 1,
+              "delayBetweenTicksInMS": 500,
+              "delayBeforeFirstTickInMS": 0,
+              "attachedToBrawler": false,
+              "radius": 1.3000000000000003,
+              "destructive": true,
+              "duration": 0.5000000000000001,
+              "areaVisible": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "KINEMATIC",
+              "typeCollider": "SPHERE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-08-01T08:52:29.540Z|78870",
+      "type": "Graph"
     }
   }
 }
