@@ -16902,7 +16902,7 @@
                 "scaling": "[0.5, 0.6000000238418579, 0.6000000238418579]"
               },
               "Component": {
-                "active": false
+                "active": true
               }
             }
           }
@@ -16922,44 +16922,23 @@
             }
           }
         ],
-        "CowboySpecialAttack": [
+        "CowboySpecialAttack": [],
+        "CowboyMainAttack": [],
+        "ComponentAOEAttack": [
           {
-            "Script.CowboySpecialAttack": {
-              "Component": {
-                "active": true
-              },
-              "previewType": 1,
-              "previewWidth": 1.6,
-              "range": 5,
-              "attackType": 1,
-              "maxCharges": 1,
-              "damage": 100,
-              "minDelayBetweenAttacks": 0.3,
-              "energyGenerationPerSecond": 1,
-              "energyNeededPerCharge": 1,
-              "castingTime": 0,
-              "lockBrawlerForAnimationTime": false,
-              "lockTime": 1,
-              "recoil": 0,
-              "invulerableTime": 0
-            }
-          }
-        ],
-        "CowboyMainAttack": [
-          {
-            "Script.CowboyMainAttack": {
+            "Script.ComponentAOEAttack": {
               "ComponentAttack": {
                 "Component": {
                   "active": true
                 },
-                "previewType": 0,
+                "previewType": 2,
                 "previewWidth": 1,
-                "range": 8,
+                "range": 1,
                 "attackType": 0,
                 "maxCharges": 3,
                 "damage": 100,
-                "minDelayBetweenAttacks": 0.3,
-                "energyGenerationPerSecond": 1,
+                "minDelayBetweenAttacks": 0.09999999999999998,
+                "energyGenerationPerSecond": 0.7500000000000001,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
@@ -16967,13 +16946,33 @@
                 "recoil": 0,
                 "invulerableTime": 0
               },
-              "speed": 6,
-              "range": 8,
-              "rotateInDirection": true,
-              "attachedToBrawler": false,
-              "projectile": "DefaultProjectile",
-              "gravity": false,
-              "destructive": false
+              "aoeGraph": "AOEBite",
+              "offset": "[0, 0, 0.6000000000000001]"
+            }
+          },
+          {
+            "Script.ComponentAOEAttack": {
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
+                },
+                "previewType": 0,
+                "previewWidth": 1,
+                "range": 5,
+                "attackType": 1,
+                "maxCharges": 1,
+                "damage": 100,
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 1,
+                "energyNeededPerCharge": 1,
+                "castingTime": 0,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0,
+                "recoil": -12,
+                "invulerableTime": 0
+              },
+              "aoeGraph": "AOERam",
+              "offset": "[0, 0, 0]"
             }
           }
         ]
@@ -17252,7 +17251,7 @@
                 "recoil": 3,
                 "invulerableTime": 0
               },
-              "speed": 2,
+              "speed": 0.8,
               "range": 3,
               "rotateInDirection": true,
               "attachedToBrawler": false,
@@ -18837,6 +18836,158 @@
       "name": "Walk",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\dummy_blobby.glb"
+    }
+  },
+  "Graph|2024-08-02T14:04:11.412Z|83110": {
+    "ƒ.Graph": {
+      "name": "AOEBite",
+      "active": true,
+      "components": {
+        "ComponentAOE": [
+          {
+            "Script.ComponentAOE": {
+              "Component": {
+                "active": true
+              },
+              "damage": 150,
+              "maxTicksPerEnemy": 1,
+              "delayBetweenTicksInMS": 500,
+              "delayBeforeFirstTickInMS": 0,
+              "attachedToBrawler": true,
+              "radius": 0.8,
+              "destructive": false,
+              "durationDamage": 0.10000000000000014,
+              "durationVisual": 0.10000000000000014,
+              "areaVisible": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[-1, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 0,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 0,
+              "typeBody": "KINEMATIC",
+              "typeCollider": "CUBE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-08-02T14:04:11.412Z|83110",
+      "type": "Graph"
+    }
+  },
+  "Graph|2024-08-02T14:22:27.437Z|92151": {
+    "ƒ.Graph": {
+      "name": "AOERam",
+      "active": true,
+      "components": {
+        "ComponentAOE": [
+          {
+            "Script.ComponentAOE": {
+              "Component": {
+                "active": true
+              },
+              "damage": 200,
+              "maxTicksPerEnemy": 1,
+              "delayBetweenTicksInMS": 500,
+              "delayBeforeFirstTickInMS": 0,
+              "attachedToBrawler": true,
+              "radius": 1,
+              "destructive": true,
+              "durationDamage": 0.30000000000000016,
+              "durationVisual": 0.30000000000000016,
+              "areaVisible": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "KINEMATIC",
+              "typeCollider": "CUBE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-08-02T14:22:27.437Z|92151",
+      "type": "Graph"
     }
   }
 }
