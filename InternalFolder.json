@@ -170,6 +170,17 @@
                 "idResource": "AnimationGLTF|2024-08-01T12:38:05.750Z|48263"
               }
             ]
+          },
+          {
+            "name": "Dummy",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-08-02T10:01:39.920Z|03067"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-02T10:01:39.920Z|80466"
+              }
+            ]
           }
         ]
       },

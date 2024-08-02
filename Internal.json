@@ -18659,7 +18659,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-17T14:03:22.586Z|44909"
+                  "idSource": "GraphGLTF|2024-08-02T10:01:39.920Z|03067"
                 }
               }
             ]
@@ -18668,6 +18668,47 @@
       ],
       "idResource": "Graph|2024-08-02T09:47:35.228Z|38076",
       "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-08-02T10:01:39.920Z|03067": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-08-02T10:01:39.920Z|80466",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": false
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-08-02T10:01:39.920Z|03067",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\dummy_blobby.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-02T10:01:39.920Z|80466": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-02T10:01:39.920Z|80466",
+      "name": "Walk",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\dummy_blobby.glb"
     }
   }
 }
