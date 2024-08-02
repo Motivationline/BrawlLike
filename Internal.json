@@ -16685,6 +16685,18 @@
               }
             }
           }
+        ],
+        "ComponentBloom": [
+          {
+            "ƒ.ComponentBloom": {
+              "threshold": 0.9099999999999999,
+              "intensity": 0.1,
+              "desaturateHighlights": 0.5,
+              "Component": {
+                "active": false
+              }
+            }
+          }
         ]
       },
       "children": [],
@@ -17353,7 +17365,7 @@
       "shader": "ShaderLit",
       "coat": {
         "ƒ.CoatColored": {
-          "color": "[1, 1, 1, 1]"
+          "color": "[0.9294117647058824, 0.9294117647058824, 0.9294117647058824, 1]"
         }
       },
       "alphaClip": 0.01
@@ -18388,7 +18400,7 @@
               "attachedToBrawler": false,
               "radius": 2,
               "destructive": false,
-              "duration": 0.5,
+              "duration": 0.7999999999999999,
               "areaVisible": true
             }
           }
