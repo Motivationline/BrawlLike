@@ -15661,9 +15661,123 @@
                   "components": {},
                   "children": [
                     {
-                      "ƒ.GraphInstance": {
-                        "deserializeFromSource": true,
-                        "idSource": "Graph|2024-08-02T09:47:35.228Z|38076"
+                      "ƒ.Node": {
+                        "name": "Dummy01",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[3.9999999999999996, 0, -4.499999999999998]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-08-02T09:47:35.228Z|38076"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Dummy02",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 0, 4.700000000000001]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-08-02T09:47:35.228Z|38076"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Dummy03",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 0, -4.799999999999997]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-08-02T09:47:35.228Z|38076"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Dummy04",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-4.1, 0, 4.200000000000003]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-08-02T09:47:35.228Z|38076"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -18581,7 +18695,7 @@
           {
             "ƒ.ComponentTransform": {
               "local": {
-                "translation": "[-6, 0, -5]",
+                "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
                 "scaling": "[1, 1, 1]"
               },
@@ -18606,9 +18720,9 @@
               "isTrigger": true,
               "id": 0,
               "pivot": {
-                "translation": "[0, 0, 0]",
+                "translation": "[0, 0.42000000000000004, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[1, 0.5000000000000001, 1]"
+                "scaling": "[0.5400000000000001, 0.3600000000000002, 0.6000000000000001]"
               },
               "Component": {
                 "active": true
@@ -18646,7 +18760,7 @@
                     "local": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[1, 1, 1]"
+                      "scaling": "[2, 2, 2]"
                     },
                     "Component": {
                       "active": true
