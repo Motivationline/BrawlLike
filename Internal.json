@@ -15659,7 +15659,14 @@
                   "name": "Dummies",
                   "active": true,
                   "components": {},
-                  "children": []
+                  "children": [
+                    {
+                      "ƒ.GraphInstance": {
+                        "deserializeFromSource": true,
+                        "idSource": "Graph|2024-08-02T09:47:35.228Z|38076"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -18563,6 +18570,104 @@
       "name": "Boom",
       "type": "AnimationGLTF",
       "url": "Assets\\Explosion\\Boom.glb"
+    }
+  },
+  "Graph|2024-08-02T09:47:35.228Z|38076": {
+    "ƒ.Graph": {
+      "name": "BrawlerDummy",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[-6, 0, -5]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 0,
+              "typeBody": "STATIC",
+              "typeCollider": "CAPSULE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 0.5000000000000001, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentBrawler": [
+          {
+            "Script.ComponentBrawler": {
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 0,
+              "animationIdleName": "",
+              "animationWalkName": "",
+              "animationAttackName": "",
+              "animationSpecialName": ""
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-07-17T14:03:22.586Z|44909"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-08-02T09:47:35.228Z|38076",
+      "type": "Graph"
     }
   }
 }
