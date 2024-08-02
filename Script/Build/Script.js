@@ -416,13 +416,15 @@ var Script;
         attachedToBrawler = false;
         radius = 1;
         destructive = false;
-        duration = 1;
+        durationDamage = 1;
+        durationVisual = 1;
         areaVisible = true;
         #rb;
         #damagables = [];
         #owner;
         #circle;
-        #endTime;
+        #endTimeDamage;
+        #endTimeVisual;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -439,7 +441,8 @@ var Script;
         setup(_owner, _pos) {
             this.#owner = _owner;
             this.node.mtxLocal.translation = new ƒ.Vector3(_pos.x, 0, _pos.z);
-            this.#endTime = ƒ.Time.game.get() + this.duration * 1000;
+            this.#endTimeDamage = ƒ.Time.game.get() + this.durationDamage * 1000;
+            this.#endTimeVisual = ƒ.Time.game.get() + this.durationVisual * 1000;
         }
         initVisuals = async () => {
             let aoeCircle = ƒ.Project.getResourcesByName("AOECircle")[0];
@@ -472,7 +475,16 @@ var Script;
                     pair.amtTicks++;
                 }
             }
-            if (this.#endTime < currentTime) {
+            if (this.#endTimeDamage < currentTime) {
+                this.#circle.activate(false);
+                this.#rb.activate(false);
+            }
+            if (this.#endTimeVisual < currentTime) {
+                for (let child of this.node.getChildren()) {
+                    child.activate(false);
+                }
+            }
+            if (this.#endTimeDamage < currentTime && this.#endTimeVisual < currentTime) {
                 this.node.getParent()?.removeChild(this.node);
                 ƒ.Loop.removeEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
             }
@@ -528,7 +540,8 @@ var Script;
                 attachedToBrawler: this.attachedToBrawler,
                 radius: this.radius,
                 destructive: this.destructive,
-                duration: this.duration,
+                durationDamage: this.durationDamage,
+                durationVisual: this.durationVisual,
                 areaVisible: this.areaVisible,
             };
             return serialization;
@@ -550,8 +563,10 @@ var Script;
                 this.radius = _serialization.radius;
             if (_serialization.destructive !== undefined)
                 this.destructive = _serialization.destructive;
-            if (_serialization.duration !== undefined)
-                this.duration = _serialization.duration;
+            if (_serialization.durationDamage !== undefined)
+                this.durationDamage = _serialization.durationDamage;
+            if (_serialization.durationVisual !== undefined)
+                this.durationVisual = _serialization.durationVisual;
             if (_serialization.areaVisible !== undefined)
                 this.areaVisible = _serialization.areaVisible;
             return this;

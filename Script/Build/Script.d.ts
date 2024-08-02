@@ -96,7 +96,8 @@ declare namespace Script {
         attachedToBrawler: boolean;
         radius: number;
         destructive: boolean;
-        duration: number;
+        durationDamage: number;
+        durationVisual: number;
         areaVisible: boolean;
         constructor();
         private init;
