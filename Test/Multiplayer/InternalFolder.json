@@ -1,0 +1,24 @@
+{
+  "Fudge.ResourceFolder": {
+    "name": "Resources",
+    "entries": [
+      {
+        "idResource": "Graph|2024-08-02T11:37:13.494Z|58260"
+      },
+      {
+        "idResource": "Graph|2024-08-02T11:40:13.958Z|52449"
+      },
+      {
+        "name": "Stuff",
+        "entries": [
+          {
+            "idResource": "MeshCube|2024-08-02T11:38:20.024Z|52858"
+          },
+          {
+            "idResource": "Material|2024-08-02T11:38:39.148Z|55915"
+          }
+        ]
+      }
+    ]
+  }
+}
