@@ -16918,12 +16918,10 @@
               },
               "speed": 2,
               "animationIdleName": "CowgirlIdle",
-              "animationWalkName": "CowgirlWalk"
+              "animationWalkName": "WalkCycleTest"
             }
           }
         ],
-        "CowboySpecialAttack": [],
-        "CowboyMainAttack": [],
         "ComponentAOEAttack": [
           {
             "Script.ComponentAOEAttack": {
@@ -16988,7 +16986,7 @@
                   "ƒ.ComponentTransform": {
                     "local": {
                       "translation": "[0, 0, 0]",
-                      "rotation": "[0, 0, 0]",
+                      "rotation": "[0, 180, 0]",
                       "scaling": "[1, 1, 1]"
                     },
                     "Component": {
@@ -17002,7 +17000,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-07-17T14:53:53.041Z|79792"
+                  "idSource": "GraphGLTF|2024-08-05T14:21:04.655Z|57420"
                 }
               }
             ]
@@ -18988,6 +18986,47 @@
       "children": [],
       "idResource": "Graph|2024-08-02T14:22:27.437Z|92151",
       "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-08-05T14:21:04.655Z|57420": {
+    "ƒ.GraphGLTF": {
+      "name": "RigTestScene",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-08-05T14:21:04.655Z|03417",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-08-05T14:21:04.655Z|57420",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\ScoprionRigTest.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-05T14:21:04.655Z|03417": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-05T14:21:04.655Z|03417",
+      "name": "WalkCycleTest",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\ScoprionRigTest.glb"
     }
   }
 }
