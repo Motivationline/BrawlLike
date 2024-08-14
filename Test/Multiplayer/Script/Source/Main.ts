@@ -10,7 +10,7 @@ namespace Script {
 
 
   const client = new ƒNet.FudgeClient();
-  client.connectToServer("ws://192.52.33.95:8080");
+  client.connectToServer("wss://motivationline.plagiatus.net");
   client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, <EventListener><unknown>receiveMessage);
   const playerName = prompt("PlayerName", "Player" + Math.floor(Math.random() * 10000 + 1));
   let interval: number;
