@@ -3,82 +3,112 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     var ƒNet = FudgeNet;
+    let MessageCommand;
+    (function (MessageCommand) {
+        MessageCommand[MessageCommand["SYNC"] = 0] = "SYNC";
+        MessageCommand[MessageCommand["DESTROY"] = 1] = "DESTROY";
+        MessageCommand[MessageCommand["CREATE"] = 2] = "CREATE";
+        MessageCommand[MessageCommand["JOIN"] = 3] = "JOIN";
+    })(MessageCommand || (MessageCommand = {}));
     class MultiplayerManager {
         static { this.Instance = new MultiplayerManager(); }
-        static #ownElementsToSync = [];
-        static #otherElementsToSync = [];
+        static #ownElementsToSync = new Map();
+        static #otherElementsToSync = new Map();
         constructor() {
             if (MultiplayerManager.Instance)
                 return MultiplayerManager.Instance;
         }
         static register(_syncComp) {
-            if (!_syncComp.ownerId) {
-                _syncComp.ownerId = this.client.id;
-                if (this.#ownElementsToSync.includes(_syncComp))
-                    return;
-                this.#ownElementsToSync.push(_syncComp);
+            if (_syncComp.ownerId === this.client.id) {
+                this.#ownElementsToSync.set(_syncComp.id, _syncComp);
+                this.broadcastCreation(_syncComp.creationData());
             }
             else if (_syncComp.ownerId !== this.client.id) {
-                if (this.#otherElementsToSync.includes(_syncComp))
-                    return;
-                this.#otherElementsToSync.push(_syncComp);
+                this.#otherElementsToSync.set(_syncComp.id, _syncComp);
             }
         }
         static installListeners() {
             this.client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, this.messageHandler.bind(this));
             setInterval(() => {
                 let updateData = this.getUpdate();
-                this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: "sync", data: updateData } });
-            }, 100);
+                this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.SYNC, data: updateData } });
+            }, 1000);
+        }
+        static broadcastCreation(_data) {
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.CREATE, data: _data } });
         }
         static getUpdate() {
             let data = {};
-            for (let element of this.#ownElementsToSync) {
+            for (let element of this.#ownElementsToSync.values()) {
                 data[element.id] = element.getInfo();
             }
             return data;
         }
         static async applyUpdate(_data) {
             // console.log("apply Update", { _data })
-            for (let element of this.#otherElementsToSync) {
+            for (let element of this.#otherElementsToSync.values()) {
                 let data = _data[element.id];
                 if (data) {
                     element.putInfo(data);
                 }
                 delete _data[element.id];
             }
-            let keys = Object.keys(_data);
-            for (let key of keys) {
-                await this.createPlayer(key);
-            }
-            if (keys.length > 0) {
-                this.applyUpdate(_data);
-            }
         }
-        static async createPlayer(_id) {
-            let player = ƒ.Project.getResourcesByName("Player")[0];
-            let instance = await ƒ.Project.createGraphInstance(player);
+        static async createObject(_data) {
+            let graph = ƒ.Project.getResourcesByName(_data.resourceName)[0];
+            let instance = await ƒ.Project.createGraphInstance(graph);
             Script.viewport.getBranch().addChild(instance);
-            instance.mtxLocal.translation = new ƒ.Vector3();
-            instance.addComponent(new Script.PlayerScript());
-            instance.addComponent(new Script.ServerSync(`_${_id.split("_")[1]}`, _id));
+            if (_data.resourceName === "Player") {
+                let playerScript = new Script.PlayerScript(false);
+                instance.addComponent(playerScript);
+            }
+            let ssc = instance.getAllComponents().find(c => c instanceof Script.ServerSync);
+            ssc.setupId(_data.id);
+        }
+        static async destroyObject(_data) {
+            if (!this.#otherElementsToSync.has(_data.id))
+                return;
+            this.#otherElementsToSync.delete(_data.id);
+            let element = this.#otherElementsToSync.get(_data.id);
+            element.node.getParent()?.removeChild(element.node);
+        }
+        static updateOne(_data, _id) {
+            let updateData = {};
+            updateData[_id] = _data;
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.SYNC, data: updateData } });
+        }
+        static broadcastJoin() {
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.JOIN } });
         }
         static messageHandler(_event) {
             if (_event instanceof MessageEvent) {
                 let message = JSON.parse(_event.data);
                 if (message.command === ƒNet.COMMAND.UNDEFINED) {
-                    if (message.content.command === "sync") {
-                        if (message.idSource !== this.client.id) {
-                            this.applyUpdate(message.content.data);
+                    if (message.idSource == this.client.id)
+                        return;
+                    if (message.content.command === MessageCommand.SYNC) {
+                        this.applyUpdate(message.content.data);
+                    }
+                    if (message.content.command === MessageCommand.CREATE) {
+                        this.createObject(message.content.data);
+                    }
+                    if (message.content.command === MessageCommand.DESTROY) {
+                        this.destroyObject(message.content.data);
+                    }
+                    if (message.content.command === MessageCommand.JOIN) {
+                        for (let element of this.#ownElementsToSync.values()) {
+                            let creationData = element.creationData();
+                            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, idTarget: message.idSource, content: { command: MessageCommand.CREATE, data: creationData } });
                         }
                     }
                 }
             }
             else {
-                if (_event.type === "sync") {
-                    this.applyUpdate(_event.detail.data);
-                }
+                console.warn("unexpected event", _event);
             }
+        }
+        static getOwnerIdFromId(_id) {
+            return _id.split("+")[0];
         }
     }
     Script.MultiplayerManager = MultiplayerManager;
@@ -147,6 +177,7 @@ var Script;
             return;
         console.log("Enter", _room);
         client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: _room } });
+        client.idRoom = _room;
         loadGame();
     }
     function createRoom() {
@@ -177,15 +208,60 @@ var Script;
         graph.addChild(instance);
         instance.mtxLocal.translation = new ƒ.Vector3();
         Script.viewport.camera = instance.getComponent(ƒ.ComponentCamera);
-        instance.addComponent(new Script.PlayerScript(true));
-        instance.addComponent(new Script.ServerSync());
+        let playerScript = new Script.PlayerScript(true);
+        instance.addComponent(playerScript);
+        playerScript.setupId();
+        Script.MultiplayerManager.broadcastJoin();
     }
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    class ServerSync extends ƒ.Component {
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+        }
+        setupId(_id) {
+            this.id = _id;
+            if (!_id) {
+                this.id = Script.MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
+            }
+            this.ownerId = Script.MultiplayerManager.getOwnerIdFromId(this.id);
+            Script.MultiplayerManager.register(this);
+        }
+        syncSelf() {
+            Script.MultiplayerManager.updateOne(this.getInfo(), this.id);
+        }
+        getInfo() {
+            let info = {};
+            info.position = this.node.mtxLocal.translation;
+            return info;
+        }
+        putInfo(_data) {
+            if (this.ownerId === Script.MultiplayerManager.client.id)
+                return;
+            if (!_data)
+                return;
+            this.applyData(_data);
+        }
+        applyData(data) {
+            let rb = this.node.getComponent(ƒ.ComponentRigidbody);
+            rb.activate(false);
+            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
+            rb.activate(true);
+        }
+    }
+    Script.ServerSync = ServerSync;
+})(Script || (Script = {}));
+/// <reference path="ServerSync.ts" />
+var Script;
+/// <reference path="ServerSync.ts" />
+(function (Script) {
+    var ƒ = FudgeCore;
     ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
-    class PlayerScript extends ƒ.ComponentScript {
+    class PlayerScript extends Script.ServerSync {
         // Register the script as component for use in the editor via drag&drop
         #rb;
         #currentDirection;
@@ -244,49 +320,31 @@ var Script;
             if (mgtSqrt > 1) {
                 direction.normalize(1);
             }
-            if (!this.#currentDirection.equals(direction))
+            if (!this.#currentDirection.equals(direction)) {
                 this.#currentDirection.copy(direction);
+                this.syncSelf();
+            }
         }
         move() {
             this.#rb.setVelocity(this.#currentDirection);
         }
-    }
-    Script.PlayerScript = PlayerScript;
-})(Script || (Script = {}));
-var Script;
-(function (Script) {
-    var ƒ = FudgeCore;
-    class ServerSync extends ƒ.Component {
-        constructor(_ownerId, _id) {
-            super();
-            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
-                return;
-            this.ownerId = _ownerId;
-            this.id = _id;
-            Script.MultiplayerManager.register(this);
-            if (!this.id) {
-                this.id = this.ownerId + "_" + ƒ.Time.game.get() + "_" + Math.floor(Math.random() * 10000 + 1);
-            }
-        }
         getInfo() {
-            let info = {};
-            info.position = this.node.mtxLocal.translation;
+            let info = super.getInfo();
+            info.dir = this.#currentDirection;
             return info;
         }
         putInfo(_data) {
-            if (this.ownerId === Script.MultiplayerManager.client.id)
-                return;
-            if (!_data)
-                return;
-            this.applyData(_data);
+            super.putInfo(_data);
+            this.#currentDirection = _data.dir;
         }
-        applyData(data) {
-            let rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            rb.activate(false);
-            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
-            rb.activate(true);
+        creationData() {
+            return {
+                id: this.id,
+                initData: this.getInfo(),
+                resourceName: "Player",
+            };
         }
     }
-    Script.ServerSync = ServerSync;
+    Script.PlayerScript = PlayerScript;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

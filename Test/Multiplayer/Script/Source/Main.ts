@@ -73,6 +73,7 @@ namespace Script {
     if (!rooms.includes(_room)) return;
     console.log("Enter", _room);
     client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: _room } });
+    client.idRoom = _room;
 
     loadGame();
   }
@@ -106,8 +107,11 @@ namespace Script {
     graph.addChild(instance);
     instance.mtxLocal.translation = new ƒ.Vector3();
     viewport.camera = instance.getComponent(ƒ.ComponentCamera);
-    instance.addComponent(new PlayerScript(true));
-    instance.addComponent(new ServerSync());
+    let playerScript = new PlayerScript(true)
+    instance.addComponent(playerScript);
+    playerScript.setupId();
+
+    MultiplayerManager.broadcastJoin();
   }
 }
 

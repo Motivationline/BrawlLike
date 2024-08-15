@@ -1,8 +1,10 @@
+/// <reference path="ServerSync.ts" />
+
 namespace Script {
   import ƒ = FudgeCore;
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
 
-  export class PlayerScript extends ƒ.ComponentScript {
+  export class PlayerScript extends ServerSync {
     // Register the script as component for use in the editor via drag&drop
     #rb: ƒ.ComponentRigidbody;
     #currentDirection: ƒ.Vector3 = new ƒ.Vector3();
@@ -68,12 +70,33 @@ namespace Script {
       if (mgtSqrt > 1) {
         direction.normalize(1);
       }
-      if (!this.#currentDirection.equals(direction))
+      if (!this.#currentDirection.equals(direction)){
         this.#currentDirection.copy(direction);
+        this.syncSelf();
+      }
     }
 
     move() {
       this.#rb.setVelocity(this.#currentDirection);
+    }
+
+    getInfo() {
+      let info = super.getInfo();
+      info.dir = this.#currentDirection;
+      return info;
+    }
+
+    putInfo(_data: any): void {
+      super.putInfo(_data);
+      this.#currentDirection = _data.dir;
+    }
+
+    creationData(): CreationData {
+      return {
+        id: this.id,
+        initData: this.getInfo(),
+        resourceName: "Player",
+      }
     }
   }
 }

@@ -1,21 +1,28 @@
 namespace Script {
     import ƒ = FudgeCore;
-    export class ServerSync extends ƒ.Component {
+    export abstract class ServerSync extends ƒ.Component {
         id: string;
         ownerId: string;
-        constructor(_ownerId?: string, _id?: string) {
+        constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
-            this.ownerId = _ownerId;
-            this.id = _id;
-            MultiplayerManager.register(this);
-            if (!this.id) {
-                this.id = this.ownerId + "_" + ƒ.Time.game.get() + "_" + Math.floor(Math.random() * 10000 + 1);
-            }
         }
 
-        getInfo() {
+        setupId(_id?: string) {
+            this.id = _id;
+            if(!_id){
+                this.id = MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
+            }
+            this.ownerId = MultiplayerManager.getOwnerIdFromId(this.id);
+            MultiplayerManager.register(this);
+        }
+
+        syncSelf() {
+            MultiplayerManager.updateOne(this.getInfo(), this.id);
+        }
+
+        getInfo(): any {
             let info: any = {};
             info.position = this.node.mtxLocal.translation;
             return info;
@@ -31,6 +38,7 @@ namespace Script {
             this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
             rb.activate(true);
         }
+        abstract creationData(): CreationData;
 
     }
 }
