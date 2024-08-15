@@ -19028,5 +19028,223 @@
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\ScoprionRigTest.glb"
     }
+  },
+  "Graph|2024-08-15T12:25:09.794Z|42388": {
+    "ƒ.Graph": {
+      "name": "BrawlerSniper",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 0,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "CAPSULE",
+              "isTrigger": false,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0.5, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.6000000000000001, 0.6000000000000001, 0.6000000000000001]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentBrawler": [
+          {
+            "Script.ComponentBrawler": {
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 2,
+              "animationIdleName": "SniiperIdle",
+              "animationWalkName": "SniperWAlk",
+              "animationAttackName": "SniperShoot",
+              "animationSpecialName": "SniperRoll"
+            }
+          }
+        ],
+        "CowboyMainAttack": [
+          {
+            "Script.CowboyMainAttack": {
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
+                },
+                "previewType": 0,
+                "previewWidth": 0.20000000000000015,
+                "range": 70,
+                "attackType": 0,
+                "maxCharges": 2,
+                "damage": 100,
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 0.5,
+                "energyNeededPerCharge": 1,
+                "castingTime": 0.1,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0.7000000000000001,
+                "recoil": 0.1,
+                "invulerableTime": 0
+              },
+              "speed": 12,
+              "range": 70,
+              "rotateInDirection": true,
+              "attachedToBrawler": false,
+              "projectile": "DefaultProjectile",
+              "gravity": false,
+              "destructive": true
+            }
+          }
+        ],
+        "CowboySpecialAttack": [
+          {
+            "Script.CowboySpecialAttack": {
+              "Component": {
+                "active": true
+              },
+              "previewType": 0,
+              "previewWidth": 1,
+              "range": 0,
+              "attackType": 1,
+              "maxCharges": 3,
+              "damage": 0,
+              "minDelayBetweenAttacks": 0.1,
+              "energyGenerationPerSecond": 0.7999999999999996,
+              "energyNeededPerCharge": 1,
+              "castingTime": 0,
+              "lockBrawlerForAnimationTime": true,
+              "lockTime": 0,
+              "recoil": -5,
+              "invulerableTime": 1
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-08-15T12:28:18.163Z|63222"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-08-15T12:25:09.794Z|42388",
+      "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-08-15T12:28:18.163Z|63222": {
+    "ƒ.GraphGLTF": {
+      "name": "InsektScene",
+      "active": true,
+      "components": {
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-08-15T12:28:18.178Z|82544",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": false
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-08-15T12:28:18.163Z|63222",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\sniper.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-15T12:28:18.178Z|82544": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-15T12:28:18.178Z|82544",
+      "name": "SniiperIdle",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\sniper.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-15T12:28:18.199Z|06917": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-15T12:28:18.199Z|06917",
+      "name": "SniperRoll",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\sniper.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-15T12:28:18.213Z|38911": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-15T12:28:18.213Z|38911",
+      "name": "SniperShoot",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\sniper.glb"
+    }
+  },
+  "AnimationGLTF|2024-08-15T12:28:18.229Z|35435": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-08-15T12:28:18.229Z|35435",
+      "name": "SniperWAlk",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\sniper.glb"
+    }
   }
 }

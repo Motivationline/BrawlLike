@@ -23,38 +23,43 @@
 
     <!--Load Autoview script-->
     <!-- <script type="text/javascript" src="Autoview.js"></script> -->
+  </head>
 
-</head>
-
-<body>
+  <body>
     <!--Dialog shown at startup only-->
     <dialog>
-        <p>FUDGE Autoview</p>
-        <h1>Title (will be replaced by Autoview)</h1>
-        <p>click to start</p>
+      <p>FUDGE Autoview</p>
+      <h1>Title (will be replaced by Autoview)</h1>
+      <p>click to start</p>
     </dialog>
     <!--Canvas for FUDGE to render to-->
-    <canvas class="fullscreen">
-    </canvas>
+    <canvas class="fullscreen"> </canvas>
     <div class="overlay" id="selection-overlay">
-        <!-- <button data-brawler="Brawler">Default</button> -->
+      <!-- <button data-brawler="Brawler">Default</button> -->
+      <div id="brawler">
         <button id="b1" data-brawler="BrawlerCowboy">
-            <img src="UI/BrawlerPicking/Cowgirl.png" />
-            <div>Cowgirl</div>
+          <img src="UI/BrawlerPicking/Cowgirl.png" />
+          <div>Melee</div>
         </button>
         <button id="b2" data-brawler="BrawlerFrogger">
-            <img src="UI/BrawlerPicking/Frog.png" />
-            <div>Frogger</div>
+          <img src="UI/BrawlerPicking/Frog.png" />
+          <div>Frogger</div>
         </button>
         <button id="b3" data-brawler="BrawlerBugsy">
-            <img src="UI/BrawlerPicking/Bugsy.png" />
-            <div>Bugsy</div>
+          <img src="UI/BrawlerPicking/Bugsy.png" />
+          <div>Bugsy</div>
         </button>
+
+        <button id="b4" data-brawler="BrawlerSniper">
+          <img src="UI/BrawlerPicking/Sniper.png" />
+          <div>Sniper</div>
+        </button>
+      </div>
     </div>
 
-    
     <div class="overlay" id="start-overlay">
-        <button id="start">Start</button>
+      <button id="start">Start</button>
     </div>
+  
 </body>
 </html>

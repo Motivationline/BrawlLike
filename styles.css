@@ -25,32 +25,59 @@ div.overlay {
   background-color: aliceblue;
 }
 
-button{
-  display: flexbox;
-  min-height: 50%;
-  width: auto;
+#brawler{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  width: 100%;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: rgb(128, 186, 187)
+}
+#brawler button{
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 48px;
   color: rgb(39, 39, 39);
   font-family:"Poppins";
   cursor: pointer;
- 
+  transition: transform 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.597);
+  border: 10px solid rgb(39, 39, 39);
+  border-radius: 10px;
 }
 
+#brawler button:hover{
+  transform: scale(1.05);
+}
+
+#brawler button img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
 
 #start{
   background-color: rgb(176, 237, 176);
   width: 100%;
   height: 100%;
+  font-size: 48px;
+  font-family:"Poppins";
+  cursor: pointer;
 }
 
-#b1 {
-  background-color: rgb(225, 210, 97);
+@media screen and (max-width: 768px) {
+  #brawler {
+      grid-template-columns: repeat(2, 1fr); /* Zwei Spalten auf kleineren Bildschirmen */
+  }
 }
 
-
-#b2 {
-  background-color: rgb(97, 212, 225);
-}
-#b1:hover , #b2:hover, #start:hover{
-  background-color: rgb(238, 238, 238);
+@media screen and (max-width: 480px) {
+  #brawler {
+      grid-template-columns: 1fr; /* Eine Spalte auf sehr kleinen Bildschirmen */
+  }
 }

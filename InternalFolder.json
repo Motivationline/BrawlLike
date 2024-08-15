@@ -120,6 +120,9 @@
               },
               {
                 "idResource": "Graph|2024-08-02T09:47:35.228Z|38076"
+              },
+              {
+                "idResource": "Graph|2024-08-15T12:25:09.794Z|42388"
               }
             ]
           },
@@ -196,6 +199,26 @@
               },
               {
                 "idResource": "AnimationGLTF|2024-08-05T14:21:04.655Z|03417"
+              }
+            ]
+          },
+          {
+            "name": "Sniper",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-08-15T12:28:18.163Z|63222"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.178Z|82544"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.199Z|06917"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.213Z|38911"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.229Z|35435"
               }
             ]
           }
