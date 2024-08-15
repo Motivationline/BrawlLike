@@ -14,6 +14,7 @@ var Script;
         static { this.Instance = new MultiplayerManager(); }
         static #ownElementsToSync = new Map();
         static #otherElementsToSync = new Map();
+        static #otherClients = {};
         constructor() {
             if (MultiplayerManager.Instance)
                 return MultiplayerManager.Instance;
@@ -64,13 +65,14 @@ var Script;
             }
             let ssc = instance.getAllComponents().find(c => c instanceof Script.ServerSync);
             ssc.setupId(_data.id);
+            ssc.applyData(_data.initData);
         }
         static async destroyObject(_data) {
             if (!this.#otherElementsToSync.has(_data.id))
                 return;
-            this.#otherElementsToSync.delete(_data.id);
             let element = this.#otherElementsToSync.get(_data.id);
             element.node.getParent()?.removeChild(element.node);
+            this.#otherElementsToSync.delete(_data.id);
         }
         static updateOne(_data, _id) {
             let updateData = {};
@@ -106,6 +108,18 @@ var Script;
             else {
                 console.warn("unexpected event", _event);
             }
+            for (let id in this.client.clientsInfoFromServer) {
+                delete this.#otherClients[id];
+            }
+            for (let id in this.#otherClients) {
+                for (let entityId of this.#otherElementsToSync.keys()) {
+                    let ownerId = this.getOwnerIdFromId(entityId);
+                    if (ownerId === id) {
+                        this.destroyObject({ id: entityId });
+                    }
+                }
+            }
+            this.#otherClients = { ...this.client.clientsInfoFromServer };
         }
         static getOwnerIdFromId(_id) {
             return _id.split("+")[0];
