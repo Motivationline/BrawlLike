@@ -19246,5 +19246,207 @@
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\sniper.glb"
     }
+  },
+  "ParticleSystem|2024-07-31T13:27:19.789Z|52883": {
+    "ƒ.ParticleSystem": {
+      "idResource": "ParticleSystem|2024-07-31T13:27:19.789Z|52883",
+      "name": "Sparks",
+      "data": {
+        "variables": [
+          {
+            "code": "5"
+          },
+          {
+            "code": "1"
+          },
+          {
+            "code": "randomRange(4, 20)"
+          },
+          {
+            "code": "systemTime / 1000"
+          },
+          {
+            "code": "systemDuration / 1000"
+          },
+          {
+            "code": "time / duration"
+          },
+          {
+            "code": "pow(2.71, -drag * time)"
+          },
+          {
+            "code": "(1 - timeNormalized) * pow(2.718, -decayRateSize * timeNormalized)"
+          },
+          {
+            "code": "max(1 + decayNormalized * 2.5, 1)"
+          },
+          {
+            "code": "randomRange(0.1, 0.3) * decayNormalized"
+          }
+        ],
+        "variableNames": [
+          "drag",
+          "decayRateSize",
+          "speed",
+          "time",
+          "duration",
+          "timeNormalized",
+          "decay",
+          "decayNormalized",
+          "stretch",
+          "size"
+        ],
+        "mtxLocal": [
+          {
+            "transformation": "rotate",
+            "parameters": [
+              {
+                "code": "randomRange(0, 360)"
+              },
+              {
+                "code": "randomRange(0, 360)"
+              }
+            ]
+          },
+          {
+            "transformation": "translate",
+            "parameters": [
+              {
+                "code": "0"
+              },
+              {
+                "code": "0"
+              },
+              {
+                "code": "(speed / drag) * (1 - decay)"
+              }
+            ]
+          },
+          {
+            "transformation": "scale",
+            "parameters": [
+              {
+                "value": 1
+              },
+              {
+                "value": 1
+              },
+              {
+                "code": "stretch"
+              }
+            ]
+          },
+          {
+            "transformation": "scale",
+            "parameters": [
+              {
+                "code": "size"
+              },
+              {
+                "code": "size"
+              },
+              {
+                "code": "size"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "MeshSphere|2024-08-16T09:34:16.273Z|73316": {
+    "ƒ.MeshSphere": {
+      "idResource": "MeshSphere|2024-08-16T09:34:16.273Z|73316",
+      "name": "MeshSphere",
+      "type": "MeshSphere",
+      "longitudes": 8,
+      "latitudes": 8
+    }
+  },
+  "Material|2024-08-16T09:34:24.150Z|91070": {
+    "ƒ.Material": {
+      "name": "ShaderLit",
+      "idResource": "Material|2024-08-16T09:34:24.150Z|91070",
+      "shader": "ShaderLit",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[1, 1, 1, 1]"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "Graph|2024-08-16T09:33:20.601Z|27131": {
+    "ƒ.Graph": {
+      "name": "Sparks",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentMesh": [
+          {
+            "ƒ.ComponentMesh": {
+              "idMesh": "MeshSphere|2024-08-16T09:34:16.273Z|73316",
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentMaterial": [
+          {
+            "ƒ.ComponentMaterial": {
+              "sortForAlpha": true,
+              "clrPrimary": "[1, 0.6431372549019608, 0.1411764705882353, 1]",
+              "clrSecondary": "[1, 1, 1, 1]",
+              "pivot": {
+                "translation": "[0, 0]",
+                "rotation": 0,
+                "scaling": "[1, 1]"
+              },
+              "Component": {
+                "active": true
+              },
+              "idMaterial": "Material|2024-08-16T09:34:24.150Z|91070"
+            }
+          }
+        ],
+        "ComponentParticleSystem": [
+          {
+            "ƒ.ComponentParticleSystem": {
+              "Component": {
+                "active": true
+              },
+              "idParticleSystem": "ParticleSystem|2024-07-31T13:27:19.789Z|52883",
+              "depthMask": false,
+              "blendMode": 2,
+              "playMode": 0,
+              "duration": 500,
+              "size": 25
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-08-16T09:33:20.601Z|27131",
+      "type": "Graph"
+    }
   }
 }
