@@ -19107,7 +19107,7 @@
                 "energyGenerationPerSecond": 0.5,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0.1,
-                "lockBrawlerForAnimationTime": false,
+                "lockBrawlerForAnimationTime": true,
                 "lockTime": 0.7000000000000001,
                 "recoil": 0.1,
                 "invulerableTime": 0
