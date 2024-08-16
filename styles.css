@@ -1,23 +1,23 @@
-html, body {
+html,
+body {
   padding: 0px;
   margin: 0px;
   width: 100%;
   height: 100%;
- overflow: hidden;
+  overflow: hidden;
 }
 
-dialog { 
-  text-align: center; 
+dialog {
+  text-align: center;
 }
 
-canvas.fullscreen { 
-  width: 100vw; 
-  height: 100vh; 
+canvas.fullscreen {
+  width: 100vw;
+  height: 100vh;
 }
 
 div.overlay {
   position: absolute;
-  display: flex;
   top: 0;
   left: 0;
   right: 0;
@@ -25,16 +25,21 @@ div.overlay {
   background-color: aliceblue;
 }
 
-#brawler{
+div.overlay.hidden {
+  display: none;
+}
+
+#brawler {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   width: 100%;
   gap: 10px;
   box-sizing: border-box;
   padding: 10px;
   background-color: rgb(128, 186, 187)
 }
-#brawler button{
+
+#brawler button {
   height: 60vh;
   display: flex;
   flex-direction: column;
@@ -42,7 +47,7 @@ div.overlay {
   justify-content: center;
   font-size: 48px;
   color: rgb(39, 39, 39);
-  font-family:"Poppins";
+  font-family: "Poppins";
   cursor: pointer;
   transition: transform 0.3s ease;
   background-color: rgba(255, 255, 255, 0.597);
@@ -50,7 +55,7 @@ div.overlay {
   border-radius: 10px;
 }
 
-#brawler button:hover{
+#brawler button:hover {
   transform: scale(1.05);
 }
 
@@ -61,23 +66,47 @@ div.overlay {
   margin-bottom: 10px;
 }
 
-#start{
+#start {
   background-color: rgb(176, 237, 176);
   width: 100%;
   height: 100%;
   font-size: 48px;
-  font-family:"Poppins";
+  font-family: "Poppins";
   cursor: pointer;
+}
+
+li.room {
+  cursor: pointer;
+}
+li.room.selected {
+  background-color: aquamarine;
+}
+
+#permanent-overlay {
+  background-color: transparent;
+  pointer-events: none;
+}
+
+#permanent-overlay div {
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  background-color: white;
+}
+#client-id {
+  color: gray;
 }
 
 @media screen and (max-width: 768px) {
   #brawler {
-      grid-template-columns: repeat(2, 1fr); /* Zwei Spalten auf kleineren Bildschirmen */
+    grid-template-columns: repeat(2, 1fr);
+    /* Zwei Spalten auf kleineren Bildschirmen */
   }
 }
 
 @media screen and (max-width: 480px) {
   #brawler {
-      grid-template-columns: 1fr; /* Eine Spalte auf sehr kleinen Bildschirmen */
+    grid-template-columns: 1fr;
+    /* Eine Spalte auf sehr kleinen Bildschirmen */
   }
 }

@@ -45,9 +45,19 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    enum MENU_TYPE {
+        NONE = 0,
+        START = 1,
+        LOADING = 2,
+        LOBBY = 3,
+        GAME_LOBBY = 4,
+        SELECTION = 5
+    }
     class MenuManager {
+        overlays: Map<MENU_TYPE, HTMLElement>;
         constructor();
         resourcesLoaded: () => void;
+        showOverlay(_type: MENU_TYPE): void;
     }
 }
 declare namespace Script {
@@ -79,10 +89,61 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    interface NetworkData {
+        [id: string]: any;
+    }
+    interface CreationData {
+        id: string;
+        resourceName: string;
+        initData: any;
+    }
+    interface DestructionData {
+        id: string;
+    }
+    class MultiplayerManager {
+        #private;
+        static Instance: MultiplayerManager;
+        static client: FudgeNet.FudgeClient;
+        constructor();
+        static register(_syncComp: ServerSync): void;
+        static installListeners(): void;
+        static broadcastCreation(_data: CreationData): void;
+        private static getUpdate;
+        private static applyUpdate;
+        private static createObject;
+        private static destroyObject;
+        static updateOne(_data: any, _id: string): void;
+        static broadcastJoin(): void;
+        private static messageHandler;
+        static getOwnerIdFromId(_id: string): string;
+    }
+}
+declare namespace Script {
+    class LobbyManager {
+        static client: FudgeNet.FudgeClient;
+        static rooms: {
+            [roomId: string]: number;
+        };
+        static refreshInterval: number;
+        static selectedRoom: string;
+        static installListeners(): void;
+        static refreshRooms: () => void;
+        static messageHandler(_event: CustomEvent | MessageEvent): void;
+        static updateVisibleRooms(): void;
+        static hostRoom: () => void;
+        static selectRoom: (_event: MouseEvent) => void;
+        static joinRoom: () => void;
+        static leaveRoom: () => void;
+        static updateRoom: () => void;
+    }
+}
+declare namespace Script {
     import ƒ = FudgeCore;
+    import ƒNet = FudgeNet;
     let viewport: ƒ.Viewport;
     const menuManager: MenuManager;
     const inputManager: InputManager;
+    const client: ƒNet.FudgeClient;
     function startViewport(): Promise<void>;
 }
 declare namespace Script {
@@ -277,6 +338,20 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class IgnoredByProjectiles extends ƒ.Component {
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    abstract class ServerSync extends ƒ.Component {
+        id: string;
+        ownerId: string;
+        constructor();
+        setupId(_id?: string): void;
+        syncSelf(): void;
+        getInfo(): any;
+        putInfo(_data: any): void;
+        applyData(data: any): void;
+        abstract creationData(): CreationData;
     }
 }
 declare namespace Script {

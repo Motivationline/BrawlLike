@@ -180,27 +180,67 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    let MENU_TYPE;
+    (function (MENU_TYPE) {
+        MENU_TYPE[MENU_TYPE["NONE"] = 0] = "NONE";
+        MENU_TYPE[MENU_TYPE["START"] = 1] = "START";
+        MENU_TYPE[MENU_TYPE["LOADING"] = 2] = "LOADING";
+        MENU_TYPE[MENU_TYPE["LOBBY"] = 3] = "LOBBY";
+        MENU_TYPE[MENU_TYPE["GAME_LOBBY"] = 4] = "GAME_LOBBY";
+        MENU_TYPE[MENU_TYPE["SELECTION"] = 5] = "SELECTION";
+    })(MENU_TYPE = Script.MENU_TYPE || (Script.MENU_TYPE = {}));
     class MenuManager {
+        overlays = new Map();
         constructor() {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             ƒ.Project.addEventListener("resourcesLoaded" /* ƒ.EVENT.RESOURCES_LOADED */, this.resourcesLoaded);
             document.addEventListener("DOMContentLoaded", () => {
-                document.getElementById("start").addEventListener("click", Script.startViewport);
+                this.overlays.set(MENU_TYPE.START, document.getElementById("start-overlay"));
+                this.overlays.set(MENU_TYPE.LOADING, document.getElementById("loading-overlay"));
+                this.overlays.set(MENU_TYPE.LOBBY, document.getElementById("lobby-overlay"));
+                this.overlays.set(MENU_TYPE.GAME_LOBBY, document.getElementById("game-lobby-overlay"));
+                this.overlays.set(MENU_TYPE.SELECTION, document.getElementById("selection-overlay"));
+                document.getElementById("start").addEventListener("click", () => {
+                    this.showOverlay(MENU_TYPE.LOADING);
+                    Script.startViewport();
+                });
                 document.getElementById("selection-overlay").querySelectorAll("button").forEach((button) => {
                     button.addEventListener("click", async () => {
+                        let graph = ƒ.Project.getResourcesByName("TrainingMap")[0];
+                        Script.viewport.setBranch(graph);
                         await Script.EntityManager.Instance.loadBrawler(button.dataset.brawler);
                         ƒ.Loop.start();
                         // ƒ.Time.game.setScale(0.2);
-                        document.getElementById("selection-overlay").style.display = "none";
+                        this.showOverlay(MENU_TYPE.NONE);
                     });
+                });
+                document.getElementById("lobby-host").addEventListener("click", () => {
+                    this.showOverlay(MENU_TYPE.GAME_LOBBY);
+                });
+                document.getElementById("lobby-join").addEventListener("click", () => {
+                    this.showOverlay(MENU_TYPE.GAME_LOBBY);
+                });
+                document.getElementById("game-lobby-cancel").addEventListener("click", () => {
+                    this.showOverlay(MENU_TYPE.LOBBY);
+                });
+                document.getElementById("game-lobby-start").addEventListener("click", () => {
+                    this.showOverlay(MENU_TYPE.SELECTION);
                 });
             });
         }
         resourcesLoaded = () => {
             console.log("resources loaded");
-            document.getElementById("start-overlay").style.display = "none";
+            this.showOverlay(MENU_TYPE.LOBBY);
         };
+        showOverlay(_type) {
+            if (!this.overlays.has(_type) && _type !== MENU_TYPE.NONE)
+                return;
+            this.overlays.forEach(overlay => {
+                overlay.classList.add("hidden");
+            });
+            this.overlays.get(_type)?.classList.remove("hidden");
+        }
     }
     Script.MenuManager = MenuManager;
 })(Script || (Script = {}));
@@ -351,20 +391,270 @@ var Script;
     }
     Script.EntityManager = EntityManager;
 })(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    var ƒNet = FudgeNet;
+    let MessageCommand;
+    (function (MessageCommand) {
+        MessageCommand[MessageCommand["SYNC"] = 0] = "SYNC";
+        MessageCommand[MessageCommand["DESTROY"] = 1] = "DESTROY";
+        MessageCommand[MessageCommand["CREATE"] = 2] = "CREATE";
+        MessageCommand[MessageCommand["JOIN"] = 3] = "JOIN";
+    })(MessageCommand || (MessageCommand = {}));
+    class MultiplayerManager {
+        static Instance = new MultiplayerManager();
+        static client;
+        static #ownElementsToSync = new Map();
+        static #otherElementsToSync = new Map();
+        static #otherClients = {};
+        constructor() {
+            if (MultiplayerManager.Instance)
+                return MultiplayerManager.Instance;
+        }
+        static register(_syncComp) {
+            if (_syncComp.ownerId === this.client.id) {
+                this.#ownElementsToSync.set(_syncComp.id, _syncComp);
+                this.broadcastCreation(_syncComp.creationData());
+            }
+            else if (_syncComp.ownerId !== this.client.id) {
+                this.#otherElementsToSync.set(_syncComp.id, _syncComp);
+            }
+        }
+        static installListeners() {
+            this.client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, this.messageHandler.bind(this));
+            setInterval(() => {
+                let updateData = this.getUpdate();
+                if (Object.keys(updateData).length == 0)
+                    return;
+                this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.SYNC, data: updateData } });
+            }, 1000);
+        }
+        static broadcastCreation(_data) {
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.CREATE, data: _data } });
+        }
+        static getUpdate() {
+            let data = {};
+            for (let element of this.#ownElementsToSync.values()) {
+                data[element.id] = element.getInfo();
+            }
+            return data;
+        }
+        static async applyUpdate(_data) {
+            // console.log("apply Update", { _data })
+            for (let element of this.#otherElementsToSync.values()) {
+                let data = _data[element.id];
+                if (data) {
+                    element.putInfo(data);
+                }
+                delete _data[element.id];
+            }
+        }
+        static async createObject(_data) {
+            let graph = ƒ.Project.getResourcesByName(_data.resourceName)[0];
+            let instance = await ƒ.Project.createGraphInstance(graph);
+            Script.viewport.getBranch().addChild(instance);
+            let ssc = instance.getAllComponents().find(c => c instanceof Script.ServerSync);
+            ssc.setupId(_data.id);
+            ssc.applyData(_data.initData);
+        }
+        static async destroyObject(_data) {
+            if (!this.#otherElementsToSync.has(_data.id))
+                return;
+            let element = this.#otherElementsToSync.get(_data.id);
+            element.node.getParent()?.removeChild(element.node);
+            this.#otherElementsToSync.delete(_data.id);
+        }
+        static updateOne(_data, _id) {
+            let updateData = {};
+            updateData[_id] = _data;
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.SYNC, data: updateData } });
+        }
+        static broadcastJoin() {
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.JOIN } });
+        }
+        static messageHandler(_event) {
+            if (_event instanceof MessageEvent) {
+                let message = JSON.parse(_event.data);
+                if (message.command === ƒNet.COMMAND.UNDEFINED) {
+                    if (message.idSource == this.client.id)
+                        return;
+                    if (message.content.command === MessageCommand.SYNC) {
+                        this.applyUpdate(message.content.data);
+                    }
+                    if (message.content.command === MessageCommand.CREATE) {
+                        this.createObject(message.content.data);
+                    }
+                    if (message.content.command === MessageCommand.DESTROY) {
+                        this.destroyObject(message.content.data);
+                    }
+                    if (message.content.command === MessageCommand.JOIN) {
+                        for (let element of this.#ownElementsToSync.values()) {
+                            let creationData = element.creationData();
+                            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, idTarget: message.idSource, content: { command: MessageCommand.CREATE, data: creationData } });
+                        }
+                    }
+                }
+            }
+            else {
+                console.warn("unexpected event", _event);
+            }
+            for (let id in this.client.clientsInfoFromServer) {
+                delete this.#otherClients[id];
+            }
+            for (let id in this.#otherClients) {
+                for (let entityId of this.#otherElementsToSync.keys()) {
+                    let ownerId = this.getOwnerIdFromId(entityId);
+                    if (ownerId === id) {
+                        this.destroyObject({ id: entityId });
+                    }
+                }
+            }
+            this.#otherClients = { ...this.client.clientsInfoFromServer };
+        }
+        static getOwnerIdFromId(_id) {
+            return _id.split("+")[0];
+        }
+    }
+    Script.MultiplayerManager = MultiplayerManager;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒNet = FudgeNet;
+    class LobbyManager {
+        static client;
+        static rooms;
+        static refreshInterval;
+        static selectedRoom = "";
+        static installListeners() {
+            this.client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, this.messageHandler.bind(this));
+            this.refreshRooms();
+            this.refreshInterval = setInterval(this.refreshRooms, 5000);
+            document.getElementById("lobby-host").addEventListener("click", this.hostRoom);
+            document.getElementById("lobby-join").addEventListener("click", this.joinRoom);
+            document.getElementById("game-lobby-cancel").addEventListener("click", this.leaveRoom);
+        }
+        static refreshRooms = () => {
+            this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_GET_IDS, route: FudgeNet.ROUTE.SERVER });
+        };
+        static messageHandler(_event) {
+            if (_event instanceof MessageEvent) {
+                let message = JSON.parse(_event.data);
+                switch (message.command) {
+                    case ƒNet.COMMAND.ROOM_GET_IDS:
+                        this.rooms = message.content.rooms;
+                        this.updateVisibleRooms();
+                        break;
+                    case ƒNet.COMMAND.ROOM_ENTER:
+                    case ƒNet.COMMAND.SERVER_HEARTBEAT:
+                        this.updateRoom();
+                        break;
+                    // case ƒNet.COMMAND.UNDEFINED:
+                    // case ƒNet.COMMAND.ERROR:
+                    // case ƒNet.COMMAND.ASSIGN_ID:
+                    // case ƒNet.COMMAND.LOGIN_REQUEST:
+                    // case ƒNet.COMMAND.LOGIN_RESPONSE:
+                    // case ƒNet.COMMAND.SERVER_HEARTBEAT:
+                    // case ƒNet.COMMAND.CLIENT_HEARTBEAT:
+                    // case ƒNet.COMMAND.RTC_OFFER:
+                    // case ƒNet.COMMAND.RTC_ANSWER:
+                    // case ƒNet.COMMAND.ICE_CANDIDATE:
+                    // case ƒNet.COMMAND.CREATE_MESH:
+                    // case ƒNet.COMMAND.CONNECT_HOST:
+                    // case ƒNet.COMMAND.CONNECT_PEERS:
+                    // case ƒNet.COMMAND.DISCONNECT_PEERS:
+                    // case ƒNet.COMMAND.ROOM_CREATE:
+                }
+            }
+        }
+        static updateVisibleRooms() {
+            if (this.client.idRoom !== "Lobby")
+                return;
+            document.getElementById("client-id").innerText = this.client.id;
+            document.getElementById("client-name").innerText = this.client.name;
+            let listElement = document.getElementById("open-lobbies");
+            let newChildren = [];
+            if (Object.keys(this.rooms).length <= 1) {
+                let span = document.createElement("span");
+                span.innerText = "No games going on. Why don't you host yourself?";
+                newChildren.push(span);
+            }
+            else {
+                for (let room in this.rooms) {
+                    if (room === "Lobby")
+                        continue;
+                    let li = document.createElement("li");
+                    li.innerText = `${room} - ${this.rooms[room]} Players`;
+                    li.dataset.room = room;
+                    li.addEventListener("click", this.selectRoom);
+                    li.classList.add("room");
+                    if (room === this.selectedRoom)
+                        li.classList.add("selected");
+                    newChildren.push(li);
+                }
+            }
+            listElement.replaceChildren(...newChildren);
+        }
+        static hostRoom = () => {
+            this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_CREATE, route: FudgeNet.ROUTE.SERVER });
+        };
+        static selectRoom = (_event) => {
+            let target = _event.target;
+            document.querySelectorAll("li.room").forEach(el => el.classList.remove("selected"));
+            this.selectedRoom = target.dataset.room;
+            target.classList.add("selected");
+            document.getElementById("lobby-join").disabled = false;
+        };
+        static joinRoom = () => {
+            document.getElementById("lobby-join").disabled = true;
+            if (!this.selectedRoom)
+                return;
+            Script.client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: this.selectedRoom } });
+            this.selectedRoom = "";
+        };
+        static leaveRoom = () => {
+            Script.client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: "Lobby" } });
+            this.selectedRoom = "";
+        };
+        static updateRoom = () => {
+            if (this.client.idRoom === "Lobby")
+                return;
+            document.getElementById("game-lobby-id").innerText = `Room id: ${this.client.idRoom}`;
+            let players = [];
+            for (let client in this.client.clientsInfoFromServer) {
+                let li = document.createElement("li");
+                li.innerText = `${this.client.clientsInfoFromServer[client].name} (id: ${client}) ${client === this.client.id ? "(you)" : ""}`;
+                players.push(li);
+            }
+            document.getElementById("connected-players").replaceChildren(...players);
+        };
+    }
+    Script.LobbyManager = LobbyManager;
+})(Script || (Script = {}));
 ///<reference path="Managers/MenuManager.ts" />
 ///<reference path="Managers/InputManager.ts" />
 ///<reference path="Managers/EntityManager.ts" />
+///<reference path="Managers/MultiplayerManager.ts" />
+///<reference path="Managers/LobbyManager.ts" />
 var Script;
 ///<reference path="Managers/MenuManager.ts" />
 ///<reference path="Managers/InputManager.ts" />
 ///<reference path="Managers/EntityManager.ts" />
+///<reference path="Managers/MultiplayerManager.ts" />
+///<reference path="Managers/LobbyManager.ts" />
 (function (Script) {
     var ƒ = FudgeCore;
+    var ƒNet = FudgeNet;
     document.addEventListener("interactiveViewportStarted", start);
     Script.menuManager = new Script.MenuManager();
     Script.inputManager = new Script.InputManager();
+    Script.client = initClient();
+    Script.MultiplayerManager.client = Script.client;
+    Script.LobbyManager.client = Script.client;
     document.addEventListener("DOMContentLoaded", preStart);
     function preStart() {
+        Script.MultiplayerManager.installListeners();
+        Script.LobbyManager.installListeners();
     }
     function start(_event) {
         Script.viewport = _event.detail;
@@ -378,7 +668,7 @@ var Script;
         ƒ.AudioManager.default.update();
     }
     async function startViewport() {
-        document.getElementById("start").removeEventListener("click", startViewport);
+        // document.getElementById("start").removeEventListener("click", startViewport);
         let graphId = document.head.querySelector("meta[autoView]").getAttribute("autoView");
         await ƒ.Project.loadResourcesFromHTML();
         let graph = ƒ.Project.resources[graphId];
@@ -403,6 +693,15 @@ var Script;
                 return cam;
         }
         return undefined;
+    }
+    function initClient() {
+        const client = new ƒNet.FudgeClient();
+        let serverURL = "wss://motivationline.plagiatus.net/brawler/";
+        if (window.location.hostname.startsWith("localhost") || window.location.hostname.startsWith("127.0.0.1")) {
+            serverURL = "ws://localhost:8000";
+        }
+        client.connectToServer(serverURL);
+        return client;
     }
 })(Script || (Script = {}));
 var Script;
@@ -1410,6 +1709,49 @@ var Script;
     class IgnoredByProjectiles extends ƒ.Component {
     }
     Script.IgnoredByProjectiles = IgnoredByProjectiles;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ServerSync extends ƒ.Component {
+        id;
+        ownerId;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+        }
+        setupId(_id) {
+            this.id = _id;
+            if (!_id) {
+                this.id = Script.MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
+            }
+            this.ownerId = Script.MultiplayerManager.getOwnerIdFromId(this.id);
+            Script.MultiplayerManager.register(this);
+        }
+        syncSelf() {
+            Script.MultiplayerManager.updateOne(this.getInfo(), this.id);
+        }
+        getInfo() {
+            let info = {};
+            info.position = this.node.mtxLocal.translation;
+            return info;
+        }
+        putInfo(_data) {
+            if (this.ownerId === Script.MultiplayerManager.client.id)
+                return;
+            if (!_data)
+                return;
+            this.applyData(_data);
+        }
+        applyData(data) {
+            let rb = this.node.getComponent(ƒ.ComponentRigidbody);
+            rb.activate(false);
+            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
+            rb.activate(true);
+        }
+    }
+    Script.ServerSync = ServerSync;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

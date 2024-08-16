@@ -14,6 +14,7 @@
     <!--Load FUDGE. You may want to download local copies to work offline and be independent from future changes! Developers working on FUDGE itself may want to create symlinks-->
     <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeCore.js"></script>
     <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeAid.js"></script>
+    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeClient.js"></script>
 
     <!--Link internal resources. The editor only loads the first, but at runtime, multiple files can contribute-->
     <link type="resources" src="Internal.json" />
@@ -34,8 +35,31 @@
     </dialog>
     <!--Canvas for FUDGE to render to-->
     <canvas class="fullscreen"> </canvas>
-    <div class="overlay" id="selection-overlay">
-      <!-- <button data-brawler="Brawler">Default</button> -->
+    <div class="overlay" id="start-overlay">
+      <button id="start">Start</button>
+    </div>
+    <div class="overlay hidden" id="loading-overlay">
+      <h1>Loading...</h1>
+    </div>
+    <div class="overlay hidden" id="lobby-overlay">
+      <h1>Lobby</h1>
+      <h3>Games</h3>
+      <ul id="open-lobbies">
+        Loading...
+      </ul>
+      <button id="lobby-host">Host</button>
+      <button id="lobby-join" disabled>Join</button>
+    </div>
+    <div class="overlay hidden" id="game-lobby-overlay">
+      <h1>Game Lobby</h1> <span id="game-lobby-id"></span>
+      <h3>Connected Players</h3>
+      <ul id="connected-players">
+        Loading...
+      </ul>
+      <button id="game-lobby-start">Start</button>
+      <button id="game-lobby-cancel">Cancel</button>
+    </div>
+    <div class="overlay hidden" id="selection-overlay">
       <div id="brawler">
         <button id="b1" data-brawler="BrawlerCowboy">
           <img src="UI/BrawlerPicking/Cowgirl.png" />
@@ -55,10 +79,15 @@
           <div>Sniper</div>
         </button>
       </div>
+      <div id="brawler-preview"></div>
+      <div id="brawler-info"></div>
+      <div id="brawler-ready"><button disabled>READY</button></div>
     </div>
 
-    <div class="overlay" id="start-overlay">
-      <button id="start">Start</button>
+    <div id="permanent-overlay" class="overlay">
+      <div>
+        <span id="client-name"></span>:<span id="client-id"></span>
+      </div>
     </div>
   
 </body>
