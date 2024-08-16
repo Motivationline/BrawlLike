@@ -10,7 +10,11 @@ namespace Script {
 
 
   const client = new ƒNet.FudgeClient();
-  client.connectToServer("wss://motivationline.plagiatus.net");
+  let serverURL: string = "wss://motivationline.plagiatus.net/test/";
+  if (window.location.hostname.startsWith("localhost") || window.location.hostname.startsWith("127.0.0.1")) {
+    // serverURL = "ws://localhost:8000"
+  }
+  client.connectToServer(serverURL);
   client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, <EventListener><unknown>receiveMessage);
   const playerName = prompt("PlayerName", "Player" + Math.floor(Math.random() * 10000 + 1));
   let interval: number;
@@ -85,7 +89,7 @@ namespace Script {
   }
   function updateVisibleRooms() {
     let roomsToDisplay: HTMLElement[] = [];
-    for(let room of rooms){
+    for (let room of rooms) {
       let btn = document.createElement("button");
       btn.innerText = room;
       btn.addEventListener("click", () => {
@@ -101,7 +105,7 @@ namespace Script {
     let graph = <ƒ.Graph>ƒ.Project.getResourcesByName("Map")[0];
     viewport.setBranch(graph);
     document.getElementById("rooms-wrapper").remove();
-    
+
     let player = <ƒ.Graph>ƒ.Project.getResourcesByName("Player")[0];
     let instance = await ƒ.Project.createGraphInstance(player);
     graph.addChild(instance);

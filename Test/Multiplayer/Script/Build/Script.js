@@ -137,7 +137,11 @@ var Script;
     document.addEventListener("interactiveViewportStarted", start);
     let rooms = [];
     const client = new ƒNet.FudgeClient();
-    client.connectToServer("wss://motivationline.plagiatus.net");
+    let serverURL = "wss://motivationline.plagiatus.net/test/";
+    if (window.location.hostname.startsWith("localhost") || window.location.hostname.startsWith("127.0.0.1")) {
+        // serverURL = "ws://localhost:8000"
+    }
+    client.connectToServer(serverURL);
     client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
     const playerName = prompt("PlayerName", "Player" + Math.floor(Math.random() * 10000 + 1));
     let interval;
