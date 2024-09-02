@@ -16917,7 +16917,7 @@
                 "health": 500
               },
               "speed": 2,
-              "animationIdleName": "CowgirlIdle",
+              "animationIdleName": "SpiderIdle",
               "animationWalkName": "WalkCycleTest"
             }
           }
