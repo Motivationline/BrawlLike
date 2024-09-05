@@ -192,13 +192,22 @@
             ]
           },
           {
-            "name": "Scorpion",
+            "name": "Spider",
             "entries": [
               {
-                "idResource": "GraphGLTF|2024-08-05T14:21:04.655Z|57420"
+                "idResource": "GraphGLTF|2024-09-05T08:52:54.706Z|06783"
               },
               {
-                "idResource": "AnimationGLTF|2024-08-05T14:21:04.655Z|03417"
+                "idResource": "AnimationGLTF|2024-09-05T08:52:54.706Z|42106"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T08:52:54.741Z|36427"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T08:52:54.775Z|89080"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T09:38:58.236Z|53329"
               }
             ]
           },

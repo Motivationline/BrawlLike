@@ -16907,21 +16907,6 @@
             }
           }
         ],
-        "Cowboy": [
-          {
-            "Script.Cowboy": {
-              "Damagable": {
-                "Component": {
-                  "active": true
-                },
-                "health": 500
-              },
-              "speed": 2,
-              "animationIdleName": "SpiderIdle",
-              "animationWalkName": "WalkCycleTest"
-            }
-          }
-        ],
         "ComponentAOEAttack": [
           {
             "Script.ComponentAOEAttack": {
@@ -16939,7 +16924,7 @@
                 "energyGenerationPerSecond": 0.7500000000000001,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerForAnimationTime": false,
+                "lockBrawlerForAnimationTime": true,
                 "lockTime": 0,
                 "recoil": 0,
                 "invulerableTime": 0
@@ -16973,6 +16958,23 @@
               "offset": "[0, 0, 0]"
             }
           }
+        ],
+        "ComponentBrawler": [
+          {
+            "Script.ComponentBrawler": {
+              "Damagable": {
+                "Component": {
+                  "active": true
+                },
+                "health": 500
+              },
+              "speed": 2,
+              "animationIdleName": "SpiderIdle",
+              "animationWalkName": "SpiderWalk",
+              "animationAttackName": "SpiderAttack",
+              "animationSpecialName": "SpiderSpecialAttack"
+            }
+          }
         ]
       },
       "children": [
@@ -17000,7 +17002,7 @@
               {
                 "ƒ.GraphInstance": {
                   "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-08-05T14:21:04.655Z|57420"
+                  "idSource": "GraphGLTF|2024-09-05T08:52:54.706Z|06783"
                 }
               }
             ]
@@ -18282,7 +18284,7 @@
               "local": {
                 "translation": "[0, 0, 0]",
                 "rotation": "[0, 0, 0]",
-                "scaling": "[0.40000000000000013, 0.40000000000000013, 0.40000000000000013]"
+                "scaling": "[0.6000000000000001, 0.6000000000000001, 0.6000000000000001]"
               },
               "Component": {
                 "active": true
@@ -18988,47 +18990,6 @@
       "type": "Graph"
     }
   },
-  "GraphGLTF|2024-08-05T14:21:04.655Z|57420": {
-    "ƒ.GraphGLTF": {
-      "name": "RigTestScene",
-      "active": true,
-      "components": {
-        "ComponentPhongToToon": [
-          {
-            "Script.ComponentPhongToToon": {
-              "active": true
-            }
-          }
-        ],
-        "ComponentAnimator": [
-          {
-            "ƒ.ComponentAnimator": {
-              "Component": {
-                "active": true
-              },
-              "idAnimation": "AnimationGLTF|2024-08-05T14:21:04.655Z|03417",
-              "playmode": "loop",
-              "quantization": "continous",
-              "scale": 1,
-              "scaleWithGameTime": true,
-              "animateInEditor": true
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2024-08-05T14:21:04.655Z|57420",
-      "type": "GraphGLTF",
-      "url": "Assets\\Chars\\ScoprionRigTest.glb"
-    }
-  },
-  "AnimationGLTF|2024-08-05T14:21:04.655Z|03417": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2024-08-05T14:21:04.655Z|03417",
-      "name": "WalkCycleTest",
-      "type": "AnimationGLTF",
-      "url": "Assets\\Chars\\ScoprionRigTest.glb"
-    }
-  },
   "Graph|2024-08-15T12:25:09.794Z|42388": {
     "ƒ.Graph": {
       "name": "BrawlerSniper",
@@ -19457,6 +19418,71 @@
       "children": [],
       "idResource": "Graph|2024-08-16T12:09:59.666Z|75108",
       "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-09-05T08:52:54.706Z|06783": {
+    "ƒ.GraphGLTF": {
+      "name": "SpiderScene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-09-05T08:52:54.741Z|36427",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentPhongToToon": [
+          {
+            "Script.ComponentPhongToToon": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-09-05T08:52:54.706Z|06783",
+      "type": "GraphGLTF",
+      "url": "Assets\\Chars\\MeeleSpider.glb"
+    }
+  },
+  "AnimationGLTF|2024-09-05T08:52:54.741Z|36427": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-09-05T08:52:54.741Z|36427",
+      "name": "SpiderIdle",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\MeeleSpider.glb"
+    }
+  },
+  "AnimationGLTF|2024-09-05T08:52:54.706Z|42106": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-09-05T08:52:54.706Z|42106",
+      "name": "SpiderAttack",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\MeeleSpider.glb"
+    }
+  },
+  "AnimationGLTF|2024-09-05T08:52:54.775Z|89080": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-09-05T08:52:54.775Z|89080",
+      "name": "SpiderWalk",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\MeeleSpider.glb"
+    }
+  },
+  "AnimationGLTF|2024-09-05T09:38:58.236Z|53329": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-09-05T09:38:58.236Z|53329",
+      "name": "SpiderSpecialAttack",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Chars\\MeeleSpider.glb"
     }
   }
 }
