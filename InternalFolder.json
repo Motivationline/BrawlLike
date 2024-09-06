@@ -102,6 +102,23 @@
         "entries": [
           {
             "idResource": "Graph|2024-09-06T09:45:25.078Z|59013"
+          },
+          {
+            "name": "TestEffect",
+            "entries": [
+              {
+                "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298"
+              },
+              {
+                "idResource": "Material|2024-09-06T13:52:35.593Z|50694"
+              },
+              {
+                "idResource": "TextureImage|2024-09-06T13:52:48.087Z|40020"
+              },
+              {
+                "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078"
+              }
+            ]
           }
         ]
       },

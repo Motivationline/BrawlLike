@@ -19506,12 +19506,13 @@
               "Component": {
                 "active": true
               },
-              "duration": 2,
-              "offset": "[0, 0, 1]",
+              "duration": 1,
+              "offset": "[0, 1, 1]",
               "offsetIsLocal": true
             }
           }
-        ]
+        ],
+        "ComponentFaceCamera": []
       },
       "children": [
         {
@@ -19522,7 +19523,7 @@
               "ComponentMesh": [
                 {
                   "ƒ.ComponentMesh": {
-                    "idMesh": "MeshCube|2024-06-26T12:31:46.705Z|83523",
+                    "idMesh": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
                     "pivot": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
@@ -19537,21 +19538,38 @@
               "ComponentMaterial": [
                 {
                   "ƒ.ComponentMaterial": {
-                    "sortForAlpha": false,
+                    "sortForAlpha": true,
                     "clrPrimary": "[1, 1, 1, 1]",
                     "clrSecondary": "[1, 1, 1, 1]",
                     "pivot": {
-                      "translation": "[0, 0]",
+                      "translation": "[0.6666666666666666, 0]",
                       "rotation": 0,
-                      "scaling": "[1, 1]"
+                      "scaling": "[0.3333333333333333, 0.3333333333333333]"
                     },
                     "Component": {
                       "active": true
                     },
-                    "idMaterial": "Material|2024-06-26T12:32:41.145Z|10871"
+                    "idMaterial": "Material|2024-09-06T13:52:35.593Z|50694"
                   }
                 }
-              ]
+              ],
+              "ComponentAnimator": [
+                {
+                  "ƒ.ComponentAnimator": {
+                    "Component": {
+                      "active": true
+                    },
+                    "idAnimation": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
+                    "playmode": "loop",
+                    "quantization": "discrete",
+                    "scale": 1,
+                    "scaleWithGameTime": true,
+                    "animateInEditor": true
+                  }
+                }
+              ],
+              "ComponentFaceCamera": [],
+              "ComponentTransform": []
             },
             "children": []
           }
@@ -19559,6 +19577,59 @@
       ],
       "idResource": "Graph|2024-09-06T09:45:25.078Z|59013",
       "type": "Graph"
+    }
+  },
+  "MeshSprite|2024-09-06T13:52:27.598Z|01298": {
+    "ƒ.MeshSprite": {
+      "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
+      "name": "MeshSprite",
+      "type": "MeshSprite"
+    }
+  },
+  "Material|2024-09-06T13:52:35.593Z|50694": {
+    "ƒ.Material": {
+      "name": "TestEffectShader",
+      "idResource": "Material|2024-09-06T13:52:35.593Z|50694",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-09-06T13:52:48.087Z|40020"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "TextureImage|2024-09-06T13:52:48.087Z|40020": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Sprites\\Effects\\spritetest.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-09-06T13:52:48.087Z|40020",
+        "name": "Assets\\Sprites\\Effects\\spritetest.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "AnimationSprite|2024-09-06T13:53:51.450Z|62078": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
+      "idTexture": "TextureImage|2024-09-06T13:52:48.087Z|40020",
+      "frames": 5,
+      "wrapAfter": 3,
+      "start": "[0, 0]",
+      "size": "[64, 64]",
+      "next": "[64, 0]",
+      "wrap": "[0, 80]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
+        "name": "AnimationSprite",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 12,
+        "animationStructure": {}
+      }
     }
   }
 }
