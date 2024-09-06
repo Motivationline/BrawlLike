@@ -1780,6 +1780,8 @@ var Script;
             angle *= Math.PI / 180 * Math.sign(_direction.x);
             let rotatedOffset = new ƒ.Vector3(this.offset.x * Math.cos(angle) + this.offset.z * Math.sin(angle), this.offset.y, -this.offset.x * Math.sin(angle) + this.offset.z * Math.cos(angle));
             this.node.mtxLocal.translate(this.offsetIsLocal ? rotatedOffset : this.offset);
+            if (this.offsetIsLocal)
+                this.node.mtxLocal.rotateY(angle * 180 / Math.PI);
             this.#endTime = ƒ.Time.game.get() + this.duration * 1000;
         }
         loop = () => {
@@ -1801,7 +1803,7 @@ var Script;
         async deserialize(_serialization) {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.durationj !== undefined)
+            if (_serialization.duration !== undefined)
                 this.duration = _serialization.duration;
             if (_serialization.offset !== undefined)
                 this.offset.deserialize(_serialization.offset);
