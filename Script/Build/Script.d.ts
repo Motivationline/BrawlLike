@@ -198,6 +198,8 @@ declare namespace Script {
         lockTime: number;
         recoil: number;
         invulerableTime: number;
+        effect: string;
+        effectDelay: number;
         protected singleton: boolean;
         protected maxEnergy: number;
         protected currentEnergy: number;
@@ -210,6 +212,7 @@ declare namespace Script {
         attack(_direction: ƒ.Vector3): boolean;
         executeAttack: (_event: ƒ.EventTimer) => void;
         executeRecoil: (_event: ƒ.EventTimer) => void;
+        private executeEffect;
         update(): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -333,6 +336,21 @@ declare namespace Script {
     class Cowboy extends ComponentBrawler {
         move(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class ComponentEffect extends ƒ.Component {
+        #private;
+        duration: number;
+        offset: ƒ.Vector3;
+        offsetIsLocal: boolean;
+        constructor();
+        private init;
+        setup(_direction: ƒ.Vector3): void;
+        private loop;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {

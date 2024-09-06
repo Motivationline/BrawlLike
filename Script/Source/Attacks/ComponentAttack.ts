@@ -26,6 +26,8 @@ namespace Script {
         public lockTime: number = 0;
         public recoil: number = 0;
         public invulerableTime: number = 0;
+        public effect: string = "";
+        public effectDelay: number = 0;
 
         protected singleton: boolean = false;
         protected maxEnergy: number = 0;
@@ -156,6 +158,7 @@ namespace Script {
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeRecoil, _direction);
+            ƒ.Time.game.setTimer(this.effectDelay * 1000, 1, this.executeEffect, _direction);
             let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
             if (this.invulerableTime) brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
             return true;
@@ -172,6 +175,21 @@ namespace Script {
                 let recoil = new ƒ.Vector3(-direction.x, 0, -direction.z).normalize(this.recoil);
                 brawlerComp.addVelocity(recoil, 0.25);
             }
+        }
+
+        private executeEffect = async (_event: ƒ.EventTimer) => {
+            if(!this.effect) return;
+            let direction: ƒ.Vector3 = <ƒ.Vector3>_event.arguments[0];
+            if (!direction) return;
+
+            let obj = <ƒ.Graph>ƒ.Project.getResourcesByName(this.effect)[0];
+            if(!obj) return;
+            
+            let instance = await ƒ.Project.createGraphInstance(obj);
+
+            this.node.addChild(instance);
+            let comp = <ComponentEffect>instance.getAllComponents().find(c => c instanceof ComponentEffect);;
+            comp.setup(direction);
         }
 
         update(): void {
@@ -212,6 +230,7 @@ namespace Script {
                 lockTime: this.lockTime,
                 recoil: this.recoil,
                 invulerableTime: this.invulerableTime,
+                effect: this.effect,
             }
             return serialization;
         }
@@ -247,6 +266,8 @@ namespace Script {
                 this.recoil = _serialization.recoil;
             if (_serialization.invulerableTime !== undefined)
                 this.invulerableTime = _serialization.invulerableTime;
+            if (_serialization.effect !== undefined)
+                this.effect = _serialization.effect;
 
             return this;
         }

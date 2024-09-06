@@ -16511,7 +16511,8 @@
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
                 "recoil": 0,
-                "invulerableTime": 0
+                "invulerableTime": 0,
+                "effect": ""
               },
               "speed": 2,
               "range": 10,
@@ -16542,7 +16543,8 @@
               "lockBrawlerForAnimationTime": false,
               "lockTime": 0,
               "recoil": 0,
-              "invulerableTime": 0
+              "invulerableTime": 0,
+              "effect": ""
             }
           }
         ]
@@ -16927,7 +16929,8 @@
                 "lockBrawlerForAnimationTime": true,
                 "lockTime": 0,
                 "recoil": 0,
-                "invulerableTime": 0
+                "invulerableTime": 0,
+                "effect": ""
               },
               "aoeGraph": "AOEBite",
               "offset": "[0, 0, 0.6000000000000001]"
@@ -16952,7 +16955,8 @@
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
                 "recoil": -12,
-                "invulerableTime": 0
+                "invulerableTime": 0,
+                "effect": ""
               },
               "aoeGraph": "AOERam",
               "offset": "[0, 0, 0]"
@@ -17249,7 +17253,8 @@
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
                 "recoil": 3,
-                "invulerableTime": 0
+                "invulerableTime": 0,
+                "effect": "TestEffect"
               },
               "speed": 0.8,
               "range": 3,
@@ -17299,7 +17304,8 @@
                   "lockBrawlerForAnimationTime": true,
                   "lockTime": 0,
                   "recoil": 0,
-                  "invulerableTime": 0
+                  "invulerableTime": 0,
+                  "effect": ""
                 },
                 "speed": 2,
                 "range": 3,
@@ -17981,7 +17987,8 @@
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0.1,
                 "recoil": 0,
-                "invulerableTime": 0
+                "invulerableTime": 0,
+                "effect": ""
               },
               "speed": 6,
               "range": 4,
@@ -18012,7 +18019,8 @@
               "lockBrawlerForAnimationTime": false,
               "lockTime": 0.7999999999999999,
               "recoil": -5,
-              "invulerableTime": 0.7999999999999999
+              "invulerableTime": 0.7999999999999999,
+              "effect": ""
             }
           }
         ]
@@ -19071,7 +19079,8 @@
                 "lockBrawlerForAnimationTime": true,
                 "lockTime": 0.7000000000000001,
                 "recoil": 0.1,
-                "invulerableTime": 0
+                "invulerableTime": 0,
+                "effect": ""
               },
               "speed": 12,
               "range": 70,
@@ -19102,7 +19111,8 @@
               "lockBrawlerForAnimationTime": true,
               "lockTime": 0,
               "recoil": -5,
-              "invulerableTime": 1
+              "invulerableTime": 1,
+              "effect": ""
             }
           }
         ]
@@ -19483,6 +19493,72 @@
       "name": "SpiderSpecialAttack",
       "type": "AnimationGLTF",
       "url": "Assets\\Chars\\MeeleSpider.glb"
+    }
+  },
+  "Graph|2024-09-06T09:45:25.078Z|59013": {
+    "ƒ.Graph": {
+      "name": "TestEffect",
+      "active": true,
+      "components": {
+        "ComponentEffect": [
+          {
+            "Script.ComponentEffect": {
+              "Component": {
+                "active": true
+              },
+              "duration": 2,
+              "offset": "[0, 0, 1]",
+              "offsetIsLocal": true
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "New Node",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshCube|2024-06-26T12:31:46.705Z|83523",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-06-26T12:32:41.145Z|10871"
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-09-06T09:45:25.078Z|59013",
+      "type": "Graph"
     }
   }
 }

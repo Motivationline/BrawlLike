@@ -902,6 +902,8 @@ var Script;
         lockTime = 0;
         recoil = 0;
         invulerableTime = 0;
+        effect = "";
+        effectDelay = 0;
         singleton = false;
         maxEnergy = 0;
         currentEnergy = 0;
@@ -1025,6 +1027,7 @@ var Script;
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
             ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeRecoil, _direction);
+            ƒ.Time.game.setTimer(this.effectDelay * 1000, 1, this.executeEffect, _direction);
             let brawlerComp = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             if (this.invulerableTime)
                 brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
@@ -1039,6 +1042,21 @@ var Script;
                 let recoil = new ƒ.Vector3(-direction.x, 0, -direction.z).normalize(this.recoil);
                 brawlerComp.addVelocity(recoil, 0.25);
             }
+        };
+        executeEffect = async (_event) => {
+            if (!this.effect)
+                return;
+            let direction = _event.arguments[0];
+            if (!direction)
+                return;
+            let obj = ƒ.Project.getResourcesByName(this.effect)[0];
+            if (!obj)
+                return;
+            let instance = await ƒ.Project.createGraphInstance(obj);
+            this.node.addChild(instance);
+            let comp = instance.getAllComponents().find(c => c instanceof Script.ComponentEffect);
+            ;
+            comp.setup(direction);
         };
         update() {
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
@@ -1075,6 +1093,7 @@ var Script;
                 lockTime: this.lockTime,
                 recoil: this.recoil,
                 invulerableTime: this.invulerableTime,
+                effect: this.effect,
             };
             return serialization;
         }
@@ -1109,6 +1128,8 @@ var Script;
                 this.recoil = _serialization.recoil;
             if (_serialization.invulerableTime !== undefined)
                 this.invulerableTime = _serialization.invulerableTime;
+            if (_serialization.effect !== undefined)
+                this.effect = _serialization.effect;
             return this;
         }
         getMutatorAttributeTypes(_mutator) {
@@ -1702,6 +1723,63 @@ var Script;
         }
     }
     Script.Cowboy = Cowboy;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ComponentEffect extends ƒ.Component {
+        duration = 1;
+        offset = new ƒ.Vector3();
+        offsetIsLocal = true;
+        #endTime = Infinity;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
+            ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
+        }
+        init = () => {
+            this.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
+            if (!this.node.getComponent(ƒ.ComponentTransform))
+                this.node.addComponent(new ƒ.ComponentTransform());
+        };
+        setup(_direction) {
+            let angle = ƒ.Vector3.ANGLE(new ƒ.Vector3(_direction.x, 0, _direction.z), ƒ.Vector3.Z());
+            angle *= Math.PI / 180 * Math.sign(_direction.x);
+            let rotatedOffset = new ƒ.Vector3(this.offset.x * Math.cos(angle) + this.offset.z * Math.sin(angle), this.offset.y, -this.offset.x * Math.sin(angle) + this.offset.z * Math.cos(angle));
+            this.node.mtxLocal.translate(this.offsetIsLocal ? rotatedOffset : this.offset);
+            this.#endTime = ƒ.Time.game.get() + this.duration * 1000;
+        }
+        loop = () => {
+            let currentTime = ƒ.Time.game.get();
+            if (currentTime > this.#endTime) {
+                ƒ.Loop.removeEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
+                this.node.getParent()?.removeChild(this.node);
+            }
+        };
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                duration: this.duration,
+                offset: this.offset.serialize(),
+                offsetIsLocal: this.offsetIsLocal,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.durationj !== undefined)
+                this.duration = _serialization.duration;
+            if (_serialization.offset !== undefined)
+                this.offset.deserialize(_serialization.offset);
+            if (_serialization.offsetIsLocal !== undefined)
+                this.offsetIsLocal = _serialization.offsetIsLocal;
+            return this;
+        }
+    }
+    Script.ComponentEffect = ComponentEffect;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
