@@ -163,6 +163,7 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class Destructible extends ƒ.Component {
+        replaceWith = "";
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -171,8 +172,38 @@ var Script;
                 this.node.addEventListener("destruction", this.destroy.bind(this));
             });
         }
-        destroy() {
-            this.node.getParent().removeChild(this.node);
+        async destroy() {
+            let parent = this.node.getParent();
+            if (this.replaceWith) {
+                let replacement = ƒ.Project.getResourcesByName(this.replaceWith)[0];
+                if (replacement) {
+                    let instance = await ƒ.Project.createGraphInstance(replacement);
+                    instance.mtxLocal.translation = this.node.mtxLocal.translation.clone;
+                    instance.mtxLocal.scaling = this.node.mtxLocal.scaling.clone;
+                    instance.mtxLocal.rotation = this.node.mtxLocal.rotation.clone;
+                    parent.replaceChild(this.node, instance);
+                }
+                else {
+                    parent.removeChild(this.node);
+                }
+            }
+            else {
+                parent.removeChild(this.node);
+            }
+        }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                replaceWith: this.replaceWith,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.replaceWith !== undefined)
+                this.replaceWith = _serialization.replaceWith;
+            return this;
         }
     }
     Script.Destructible = Destructible;

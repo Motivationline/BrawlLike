@@ -40,8 +40,11 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class Destructible extends ƒ.Component {
+        replaceWith: string;
         constructor();
-        destroy(): void;
+        destroy(): Promise<void>;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }
 declare namespace Script {
