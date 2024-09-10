@@ -1185,6 +1185,9 @@ var Script;
         aoeGraph = "";
         executeAttack = async (_event) => {
             let direction = _event.arguments[0];
+            this.spawnAOE(direction);
+        };
+        async spawnAOE(direction) {
             if (!direction)
                 return;
             if (!this.aoeGraph)
@@ -1205,7 +1208,7 @@ var Script;
                 this.node.getParent().addChild(instance);
                 compAOE.setup(owner, ƒ.Vector3.SUM(this.node.mtxLocal.translation, rotatedOffset));
             }
-        };
+        }
         serialize() {
             let serialization = {
                 [super.constructor.name]: super.serialize(),
@@ -1488,6 +1491,47 @@ var Script;
         }
     }
     Script.FroggerSpecialAttack = FroggerSpecialAttack;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class SpiderSpecialAttack extends Script.ComponentAOEAttack {
+        moveColliderUpBy = 1;
+        moveColliderUpForSeconds = 1;
+        aoeDelay = 0;
+        serialize() {
+            let s = {
+                [super.constructor.name]: super.serialize(),
+                moveColliderUpBy: this.moveColliderUpBy,
+                aoeDelay: this.aoeDelay,
+            };
+            return s;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] !== null) {
+                await super.deserialize(_serialization[super.constructor.name]);
+            }
+            if (_serialization.moveColliderUpBy !== undefined)
+                this.moveColliderUpBy = _serialization.moveColliderUpBy;
+            if (_serialization.aoeDelay !== undefined)
+                this.aoeDelay = _serialization.aoeDelay;
+            return this;
+        }
+        executeAttack = async (_event) => {
+            let direction = _event.arguments[0];
+            ƒ.Time.game.setTimer(this.aoeDelay * 1000, 1, () => { this.spawnAOE(direction); });
+            let rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+            rigidbody.activate(false);
+            rigidbody.mtxPivot.translateY(this.moveColliderUpBy);
+            rigidbody.activate(true);
+            ƒ.Time.game.setTimer(this.moveColliderUpForSeconds * 1000, 1, () => {
+                rigidbody.activate(false);
+                rigidbody.mtxPivot.translateY(-this.moveColliderUpBy);
+                rigidbody.activate(true);
+            });
+        };
+    }
+    Script.SpiderSpecialAttack = SpiderSpecialAttack;
 })(Script || (Script = {}));
 ///<reference path="../Damagable.ts"/>
 var Script;

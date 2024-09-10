@@ -229,6 +229,7 @@ declare namespace Script {
         offset: ƒ.Vector3;
         aoeGraph: string;
         executeAttack: ƒ.TimerHandler;
+        protected spawnAOE(direction: ƒ.Vector3): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
@@ -292,6 +293,17 @@ declare namespace Script {
         shootProjectiles(_direction: ƒ.Vector3): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class SpiderSpecialAttack extends ComponentAOEAttack {
+        moveColliderUpBy: number;
+        moveColliderUpForSeconds: number;
+        aoeDelay: number;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        executeAttack: ƒ.TimerHandler;
     }
 }
 declare namespace Script {
