@@ -1,6 +1,519 @@
 {
   "Fudge.ResourceFolder": {
     "name": "Resources",
-    "entries": []
+    "entries": [
+      {
+        "name": "Attacks",
+        "entries": [
+          {
+            "name": "Projectiles",
+            "entries": [
+              {
+                "idResource": "Graph|2024-06-28T11:41:35.981Z|68015"
+              },
+              {
+                "idResource": "Graph|2024-07-26T08:27:01.462Z|90648"
+              },
+              {
+                "idResource": "Graph|2024-07-31T15:33:39.293Z|88979"
+              },
+              {
+                "name": "Potato",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-26T08:26:01.771Z|62446"
+                  }
+                ]
+              },
+              {
+                "name": "Tomato",
+                "entries": [
+                  {
+                    "idResource": "AnimationGLTF|2024-07-18T10:06:25.240Z|84164"
+                  },
+                  {
+                    "idResource": "GraphGLTF|2024-07-26T08:26:06.036Z|19405"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Previews",
+            "entries": [
+              {
+                "idResource": "TextureImage|2024-07-23T12:12:47.386Z|82109"
+              },
+              {
+                "idResource": "TextureImage|2024-07-23T12:12:47.386Z|70454"
+              },
+              {
+                "idResource": "TextureImage|2024-07-05T13:42:52.400Z|17225"
+              },
+              {
+                "idResource": "Material|2024-07-05T13:42:58.398Z|17443"
+              },
+              {
+                "idResource": "Material|2024-07-23T12:13:24.137Z|58214"
+              },
+              {
+                "idResource": "Material|2024-07-23T12:14:53.678Z|90605"
+              }
+            ]
+          },
+          {
+            "name": "AOEs",
+            "entries": [
+              {
+                "idResource": "Graph|2024-07-31T06:53:41.465Z|95392"
+              },
+              {
+                "idResource": "Material|2024-07-31T06:54:14.355Z|80884"
+              },
+              {
+                "idResource": "Graph|2024-07-31T07:10:31.978Z|51570"
+              },
+              {
+                "idResource": "Graph|2024-08-01T08:52:29.540Z|78870"
+              },
+              {
+                "idResource": "Graph|2024-08-02T14:04:11.412Z|83110"
+              },
+              {
+                "idResource": "Graph|2024-09-10T08:30:18.971Z|70408"
+              },
+              {
+                "idResource": "Graph|2024-09-09T12:21:31.445Z|63309"
+              }
+            ]
+          },
+          {
+            "name": "Explosions",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-08-01T14:29:16.075Z|82016"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-01T14:29:16.075Z|80798"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Effects",
+        "entries": [
+          {
+            "idResource": "Graph|2024-09-06T09:45:25.078Z|59013"
+          },
+          {
+            "name": "TestEffect",
+            "entries": [
+              {
+                "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298"
+              },
+              {
+                "idResource": "Material|2024-09-06T13:52:35.593Z|50694"
+              },
+              {
+                "idResource": "TextureImage|2024-09-06T13:52:48.087Z|40020"
+              },
+              {
+                "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Brawlers",
+        "entries": [
+          {
+            "idResource": "Graph|2024-06-28T07:32:49.098Z|23377"
+          },
+          {
+            "name": "BrawlerScenes",
+            "entries": [
+              {
+                "idResource": "Graph|2024-06-26T12:42:10.698Z|62317"
+              },
+              {
+                "idResource": "Graph|2024-06-28T13:29:09.815Z|45211"
+              },
+              {
+                "idResource": "Graph|2024-07-16T09:32:18.199Z|08157"
+              },
+              {
+                "idResource": "Graph|2024-07-24T09:56:45.797Z|36518"
+              },
+              {
+                "idResource": "Graph|2024-08-02T09:47:35.228Z|38076"
+              },
+              {
+                "idResource": "Graph|2024-08-15T12:25:09.794Z|42388"
+              }
+            ]
+          },
+          {
+            "name": "Cowgirl",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-17T14:53:53.041Z|79792"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-17T14:53:53.041Z|37225"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-17T14:53:53.042Z|49552"
+              }
+            ]
+          },
+          {
+            "name": "Frogger",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-17T14:03:22.586Z|44909"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-17T14:03:22.586Z|78596"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-22T14:43:09.326Z|54251"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-26T10:09:00.180Z|57835"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-31T12:08:33.568Z|53860"
+              }
+            ]
+          },
+          {
+            "name": "Bugsy",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-24T09:56:04.310Z|95218"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-24T09:56:04.310Z|69177"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-25T09:44:56.262Z|15297"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-07-25T09:45:21.882Z|78079"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-01T12:38:05.750Z|48263"
+              }
+            ]
+          },
+          {
+            "name": "Dummy",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-08-02T10:01:39.920Z|03067"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-02T10:01:39.920Z|80466"
+              }
+            ]
+          },
+          {
+            "name": "Spider",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-09-05T08:52:54.706Z|06783"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T08:52:54.706Z|42106"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T08:52:54.741Z|36427"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T08:52:54.775Z|89080"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-09-05T09:38:58.236Z|53329"
+              }
+            ]
+          },
+          {
+            "name": "Sniper",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-08-15T12:28:18.163Z|63222"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.178Z|82544"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.199Z|06917"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.213Z|38911"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-08-15T12:28:18.229Z|35435"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Maps",
+        "entries": [
+          {
+            "idResource": "Graph|2024-06-26T12:09:52.220Z|08626"
+          },
+          {
+            "idResource": "Graph|2024-06-26T12:09:52.220Z|08627"
+          },
+          {
+            "idResource": "MeshQuad|2024-06-28T08:24:39.947Z|87340"
+          },
+          {
+            "name": "MapV2",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-07-18T14:43:35.986Z|90349"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Shared",
+        "entries": [
+          {
+            "idResource": "MeshCube|2024-06-26T12:31:46.705Z|83523"
+          },
+          {
+            "idResource": "Material|2024-06-26T12:32:41.145Z|10871"
+          },
+          {
+            "idResource": "MeshCube|2024-06-26T12:37:06.268Z|15864"
+          },
+          {
+            "idResource": "MeshPyramid|2024-06-28T11:42:43.929Z|66964"
+          },
+          {
+            "idResource": "MeshQuad|2024-07-05T13:42:11.867Z|27267"
+          },
+          {
+            "idResource": "Animation|2024-07-22T12:47:03.140Z|32337"
+          },
+          {
+            "idResource": "Graph|2024-07-29T08:49:22.847Z|21081"
+          },
+          {
+            "idResource": "TextureImage|2024-07-29T08:51:51.735Z|84230"
+          },
+          {
+            "idResource": "Material|2024-07-29T08:52:16.915Z|22981"
+          }
+        ]
+      },
+      {
+        "name": "Decoration",
+        "entries": [
+          {
+            "name": "Bush",
+            "entries": [
+              {
+                "idResource": "Graph|2024-07-03T11:44:47.273Z|33490"
+              },
+              {
+                "name": "With Animation",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-03T13:04:23.278Z|36622"
+                  },
+                  {
+                    "idResource": "AnimationGLTF|2024-07-03T13:04:23.278Z|23591"
+                  }
+                ]
+              },
+              {
+                "name": "No Animation",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-03T13:06:52.197Z|44245"
+                  }
+                ]
+              },
+              {
+                "name": "RoundBush",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-22T12:03:49.917Z|81675"
+                  },
+                  {
+                    "idResource": "AnimationGLTF|2024-07-22T12:03:49.917Z|35082"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Boulder",
+            "entries": [
+              {
+                "idResource": "MeshGLTF|2024-06-28T08:50:53.601Z|91061"
+              }
+            ]
+          },
+          {
+            "name": "Crate",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
+              },
+              {
+                "idResource": "Graph|2024-07-31T13:03:20.902Z|13065"
+              },
+              {
+                "name": "Destructed",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-31T14:36:51.660Z|18912"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Cloud",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-28T14:02:31.959Z|70149"
+              },
+              {
+                "idResource": "MaterialGLTF|2024-06-28T14:02:31.959Z|92440"
+              },
+              {
+                "idResource": "MeshGLTF|2024-06-28T14:02:31.959Z|20765"
+              }
+            ]
+          },
+          {
+            "name": "Fence",
+            "entries": [
+              {
+                "name": "FenceSolo",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-19T11:35:56.088Z|29355"
+                  }
+                ]
+              },
+              {
+                "name": "FenceShort",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-19T12:07:33.012Z|85162"
+                  }
+                ]
+              },
+              {
+                "name": "FenceLong",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2024-07-19T12:07:37.088Z|61000"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "idResource": "MeshCube|2024-06-27T09:39:02.161Z|07120"
+          },
+          {
+            "name": "Mountain",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-28T14:04:16.312Z|32649"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Materials",
+        "entries": [
+          {
+            "idResource": "Material|2024-06-27T09:42:46.373Z|74497"
+          },
+          {
+            "idResource": "Material|2024-06-27T11:36:07.188Z|68061"
+          },
+          {
+            "idResource": "Material|2024-06-28T08:25:00.560Z|65025"
+          },
+          {
+            "idResource": "Material|2024-07-01T14:25:52.589Z|65245"
+          }
+        ]
+      },
+      {
+        "name": "Floors",
+        "entries": [
+          {
+            "name": "Dirt",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-06-27T13:47:35.746Z|44149"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Animations",
+        "entries": [
+          {
+            "idResource": "Animation|2024-06-28T14:43:31.368Z|52613"
+          },
+          {
+            "idResource": "Animation|2024-06-28T14:49:00.996Z|86706"
+          }
+        ]
+      },
+      {
+        "name": "IngameUI",
+        "entries": [
+          {
+            "idResource": "Graph|2024-07-17T11:26:37.372Z|92706"
+          },
+          {
+            "idResource": "Graph|2024-07-22T11:19:18.345Z|00209"
+          },
+          {
+            "idResource": "Material|2024-07-17T11:29:03.022Z|50220"
+          }
+        ]
+      },
+      {
+        "name": "ParticleSystems",
+        "entries": [
+          {
+            "idResource": "Graph|2024-08-16T09:33:20.601Z|27131"
+          },
+          {
+            "idResource": "ParticleSystem|2024-07-31T13:27:19.789Z|52883"
+          },
+          {
+            "idResource": "MeshSphere|2024-08-16T09:34:16.273Z|73316"
+          },
+          {
+            "idResource": "Material|2024-08-16T09:34:24.150Z|91070"
+          }
+        ]
+      },
+      {
+        "idResource": "Graph|2024-08-16T12:09:59.666Z|75108"
+      }
+    ]
   }
 }
