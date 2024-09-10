@@ -245,6 +245,16 @@
               "active": true
             }
           }
+        ],
+        "Destructible": [
+          {
+            "Script.Destructible": {
+              "Component": {
+                "active": true
+              },
+              "replaceWith": "DestroyedCrateScene"
+            }
+          }
         ]
       },
       "children": [
@@ -18741,16 +18751,6 @@
       "url": "Assets\\Chars\\frog.glb"
     }
   },
-  "GraphGLTF|2024-07-31T14:36:51.660Z|18912": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {},
-      "idResource": "GraphGLTF|2024-07-31T14:36:51.660Z|18912",
-      "type": "GraphGLTF",
-      "url": "Assets\\Decorations\\CrateDestroyed.glb"
-    }
-  },
   "Graph|2024-07-31T15:33:39.293Z|88979": {
     "ƒ.Graph": {
       "name": "SpecialPotatoProjectile",
@@ -19959,6 +19959,16 @@
       "children": [],
       "idResource": "Graph|2024-09-10T08:30:18.971Z|70408",
       "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-09-10T09:58:03.110Z|35503": {
+    "ƒ.GraphGLTF": {
+      "name": "DestroyedCrateScene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-09-10T09:58:03.110Z|35503",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\CrateDestroyed.glb"
     }
   }
 }
