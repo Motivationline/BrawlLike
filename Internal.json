@@ -295,7 +295,10 @@
               "Destructible": [
                 {
                   "Script.Destructible": {
-                    "active": true
+                    "Component": {
+                      "active": true
+                    },
+                    "replaceWith": ""
                   }
                 }
               ]
@@ -1157,7 +1160,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -1283,7 +1289,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -1409,7 +1418,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -1559,7 +1571,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -1685,7 +1700,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -1811,7 +1829,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -1961,7 +1982,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2087,7 +2111,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2213,7 +2240,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2339,7 +2369,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2489,7 +2522,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2615,7 +2651,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2741,7 +2780,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -2867,7 +2909,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3017,7 +3062,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3143,7 +3191,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3293,7 +3344,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3419,7 +3473,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3548,7 +3605,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -3601,7 +3661,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3702,7 +3765,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3828,7 +3894,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -3954,7 +4023,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4080,7 +4152,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4230,7 +4305,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4356,7 +4434,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4482,7 +4563,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4608,7 +4692,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4737,7 +4824,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -4790,7 +4880,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -4870,7 +4963,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -4923,7 +5019,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -5003,7 +5102,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -5056,7 +5158,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -5136,7 +5241,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -5189,7 +5297,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -8480,7 +8591,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -8606,7 +8720,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -8732,7 +8849,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -8882,7 +9002,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9008,7 +9131,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9134,7 +9260,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9284,7 +9413,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9410,7 +9542,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9536,7 +9671,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9686,7 +9824,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9812,7 +9953,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -9938,7 +10082,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10088,7 +10235,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10214,7 +10364,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10340,7 +10493,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10466,7 +10622,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10616,7 +10775,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10742,7 +10904,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10868,7 +11033,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -10994,7 +11162,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11144,7 +11315,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11270,7 +11444,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11420,7 +11597,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11546,7 +11726,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11696,7 +11879,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11822,7 +12008,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -11972,7 +12161,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12098,7 +12290,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12227,7 +12422,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -12280,7 +12478,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12381,7 +12582,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12507,7 +12711,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12633,7 +12840,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12759,7 +12969,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -12909,7 +13122,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13035,7 +13251,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13161,7 +13380,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13287,7 +13509,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13416,7 +13641,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -13469,7 +13697,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13549,7 +13780,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -13602,7 +13836,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13682,7 +13919,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -13735,7 +13975,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -13815,7 +14058,10 @@
                                 "Destructible": [
                                   {
                                     "Script.Destructible": {
-                                      "active": true
+                                      "Component": {
+                                        "active": true
+                                      },
+                                      "replaceWith": ""
                                     }
                                   }
                                 ]
@@ -13868,7 +14114,10 @@
                                       "Destructible": [
                                         {
                                           "Script.Destructible": {
-                                            "active": true
+                                            "Component": {
+                                              "active": true
+                                            },
+                                            "replaceWith": ""
                                           }
                                         }
                                       ]
@@ -16944,21 +17193,21 @@
                 },
                 "previewType": 0,
                 "previewWidth": 1,
-                "range": 5,
+                "range": 4.400000000000002,
                 "attackType": 1,
                 "maxCharges": 1,
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 1,
                 "energyNeededPerCharge": 1,
-                "castingTime": 0,
-                "lockBrawlerForAnimationTime": false,
+                "castingTime": 0.1,
+                "lockBrawlerForAnimationTime": true,
                 "lockTime": 0,
-                "recoil": -12,
+                "recoil": -18,
                 "invulerableTime": 0,
                 "effect": ""
               },
-              "aoeGraph": "AOERam",
+              "aoeGraph": "AOEImpact",
               "offset": "[0, 0, 0]"
             }
           }
@@ -17045,7 +17294,10 @@
         "Destructible": [
           {
             "Script.Destructible": {
-              "active": true
+              "Component": {
+                "active": true
+              },
+              "replaceWith": ""
             }
           }
         ],
@@ -18859,12 +19111,12 @@
               },
               "damage": 150,
               "maxTicksPerEnemy": 1,
-              "delayBetweenTicksInMS": 500,
+              "delayBetweenTicksInMS": 1,
               "delayBeforeFirstTickInMS": 0,
               "attachedToBrawler": true,
               "radius": 0.8,
               "destructive": false,
-              "durationDamage": 0.10000000000000014,
+              "durationDamage": 0.10000000000000009,
               "durationVisual": 0.10000000000000014,
               "areaVisible": true
             }
@@ -18919,82 +19171,6 @@
       },
       "children": [],
       "idResource": "Graph|2024-08-02T14:04:11.412Z|83110",
-      "type": "Graph"
-    }
-  },
-  "Graph|2024-08-02T14:22:27.437Z|92151": {
-    "ƒ.Graph": {
-      "name": "AOERam",
-      "active": true,
-      "components": {
-        "ComponentAOE": [
-          {
-            "Script.ComponentAOE": {
-              "Component": {
-                "active": true
-              },
-              "damage": 200,
-              "maxTicksPerEnemy": 1,
-              "delayBetweenTicksInMS": 500,
-              "delayBeforeFirstTickInMS": 0,
-              "attachedToBrawler": true,
-              "radius": 1,
-              "destructive": true,
-              "durationDamage": 0.30000000000000016,
-              "durationVisual": 0.30000000000000016,
-              "areaVisible": true
-            }
-          }
-        ],
-        "ComponentTransform": [
-          {
-            "ƒ.ComponentTransform": {
-              "local": {
-                "translation": "[0, 0, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[1, 1, 1]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "ComponentRigidbody": [
-          {
-            "ƒ.ComponentRigidbody": {
-              "initialization": "TO_PIVOT",
-              "friction": 0.2,
-              "restitution": 0.2,
-              "mass": 1,
-              "dampTranslation": 0.1,
-              "dampRotation": 0.1,
-              "effectGravity": 1,
-              "typeBody": "KINEMATIC",
-              "typeCollider": "CUBE",
-              "isTrigger": true,
-              "id": 0,
-              "pivot": {
-                "translation": "[0, 0, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[1, 1, 1]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "IgnoredByProjectiles": [
-          {
-            "Script.IgnoredByProjectiles": {
-              "active": true
-            }
-          }
-        ]
-      },
-      "children": [],
-      "idResource": "Graph|2024-08-02T14:22:27.437Z|92151",
       "type": "Graph"
     }
   },
@@ -19070,8 +19246,8 @@
                 "previewWidth": 0.20000000000000015,
                 "range": 70,
                 "attackType": 0,
-                "maxCharges": 2,
-                "damage": 100,
+                "maxCharges": 1,
+                "damage": 200,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 0.5,
                 "energyNeededPerCharge": 1,
@@ -19088,31 +19264,35 @@
               "attachedToBrawler": false,
               "projectile": "DefaultProjectile",
               "gravity": false,
-              "destructive": true
+              "destructive": false
             }
           }
         ],
-        "CowboySpecialAttack": [
+        "ComponentAOEAttack": [
           {
-            "Script.CowboySpecialAttack": {
-              "Component": {
-                "active": true
+            "Script.ComponentAOEAttack": {
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
+                },
+                "previewType": 0,
+                "previewWidth": 1,
+                "range": 1,
+                "attackType": 1,
+                "maxCharges": 2,
+                "damage": 50,
+                "minDelayBetweenAttacks": 0.3,
+                "energyGenerationPerSecond": 1,
+                "energyNeededPerCharge": 1,
+                "castingTime": 0,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": -0.5000000000000001,
+                "recoil": -0.6000000000000001,
+                "invulerableTime": 0.6000000000000001,
+                "effect": ""
               },
-              "previewType": 0,
-              "previewWidth": 1,
-              "range": 0,
-              "attackType": 1,
-              "maxCharges": 3,
-              "damage": 0,
-              "minDelayBetweenAttacks": 0.1,
-              "energyGenerationPerSecond": 0.7999999999999996,
-              "energyNeededPerCharge": 1,
-              "castingTime": 0,
-              "lockBrawlerForAnimationTime": true,
-              "lockTime": 0,
-              "recoil": -5,
-              "invulerableTime": 1,
-              "effect": ""
+              "aoeGraph": "AOEBunnyBox",
+              "offset": "[0, 3.5, 0.40000000000000013]"
             }
           }
         ]
@@ -19495,6 +19675,59 @@
       "url": "Assets\\Chars\\MeeleSpider.glb"
     }
   },
+  "MeshSprite|2024-09-06T13:52:27.598Z|01298": {
+    "ƒ.MeshSprite": {
+      "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
+      "name": "MeshSprite",
+      "type": "MeshSprite"
+    }
+  },
+  "Material|2024-09-06T13:52:35.593Z|50694": {
+    "ƒ.Material": {
+      "name": "TestEffectShader",
+      "idResource": "Material|2024-09-06T13:52:35.593Z|50694",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-09-06T13:52:48.087Z|40020"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "TextureImage|2024-09-06T13:52:48.087Z|40020": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Sprites\\Effects\\spritetest.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-09-06T13:52:48.087Z|40020",
+        "name": "Assets\\Sprites\\Effects\\spritetest.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "AnimationSprite|2024-09-06T13:53:51.450Z|62078": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
+      "idTexture": "TextureImage|2024-09-06T13:52:48.087Z|40020",
+      "frames": 5,
+      "wrapAfter": 3,
+      "start": "[0, 0]",
+      "size": "[64, 64]",
+      "next": "[64, 0]",
+      "wrap": "[0, 80]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
+        "name": "AnimationSprite",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 12,
+        "animationStructure": {}
+      }
+    }
+  },
   "Graph|2024-09-06T09:45:25.078Z|59013": {
     "ƒ.Graph": {
       "name": "TestEffect",
@@ -19511,8 +19744,7 @@
               "offsetIsLocal": true
             }
           }
-        ],
-        "ComponentFaceCamera": []
+        ]
       },
       "children": [
         {
@@ -19567,9 +19799,7 @@
                     "animateInEditor": true
                   }
                 }
-              ],
-              "ComponentFaceCamera": [],
-              "ComponentTransform": []
+              ]
             },
             "children": []
           }
@@ -19579,57 +19809,156 @@
       "type": "Graph"
     }
   },
-  "MeshSprite|2024-09-06T13:52:27.598Z|01298": {
-    "ƒ.MeshSprite": {
-      "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
-      "name": "MeshSprite",
-      "type": "MeshSprite"
-    }
-  },
-  "Material|2024-09-06T13:52:35.593Z|50694": {
-    "ƒ.Material": {
-      "name": "TestEffectShader",
-      "idResource": "Material|2024-09-06T13:52:35.593Z|50694",
-      "shader": "ShaderLitTextured",
-      "coat": {
-        "ƒ.CoatTextured": {
-          "color": "[1, 1, 1, 1]",
-          "idTexture": "TextureImage|2024-09-06T13:52:48.087Z|40020"
-        }
+  "Graph|2024-09-09T12:21:31.445Z|63309": {
+    "ƒ.Graph": {
+      "name": "AOEBunnyBox",
+      "active": true,
+      "components": {
+        "ComponentAOE": [
+          {
+            "Script.ComponentAOE": {
+              "Component": {
+                "active": true
+              },
+              "damage": 20,
+              "maxTicksPerEnemy": 1,
+              "delayBetweenTicksInMS": 6,
+              "delayBeforeFirstTickInMS": 10,
+              "attachedToBrawler": true,
+              "radius": 0.9999999999999997,
+              "destructive": true,
+              "durationDamage": 0.30000000000000027,
+              "durationVisual": 0.30000000000000016,
+              "areaVisible": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 1, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 1,
+              "typeBody": "KINEMATIC",
+              "typeCollider": "CUBE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0.7, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5000000000000001, 0.30000000000000016, 0.5000000000000001]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
       },
-      "alphaClip": 0.01
+      "children": [],
+      "idResource": "Graph|2024-09-09T12:21:31.445Z|63309",
+      "type": "Graph"
     }
   },
-  "TextureImage|2024-09-06T13:52:48.087Z|40020": {
-    "ƒ.TextureImage": {
-      "url": "Assets\\Sprites\\Effects\\spritetest.png",
-      "type": "TextureImage",
-      "Texture": {
-        "idResource": "TextureImage|2024-09-06T13:52:48.087Z|40020",
-        "name": "Assets\\Sprites\\Effects\\spritetest.png",
-        "mipmap": "CRISP",
-        "wrap": "REPEAT"
-      }
-    }
-  },
-  "AnimationSprite|2024-09-06T13:53:51.450Z|62078": {
-    "ƒ.AnimationSprite": {
-      "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
-      "idTexture": "TextureImage|2024-09-06T13:52:48.087Z|40020",
-      "frames": 5,
-      "wrapAfter": 3,
-      "start": "[0, 0]",
-      "size": "[64, 64]",
-      "next": "[64, 0]",
-      "wrap": "[0, 80]",
-      "Animation": {
-        "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078",
-        "name": "AnimationSprite",
-        "labels": {},
-        "events": {},
-        "framesPerSecond": 12,
-        "animationStructure": {}
-      }
+  "Graph|2024-09-10T08:30:18.971Z|70408": {
+    "ƒ.Graph": {
+      "name": "AOEImpact",
+      "active": true,
+      "components": {
+        "ComponentAOE": [
+          {
+            "Script.ComponentAOE": {
+              "Component": {
+                "active": true
+              },
+              "damage": 200,
+              "maxTicksPerEnemy": 1,
+              "delayBetweenTicksInMS": 500,
+              "delayBeforeFirstTickInMS": 0,
+              "attachedToBrawler": true,
+              "radius": 1,
+              "destructive": true,
+              "durationDamage": 0.5000000000000001,
+              "durationVisual": 0.5000000000000001,
+              "areaVisible": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0.2,
+              "restitution": 0.2,
+              "mass": 0,
+              "dampTranslation": 0.1,
+              "dampRotation": 0.1,
+              "effectGravity": 0,
+              "typeBody": "KINEMATIC",
+              "typeCollider": "CUBE",
+              "isTrigger": true,
+              "id": 1,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-09-10T08:30:18.971Z|70408",
+      "type": "Graph"
     }
   }
 }
