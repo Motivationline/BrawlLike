@@ -12,6 +12,7 @@ namespace Script {
         }
         public async destroy(): Promise<void> {
             let parent = this.node.getParent();
+            parent.removeChild(this.node);
 
             if (this.replaceWith) {
                 let replacement = <ƒ.Graph>ƒ.Project.getResourcesByName(this.replaceWith)[0]
@@ -20,13 +21,8 @@ namespace Script {
                     instance.mtxLocal.translation = this.node.mtxLocal.translation.clone;
                     instance.mtxLocal.scaling = this.node.mtxLocal.scaling.clone;
                     instance.mtxLocal.rotation = this.node.mtxLocal.rotation.clone;
-                    parent.replaceChild(this.node, instance);
-                } else {
-                    parent.removeChild(this.node);
+                    parent.addChild(instance);
                 }
-
-            } else {
-                parent.removeChild(this.node);
             }
 
         }

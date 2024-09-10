@@ -174,6 +174,7 @@ var Script;
         }
         async destroy() {
             let parent = this.node.getParent();
+            parent.removeChild(this.node);
             if (this.replaceWith) {
                 let replacement = ƒ.Project.getResourcesByName(this.replaceWith)[0];
                 if (replacement) {
@@ -181,14 +182,8 @@ var Script;
                     instance.mtxLocal.translation = this.node.mtxLocal.translation.clone;
                     instance.mtxLocal.scaling = this.node.mtxLocal.scaling.clone;
                     instance.mtxLocal.rotation = this.node.mtxLocal.rotation.clone;
-                    parent.replaceChild(this.node, instance);
+                    parent.addChild(instance);
                 }
-                else {
-                    parent.removeChild(this.node);
-                }
-            }
-            else {
-                parent.removeChild(this.node);
             }
         }
         serialize() {
@@ -1661,7 +1656,7 @@ var Script;
                     break;
                 case ATTACK_TYPE.SPECIAL:
                     if (this.attackSpecial.attack(_direction)) {
-                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime });
+                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackSpecial.lockTime });
                     }
                     break;
             }
@@ -1755,6 +1750,21 @@ var Script;
     }
     Script.Cowboy = Cowboy;
 })(Script || (Script = {}));
+// namespace Script {
+//     import ƒ = FudgeCore;
+//     export interface Team {
+//         players: Player[],
+//         remainingRespawns: number,
+//     }
+//     export interface GameSettings {
+//         timer: number,
+//         maxRespawns: number,
+//     }
+//     export class GameManager {
+//         static Instance: GameManager;
+//         teams: Team[];
+//     }
+// }
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;

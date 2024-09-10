@@ -171,7 +171,7 @@ namespace Script {
           break;
         case ATTACK_TYPE.SPECIAL:
           if (this.attackSpecial.attack(_direction)) {
-            this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime });
+            this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackSpecial.lockTime });
           }
           break;
       }
