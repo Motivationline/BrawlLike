@@ -232,17 +232,20 @@
             }
           }
         ],
-        "ComponentGraphFilter": [
-          {
-            "ƒ.ComponentGraphFilter": {
-              "active": true
-            }
-          }
-        ],
         "IgnoredByProjectiles": [
           {
             "Script.IgnoredByProjectiles": {
               "active": true
+            }
+          }
+        ],
+        "Destructible": [
+          {
+            "Script.Destructible": {
+              "Component": {
+                "active": true
+              },
+              "replaceWith": "BrawlerDummy"
             }
           }
         ]
@@ -289,16 +292,6 @@
                     "Component": {
                       "active": true
                     }
-                  }
-                }
-              ],
-              "Destructible": [
-                {
-                  "Script.Destructible": {
-                    "Component": {
-                      "active": true
-                    },
-                    "replaceWith": ""
                   }
                 }
               ]
@@ -8531,39 +8524,14 @@
                               },
                               "children": [
                                 {
-                                  "ƒ.GraphInstance": {
-                                    "name": "Box",
+                                  "ƒ.Node": {
+                                    "name": "BoxWrapper",
                                     "active": true,
                                     "components": {
                                       "ComponentTransform": [
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[-1, 0.5, 0]",
-                                              "rotation": "[0, 0, 0]",
-                                              "scaling": "[1, 1, 1]"
-                                            },
-                                            "Component": {
-                                              "active": true
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentRigidbody": [
-                                        {
-                                          "ƒ.ComponentRigidbody": {
-                                            "initialization": "TO_PIVOT",
-                                            "friction": 0.2,
-                                            "restitution": 0.2,
-                                            "mass": 1,
-                                            "dampTranslation": 0.1,
-                                            "dampRotation": 0.1,
-                                            "effectGravity": 1,
-                                            "typeBody": "STATIC",
-                                            "typeCollider": "CUBE",
-                                            "isTrigger": false,
-                                            "id": 2,
-                                            "pivot": {
                                               "translation": "[0, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
@@ -8573,348 +8541,76 @@
                                             }
                                           }
                                         }
-                                      ],
-                                      "ComponentGraphFilter": [
-                                        {
-                                          "ƒ.ComponentGraphFilter": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "IgnoredByProjectiles": [
-                                        {
-                                          "Script.IgnoredByProjectiles": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "Destructible": [
-                                        {
-                                          "Script.Destructible": {
-                                            "Component": {
-                                              "active": true
-                                            },
-                                            "replaceWith": ""
-                                          }
-                                        }
                                       ]
                                     },
                                     "children": [
                                       {
-                                        "ƒ.Node": {
-                                          "name": "Model",
-                                          "active": true,
-                                          "components": {
-                                            "ComponentTransform": [
-                                              {
-                                                "ƒ.ComponentTransform": {
-                                                  "local": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, -2, 0]",
-                                                    "scaling": "[1, 1, 1]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ],
-                                            "ComponentRigidbody": [
-                                              {
-                                                "ƒ.ComponentRigidbody": {
-                                                  "initialization": "TO_PIVOT",
-                                                  "friction": 0.2,
-                                                  "restitution": 0.2,
-                                                  "mass": 1,
-                                                  "dampTranslation": 0.1,
-                                                  "dampRotation": 0.1,
-                                                  "effectGravity": 1,
-                                                  "typeBody": "STATIC",
-                                                  "typeCollider": "CUBE",
-                                                  "isTrigger": false,
-                                                  "id": 1,
-                                                  "pivot": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 0, 0]",
-                                                    "scaling": "[0.8700000000000001, 0.8, 0.8700000000000001]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          },
-                                          "children": [
-                                            {
-                                              "ƒ.GraphInstance": {
-                                                "deserializeFromSource": true,
-                                                "idSource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-                                              }
-                                            }
-                                          ]
+                                        "ƒ.GraphInstance": {
+                                          "deserializeFromSource": true,
+                                          "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
                                         }
                                       }
-                                    ],
-                                    "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
+                                    ]
                                   }
                                 },
                                 {
-                                  "ƒ.GraphInstance": {
-                                    "name": "Box",
+                                  "ƒ.Node": {
+                                    "name": "BoxWrapper",
                                     "active": true,
                                     "components": {
                                       "ComponentTransform": [
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0.5, 0]",
+                                              "translation": "[1, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
                                               "active": true
                                             }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentRigidbody": [
-                                        {
-                                          "ƒ.ComponentRigidbody": {
-                                            "initialization": "TO_PIVOT",
-                                            "friction": 0.2,
-                                            "restitution": 0.2,
-                                            "mass": 1,
-                                            "dampTranslation": 0.1,
-                                            "dampRotation": 0.1,
-                                            "effectGravity": 1,
-                                            "typeBody": "STATIC",
-                                            "typeCollider": "CUBE",
-                                            "isTrigger": false,
-                                            "id": 2,
-                                            "pivot": {
-                                              "translation": "[0, 0, 0]",
-                                              "rotation": "[0, 0, 0]",
-                                              "scaling": "[1, 1, 1]"
-                                            },
-                                            "Component": {
-                                              "active": true
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentGraphFilter": [
-                                        {
-                                          "ƒ.ComponentGraphFilter": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "IgnoredByProjectiles": [
-                                        {
-                                          "Script.IgnoredByProjectiles": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "Destructible": [
-                                        {
-                                          "Script.Destructible": {
-                                            "Component": {
-                                              "active": true
-                                            },
-                                            "replaceWith": ""
                                           }
                                         }
                                       ]
                                     },
                                     "children": [
                                       {
-                                        "ƒ.Node": {
-                                          "name": "Model",
-                                          "active": true,
-                                          "components": {
-                                            "ComponentTransform": [
-                                              {
-                                                "ƒ.ComponentTransform": {
-                                                  "local": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 6, 0]",
-                                                    "scaling": "[1, 1, 1]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ],
-                                            "ComponentRigidbody": [
-                                              {
-                                                "ƒ.ComponentRigidbody": {
-                                                  "initialization": "TO_PIVOT",
-                                                  "friction": 0.2,
-                                                  "restitution": 0.2,
-                                                  "mass": 1,
-                                                  "dampTranslation": 0.1,
-                                                  "dampRotation": 0.1,
-                                                  "effectGravity": 1,
-                                                  "typeBody": "STATIC",
-                                                  "typeCollider": "CUBE",
-                                                  "isTrigger": false,
-                                                  "id": 1,
-                                                  "pivot": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 0, 0]",
-                                                    "scaling": "[0.8700000000000001, 0.8, 0.8700000000000001]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          },
-                                          "children": [
-                                            {
-                                              "ƒ.GraphInstance": {
-                                                "deserializeFromSource": true,
-                                                "idSource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-                                              }
-                                            }
-                                          ]
+                                        "ƒ.GraphInstance": {
+                                          "deserializeFromSource": true,
+                                          "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
                                         }
                                       }
-                                    ],
-                                    "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
+                                    ]
                                   }
                                 },
                                 {
-                                  "ƒ.GraphInstance": {
-                                    "name": "Box",
+                                  "ƒ.Node": {
+                                    "name": "BoxWrapper",
                                     "active": true,
                                     "components": {
                                       "ComponentTransform": [
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[1, 0.5, 0]",
+                                              "translation": "[-1, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
                                               "active": true
                                             }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentRigidbody": [
-                                        {
-                                          "ƒ.ComponentRigidbody": {
-                                            "initialization": "TO_PIVOT",
-                                            "friction": 0.2,
-                                            "restitution": 0.2,
-                                            "mass": 1,
-                                            "dampTranslation": 0.1,
-                                            "dampRotation": 0.1,
-                                            "effectGravity": 1,
-                                            "typeBody": "STATIC",
-                                            "typeCollider": "CUBE",
-                                            "isTrigger": false,
-                                            "id": 2,
-                                            "pivot": {
-                                              "translation": "[0, 0, 0]",
-                                              "rotation": "[0, 0, 0]",
-                                              "scaling": "[1, 1, 1]"
-                                            },
-                                            "Component": {
-                                              "active": true
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentGraphFilter": [
-                                        {
-                                          "ƒ.ComponentGraphFilter": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "IgnoredByProjectiles": [
-                                        {
-                                          "Script.IgnoredByProjectiles": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "Destructible": [
-                                        {
-                                          "Script.Destructible": {
-                                            "Component": {
-                                              "active": true
-                                            },
-                                            "replaceWith": ""
                                           }
                                         }
                                       ]
                                     },
                                     "children": [
                                       {
-                                        "ƒ.Node": {
-                                          "name": "Model",
-                                          "active": true,
-                                          "components": {
-                                            "ComponentTransform": [
-                                              {
-                                                "ƒ.ComponentTransform": {
-                                                  "local": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, -3, 0]",
-                                                    "scaling": "[1, 1, 1]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ],
-                                            "ComponentRigidbody": [
-                                              {
-                                                "ƒ.ComponentRigidbody": {
-                                                  "initialization": "TO_PIVOT",
-                                                  "friction": 0.2,
-                                                  "restitution": 0.2,
-                                                  "mass": 1,
-                                                  "dampTranslation": 0.1,
-                                                  "dampRotation": 0.1,
-                                                  "effectGravity": 1,
-                                                  "typeBody": "STATIC",
-                                                  "typeCollider": "CUBE",
-                                                  "isTrigger": false,
-                                                  "id": 1,
-                                                  "pivot": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 0, 0]",
-                                                    "scaling": "[0.8700000000000001, 0.8, 0.8700000000000001]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          },
-                                          "children": [
-                                            {
-                                              "ƒ.GraphInstance": {
-                                                "deserializeFromSource": true,
-                                                "idSource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-                                              }
-                                            }
-                                          ]
+                                        "ƒ.GraphInstance": {
+                                          "deserializeFromSource": true,
+                                          "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
                                         }
                                       }
-                                    ],
-                                    "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
+                                    ]
                                   }
                                 }
                               ]
@@ -8942,39 +8638,14 @@
                               },
                               "children": [
                                 {
-                                  "ƒ.GraphInstance": {
-                                    "name": "Box",
+                                  "ƒ.Node": {
+                                    "name": "BoxWrapper",
                                     "active": true,
                                     "components": {
                                       "ComponentTransform": [
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[-1, 0.5, 0]",
-                                              "rotation": "[0, 0, 0]",
-                                              "scaling": "[1, 1, 1]"
-                                            },
-                                            "Component": {
-                                              "active": true
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentRigidbody": [
-                                        {
-                                          "ƒ.ComponentRigidbody": {
-                                            "initialization": "TO_PIVOT",
-                                            "friction": 0.2,
-                                            "restitution": 0.2,
-                                            "mass": 1,
-                                            "dampTranslation": 0.1,
-                                            "dampRotation": 0.1,
-                                            "effectGravity": 1,
-                                            "typeBody": "STATIC",
-                                            "typeCollider": "CUBE",
-                                            "isTrigger": false,
-                                            "id": 2,
-                                            "pivot": {
                                               "translation": "[0, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
@@ -8984,348 +8655,76 @@
                                             }
                                           }
                                         }
-                                      ],
-                                      "ComponentGraphFilter": [
-                                        {
-                                          "ƒ.ComponentGraphFilter": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "IgnoredByProjectiles": [
-                                        {
-                                          "Script.IgnoredByProjectiles": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "Destructible": [
-                                        {
-                                          "Script.Destructible": {
-                                            "Component": {
-                                              "active": true
-                                            },
-                                            "replaceWith": ""
-                                          }
-                                        }
                                       ]
                                     },
                                     "children": [
                                       {
-                                        "ƒ.Node": {
-                                          "name": "Model",
-                                          "active": true,
-                                          "components": {
-                                            "ComponentTransform": [
-                                              {
-                                                "ƒ.ComponentTransform": {
-                                                  "local": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, -2, 0]",
-                                                    "scaling": "[1, 1, 1]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ],
-                                            "ComponentRigidbody": [
-                                              {
-                                                "ƒ.ComponentRigidbody": {
-                                                  "initialization": "TO_PIVOT",
-                                                  "friction": 0.2,
-                                                  "restitution": 0.2,
-                                                  "mass": 1,
-                                                  "dampTranslation": 0.1,
-                                                  "dampRotation": 0.1,
-                                                  "effectGravity": 1,
-                                                  "typeBody": "STATIC",
-                                                  "typeCollider": "CUBE",
-                                                  "isTrigger": false,
-                                                  "id": 1,
-                                                  "pivot": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 0, 0]",
-                                                    "scaling": "[0.8700000000000001, 0.8, 0.8700000000000001]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          },
-                                          "children": [
-                                            {
-                                              "ƒ.GraphInstance": {
-                                                "deserializeFromSource": true,
-                                                "idSource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-                                              }
-                                            }
-                                          ]
+                                        "ƒ.GraphInstance": {
+                                          "deserializeFromSource": true,
+                                          "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
                                         }
                                       }
-                                    ],
-                                    "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
+                                    ]
                                   }
                                 },
                                 {
-                                  "ƒ.GraphInstance": {
-                                    "name": "Box",
+                                  "ƒ.Node": {
+                                    "name": "BoxWrapper",
                                     "active": true,
                                     "components": {
                                       "ComponentTransform": [
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[0, 0.5, 0]",
+                                              "translation": "[1, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
                                               "active": true
                                             }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentRigidbody": [
-                                        {
-                                          "ƒ.ComponentRigidbody": {
-                                            "initialization": "TO_PIVOT",
-                                            "friction": 0.2,
-                                            "restitution": 0.2,
-                                            "mass": 1,
-                                            "dampTranslation": 0.1,
-                                            "dampRotation": 0.1,
-                                            "effectGravity": 1,
-                                            "typeBody": "STATIC",
-                                            "typeCollider": "CUBE",
-                                            "isTrigger": false,
-                                            "id": 2,
-                                            "pivot": {
-                                              "translation": "[0, 0, 0]",
-                                              "rotation": "[0, 0, 0]",
-                                              "scaling": "[1, 1, 1]"
-                                            },
-                                            "Component": {
-                                              "active": true
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentGraphFilter": [
-                                        {
-                                          "ƒ.ComponentGraphFilter": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "IgnoredByProjectiles": [
-                                        {
-                                          "Script.IgnoredByProjectiles": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "Destructible": [
-                                        {
-                                          "Script.Destructible": {
-                                            "Component": {
-                                              "active": true
-                                            },
-                                            "replaceWith": ""
                                           }
                                         }
                                       ]
                                     },
                                     "children": [
                                       {
-                                        "ƒ.Node": {
-                                          "name": "Model",
-                                          "active": true,
-                                          "components": {
-                                            "ComponentTransform": [
-                                              {
-                                                "ƒ.ComponentTransform": {
-                                                  "local": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 6, 0]",
-                                                    "scaling": "[1, 1, 1]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ],
-                                            "ComponentRigidbody": [
-                                              {
-                                                "ƒ.ComponentRigidbody": {
-                                                  "initialization": "TO_PIVOT",
-                                                  "friction": 0.2,
-                                                  "restitution": 0.2,
-                                                  "mass": 1,
-                                                  "dampTranslation": 0.1,
-                                                  "dampRotation": 0.1,
-                                                  "effectGravity": 1,
-                                                  "typeBody": "STATIC",
-                                                  "typeCollider": "CUBE",
-                                                  "isTrigger": false,
-                                                  "id": 1,
-                                                  "pivot": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 0, 0]",
-                                                    "scaling": "[0.8700000000000001, 0.8, 0.8700000000000001]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          },
-                                          "children": [
-                                            {
-                                              "ƒ.GraphInstance": {
-                                                "deserializeFromSource": true,
-                                                "idSource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-                                              }
-                                            }
-                                          ]
+                                        "ƒ.GraphInstance": {
+                                          "deserializeFromSource": true,
+                                          "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
                                         }
                                       }
-                                    ],
-                                    "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
+                                    ]
                                   }
                                 },
                                 {
-                                  "ƒ.GraphInstance": {
-                                    "name": "Box",
+                                  "ƒ.Node": {
+                                    "name": "BoxWrapper",
                                     "active": true,
                                     "components": {
                                       "ComponentTransform": [
                                         {
                                           "ƒ.ComponentTransform": {
                                             "local": {
-                                              "translation": "[1, 0.5, 0]",
+                                              "translation": "[-1, 0, 0]",
                                               "rotation": "[0, 0, 0]",
                                               "scaling": "[1, 1, 1]"
                                             },
                                             "Component": {
                                               "active": true
                                             }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentRigidbody": [
-                                        {
-                                          "ƒ.ComponentRigidbody": {
-                                            "initialization": "TO_PIVOT",
-                                            "friction": 0.2,
-                                            "restitution": 0.2,
-                                            "mass": 1,
-                                            "dampTranslation": 0.1,
-                                            "dampRotation": 0.1,
-                                            "effectGravity": 1,
-                                            "typeBody": "STATIC",
-                                            "typeCollider": "CUBE",
-                                            "isTrigger": false,
-                                            "id": 2,
-                                            "pivot": {
-                                              "translation": "[0, 0, 0]",
-                                              "rotation": "[0, 0, 0]",
-                                              "scaling": "[1, 1, 1]"
-                                            },
-                                            "Component": {
-                                              "active": true
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "ComponentGraphFilter": [
-                                        {
-                                          "ƒ.ComponentGraphFilter": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "IgnoredByProjectiles": [
-                                        {
-                                          "Script.IgnoredByProjectiles": {
-                                            "active": true
-                                          }
-                                        }
-                                      ],
-                                      "Destructible": [
-                                        {
-                                          "Script.Destructible": {
-                                            "Component": {
-                                              "active": true
-                                            },
-                                            "replaceWith": ""
                                           }
                                         }
                                       ]
                                     },
                                     "children": [
                                       {
-                                        "ƒ.Node": {
-                                          "name": "Model",
-                                          "active": true,
-                                          "components": {
-                                            "ComponentTransform": [
-                                              {
-                                                "ƒ.ComponentTransform": {
-                                                  "local": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, -3, 0]",
-                                                    "scaling": "[1, 1, 1]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ],
-                                            "ComponentRigidbody": [
-                                              {
-                                                "ƒ.ComponentRigidbody": {
-                                                  "initialization": "TO_PIVOT",
-                                                  "friction": 0.2,
-                                                  "restitution": 0.2,
-                                                  "mass": 1,
-                                                  "dampTranslation": 0.1,
-                                                  "dampRotation": 0.1,
-                                                  "effectGravity": 1,
-                                                  "typeBody": "STATIC",
-                                                  "typeCollider": "CUBE",
-                                                  "isTrigger": false,
-                                                  "id": 1,
-                                                  "pivot": {
-                                                    "translation": "[0, 0, 0]",
-                                                    "rotation": "[0, 0, 0]",
-                                                    "scaling": "[0.8700000000000001, 0.8, 0.8700000000000001]"
-                                                  },
-                                                  "Component": {
-                                                    "active": true
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          },
-                                          "children": [
-                                            {
-                                              "ƒ.GraphInstance": {
-                                                "deserializeFromSource": true,
-                                                "idSource": "GraphGLTF|2024-06-27T07:16:42.618Z|60213"
-                                              }
-                                            }
-                                          ]
+                                        "ƒ.GraphInstance": {
+                                          "deserializeFromSource": true,
+                                          "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
                                         }
                                       }
-                                    ],
-                                    "idSource": "Graph|2024-07-31T13:03:20.902Z|13065"
+                                    ]
                                   }
                                 }
                               ]
