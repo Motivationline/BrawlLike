@@ -245,7 +245,7 @@
               "Component": {
                 "active": true
               },
-              "replaceWith": "BrawlerDummy"
+              "replaceWith": "DestroyedCrateScene"
             }
           }
         ]
@@ -19354,7 +19354,22 @@
     "ƒ.GraphGLTF": {
       "name": "DestroyedCrateScene",
       "active": true,
-      "components": {},
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ]
+      },
       "idResource": "GraphGLTF|2024-09-10T10:08:14.194Z|20227",
       "type": "GraphGLTF",
       "url": "Assets\\Decorations\\CrateDestroyed.glb"
