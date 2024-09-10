@@ -355,6 +355,21 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    class DummyBrawler extends ComponentBrawler {
+        #private;
+        respawnTime: number;
+        walkRandom: boolean;
+        constructor();
+        protected death(): void;
+        private respawn;
+        private changeDirection;
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        update(): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     class ComponentEffect extends ƒ.Component {
         #private;
         duration: number;
