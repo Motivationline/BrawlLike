@@ -1794,21 +1794,6 @@ var Script;
     }
     Script.Cowboy = Cowboy;
 })(Script || (Script = {}));
-// namespace Script {
-//     import ƒ = FudgeCore;
-//     export interface Team {
-//         players: Player[],
-//         remainingRespawns: number,
-//     }
-//     export interface GameSettings {
-//         timer: number,
-//         maxRespawns: number,
-//     }
-//     export class GameManager {
-//         static Instance: GameManager;
-//         teams: Team[];
-//     }
-// }
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
@@ -1874,6 +1859,48 @@ var Script;
     class IgnoredByProjectiles extends ƒ.Component {
     }
     Script.IgnoredByProjectiles = IgnoredByProjectiles;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class ComponentRandomRotation extends ƒ.Component {
+        static iSubclass = ƒ.Component.registerSubclass(ComponentRandomRotation);
+        rotationY = 5;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            // Listen to this component being added to or removed from a node
+            this.addEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+            this.addEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
+        }
+        // Activate the functions of this component as response to events
+        hndEvent = (_event) => {
+            switch (_event.type) {
+                case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
+                    break;
+                case "componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */:
+                    this.removeEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
+                    this.removeEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
+                    break;
+                case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
+                    this.node.getChild(0).mtxLocal.rotateY(this.randomizeRotation(this.rotationY));
+                    break;
+            }
+        };
+        randomizeRotation(_number) {
+            let rangeNumber = Math.random() * _number;
+            let randNumber = Math.random();
+            if (randNumber < 0.5) {
+                return rangeNumber * -1;
+            }
+            else {
+                return rangeNumber;
+            }
+        }
+    }
+    Script.ComponentRandomRotation = ComponentRandomRotation;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

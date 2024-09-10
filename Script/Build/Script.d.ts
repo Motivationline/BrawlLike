@@ -375,6 +375,16 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    class ComponentRandomRotation extends ƒ.Component {
+        static readonly iSubclass: number;
+        rotationY: number;
+        constructor();
+        hndEvent: (_event: Event) => void;
+        private randomizeRotation;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     abstract class ServerSync extends ƒ.Component {
         id: string;
         ownerId: string;

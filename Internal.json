@@ -248,6 +248,13 @@
               "replaceWith": "DestroyedCrate"
             }
           }
+        ],
+        "ComponentRandomRotation": [
+          {
+            "Script.ComponentRandomRotation": {
+              "active": true
+            }
+          }
         ]
       },
       "children": [
