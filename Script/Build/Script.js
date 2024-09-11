@@ -1893,21 +1893,6 @@ var Script;
     }
     Script.DummyBrawler = DummyBrawler;
 })(Script || (Script = {}));
-// namespace Script {
-//     import ƒ = FudgeCore;
-//     export interface Team {
-//         players: Player[],
-//         remainingRespawns: number,
-//     }
-//     export interface GameSettings {
-//         timer: number,
-//         maxRespawns: number,
-//     }
-//     export class GameManager {
-//         static Instance: GameManager;
-//         teams: Team[];
-//     }
-// }
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;

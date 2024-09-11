@@ -13413,7 +13413,7 @@
                 "lockTime": 0,
                 "recoil": 4,
                 "invulerableTime": 0,
-                "effect": "TestEffect"
+                "effect": "SniperShotEffect"
               },
               "speed": 0.8,
               "range": 3,
@@ -13466,7 +13466,7 @@
                   "lockTime": 0,
                   "recoil": 0,
                   "invulerableTime": 0,
-                  "effect": ""
+                  "effect": "SniperShotEffect"
                 },
                 "speed": 2,
                 "range": 3,
@@ -15165,7 +15165,7 @@
                 "lockTime": 0.6000000000000001,
                 "recoil": 0.1,
                 "invulerableTime": 0,
-                "effect": ""
+                "effect": "SniperShotEffect"
               },
               "speed": 12,
               "range": 70,
@@ -15685,7 +15685,7 @@
                     "clrPrimary": "[1, 1, 1, 1]",
                     "clrSecondary": "[1, 1, 1, 1]",
                     "pivot": {
-                      "translation": "[0.6666666666666666, 0]",
+                      "translation": "[0.3333333333333333, 0.4166666666666667]",
                       "rotation": 0,
                       "scaling": "[0.3333333333333333, 0.3333333333333333]"
                     },
@@ -15926,6 +15926,147 @@
         }
       ],
       "idResource": "Graph|2024-09-10T10:56:19.973Z|96517",
+      "type": "Graph"
+    }
+  },
+  "Material|2024-09-11T10:20:04.179Z|41178": {
+    "ƒ.Material": {
+      "name": "ShaderLitTextured",
+      "idResource": "Material|2024-09-11T10:20:04.179Z|41178",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-09-11T10:20:32.681Z|66133"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "TextureImage|2024-09-11T10:20:32.681Z|66133": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Sprites\\Effects\\sprite_snipershot.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-09-11T10:20:32.681Z|66133",
+        "name": "Assets\\Sprites\\Effects\\sprite_snipershot.png",
+        "mipmap": "SMOOTH",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "AnimationSprite|2024-09-11T10:20:36.545Z|53007": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-09-11T10:20:36.545Z|53007",
+      "idTexture": "TextureImage|2024-09-11T10:20:32.681Z|66133",
+      "frames": 24,
+      "wrapAfter": 5,
+      "start": "[0, 0]",
+      "size": "[128, 128]",
+      "next": "[128, 0]",
+      "wrap": "[0, 127]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-09-11T10:20:36.545Z|53007",
+        "name": "AnimationSprite",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 30,
+        "animationStructure": {}
+      }
+    }
+  },
+  "Graph|2024-09-11T10:21:04.170Z|32533": {
+    "ƒ.Graph": {
+      "name": "SniperShotEffect",
+      "active": true,
+      "components": {
+        "ComponentEffect": [
+          {
+            "Script.ComponentEffect": {
+              "Component": {
+                "active": true
+              },
+              "duration": 0.75,
+              "offset": "[0, 0.4999999999999999, 0.9999999999999997]",
+              "offsetIsLocal": true
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "New Node",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0.6, 0.79375]",
+                      "rotation": 0,
+                      "scaling": "[0.2, 0.2]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-09-11T10:20:04.179Z|41178"
+                  }
+                }
+              ],
+              "ComponentAnimator": [
+                {
+                  "ƒ.ComponentAnimator": {
+                    "Component": {
+                      "active": true
+                    },
+                    "idAnimation": "AnimationSprite|2024-09-11T10:20:36.545Z|53007",
+                    "playmode": "loop",
+                    "quantization": "discrete",
+                    "scale": 1,
+                    "scaleWithGameTime": true,
+                    "animateInEditor": true
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[-90, 0, 0]",
+                      "scaling": "[2, 2, 2]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-09-11T10:21:04.170Z|32533",
       "type": "Graph"
     }
   }
