@@ -12646,6 +12646,8 @@
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.3,
                 "energyGenerationPerSecond": 1,
+                "energyGeneratedPerDamageDealt": 0,
+                "energyGeneratedPerDamageReceived": 0,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
@@ -12678,6 +12680,8 @@
               "damage": 100,
               "minDelayBetweenAttacks": 0.3,
               "energyGenerationPerSecond": 1,
+              "energyGeneratedPerDamageDealt": 0,
+              "energyGeneratedPerDamageReceived": 0,
               "energyNeededPerCharge": 1,
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
@@ -13058,16 +13062,18 @@
                 },
                 "previewType": 2,
                 "previewWidth": 1,
-                "range": 1,
+                "range": 0.5000000000000001,
                 "attackType": 0,
-                "maxCharges": 3,
+                "maxCharges": 4,
                 "damage": 100,
-                "minDelayBetweenAttacks": 0.09999999999999998,
-                "energyGenerationPerSecond": 0.7500000000000001,
+                "minDelayBetweenAttacks": 0.04999999999999999,
+                "energyGenerationPerSecond": 0.5000000000000001,
+                "energyGeneratedPerDamageDealt": 0,
+                "energyGeneratedPerDamageReceived": 0,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
-                "lockBrawlerForAnimationTime": true,
-                "lockTime": 0,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0.5,
                 "recoil": 0,
                 "invulerableTime": 0,
                 "effect": ""
@@ -13086,7 +13092,7 @@
                 },
                 "health": 500
               },
-              "speed": 2,
+              "speed": 1.4000000000000004,
               "animationIdleName": "SpiderIdle",
               "animationWalkName": "SpiderWalk",
               "animationAttackName": "SpiderAttack",
@@ -13107,11 +13113,13 @@
                   "range": 4.399999999999999,
                   "attackType": 1,
                   "maxCharges": 1,
-                  "damage": 100,
-                  "minDelayBetweenAttacks": 0.3,
-                  "energyGenerationPerSecond": 1,
-                  "energyNeededPerCharge": 1,
-                  "castingTime": 0.1,
+                  "damage": 50,
+                  "minDelayBetweenAttacks": 0.09999999999999998,
+                  "energyGenerationPerSecond": 2,
+                  "energyGeneratedPerDamageDealt": 1,
+                  "energyGeneratedPerDamageReceived": 0.5,
+                  "energyNeededPerCharge": 300,
+                  "castingTime": 0.09999999999999999,
                   "lockBrawlerForAnimationTime": false,
                   "lockTime": 0.7000000000000001,
                   "recoil": -18,
@@ -13394,14 +13402,16 @@
                 "range": 3,
                 "attackType": 0,
                 "maxCharges": 3,
-                "damage": 100,
+                "damage": 50,
                 "minDelayBetweenAttacks": 0.3,
-                "energyGenerationPerSecond": 1,
+                "energyGenerationPerSecond": 0.5,
+                "energyGeneratedPerDamageDealt": 0.01,
+                "energyGeneratedPerDamageReceived": 0,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0,
-                "recoil": 3,
+                "recoil": 4,
                 "invulerableTime": 0,
                 "effect": "TestEffect"
               },
@@ -13422,7 +13432,7 @@
                 "Component": {
                   "active": true
                 },
-                "health": 500
+                "health": 400
               },
               "speed": 1,
               "animationIdleName": "FroggerIdle",
@@ -13447,8 +13457,10 @@
                   "maxCharges": 1,
                   "damage": 100,
                   "minDelayBetweenAttacks": 0.3,
-                  "energyGenerationPerSecond": 0.25000000000000006,
-                  "energyNeededPerCharge": 1,
+                  "energyGenerationPerSecond": 0,
+                  "energyGeneratedPerDamageDealt": 1,
+                  "energyGeneratedPerDamageReceived": 0.25000000000000006,
+                  "energyNeededPerCharge": 300,
                   "castingTime": 0.4,
                   "lockBrawlerForAnimationTime": true,
                   "lockTime": 0,
@@ -14106,7 +14118,7 @@
                 "Component": {
                   "active": true
                 },
-                "health": 500
+                "health": 350
               },
               "speed": 1.5000000000000004,
               "animationIdleName": "BugsyIdle",
@@ -14130,7 +14142,9 @@
                 "maxCharges": 2,
                 "damage": 100,
                 "minDelayBetweenAttacks": 0.04999999999999999,
-                "energyGenerationPerSecond": 0.8,
+                "energyGenerationPerSecond": 0.6000000000000001,
+                "energyGeneratedPerDamageDealt": 0,
+                "energyGeneratedPerDamageReceived": 0,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
@@ -14162,11 +14176,13 @@
               "maxCharges": 1,
               "damage": 0,
               "minDelayBetweenAttacks": 0.04999999999999999,
-              "energyGenerationPerSecond": 1,
-              "energyNeededPerCharge": 1,
+              "energyGenerationPerSecond": 0,
+              "energyGeneratedPerDamageDealt": 1,
+              "energyGeneratedPerDamageReceived": 0.1,
+              "energyNeededPerCharge": 100,
               "castingTime": 0,
               "lockBrawlerForAnimationTime": false,
-              "lockTime": 0.7999999999999999,
+              "lockTime": 0.5,
               "recoil": -5,
               "invulerableTime": 0.7999999999999999,
               "effect": ""
@@ -14732,7 +14748,7 @@
               "Component": {
                 "active": true
               },
-              "damage": 100,
+              "damage": 125,
               "maxTicksPerEnemy": 1,
               "delayBetweenTicksInMS": 500,
               "delayBeforeFirstTickInMS": 0,
@@ -14890,20 +14906,24 @@
             }
           }
         ],
-        "ComponentBrawler": [
+        "DummyBrawler": [
           {
-            "Script.ComponentBrawler": {
-              "Damagable": {
-                "Component": {
-                  "active": true
+            "Script.DummyBrawler": {
+              "ComponentBrawler": {
+                "Damagable": {
+                  "Component": {
+                    "active": true
+                  },
+                  "health": 400
                 },
-                "health": 500
+                "speed": 0,
+                "animationIdleName": "",
+                "animationWalkName": "",
+                "animationAttackName": "",
+                "animationSpecialName": ""
               },
-              "speed": 0,
-              "animationIdleName": "",
-              "animationWalkName": "",
-              "animationAttackName": "",
-              "animationSpecialName": ""
+              "respawnTime": 5,
+              "walkRandom": false
             }
           }
         ]
@@ -15034,7 +15054,7 @@
               "dampRotation": 0.1,
               "effectGravity": 0,
               "typeBody": "KINEMATIC",
-              "typeCollider": "CUBE",
+              "typeCollider": "SPHERE",
               "isTrigger": true,
               "id": 0,
               "pivot": {
@@ -15112,7 +15132,7 @@
                 "Component": {
                   "active": true
                 },
-                "health": 500
+                "health": 300
               },
               "speed": 2,
               "animationIdleName": "SniiperIdle",
@@ -15136,11 +15156,13 @@
                 "maxCharges": 1,
                 "damage": 200,
                 "minDelayBetweenAttacks": 0.3,
-                "energyGenerationPerSecond": 0.5,
+                "energyGenerationPerSecond": 0.4,
+                "energyGeneratedPerDamageDealt": 0,
+                "energyGeneratedPerDamageReceived": 0,
                 "energyNeededPerCharge": 1,
                 "castingTime": 0.1,
                 "lockBrawlerForAnimationTime": true,
-                "lockTime": 0.7000000000000001,
+                "lockTime": 0.6000000000000001,
                 "recoil": 0.1,
                 "invulerableTime": 0,
                 "effect": ""
@@ -15169,13 +15191,15 @@
                 "maxCharges": 2,
                 "damage": 50,
                 "minDelayBetweenAttacks": 0.3,
-                "energyGenerationPerSecond": 1,
-                "energyNeededPerCharge": 1,
+                "energyGenerationPerSecond": 0,
+                "energyGeneratedPerDamageDealt": 0.5,
+                "energyGeneratedPerDamageReceived": 0.25000000000000006,
+                "energyNeededPerCharge": 100,
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": -0.5000000000000001,
                 "recoil": -0.6000000000000001,
-                "invulerableTime": 0.6000000000000001,
+                "invulerableTime": 0.40000000000000013,
                 "effect": ""
               },
               "aoeGraph": "AOEBunnyBox",
@@ -15783,7 +15807,7 @@
               "Component": {
                 "active": true
               },
-              "damage": 200,
+              "damage": 100,
               "maxTicksPerEnemy": 1,
               "delayBetweenTicksInMS": 500,
               "delayBeforeFirstTickInMS": 0,
