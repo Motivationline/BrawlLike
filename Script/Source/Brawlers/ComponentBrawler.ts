@@ -158,7 +158,11 @@ namespace Script {
     }
 
     dealDamage(_amt: number) {
-      if (!this.#invulnerable) super.dealDamage(_amt);
+      if (!this.#invulnerable) {
+        super.dealDamage(_amt);
+        this.attackMain?.charge(_amt, ChargeType.DAMAGE_RECEIVED);
+        this.attackSpecial?.charge(_amt, ChargeType.DAMAGE_RECEIVED);
+      }
     }
 
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
@@ -216,6 +220,11 @@ namespace Script {
     public makeInvulnerableFor(_timeInMS: number) {
       this.#invulnerable = true;
       this.#invulUntil = Math.max(this.#invulUntil, ƒ.Time.game.get() + _timeInMS);
+    }
+
+    public dealDamageToOthers(_amt: number) {
+      this.attackMain?.charge(_amt, ChargeType.DAMAGE_DEALT);
+      this.attackSpecial?.charge(_amt, ChargeType.DAMAGE_DEALT);
     }
 
     protected death(): void {

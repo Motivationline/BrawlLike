@@ -11,6 +11,12 @@ namespace Script {
         SPECIAL,
     }
 
+    export enum ChargeType {
+        PASSIVE,
+        DAMAGE_DEALT,
+        DAMAGE_RECEIVED,
+    }
+
     export abstract class ComponentAttack extends ƒ.Component {
         public previewType: AttackPreviewType = AttackPreviewType.LINE;
         public previewWidth: number = 1;
@@ -21,6 +27,8 @@ namespace Script {
         public minDelayBetweenAttacks: number = 0.3;
         public energyGenerationPerSecond: number = 0;
         public energyNeededPerCharge: number = 1;
+        public energyGeneratedPerDamageDealt: number = 0;
+        public energyGeneratedPerDamageReceived: number = 0;
         public castingTime: number = 0;
         public lockBrawlerForAnimationTime: boolean = false;
         public lockTime: number = 0;
@@ -178,13 +186,13 @@ namespace Script {
         }
 
         private executeEffect = async (_event: ƒ.EventTimer) => {
-            if(!this.effect) return;
+            if (!this.effect) return;
             let direction: ƒ.Vector3 = <ƒ.Vector3>_event.arguments[0];
             if (!direction) return;
 
             let obj = <ƒ.Graph>ƒ.Project.getResourcesByName(this.effect)[0];
-            if(!obj) return;
-            
+            if (!obj) return;
+
             let instance = await ƒ.Project.createGraphInstance(obj);
 
             this.node.addChild(instance);
@@ -197,17 +205,35 @@ namespace Script {
             if (charges < this.maxCharges) {
                 let deltaTime = ƒ.Loop.timeFrameGame / 1000;
                 let energyCharge = deltaTime * this.energyGenerationPerSecond;
-                this.currentEnergy = Math.min(this.maxEnergy, energyCharge + this.currentEnergy);
+                this.charge(energyCharge, ChargeType.PASSIVE);
+            }
+        }
 
-                for (let charge = 0; charge < this.maxCharges; charge++) {
-                    let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
-                    let thisChargePercentage: number = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
-                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
-                    let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
-                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation = new ƒ.Vector3(Math.min(1, thisChargePercentage) / 2 - 0.5, translation.y, translation.z);
-                    if (thisChargePercentage >= 1) {
-                        this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
-                    }
+        public charge(_amt: number, type: ChargeType) {
+            switch (type) {
+                case ChargeType.PASSIVE: {
+                    this.currentEnergy += _amt;
+                    break;
+                }
+                case ChargeType.DAMAGE_DEALT: {
+                    this.currentEnergy +=_amt * this.energyGeneratedPerDamageDealt;
+                    break;
+                }
+                case ChargeType.DAMAGE_RECEIVED: {
+                    this.currentEnergy += _amt * this.energyGeneratedPerDamageReceived;
+                    break;
+                }
+            }
+            this.currentEnergy = Math.min(this.currentEnergy, this.maxEnergy);
+
+            for (let charge = 0; charge < this.maxCharges; charge++) {
+                let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                let thisChargePercentage: number = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
+                this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
+                let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
+                this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation = new ƒ.Vector3(Math.min(1, thisChargePercentage) / 2 - 0.5, translation.y, translation.z);
+                if (thisChargePercentage >= 1) {
+                    this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
                 }
             }
         }
@@ -224,6 +250,8 @@ namespace Script {
                 damage: this.damage,
                 minDelayBetweenAttacks: this.minDelayBetweenAttacks,
                 energyGenerationPerSecond: this.energyGenerationPerSecond,
+                energyGeneratedPerDamageDealt: this.energyGeneratedPerDamageDealt,
+                energyGeneratedPerDamageReceived: this.energyGeneratedPerDamageReceived,
                 energyNeededPerCharge: this.energyNeededPerCharge,
                 castingTime: this.castingTime,
                 lockBrawlerForAnimationTime: this.lockBrawlerForAnimationTime,
@@ -256,6 +284,10 @@ namespace Script {
                 this.energyGenerationPerSecond = _serialization.energyGenerationPerSecond;
             if (_serialization.energyNeededPerCharge !== undefined)
                 this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
+            if (_serialization.energyGeneratedPerDamageDealt !== undefined)
+                this.energyGeneratedPerDamageDealt = _serialization.energyGeneratedPerDamageDealt;
+            if (_serialization.energyGeneratedPerDamageReceived !== undefined)
+                this.energyGeneratedPerDamageReceived = _serialization.energyGeneratedPerDamageReceived;
             if (_serialization.castingTime !== undefined)
                 this.castingTime = _serialization.castingTime;
             if (_serialization.lockBrawlerForAnimationTime !== undefined)

@@ -185,6 +185,11 @@ declare namespace Script {
         MAIN = 0,
         SPECIAL = 1
     }
+    enum ChargeType {
+        PASSIVE = 0,
+        DAMAGE_DEALT = 1,
+        DAMAGE_RECEIVED = 2
+    }
     abstract class ComponentAttack extends ƒ.Component {
         #private;
         previewType: AttackPreviewType;
@@ -196,6 +201,8 @@ declare namespace Script {
         minDelayBetweenAttacks: number;
         energyGenerationPerSecond: number;
         energyNeededPerCharge: number;
+        energyGeneratedPerDamageDealt: number;
+        energyGeneratedPerDamageReceived: number;
         castingTime: number;
         lockBrawlerForAnimationTime: boolean;
         lockTime: number;
@@ -217,6 +224,7 @@ declare namespace Script {
         executeRecoil: (_event: ƒ.EventTimer) => void;
         private executeEffect;
         update(): void;
+        charge(_amt: number, type: ChargeType): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
         getMutatorAttributeTypes(_mutator: ƒ.Mutator): ƒ.MutatorAttributeTypes;
@@ -336,6 +344,7 @@ declare namespace Script {
         addVelocity(_velocity: ƒ.Vector3, _duration: number): void;
         lockPlayerFor(_time: number): void;
         makeInvulnerableFor(_timeInMS: number): void;
+        dealDamageToOthers(_amt: number): void;
         protected death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;

@@ -62,7 +62,8 @@ namespace Script {
             // check for damagable target
             let damagable: Damagable = (<Damagable>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Damagable));
             if (damagable) {
-                damagable.health -= this.damage;
+                damagable.dealDamage(this.damage);
+                this.#owner.dealDamageToOthers(this.damage);
             }
             // check for destructible target
             if (this.destructive) {

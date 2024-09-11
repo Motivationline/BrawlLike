@@ -67,7 +67,8 @@ namespace Script {
             let currentTime = ƒ.Time.game.get();
             for (let pair of this.#damagables) {
                 if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
-                    pair.target.health -= this.damage;
+                    pair.target.dealDamage(this.damage);
+                    this.#owner.dealDamageToOthers(this.damage);
                     pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
                     pair.amtTicks++;
                 }
@@ -95,7 +96,8 @@ namespace Script {
             if (damagable) {
                 let amtTicks: number = 0;
                 if (this.delayBeforeFirstTickInMS === 0) {
-                    damagable.health -= this.damage;
+                    damagable.dealDamage(this.damage);
+                    this.#owner.dealDamageToOthers(this.damage);
                     amtTicks++;
                 }
                 let dInArray = this.#damagables.find((d) => d.target === damagable);

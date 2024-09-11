@@ -795,7 +795,8 @@ var Script;
             let currentTime = ƒ.Time.game.get();
             for (let pair of this.#damagables) {
                 if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
-                    pair.target.health -= this.damage;
+                    pair.target.dealDamage(this.damage);
+                    this.#owner.dealDamageToOthers(this.damage);
                     pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
                     pair.amtTicks++;
                 }
@@ -823,7 +824,8 @@ var Script;
             if (damagable) {
                 let amtTicks = 0;
                 if (this.delayBeforeFirstTickInMS === 0) {
-                    damagable.health -= this.damage;
+                    damagable.dealDamage(this.damage);
+                    this.#owner.dealDamageToOthers(this.damage);
                     amtTicks++;
                 }
                 let dInArray = this.#damagables.find((d) => d.target === damagable);
@@ -913,6 +915,12 @@ var Script;
         AttackType[AttackType["MAIN"] = 0] = "MAIN";
         AttackType[AttackType["SPECIAL"] = 1] = "SPECIAL";
     })(AttackType = Script.AttackType || (Script.AttackType = {}));
+    let ChargeType;
+    (function (ChargeType) {
+        ChargeType[ChargeType["PASSIVE"] = 0] = "PASSIVE";
+        ChargeType[ChargeType["DAMAGE_DEALT"] = 1] = "DAMAGE_DEALT";
+        ChargeType[ChargeType["DAMAGE_RECEIVED"] = 2] = "DAMAGE_RECEIVED";
+    })(ChargeType = Script.ChargeType || (Script.ChargeType = {}));
     class ComponentAttack extends ƒ.Component {
         previewType = AttackPreviewType.LINE;
         previewWidth = 1;
@@ -923,6 +931,8 @@ var Script;
         minDelayBetweenAttacks = 0.3;
         energyGenerationPerSecond = 0;
         energyNeededPerCharge = 1;
+        energyGeneratedPerDamageDealt = 0;
+        energyGeneratedPerDamageReceived = 0;
         castingTime = 0;
         lockBrawlerForAnimationTime = false;
         lockTime = 0;
@@ -1089,16 +1099,33 @@ var Script;
             if (charges < this.maxCharges) {
                 let deltaTime = ƒ.Loop.timeFrameGame / 1000;
                 let energyCharge = deltaTime * this.energyGenerationPerSecond;
-                this.currentEnergy = Math.min(this.maxEnergy, energyCharge + this.currentEnergy);
-                for (let charge = 0; charge < this.maxCharges; charge++) {
-                    let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
-                    let thisChargePercentage = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
-                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
-                    let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
-                    this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation = new ƒ.Vector3(Math.min(1, thisChargePercentage) / 2 - 0.5, translation.y, translation.z);
-                    if (thisChargePercentage >= 1) {
-                        this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
-                    }
+                this.charge(energyCharge, ChargeType.PASSIVE);
+            }
+        }
+        charge(_amt, type) {
+            switch (type) {
+                case ChargeType.PASSIVE: {
+                    this.currentEnergy += _amt;
+                    break;
+                }
+                case ChargeType.DAMAGE_DEALT: {
+                    this.currentEnergy += _amt * this.energyGeneratedPerDamageDealt;
+                    break;
+                }
+                case ChargeType.DAMAGE_RECEIVED: {
+                    this.currentEnergy += _amt * this.energyGeneratedPerDamageReceived;
+                    break;
+                }
+            }
+            this.currentEnergy = Math.min(this.currentEnergy, this.maxEnergy);
+            for (let charge = 0; charge < this.maxCharges; charge++) {
+                let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                let thisChargePercentage = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
+                this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
+                let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
+                this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation = new ƒ.Vector3(Math.min(1, thisChargePercentage) / 2 - 0.5, translation.y, translation.z);
+                if (thisChargePercentage >= 1) {
+                    this.#attackBars[charge].getComponent(ƒ.ComponentMaterial).clrPrimary = this.#attackBarColor;
                 }
             }
         }
@@ -1113,6 +1140,8 @@ var Script;
                 damage: this.damage,
                 minDelayBetweenAttacks: this.minDelayBetweenAttacks,
                 energyGenerationPerSecond: this.energyGenerationPerSecond,
+                energyGeneratedPerDamageDealt: this.energyGeneratedPerDamageDealt,
+                energyGeneratedPerDamageReceived: this.energyGeneratedPerDamageReceived,
                 energyNeededPerCharge: this.energyNeededPerCharge,
                 castingTime: this.castingTime,
                 lockBrawlerForAnimationTime: this.lockBrawlerForAnimationTime,
@@ -1144,6 +1173,10 @@ var Script;
                 this.energyGenerationPerSecond = _serialization.energyGenerationPerSecond;
             if (_serialization.energyNeededPerCharge !== undefined)
                 this.energyNeededPerCharge = _serialization.energyNeededPerCharge;
+            if (_serialization.energyGeneratedPerDamageDealt !== undefined)
+                this.energyGeneratedPerDamageDealt = _serialization.energyGeneratedPerDamageDealt;
+            if (_serialization.energyGeneratedPerDamageReceived !== undefined)
+                this.energyGeneratedPerDamageReceived = _serialization.energyGeneratedPerDamageReceived;
             if (_serialization.castingTime !== undefined)
                 this.castingTime = _serialization.castingTime;
             if (_serialization.lockBrawlerForAnimationTime !== undefined)
@@ -1290,7 +1323,8 @@ var Script;
             // check for damagable target
             let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
             if (damagable) {
-                damagable.health -= this.damage;
+                damagable.dealDamage(this.damage);
+                this.#owner.dealDamageToOthers(this.damage);
             }
             // check for destructible target
             if (this.destructive) {
@@ -1686,8 +1720,11 @@ var Script;
             }
         }
         dealDamage(_amt) {
-            if (!this.#invulnerable)
+            if (!this.#invulnerable) {
                 super.dealDamage(_amt);
+                this.attackMain?.charge(_amt, Script.ChargeType.DAMAGE_RECEIVED);
+                this.attackSpecial?.charge(_amt, Script.ChargeType.DAMAGE_RECEIVED);
+            }
         }
         attack(_atk, _direction) {
             if (this.#currentlyActiveAnimation.lock)
@@ -1740,6 +1777,10 @@ var Script;
         makeInvulnerableFor(_timeInMS) {
             this.#invulnerable = true;
             this.#invulUntil = Math.max(this.#invulUntil, ƒ.Time.game.get() + _timeInMS);
+        }
+        dealDamageToOthers(_amt) {
+            this.attackMain?.charge(_amt, Script.ChargeType.DAMAGE_DEALT);
+            this.attackSpecial?.charge(_amt, Script.ChargeType.DAMAGE_DEALT);
         }
         death() {
             console.log("I died.", this);
