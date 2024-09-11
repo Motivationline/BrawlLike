@@ -104,14 +104,8 @@
         "name": "Effects",
         "entries": [
           {
-            "idResource": "Graph|2024-09-06T09:45:25.078Z|59013"
-          },
-          {
             "name": "TestEffect",
             "entries": [
-              {
-                "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298"
-              },
               {
                 "idResource": "Material|2024-09-06T13:52:35.593Z|50694"
               },
@@ -120,8 +114,31 @@
               },
               {
                 "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078"
+              },
+              {
+                "idResource": "Graph|2024-09-06T09:45:25.078Z|59013"
               }
             ]
+          },
+          {
+            "name": "SniperShot",
+            "entries": [
+              {
+                "idResource": "Material|2024-09-11T10:20:04.179Z|41178"
+              },
+              {
+                "idResource": "TextureImage|2024-09-11T10:20:32.681Z|66133"
+              },
+              {
+                "idResource": "AnimationSprite|2024-09-11T10:20:36.545Z|53007"
+              },
+              {
+                "idResource": "Graph|2024-09-11T10:21:04.170Z|32533"
+              }
+            ]
+          },
+          {
+            "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298"
           }
         ]
       },
