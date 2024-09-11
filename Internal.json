@@ -13011,7 +13011,7 @@
   },
   "Graph|2024-06-28T13:29:09.815Z|45211": {
     "ƒ.Graph": {
-      "name": "BrawlerCowboy",
+      "name": "BrawlerSpider",
       "active": true,
       "components": {
         "ComponentTransform": [
@@ -13070,13 +13070,13 @@
                 "energyGenerationPerSecond": 0.5000000000000001,
                 "energyGeneratedPerDamageDealt": 0,
                 "energyGeneratedPerDamageReceived": 0,
-                "energyNeededPerCharge": 1,
+                "energyNeededPerCharge": 300,
                 "castingTime": 0,
                 "lockBrawlerForAnimationTime": false,
                 "lockTime": 0.5,
                 "recoil": 0,
                 "invulerableTime": 0,
-                "effect": ""
+                "effect": "SpiderByteEffect"
               },
               "aoeGraph": "AOEBite",
               "offset": "[0, 0, 0.6000000000000001]"
@@ -13118,9 +13118,9 @@
                   "energyGenerationPerSecond": 2,
                   "energyGeneratedPerDamageDealt": 1,
                   "energyGeneratedPerDamageReceived": 0.5,
-                  "energyNeededPerCharge": 300,
+                  "energyNeededPerCharge": 1,
                   "castingTime": 0.09999999999999999,
-                  "lockBrawlerForAnimationTime": false,
+                  "lockBrawlerForAnimationTime": true,
                   "lockTime": 0.7000000000000001,
                   "recoil": -18,
                   "invulerableTime": 0,
@@ -13413,7 +13413,7 @@
                 "lockTime": 0,
                 "recoil": 4,
                 "invulerableTime": 0,
-                "effect": "SniperShotEffect"
+                "effect": ""
               },
               "speed": 0.8,
               "range": 3,
@@ -14756,7 +14756,7 @@
               "radius": 1.3000000000000003,
               "destructive": true,
               "durationDamage": 1,
-              "durationVisual": 1,
+              "durationVisual": 0.8,
               "areaVisible": true
             }
           }
@@ -14808,7 +14808,23 @@
           }
         ]
       },
-      "children": [],
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-08-01T14:29:16.075Z|82016"
+                }
+              }
+            ]
+          }
+        }
+      ],
       "idResource": "Graph|2024-08-01T08:52:29.540Z|78870",
       "type": "Graph"
     }
@@ -16021,7 +16037,7 @@
                     "clrPrimary": "[1, 1, 1, 1]",
                     "clrSecondary": "[1, 1, 1, 1]",
                     "pivot": {
-                      "translation": "[0.6, 0.79375]",
+                      "translation": "[0, 0]",
                       "rotation": 0,
                       "scaling": "[0.2, 0.2]"
                     },
@@ -16043,7 +16059,7 @@
                     "quantization": "discrete",
                     "scale": 1,
                     "scaleWithGameTime": true,
-                    "animateInEditor": true
+                    "animateInEditor": false
                   }
                 }
               ],
@@ -16067,6 +16083,288 @@
         }
       ],
       "idResource": "Graph|2024-09-11T10:21:04.170Z|32533",
+      "type": "Graph"
+    }
+  },
+  "TextureImage|2024-09-11T13:32:15.706Z|71945": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Sprites\\Effects\\sprite_burst.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-09-11T13:32:15.706Z|71945",
+        "name": "Assets\\Sprites\\Effects\\sprite_burst.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "Material|2024-09-11T13:32:26.977Z|17156": {
+    "ƒ.Material": {
+      "name": "ShaderSpiderByte",
+      "idResource": "Material|2024-09-11T13:32:26.977Z|17156",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-09-11T13:34:03.551Z|49343"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "TextureImage|2024-09-11T13:34:03.551Z|49343": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Sprites\\Effects\\spider_byte.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-09-11T13:34:03.551Z|49343",
+        "name": "Assets\\Sprites\\Effects\\spider_byte.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "Material|2024-09-11T13:32:30.808Z|13598": {
+    "ƒ.Material": {
+      "name": "ShaderCloudBurst",
+      "idResource": "Material|2024-09-11T13:32:30.808Z|13598",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-09-11T13:32:15.706Z|71945"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "AnimationSprite|2024-09-11T13:32:34.961Z|29312": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-09-11T13:32:34.961Z|29312",
+      "idTexture": "TextureImage|2024-09-11T13:34:03.551Z|49343",
+      "frames": 17,
+      "wrapAfter": 5,
+      "start": "[0, 0]",
+      "size": "[128, 128]",
+      "next": "[128, 0]",
+      "wrap": "[0, 128]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-09-11T13:32:34.961Z|29312",
+        "name": "AnimationSpiderByte",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 30,
+        "animationStructure": {}
+      }
+    }
+  },
+  "AnimationSprite|2024-09-11T13:32:37.894Z|33486": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-09-11T13:32:37.894Z|33486",
+      "idTexture": "TextureImage|2024-09-11T13:32:15.706Z|71945",
+      "frames": 30,
+      "wrapAfter": 6,
+      "start": "[0, 0]",
+      "size": "[128, 128]",
+      "next": "[128, 0]",
+      "wrap": "[0, 128]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-09-11T13:32:37.894Z|33486",
+        "name": "AnimationCloudBurst",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 30,
+        "animationStructure": {}
+      }
+    }
+  },
+  "Graph|2024-09-11T13:35:21.567Z|38358": {
+    "ƒ.Graph": {
+      "name": "SpiderByteEffect",
+      "active": true,
+      "components": {
+        "ComponentEffect": [
+          {
+            "Script.ComponentEffect": {
+              "Component": {
+                "active": true
+              },
+              "duration": 0.5000000000000001,
+              "offset": "[0, 0, 0.7000000000000001]",
+              "offsetIsLocal": true
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "New Node",
+            "active": true,
+            "components": {
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[0.2, 0.2]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-09-11T13:32:26.977Z|17156"
+                  }
+                }
+              ],
+              "ComponentAnimator": [
+                {
+                  "ƒ.ComponentAnimator": {
+                    "Component": {
+                      "active": true
+                    },
+                    "idAnimation": "AnimationSprite|2024-09-11T13:32:34.961Z|29312",
+                    "playmode": "loop",
+                    "quantization": "discrete",
+                    "scale": 1,
+                    "scaleWithGameTime": true,
+                    "animateInEditor": false
+                  }
+                }
+              ],
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[-90, -90, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-09-11T13:35:21.567Z|38358",
+      "type": "Graph"
+    }
+  },
+  "Graph|2024-09-11T13:36:02.753Z|69166": {
+    "ƒ.Graph": {
+      "name": "CloudBurstEffect",
+      "active": true,
+      "components": {
+        "ComponentEffect": [
+          {
+            "Script.ComponentEffect": {
+              "Component": {
+                "active": true
+              },
+              "duration": 1,
+              "offset": "[0, 0.1, 0]",
+              "offsetIsLocal": true
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "New Node",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSprite|2024-09-06T13:52:27.598Z|01298",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[0.16666666666666666, 0.16666666666666666]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-09-11T13:32:30.808Z|13598"
+                  }
+                }
+              ],
+              "ComponentAnimator": [
+                {
+                  "ƒ.ComponentAnimator": {
+                    "Component": {
+                      "active": true
+                    },
+                    "idAnimation": "AnimationSprite|2024-09-11T13:32:37.894Z|33486",
+                    "playmode": "loop",
+                    "quantization": "discrete",
+                    "scale": 1,
+                    "scaleWithGameTime": true,
+                    "animateInEditor": false
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[-90, 0, 0]",
+                      "scaling": "[2, 2, 2]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-09-11T13:36:02.753Z|69166",
       "type": "Graph"
     }
   }

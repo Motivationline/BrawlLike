@@ -104,6 +104,26 @@
         "name": "Effects",
         "entries": [
           {
+            "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298"
+          },
+          {
+            "name": "EffectGraphs",
+            "entries": [
+              {
+                "idResource": "Graph|2024-09-11T10:21:04.170Z|32533"
+              },
+              {
+                "idResource": "Graph|2024-09-06T09:45:25.078Z|59013"
+              },
+              {
+                "idResource": "Graph|2024-09-11T13:35:21.567Z|38358"
+              },
+              {
+                "idResource": "Graph|2024-09-11T13:36:02.753Z|69166"
+              }
+            ]
+          },
+          {
             "name": "TestEffect",
             "entries": [
               {
@@ -114,9 +134,6 @@
               },
               {
                 "idResource": "AnimationSprite|2024-09-06T13:53:51.450Z|62078"
-              },
-              {
-                "idResource": "Graph|2024-09-06T09:45:25.078Z|59013"
               }
             ]
           },
@@ -131,14 +148,36 @@
               },
               {
                 "idResource": "AnimationSprite|2024-09-11T10:20:36.545Z|53007"
-              },
-              {
-                "idResource": "Graph|2024-09-11T10:21:04.170Z|32533"
               }
             ]
           },
           {
-            "idResource": "MeshSprite|2024-09-06T13:52:27.598Z|01298"
+            "name": "SpiderByte",
+            "entries": [
+              {
+                "idResource": "TextureImage|2024-09-11T13:34:03.551Z|49343"
+              },
+              {
+                "idResource": "Material|2024-09-11T13:32:26.977Z|17156"
+              },
+              {
+                "idResource": "AnimationSprite|2024-09-11T13:32:34.961Z|29312"
+              }
+            ]
+          },
+          {
+            "name": "CloudBurst",
+            "entries": [
+              {
+                "idResource": "TextureImage|2024-09-11T13:32:15.706Z|71945"
+              },
+              {
+                "idResource": "Material|2024-09-11T13:32:30.808Z|13598"
+              },
+              {
+                "idResource": "AnimationSprite|2024-09-11T13:32:37.894Z|33486"
+              }
+            ]
           }
         ]
       },
