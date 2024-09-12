@@ -685,6 +685,7 @@ var Script;
     function start(_event) {
         Script.viewport = _event.detail;
         Script.viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
+        Script.viewport.addEventListener("renderEnd" /* ƒ.EVENT.RENDER_END */, drawAttackPreviews);
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         // ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -728,6 +729,19 @@ var Script;
         }
         client.connectToServer(serverURL);
         return client;
+    }
+    /** Draw the attack previews after all other rendering with disabled depth test */
+    function drawAttackPreviews() {
+        if (Script.ComponentAttack.activePreviews.size == 0)
+            return;
+        ƒ.Render.setDepthTest(false);
+        for (const previewNode of Script.ComponentAttack.activePreviews) {
+            previewNode.activate(true);
+            ƒ.Render.prepare(previewNode, { ignorePhysics: true }, previewNode.getParent().mtxWorld);
+            ƒ.Render.draw(Script.viewport.camera);
+            previewNode.activate(false);
+        }
+        ƒ.Render.setDepthTest(true);
     }
 })(Script || (Script = {}));
 var Script;
@@ -922,6 +936,7 @@ var Script;
         ChargeType[ChargeType["DAMAGE_RECEIVED"] = 2] = "DAMAGE_RECEIVED";
     })(ChargeType = Script.ChargeType || (Script.ChargeType = {}));
     class ComponentAttack extends ƒ.Component {
+        static activePreviews = new Set();
         previewType = AttackPreviewType.LINE;
         previewWidth = 1;
         range = 5;
@@ -957,12 +972,12 @@ var Script;
             });
         }
         showPreview() {
-            this.#previewNode.activate(true);
             this.#previewActive = true;
+            ComponentAttack.activePreviews.add(this.#previewNode);
         }
         hidePreview() {
-            this.#previewNode.activate(false);
             this.#previewActive = false;
+            ComponentAttack.activePreviews.delete(this.#previewNode);
         }
         updatePreview(_brawlerPosition, _mousePosition) {
             if (!this.#previewActive)
@@ -1020,8 +1035,8 @@ var Script;
             mesh.mtxPivot.rotateX(-90);
             node.addChild(childNode);
             this.#previewNode = node;
-            this.node.addChild(node);
-            this.hidePreview();
+            this.#previewNode.activate(false);
+            this.node.addChild(this.#previewNode);
             // Chargebar
             this.maxEnergy = this.maxCharges * this.energyNeededPerCharge;
             this.currentEnergy = this.maxEnergy;

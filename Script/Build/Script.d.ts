@@ -192,6 +192,7 @@ declare namespace Script {
     }
     abstract class ComponentAttack extends ƒ.Component {
         #private;
+        static activePreviews: Set<ƒ.Node>;
         previewType: AttackPreviewType;
         previewWidth: number;
         range: number;

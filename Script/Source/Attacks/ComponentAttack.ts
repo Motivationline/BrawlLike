@@ -18,6 +18,8 @@ namespace Script {
     }
 
     export abstract class ComponentAttack extends ƒ.Component {
+        public static activePreviews: Set<ƒ.Node> = new Set();
+
         public previewType: AttackPreviewType = AttackPreviewType.LINE;
         public previewWidth: number = 1;
         public range: number = 5;
@@ -57,13 +59,13 @@ namespace Script {
         }
 
         public showPreview() {
-            this.#previewNode.activate(true);
             this.#previewActive = true;
+            ComponentAttack.activePreviews.add(this.#previewNode);
         }
 
         public hidePreview() {
-            this.#previewNode.activate(false);
             this.#previewActive = false;
+            ComponentAttack.activePreviews.delete(this.#previewNode);
         }
 
         public updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3) {
@@ -124,8 +126,8 @@ namespace Script {
             node.addChild(childNode);
 
             this.#previewNode = node;
-            this.node.addChild(node);
-            this.hidePreview();
+            this.#previewNode.activate(false);
+            this.node.addChild(this.#previewNode);
 
             // Chargebar
 

@@ -26,6 +26,7 @@ namespace Script {
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
     viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
+    viewport.addEventListener(ƒ.EVENT.RENDER_END, drawAttackPreviews);
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     // ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -76,5 +77,20 @@ namespace Script {
     }
     client.connectToServer(serverURL);
     return client;
+  }
+
+  /** Draw the attack previews after all other rendering with disabled depth test */
+  function drawAttackPreviews(): void {
+    if (ComponentAttack.activePreviews.size == 0)
+      return;
+
+    ƒ.Render.setDepthTest(false)
+    for (const previewNode of ComponentAttack.activePreviews) {
+      previewNode.activate(true);
+      ƒ.Render.prepare(previewNode, { ignorePhysics: true }, previewNode.getParent().mtxWorld);
+      ƒ.Render.draw(viewport.camera);
+      previewNode.activate(false);
+    }
+    ƒ.Render.setDepthTest(true);
   }
 }
