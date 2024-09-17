@@ -13202,7 +13202,7 @@
               "Component": {
                 "active": true
               },
-              "replaceWith": ""
+              "replaceWith": "DestroyedGrassPatch"
             }
           }
         ],
@@ -16365,6 +16365,57 @@
         }
       ],
       "idResource": "Graph|2024-09-11T13:36:02.753Z|69166",
+      "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-09-13T08:07:51.203Z|14537": {
+    "ƒ.GraphGLTF": {
+      "name": "RoundBushScene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-09-13T08:07:51.203Z|14537",
+      "type": "GraphGLTF",
+      "url": "Assets\\Decorations\\BushDestroyed.glb"
+    }
+  },
+  "Graph|2024-09-13T08:08:13.774Z|14204": {
+    "ƒ.Graph": {
+      "name": "DestroyedGrassPatch",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "wrapper",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-09-13T08:07:51.203Z|14537"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idResource": "Graph|2024-09-13T08:08:13.774Z|14204",
       "type": "Graph"
     }
   }
