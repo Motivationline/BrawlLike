@@ -13068,36 +13068,6 @@
             }
           }
         ],
-        "ComponentAOEAttack": [
-          {
-            "Script.ComponentAOEAttack": {
-              "ComponentAttack": {
-                "Component": {
-                  "active": true
-                },
-                "previewType": 2,
-                "previewWidth": 1,
-                "range": 0.5000000000000001,
-                "attackType": 0,
-                "maxCharges": 4,
-                "damage": 100,
-                "minDelayBetweenAttacks": 0.04999999999999999,
-                "energyGenerationPerSecond": 0.5000000000000001,
-                "energyGeneratedPerDamageDealt": 0,
-                "energyGeneratedPerDamageReceived": 0,
-                "energyNeededPerCharge": 1,
-                "castingTime": 0,
-                "lockBrawlerForAnimationTime": false,
-                "lockTime": 0.5,
-                "recoil": 0,
-                "invulerableTime": 0,
-                "effect": "SpiderByteEffect"
-              },
-              "aoeGraph": "AOEBite",
-              "offset": "[0, 0, 0.6000000000000001]"
-            }
-          }
-        ],
         "ComponentBrawler": [
           {
             "Script.ComponentBrawler": {
@@ -13146,6 +13116,41 @@
               },
               "moveColliderUpBy": 2,
               "aoeDelay": 0.4500000000000002
+            }
+          }
+        ],
+        "CowboyMainAttack": [
+          {
+            "Script.CowboyMainAttack": {
+              "ComponentAttack": {
+                "Component": {
+                  "active": true
+                },
+                "previewType": 2,
+                "previewWidth": 0.8,
+                "range": 0.6000000000000001,
+                "attackType": 0,
+                "maxCharges": 4,
+                "damage": 80,
+                "minDelayBetweenAttacks": 0.04999999999999999,
+                "energyGenerationPerSecond": 0.4999999999999999,
+                "energyGeneratedPerDamageDealt": 0,
+                "energyGeneratedPerDamageReceived": 0,
+                "energyNeededPerCharge": 1,
+                "castingTime": 0,
+                "lockBrawlerForAnimationTime": false,
+                "lockTime": 0.4,
+                "recoil": -1,
+                "invulerableTime": 0,
+                "effect": "SpiderByteEffect"
+              },
+              "speed": 4.200000000000002,
+              "range": 0.6000000000000001,
+              "rotateInDirection": true,
+              "attachedToBrawler": false,
+              "projectile": "SpiderMelee",
+              "gravity": false,
+              "destructive": false
             }
           }
         ]
@@ -24522,6 +24527,73 @@
         }
       ],
       "idResource": "Graph|2024-09-26T09:24:11.441Z|80993",
+      "type": "Graph"
+    }
+  },
+  "Graph|2024-10-11T10:14:53.236Z|31292": {
+    "ƒ.Graph": {
+      "name": "SpiderMelee",
+      "active": true,
+      "components": {
+        "ComponentProjectile": [
+          {
+            "Script.ComponentProjectile": {
+              "Component": {
+                "active": true
+              },
+              "impactAOE": ""
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1.0000001192092896, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentRigidbody": [
+          {
+            "ƒ.ComponentRigidbody": {
+              "initialization": "TO_PIVOT",
+              "friction": 0,
+              "restitution": 0.2,
+              "mass": 1,
+              "dampTranslation": 0,
+              "dampRotation": 0.1,
+              "effectGravity": 0,
+              "typeBody": "DYNAMIC",
+              "typeCollider": "SPHERE",
+              "isTrigger": true,
+              "id": 0,
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[90, 0, 0]",
+                "scaling": "[0.7000000178813933, 0.7000000178813935, 0.7000000000000001]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "IgnoredByProjectiles": [
+          {
+            "Script.IgnoredByProjectiles": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2024-10-11T10:14:53.236Z|31292",
       "type": "Graph"
     }
   }
