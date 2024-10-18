@@ -133,7 +133,7 @@ namespace Script {
 
     protected move() {
       let now = ƒ.Time.game.get();
-      let combinedVelocity: ƒ.Vector3 = new ƒ.Vector3();
+      let combinedVelocity: ƒ.Vector3 = ƒ.Recycler.get(ƒ.Vector3);
       for (let i: number = 0; i < this.#velocityOverrides.length; i++) {
         let vo = this.#velocityOverrides[i];
         if (vo.until < now) {
@@ -155,6 +155,7 @@ namespace Script {
       } else {
         this.playAnimation("idle");
       }
+      ƒ.Recycler.store(combinedVelocity);
     }
 
     dealDamage(_amt: number) {

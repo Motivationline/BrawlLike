@@ -685,7 +685,7 @@ var Script;
     }
     function start(_event) {
         Script.viewport = _event.detail;
-        Script.viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
+        // viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
         Script.viewport.addEventListener("renderEnd" /* ƒ.EVENT.RENDER_END */, drawAttackPreviews);
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         // ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -1712,7 +1712,7 @@ var Script;
         }
         move() {
             let now = ƒ.Time.game.get();
-            let combinedVelocity = new ƒ.Vector3();
+            let combinedVelocity = ƒ.Recycler.get(ƒ.Vector3);
             for (let i = 0; i < this.#velocityOverrides.length; i++) {
                 let vo = this.#velocityOverrides[i];
                 if (vo.until < now) {
@@ -1734,6 +1734,7 @@ var Script;
             else {
                 this.playAnimation("idle");
             }
+            ƒ.Recycler.store(combinedVelocity);
         }
         dealDamage(_amt) {
             if (!this.#invulnerable) {
