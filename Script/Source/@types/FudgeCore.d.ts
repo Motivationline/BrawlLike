@@ -177,9 +177,9 @@ declare namespace FudgeCore {
         NODE_SERIALIZED = "nodeSerialized",
         /** dispatched to {@link Node} and all its {@link Component}s when it's done deserializing, so all components, children and attributes are available */
         NODE_DESERIALIZED = "nodeDeserialized",
-        /** dispatched to {@link GraphInstance} when it's content is set according to a serialization of a {@link Graph}. Broadcasted, so needs to be caught in capture. */
+        /** broadcast from a {@link GraphInstance} to all its descendants when it's content is set according to a serialization of a {@link Graph}. Broadcasted, so needs to be caught in capture. */
         GRAPH_INSTANTIATED = "graphInstantiated",
-        /** dispatched to a {@link Graph} when it's finished deserializing. Broadcasted, so needs to be caught in capture. */
+        /** broadcast from a {@link Graph} to all its descendants when it's finished deserializing. Broadcasted, so needs to be caught in capture. */
         GRAPH_DESERIALIZED = "graphDeserialized",
         /** dispatched by a {@link Graph} when it and its connected instances have finished mutating  */
         GRAPH_MUTATED = "graphMutated",
@@ -271,11 +271,45 @@ declare namespace FudgeCore {
      */
     function getMutatorOfArbitrary(_object: Object): Mutator;
     /**
-     * Base class for all types being mutable using {@link Mutator}-objects, thus providing and using interfaces created at runtime.
-     * Mutables provide a {@link Mutator} that is build by collecting all object-properties that are either of a primitive type or again Mutable.
-     * Subclasses can either reduce the standard {@link Mutator} built by this base class by deleting properties or implement an individual getMutator-method.
+     * Association of an attribute with its specified type (constructor).
+     * @see {@link Metadata}.
+     */
+    type MetaAttributeTypes = Record<string | symbol, Function>;
+    /**
+     * Metadata for classes extending {@link Mutable}. Metadata needs to be explicitly specified using decorators.
+     * @see {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#decorator-metadata | type script 5.2 feature "decorator metadata"} for additional information.
+     */
+    interface Metadata {
+        /**
+         * The specified types of the attributes of a class. Use the {@link type} decorator to add type information to the metadata of a class.
+         */
+        attributeTypes?: MetaAttributeTypes;
+        enumerableKeys?: (string | symbol)[];
+    }
+    /**
+     * Decorator to specify a type (constructor) for an attribute within a class's {@link Metadata | metadata}.
+     * This allows the intended type of an attribute to be known at runtime, making it a valid drop target in the editor.
+     *
+     * **Note:** Attributes with a specified meta-type will always be included in the {@link Mutator base-mutator}
+     * (via {@link Mutable.getMutator}), regardless of their own type. Non-{@link Mutable mutable} objects
+     * will be displayed via their {@link toString} method in the editor.
+     */
+    function type(_constructor: abstract new (...args: General[]) => General): (_value: unknown, _context: ClassFieldDecoratorContext | ClassGetterDecoratorContext | ClassAccessorDecoratorContext) => void;
+    /**
+     * Decorator for making getters in a {@link Mutable} class enumerable. This ensures that the getters are included in mutators and are subsequently displayed in the editor.
+     *
+     * **Usage:** Apply this decorator to both the getter method and the class to make it effective.
+    */
+    function enumerable(_value: unknown, _context: ClassDecoratorContext | ClassGetterDecoratorContext | ClassAccessorDecoratorContext): void;
+    /**
+     * Base class for all types that are mutable using {@link Mutator}-objects, thus providing and using interfaces created at runtime.
+     *
+     * Mutables provide a {@link Mutator} built by collecting all their applicable enumerable properties. By default, this includes only primitive types and nested mutable objects.
+     * Using the {@link type}-decorator can also include non-mutable objects, which will be displayed via their {@link toString} method in the editor.
+     *
+     * Subclasses can either reduce the standard {@link Mutator} built by this base class by deleting properties or implement an individual getMutator method.
      * The provided properties of the {@link Mutator} must match public properties or getters/setters of the object.
-     * Otherwise, they will be ignored if not handled by an override of the mutate-method in the subclass and throw errors in an automatically generated user-interface for the object.
+     * Otherwise, they will be ignored unless handled by an override of the mutate method in the subclass, and will throw errors in an automatically generated user interface for the object.
      */
     abstract class Mutable extends EventTargetUnified {
         /**
@@ -297,21 +331,29 @@ declare namespace FudgeCore {
          * Collect the attributes of the instance and their values applicable for animation.
          * Basic functionality is identical to {@link getMutator}, returned mutator should then be reduced by the subclassed instance
          */
-        getMutatorForAnimation(): MutatorForAnimation;
+        getMutatorForAnimation(_extendable?: boolean): MutatorForAnimation;
         /**
          * Collect the attributes of the instance and their values applicable for the user interface.
          * Basic functionality is identical to {@link getMutator}, returned mutator should then be reduced by the subclassed instance
          */
-        getMutatorForUserInterface(): MutatorForUserInterface;
+        getMutatorForUserInterface(_extendable?: boolean): MutatorForUserInterface;
         /**
          * Collect the attributes of the instance and their values applicable for indiviualization by the component.
          * Basic functionality is identical to {@link getMutator}, returned mutator should then be reduced by the subclassed instance
          */
         /**
-         * Returns an associative array with the same attributes as the given mutator, but with the corresponding types as string-values
-         * Does not recurse into objects!
+         * Returns an associative array with the same attributes as the given mutator, but with the corresponding types as string-values.
+         * Does not recurse into objects! This will return the decorated {@link Metadata meta-type} instead of the runtime-type of the object, if available.
          */
         getMutatorAttributeTypes(_mutator: Mutator): MutatorAttributeTypes;
+        /**
+         * Retrieves the specified {@link Metadata.attributeTypes | attribute types} from the {@link Metadata | metadata} of this instance's class.
+         */
+        getMetaAttributeTypes(): MetaAttributeTypes;
+        /**
+         * Retrieves the {@link Metadata | metadata} of this instance's class.
+         */
+        getMetadata(): Metadata;
         /**
          * Updates the values of the given mutator according to the current state of the instance
          * @param _mutator
@@ -616,6 +658,7 @@ declare namespace FudgeCore {
         removeComponent(_component: Component): void;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
+        toString(): string;
         /**
          * Creates a string as representation of this node and its descendants
          */
@@ -654,7 +697,7 @@ declare namespace FudgeCore {
      * @authors Jirka Dell'Oro-Friedl, HFU, 2020 | Jascha Karagöl, HFU, 2019
      * @link https://github.com/hs-furtwangen/FUDGE/wiki/Component
      */
-    abstract class Component extends Mutable implements Serializable {
+    abstract class Component extends Mutable implements Serializable, Gizmo {
         #private;
         /** subclasses get a iSubclass number for identification */
         static readonly iSubclass: number;
@@ -686,11 +729,11 @@ declare namespace FudgeCore {
         /**
          * Override this to draw visual aids for this component inside the editors render view. Use {@link Gizmos} inside the override to draw stuff.
          */
-        drawGizmos?(): void;
+        drawGizmos?(_cmpCamera?: ComponentCamera): void;
         /**
          * See {@link drawGizmos}. Only displayed while the corresponding node is selected.
          */
-        drawGizmosSelected?(): void;
+        drawGizmosSelected?(_cmpCamera?: ComponentCamera): void;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
@@ -788,19 +831,12 @@ declare namespace FudgeCore {
          * If the depot for that type is empty it returns a new object of the requested type.
          * @param _t The class identifier of the desired object
          */
-        static get<T extends Recycable | RecycableArray<T>>(_t: new () => T): T;
+        static get<T extends Recycable | RecycableArray<T> | Object>(_t: new () => T): T;
         /**
          * Fetches an object of the requested type from the depot and returns it. ⚠️**DOES NOT** call its recycle-method.
          * Faster than {@link Recycler.get}, but should be used with caution.
          */
         static reuse<T extends Object>(_t: new () => T): T;
-        /**
-         * Returns a reference to an object of the requested type in the depot, but does not remove it there.
-         * If no object of the requested type was in the depot, one is created, stored and borrowed.
-         * For short term usage of objects in a local scope, when there will be no other call to {@link Recycler.get}, {@link Recycler.reuse} or {@link Recycler.borrow}!
-         * @param _t The class identifier of the desired object
-         */
-        static borrow<T extends Recycable>(_t: new () => T): T;
         /**
          * Stores the object in the depot for later recycling. Users are responsible for throwing in objects that are about to loose scope and are not referenced by any other
          * @param _instance
@@ -1090,6 +1126,16 @@ declare namespace FudgeCore {
         SUBTRACTIVE = 3,
         MODULATE = 4
     }
+    enum DEPTH_FUNCTION {
+        NEVER = 0,
+        LESS = 1,
+        EQUAL = 2,
+        LESS_EQUAL = 3,
+        GREATER = 4,
+        NOT_EQUAL = 5,
+        GREATER_EQUAL = 6,
+        ALWAYS = 7
+    }
     const UNIFORM_BLOCKS: {
         LIGHTS: {
             NAME: string;
@@ -1136,14 +1182,8 @@ declare namespace FudgeCore {
      * Methods and attributes of this class should not be called directly, only through {@link Render}
      */
     abstract class RenderWebGL extends EventTargetStatic {
-        static uboLights: WebGLBuffer;
-        static uboLightsVariableOffsets: {
-            [_name: string]: number;
-        };
         protected static crc3: WebGL2RenderingContext;
-        protected static ƒpicked: Pick[];
         private static rectRender;
-        private static sizePick;
         private static fboMain;
         private static fboPost;
         private static fboTarget;
@@ -1153,6 +1193,11 @@ declare namespace FudgeCore {
         private static texNoise;
         private static texDepthStencil;
         private static texBloomSamples;
+        private static fboPick;
+        private static texPick;
+        private static texDepthPick;
+        private static uboLights;
+        private static uboLightsOffsets;
         private static uboFog;
         /**
          * Initializes offscreen-canvas, renderingcontext and hardware viewport. Call once before creating any resources like meshes or shaders
@@ -1188,7 +1233,7 @@ declare namespace FudgeCore {
         /**
          * Clear the offscreen renderbuffer with the given {@link Color}
          */
-        static clear(_color?: Color): void;
+        static clear(_color?: Color, _colors?: boolean, _depth?: boolean, _stencil?: boolean): void;
         /**
          * Set the final framebuffer to render to. If null, the canvas default framebuffer is used.
          * Used by XR to render to the XRWebGLLayer framebuffer.
@@ -1207,9 +1252,17 @@ declare namespace FudgeCore {
          */
         static setDepthTest(_test: boolean): void;
         /**
+         * Set the comparison operation used to test fragment depths against current depth buffer values.
+         */
+        static setDepthFunction(_function?: DEPTH_FUNCTION): void;
+        /**
          * Enable / Disable WebGLs scissor test.
          */
         static setScissorTest(_test: boolean, _x?: number, _y?: number, _width?: number, _height?: number): void;
+        /**
+         * Set which color components to enable or to disable when rendering to a color buffer.
+         */
+        static setColorWriteMask(_r: boolean, _g: boolean, _b: boolean, _a: boolean): void;
         /**
          * Set WebGLs viewport.
          */
@@ -1233,21 +1286,25 @@ declare namespace FudgeCore {
          */
         static adjustAttachments(): void;
         /**
-         * Creates a texture buffer to be used as pick-buffer
+         * Used with a {@link Picker}-camera, this method renders one pixel with picking information
+         * for each pickable object in the line of sight and returns that as an unsorted array of {@link Pick}s.
+         * The function to render the objects into the pick buffer must be provided by the caller.
+         * @param _pick The function which renders objects into the pick buffer. Returns a {@link Pick} for each rendered object.
+         * **MUST** use {@link ShaderPick} or {@link ShaderPickTextured} to render objects.
          */
-        protected static createPickTexture(_size: number): RenderTexture;
-        protected static getPicks(_size: number, _cmpCamera: ComponentCamera): Pick[];
+        static pickFrom<T>(_from: T[], _cmpCamera: ComponentCamera, _pick: (_from: T[], _cmpCamera: ComponentCamera) => Pick[]): Pick[];
         /**
-        * The render function for picking a single node.
-        * A cameraprojection with extremely narrow focus is used, so each pixel of the buffer would hold the same information from the node,
-        * but the fragment shader renders only 1 pixel for each node into the render buffer, 1st node to 1st pixel, 2nd node to second pixel etc.
-        */
-        protected static pick(_node: Node, _cmpCamera: ComponentCamera): void;
-        protected static pickGizmos(_gizmos: Component[], _cmpCamera: ComponentCamera): void;
+         * The render function for picking nodes.
+         * A cameraprojection with extremely narrow focus is used, so each pixel of the buffer would hold the same information from the node,
+         * but the fragment shader renders only 1 pixel for each node into the render buffer, 1st node to 1st pixel, 2nd node to second pixel etc.
+         */
+        protected static pick(_nodes: Node[], _cmpCamera: ComponentCamera): Pick[];
+        protected static initializeFog(): void;
         /**
          * Buffer the fog parameters into the fog ubo
          */
         protected static bufferFog(_cmpFog: ComponentFog): void;
+        protected static initializeLights(): void;
         /**
          * Buffer the data from the lights in the scenegraph into the lights ubo
          */
@@ -1492,6 +1549,7 @@ declare namespace FudgeCore {
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         getMutator(): Mutator;
+        getMutatorAttributeTypes(_mutator: Mutator): MutatorAttributeTypes;
         mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
         protected reduceMutator(_mutator: Mutator): void;
         /** Tell the FudgePhysics system that this joint needs to be handled in the next frame. */
@@ -1550,6 +1608,323 @@ declare namespace FudgeCore {
         mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
         getMutator(): Mutator;
         protected constructJoint(): void;
+    }
+}
+declare namespace FudgeCore {
+    /** {@link TexImageSource} is a union type which as of now includes {@link VideoFrame}. All other parts of this union have a .width and .height property but VideoFrame does not. And since we only ever use {@link HTMLImageElement} and {@link OffscreenCanvas} currently VideoFrame can be excluded for convenience of accessing .width and .height */
+    type ImageSource = Exclude<TexImageSource, VideoFrame>;
+    /**
+     * - CRISP: no mipmapping, mag filter nearest, min filter nearest
+     * - MEDIUM: mipmapping, mag filter nearest, min filter nearest_mipmap_linear
+     * - BLURRY: mipmapping, mag filter linear, min filter linear_mipmap_linear
+     * - SMOOTH: no mipmapping, mag filter linear, min filter linear
+     */
+    export enum MIPMAP {
+        CRISP = 0,
+        MEDIUM = 1,
+        BLURRY = 2,
+        SMOOTH = 3
+    }
+    export enum WRAP {
+        REPEAT = 0,
+        CLAMP = 1,
+        MIRROR = 2
+    }
+    /**
+     * Baseclass for different kinds of textures.
+     * @authors Jirka Dell'Oro-Friedl, HFU, 2019
+     */
+    export abstract class Texture extends Mutable implements SerializableResource {
+        #private;
+        name: string;
+        idResource: string;
+        protected renderData: unknown;
+        protected textureDirty: boolean;
+        protected mipmapDirty: boolean;
+        protected wrapDirty: boolean;
+        constructor(_name?: string);
+        set mipmap(_mipmap: MIPMAP);
+        get mipmap(): MIPMAP;
+        set wrap(_wrap: WRAP);
+        get wrap(): WRAP;
+        /**
+         * Returns the image source of this texture.
+         */
+        abstract get texImageSource(): ImageSource;
+        /**
+         * Refreshes the image data in the render engine.
+         */
+        refresh(): void;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+        getMutator(_extendable?: boolean): Mutator;
+        getMutatorAttributeTypes(_mutator: Mutator): MutatorAttributeTypes;
+        protected reduceMutator(_mutator: Mutator): void;
+    }
+    /**
+     * Texture created from an existing image
+     */
+    export class TextureImage extends Texture {
+        image: HTMLImageElement;
+        url: RequestInfo;
+        constructor(_url?: RequestInfo);
+        get texImageSource(): ImageSource;
+        /**
+         * Asynchronously loads the image from the given url
+         */
+        load(_url: RequestInfo): Promise<void>;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+        mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
+    }
+    /**
+     * Texture created from a canvas
+     */
+    export class TextureBase64 extends Texture {
+        image: HTMLImageElement;
+        constructor(_name: string, _base64: string, _mipmap?: MIPMAP, _wrap?: WRAP, _width?: number, _height?: number);
+        get texImageSource(): ImageSource;
+    }
+    /**
+     * Texture created from a canvas
+     */
+    export class TextureCanvas extends Texture {
+        crc2: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+        constructor(_name: string, _crc2: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D);
+        get texImageSource(): ImageSource;
+    }
+    /**
+     * Texture created from a text. Texture upates when the text or font changes. The texture is resized to fit the text.
+     * @authors Jonas Plotzky, HFU, 2024
+     */
+    export class TextureText extends Texture {
+        #private;
+        protected crc2: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+        constructor(_name: string, _text?: string, _font?: string);
+        set text(_text: string);
+        get text(): string;
+        set font(_font: string);
+        get font(): string;
+        get texImageSource(): ImageSource;
+        get width(): number;
+        get height(): number;
+        get hasTransparency(): boolean;
+        private get canvas();
+        useRenderData(_textureUnit?: number): void;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+        getMutator(_extendable?: boolean): Mutator;
+    }
+    /**
+     * Texture created from a FUDGE-Sketch
+     */
+    export class TextureSketch extends TextureCanvas {
+        get texImageSource(): ImageSource;
+    }
+    /**
+     * Texture created from an HTML-page
+     */
+    export class TextureHTML extends TextureCanvas {
+        get texImageSource(): ImageSource;
+    }
+    export {};
+}
+declare namespace FudgeCore {
+    /**
+     * Abstract base class for all meshes.
+     * Meshes provide indexed vertices, the order of indices to create trigons and normals, and texture coordinates
+     *
+     * @authors Jirka Dell'Oro-Friedl, HFU, 2019/22
+     */
+    abstract class Mesh extends Mutable implements SerializableResource {
+        #private;
+        /** refers back to this class from any subclass e.g. in order to find compatible other resources*/
+        static readonly baseClass: typeof Mesh;
+        /** list of all the subclasses derived from this class, if they registered properly*/
+        static readonly subclasses: typeof Mesh[];
+        idResource: string;
+        name: string;
+        vertices: Vertices;
+        faces: Face[];
+        /** bounding box AABB */
+        protected ƒbox: Box;
+        /** bounding radius */
+        protected ƒradius: number;
+        constructor(_name?: string);
+        protected static registerSubclass(_subClass: typeof Mesh): number;
+        get renderMesh(): RenderMesh;
+        get boundingBox(): Box;
+        get radius(): number;
+        /**
+         * Clears the bounds of this mesh aswell as the buffers of the associated {@link RenderMesh}.
+         */
+        clear(): void;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+        protected reduceMutator(_mutator: Mutator): void;
+        protected createRadius(): number;
+        protected createBoundingBox(): Box;
+    }
+}
+declare namespace FudgeCore {
+    /**
+     * Baseclass for materials. Combines a {@link Shader} with a compatible {@link Coat}
+     * @authors Jirka Dell'Oro-Friedl, HFU, 2019
+     */
+    class Material extends Mutable implements SerializableResource {
+        #private;
+        /** The name to call the Material by. */
+        name: string;
+        idResource: string;
+        /**
+         * Clipping threshold for alpha values, every pixel with alpha < alphaClip will be discarded.
+         */
+        alphaClip: number;
+        private shaderType;
+        constructor(_name: string, _shader?: typeof Shader, _coat?: Coat);
+        /**
+         * Returns the currently referenced {@link Coat} instance
+         */
+        get coat(): Coat;
+        /**
+         * Makes this material reference the given {@link Coat} if it is compatible with the referenced {@link Shader}
+         */
+        set coat(_coat: Coat);
+        /**
+         * Creates a new {@link Coat} instance that is valid for the {@link Shader} referenced by this material
+         */
+        createCoatMatchingShader(): Coat;
+        /**
+         * Changes the materials reference to the given {@link Shader}, creates and references a new {@link Coat} instance
+         * and mutates the new coat to preserve matching properties.
+         * @param _shaderType
+         */
+        setShader(_shaderType: typeof Shader): void;
+        /**
+         * Returns the {@link Shader} referenced by this material
+         */
+        getShader(): typeof Shader;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+        protected reduceMutator(_mutator: Mutator): void;
+    }
+}
+declare namespace FudgeCore {
+    /**
+     * The namesapce for handling the particle data
+     */
+    namespace ParticleData {
+        /**
+         * The data structure for a particle system. Describes the particle behavior and appearance.
+         */
+        interface System {
+            variableNames?: string[];
+            variables?: Expression[];
+            color?: Expression[];
+            mtxLocal?: Transformation[];
+            mtxWorld?: Transformation[];
+        }
+        type Recursive = System | Expression[] | Transformation[] | Transformation | Expression;
+        type Expression = Function | Variable | Constant | Code;
+        interface Function {
+            function: FUNCTION;
+            parameters: Expression[];
+        }
+        interface Variable {
+            value: string;
+        }
+        interface Constant {
+            value: number;
+        }
+        interface Code {
+            code: string;
+        }
+        interface Transformation {
+            transformation: "translate" | "rotate" | "scale";
+            parameters: Expression[];
+        }
+        /**
+         * Returns true if the given data is a {@link Expression}
+         */
+        function isExpression(_data: Recursive): _data is Expression;
+        /**
+         * Returns true if the given data is a {@link Function}
+         */
+        function isFunction(_data: Recursive): _data is Function;
+        /**
+         * Returns true if the given data is a {@link Variable}
+         */
+        function isVariable(_data: Recursive): _data is Variable;
+        /**
+         * Returns true if the given data is a {@link Constant}
+         */
+        function isConstant(_data: Recursive): _data is Constant;
+        /**
+         * Returns true if the given data is a {@link Code}
+         */
+        function isCode(_data: Recursive): _data is Code;
+        /**
+         * Returns true if the given data is a {@link Transformation}
+         */
+        function isTransformation(_data: Recursive): _data is Transformation;
+    }
+    /**
+     * Holds information on how to mutate the particles of a particle system.
+     * A full particle system is composed by attaching a {@link ComponentParticleSystem}, {@link ComponentMesh} and {@link ComponentMaterial} to the same {@link Node}.
+     * Additionally a {@link ComponentFaceCamera} can be attached to make the particles face the camera.
+     * @authors Jonas Plotzky, HFU, 2022
+     */
+    class ParticleSystem extends Mutable implements SerializableResource {
+        #private;
+        name: string;
+        idResource: string;
+        constructor(_name?: string, _data?: ParticleData.System);
+        get data(): ParticleData.System;
+        set data(_data: ParticleData.System);
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
+        protected reduceMutator(_mutator: Mutator): void;
+    }
+}
+declare namespace FudgeCore {
+}
+declare namespace FudgeCore {
+    /**
+     * Holds an array of bones ({@link Node}s within a {@link Graph}). Referenced from a {@link ComponentMesh} it can be associated with a {@link Mesh} and enable skinning for the mesh.
+     * @authors Matthias Roming, HFU, 2022-2023 | Jonas Plotzky, HFU, 2023
+     */
+    class ComponentSkeleton extends Component {
+        /** The bones used for skinning */
+        bones: Node[];
+        /** When applied to vertices, it moves them from object/model space to bone-local space as if the bone were at its initial pose */
+        mtxBindInverses: Matrix4x4[];
+        protected renderBuffer: unknown;
+        protected singleton: boolean;
+        /** Contains the bone transformations applicable to the vertices of a {@link Mesh} */
+        protected readonly mtxBones: Matrix4x4[];
+        constructor(_bones?: Node[], _mtxBoneInverses?: Matrix4x4[]);
+        /**
+         * Adds a node as a bone with its bind inverse matrix
+         */
+        addBone(_bone: Node, _mtxBindInverse?: Matrix4x4): void;
+        /**
+         * Return the index of the first bone in the bones array which has the given name, and -1 otherwise.
+         */
+        indexOf(_name: string): number;
+        /**
+         * Return the index of the first occurrence of the given bone node in the bone array, or -1 if it is not present.
+         */
+        indexOf(_node: Node): number;
+        /**
+         * Updates the bone matrices to be used by the shader
+         */
+        update(): void;
+        /**
+         * Resets the pose of this skeleton to the default pose
+         */
+        resetPose(): void;
+        serialize(): Serialization;
+        deserialize(_serialization: Serialization): Promise<ComponentSkeleton>;
     }
 }
 declare function ifNumber(_check: number, _default: number): number;
@@ -1927,9 +2302,8 @@ declare namespace FudgeCore {
 }
 declare namespace FudgeCore {
     class AnimationSprite extends Animation {
+        #private;
         static readonly iSubclass: number;
-        texture: Texture;
-        private idTexture;
         private frames;
         private wrapAfter;
         private start;
@@ -1937,10 +2311,11 @@ declare namespace FudgeCore {
         private next;
         private wrap;
         constructor(_name?: string);
+        get texture(): Texture;
         /**
          * Sets the texture to be used as the spritesheet
          */
-        setTexture(_texture: Texture): void;
+        set texture(_texture: Texture);
         /**
          * Creates this animation sprite from the given arguments
          */
@@ -1955,7 +2330,7 @@ declare namespace FudgeCore {
         getPositions(): Vector2[];
         mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
         serialize(): Serialization;
-        deserialize(_s: Serialization): Promise<Serializable>;
+        deserialize(_serialization: Serialization): Promise<Serializable>;
         /**
          * Converts the {@link AnimationSprite} into an {@link Animation}
          */
@@ -2385,6 +2760,13 @@ declare namespace FudgeCore {
          * Transforms the given point from clip space to world space
          */
         pointClipToWorld(_pointInClipSpace: Vector3): Vector3;
+        /**
+         * Returns a scaling factor that, given a position in world space,
+         * scales an object at that position so that one unit equals one (logical) pixel on the screen
+         * when seen through this camera.
+         * e.g., after setting the scaling, 1 unit in the world equals one (logical) pixel on the screen.
+         */
+        getWorldToPixelScale(_posWorld: Vector3): number;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         getMutatorAttributeTypes(_mutator: Mutator): MutatorAttributeTypes;
@@ -2445,7 +2827,8 @@ declare namespace FudgeCore {
      */
     abstract class Light extends Mutable implements Serializable {
         color: Color;
-        constructor(_color?: Color);
+        intensity: number;
+        constructor(_color?: Color, _intensity?: number);
         /**
          * Returns the {@link TypeOfLight} of this light.
          */
@@ -2567,7 +2950,6 @@ declare namespace FudgeCore {
         get radius(): number;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
-        getMutatorForUserInterface(): MutatorForUserInterface;
         drawGizmosSelected(): void;
     }
 }
@@ -2608,11 +2990,8 @@ declare namespace FudgeCore {
         set timeScale(_scale: number);
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
-        getMutator(_extendable?: boolean): Mutator;
-        getMutatorForUserInterface(): MutatorForUserInterface;
         getMutatorForAnimation(): MutatorForAnimation;
         getMutatorAttributeTypes(_mutator: Mutator): MutatorAttributeTypes;
-        protected reduceMutator(_mutator: Mutator): void;
         private hndEvent;
         private update;
         private updateTimeScale;
@@ -2651,47 +3030,6 @@ declare namespace FudgeCore {
         constructor();
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
-    }
-}
-declare namespace FudgeCore {
-}
-declare namespace FudgeCore {
-    /**
-     * Holds an array of bones ({@link Node}s within a {@link Graph}). Referenced from a {@link ComponentMesh} it can be associated with a {@link Mesh} and enable skinning for the mesh.
-     * @authors Matthias Roming, HFU, 2022-2023 | Jonas Plotzky, HFU, 2023
-     */
-    class ComponentSkeleton extends Component {
-        /** The bones used for skinning */
-        bones: Node[];
-        /** When applied to vertices, it moves them from object/model space to bone-local space as if the bone were at its initial pose */
-        mtxBindInverses: Matrix4x4[];
-        protected renderBuffer: unknown;
-        protected singleton: boolean;
-        /** Contains the bone transformations applicable to the vertices of a {@link Mesh} */
-        protected readonly mtxBones: Matrix4x4[];
-        constructor(_bones?: Node[], _mtxBoneInverses?: Matrix4x4[]);
-        /**
-         * Adds a node as a bone with its bind inverse matrix
-         */
-        addBone(_bone: Node, _mtxBindInverse?: Matrix4x4): void;
-        /**
-         * Return the index of the first bone in the bones array which has the given name, and -1 otherwise.
-         */
-        indexOf(_name: string): number;
-        /**
-         * Return the index of the first occurrence of the given bone node in the bone array, or -1 if it is not present.
-         */
-        indexOf(_node: Node): number;
-        /**
-         * Updates the bone matrices to be used by the shader
-         */
-        update(): void;
-        /**
-         * Resets the pose of this skeleton to the default pose
-         */
-        resetPose(): void;
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<ComponentSkeleton>;
     }
 }
 declare namespace FudgeCore {
@@ -3466,6 +3804,10 @@ declare namespace FudgeCore {
          */
         static PRODUCT(_clrA: Color, _clrB: Color): Color;
         /**
+         * Computes and retruns the product of a color with a scalar value.
+         */
+        static PRODUCT(_color: Color, _scalar: number): Color;
+        /**
          * Creates and returns a clone of this color.
          */
         get clone(): Color;
@@ -3527,55 +3869,19 @@ declare namespace FudgeCore {
          */
         multiply(_color: Color): Color;
         /**
+         * Multiplies this with the given scalar.
+         */
+        multiply(_scalar: number): Color;
+        /**
+         * Returns true if the channels of this and the given color are to be considered identical within the given tolerance
+         */
+        equals(_compare: Color, _tolerance?: number): boolean;
+        /**
          * Returns a formatted string representation of this color
          */
         toString(): string;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
-        protected reduceMutator(_mutator: Mutator): void;
-    }
-}
-declare namespace FudgeCore {
-    /**
-     * Baseclass for materials. Combines a {@link Shader} with a compatible {@link Coat}
-     * @authors Jirka Dell'Oro-Friedl, HFU, 2019
-     */
-    class Material extends Mutable implements SerializableResource {
-        #private;
-        /** The name to call the Material by. */
-        name: string;
-        idResource: string;
-        /**
-         * Clipping threshold for alpha values, every pixel with alpha < alphaClip will be discarded.
-         */
-        alphaClip: number;
-        private shaderType;
-        constructor(_name: string, _shader?: typeof Shader, _coat?: Coat);
-        /**
-         * Returns the currently referenced {@link Coat} instance
-         */
-        get coat(): Coat;
-        /**
-         * Makes this material reference the given {@link Coat} if it is compatible with the referenced {@link Shader}
-         */
-        set coat(_coat: Coat);
-        /**
-         * Creates a new {@link Coat} instance that is valid for the {@link Shader} referenced by this material
-         */
-        createCoatMatchingShader(): Coat;
-        /**
-         * Changes the materials reference to the given {@link Shader}, creates and references a new {@link Coat} instance
-         * and mutates the new coat to preserve matching properties.
-         * @param _shaderType
-         */
-        setShader(_shaderType: typeof Shader): void;
-        /**
-         * Returns the {@link Shader} referenced by this material
-         */
-        getShader(): typeof Shader;
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<Serializable>;
-        getMutator(): Mutator;
         protected reduceMutator(_mutator: Mutator): void;
     }
 }
@@ -3616,6 +3922,11 @@ declare namespace FudgeCore {
          * Returns the linear interpolation between two values (_a, _b) for the given interpolation factor (_f). f is clamped between 0 and 1.
          */
         static lerp(_a: number, _b: number, _f: number): number;
+        /**
+         * Rounds the given value to the nearest multiple of the given increment using the given rounding function.
+         * Default rounding function is {@link Math.round}, use {@link Math.floor} or {@link Math.ceil} to round down or up.
+         */
+        static snap(_value: number, _increment: number, _round?: (_value: number) => number): number;
     }
 }
 declare namespace FudgeCore {
@@ -4013,6 +4324,10 @@ declare namespace FudgeCore {
         get quaternion(): Quaternion;
         set quaternion(_quaternion: Quaternion);
         /**
+         * Returns the determinant of this matrix. Computational heavy operation, not cached so use with care.
+         */
+        get determinant(): number;
+        /**
          * Returns the normalized cardinal x-axis.
          */
         get right(): Vector3;
@@ -4066,7 +4381,7 @@ declare namespace FudgeCore {
          * Rotates this matrix by given {@link Vector3} in the order Z, Y, X. Right hand rotation is used, thumb points in axis direction, fingers curling indicate rotation
          * The rotation is appended to already applied transforms, thus multiplied from the right. Set _fromLeft to true to switch and put it in front.
          */
-        rotate(_by: Vector3, _fromLeft?: boolean): Matrix4x4;
+        rotate(_by: Vector3 | Quaternion, _fromLeft?: boolean): Matrix4x4;
         /**
          * Adds a rotation around the x-axis to this matrix.
          */
@@ -4087,7 +4402,7 @@ declare namespace FudgeCore {
         lookAt(_target: Vector3, _up?: Vector3, _restrict?: boolean): Matrix4x4;
         /**
          * Adjusts the rotation of this matrix to align the z-axis with the given direction and tilts it to accord with the given up-{@link Vector3}.
-         * Up should be perpendicular to the given direction. If no up-vector is provided, (0, 1, 0) is used.
+         * Up should be perpendicular to the given direction. If no up-vector is provided, {@link up} is used.
          */
         lookIn(_direction: Vector3, _up?: Vector3): Matrix4x4;
         /**
@@ -4096,7 +4411,7 @@ declare namespace FudgeCore {
         /**
          * Adds a scaling by the given {@link Vector3} to this matrix.
          */
-        scale(_by: Vector3): Matrix4x4;
+        scale(_by: Vector3, _fromLeft?: boolean): Matrix4x4;
         /**
          * Adds a scaling along the x-axis to this matrix.
          */
@@ -4276,6 +4591,11 @@ declare namespace FudgeCore {
         static ROTATION(_eulerAngles: Vector3): Quaternion;
         /**
          * Returns a quaternion that rotates coordinates when multiplied by, using the axis and angle given.
+         * Axis must be normalized. Angle is in degrees.
+         */
+        static ROTATION(_axis: Vector3, _angle: number): Quaternion;
+        /**
+         * Returns a quaternion that rotates coordinates when multiplied by, using the axis and angle given.
          * ⚠️ UNTESTED!
          */
         /**
@@ -4333,6 +4653,11 @@ declare namespace FudgeCore {
          * Conjugates this quaternion and returns it.
          */
         conjugate(): Quaternion;
+        /**
+         * Rotates this quaternion around the given axis by the given angle.
+         * The rotation is appended to already applied rotations, thus multiplied from the right. Set _fromLeft to true to switch and put it in front.
+         */
+        rotate(_axis: Vector3, _angle: number, _fromLeft?: boolean): Quaternion;
         /**
          * Multiply this quaternion with the given quaternion
          */
@@ -4518,6 +4843,10 @@ declare namespace FudgeCore {
          */
         static ANGLE(_from: Vector3, _to: Vector3): number;
         /**
+         * Return the projection of a onto b
+         */
+        static PROJECTION(_a: Vector3, _b: Vector3): Vector3;
+        /**
          * Returns the length of the vector
          */
         get magnitude(): number;
@@ -4574,6 +4903,10 @@ declare namespace FudgeCore {
          */
         negate(): Vector3;
         /**
+         * Projects this vector onto the given vector
+         */
+        project(_on: Vector3): Vector3;
+        /**
          * Sets the components of this vector and returns it.
          */
         set(_x?: number, _y?: number, _z?: number): Vector3;
@@ -4612,14 +4945,18 @@ declare namespace FudgeCore {
          */
         max(_compare: Vector3): Vector3;
         /**
-         * Returns a formatted string representation of this vector
-         */
-        toString(): string;
-        /**
          * Uses the standard array.map functionality to perform the given function on all components of this vector
          * and return a new vector with the results
          */
-        map(_function: (value: number, index: number, array: ArrayLike<number>) => number): Vector3;
+        map(_function: (_value: number, _index: number, _array: ArrayLike<number>) => number): Vector3;
+        /**
+         * Applies the given function to all components of this vector (modifying it) and returns it.
+         */
+        apply(_function: (_value: number, _index: number, _component: "x" | "y" | "z") => number): Vector3;
+        /**
+         * Returns a formatted string representation of this vector
+         */
+        toString(): string;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Vector3>;
         mutate(_mutator: Mutator): Promise<void>;
@@ -4710,43 +5047,6 @@ declare namespace FudgeCore {
          */
         isInside(_point: Vector3): boolean;
         private calculateNormals;
-    }
-}
-declare namespace FudgeCore {
-    /**
-     * Abstract base class for all meshes.
-     * Meshes provide indexed vertices, the order of indices to create trigons and normals, and texture coordinates
-     *
-     * @authors Jirka Dell'Oro-Friedl, HFU, 2019/22
-     */
-    abstract class Mesh extends Mutable implements SerializableResource {
-        #private;
-        /** refers back to this class from any subclass e.g. in order to find compatible other resources*/
-        static readonly baseClass: typeof Mesh;
-        /** list of all the subclasses derived from this class, if they registered properly*/
-        static readonly subclasses: typeof Mesh[];
-        idResource: string;
-        name: string;
-        vertices: Vertices;
-        faces: Face[];
-        /** bounding box AABB */
-        protected ƒbox: Box;
-        /** bounding radius */
-        protected ƒradius: number;
-        constructor(_name?: string);
-        protected static registerSubclass(_subClass: typeof Mesh): number;
-        get renderMesh(): RenderMesh;
-        get boundingBox(): Box;
-        get radius(): number;
-        /**
-         * Clears the bounds of this mesh aswell as the buffers of the associated {@link RenderMesh}.
-         */
-        clear(): void;
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<Serializable>;
-        protected reduceMutator(_mutator: Mutator): void;
-        protected createRadius(): number;
-        protected createBoundingBox(): Box;
     }
 }
 declare namespace FudgeCore {
@@ -5007,18 +5307,19 @@ declare namespace FudgeCore {
      * @authors Jirka Dell'Oro-Friedl, HFU, 2021 | Moritz Beaugrand, HFU, 2020
      */
     class MeshRelief extends MeshTerrain {
+        #private;
         static readonly iSubclass: number;
-        private texture;
         constructor(_name?: string, _texture?: TextureImage);
         private static createHeightMapFunction;
         private static textureToClampedArray;
         /**
-         * Sets the texture to be used as heightmap
+         * The texture to be used as the heightmap.
+         * **Caution!** Setting this causes the mesh to be recreated which can be an expensive operation.
          */
-        setTexture(_texture?: TextureImage): void;
+        get texture(): TextureImage;
+        set texture(_texture: TextureImage);
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
-        mutate(_mutator: Mutator): Promise<void>;
         protected reduceMutator(_mutator: Mutator): void;
     }
 }
@@ -5088,19 +5389,20 @@ declare namespace FudgeCore {
 }
 declare namespace FudgeCore {
     /**
-     * Generate a Torus with a given thickness and the number of major- and minor segments
+     * Generate a torus with a given ring radius, tube radius and the number of major- and minor segments
      * @authors Simon Storl-Schulke, HFU, 2020 | Jirka Dell'Oro-Friedl, HFU, 2020
      */
     class MeshTorus extends MeshRotation {
         static readonly iSubclass: number;
-        private size;
         private latitudes;
-        constructor(_name?: string, _size?: number, _longitudes?: number, _latitudes?: number);
+        private radiusRing;
+        private radiusTube;
+        constructor(_name?: string, _radiusRing?: number, _radiusTube?: number, _longitudes?: number, _latitudes?: number);
         private static getShape;
         /**
          * Create this torus from the given parameters
          */
-        create(_size?: number, _longitudes?: number, _latitudes?: number): void;
+        create(_radiusRing?: number, _radiusTube?: number, _longitudes?: number, _latitudes?: number): void;
         serialize(): Serialization;
         deserialize(_serialization: Serialization): Promise<Serializable>;
         mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
@@ -5195,85 +5497,6 @@ declare namespace FudgeCore {
          * returns the bones associated with the vertex addressed, resolving references between vertices
          */
         bones(_index: number): Bone[];
-    }
-}
-declare namespace FudgeCore {
-    /**
-     * The namesapce for handling the particle data
-     */
-    namespace ParticleData {
-        /**
-         * The data structure for a particle system. Describes the particle behavior and appearance.
-         */
-        interface System {
-            variableNames?: string[];
-            variables?: Expression[];
-            color?: Expression[];
-            mtxLocal?: Transformation[];
-            mtxWorld?: Transformation[];
-        }
-        type Recursive = System | Expression[] | Transformation[] | Transformation | Expression;
-        type Expression = Function | Variable | Constant | Code;
-        interface Function {
-            function: FUNCTION;
-            parameters: Expression[];
-        }
-        interface Variable {
-            value: string;
-        }
-        interface Constant {
-            value: number;
-        }
-        interface Code {
-            code: string;
-        }
-        interface Transformation {
-            transformation: "translate" | "rotate" | "scale";
-            parameters: Expression[];
-        }
-        /**
-         * Returns true if the given data is a {@link Expression}
-         */
-        function isExpression(_data: Recursive): _data is Expression;
-        /**
-         * Returns true if the given data is a {@link Function}
-         */
-        function isFunction(_data: Recursive): _data is Function;
-        /**
-         * Returns true if the given data is a {@link Variable}
-         */
-        function isVariable(_data: Recursive): _data is Variable;
-        /**
-         * Returns true if the given data is a {@link Constant}
-         */
-        function isConstant(_data: Recursive): _data is Constant;
-        /**
-         * Returns true if the given data is a {@link Code}
-         */
-        function isCode(_data: Recursive): _data is Code;
-        /**
-         * Returns true if the given data is a {@link Transformation}
-         */
-        function isTransformation(_data: Recursive): _data is Transformation;
-    }
-    /**
-     * Holds information on how to mutate the particles of a particle system.
-     * A full particle system is composed by attaching a {@link ComponentParticleSystem}, {@link ComponentMesh} and {@link ComponentMaterial} to the same {@link Node}.
-     * Additionally a {@link ComponentFaceCamera} can be attached to make the particles face the camera.
-     * @authors Jonas Plotzky, HFU, 2022
-     */
-    class ParticleSystem extends Mutable implements SerializableResource {
-        #private;
-        name: string;
-        idResource: string;
-        constructor(_name?: string, _data?: ParticleData.System);
-        get data(): ParticleData.System;
-        set data(_data: ParticleData.System);
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<Serializable>;
-        getMutatorForUserInterface(): MutatorForUserInterface;
-        getMutator(): Mutator;
-        protected reduceMutator(_mutator: Mutator): void;
     }
 }
 declare namespace FudgeCore {
@@ -6318,7 +6541,7 @@ declare namespace FudgeCore {
         zBuffer: number;
         color: Color;
         textureUV: Vector2;
-        gizmo?: Component;
+        gizmo?: Gizmo;
         constructor(_node: Node);
         /**
          * Accessor to calculate and store world position of intersection of {@link Ray} and {@link Mesh} only when used.
@@ -6348,12 +6571,14 @@ declare namespace FudgeCore {
          * Takes a ray plus min and max values for the near and far planes to construct the picker-camera,
          * then renders the pick-texture and returns an unsorted {@link Pick}-array with information about the hits of the ray.
          */
-        static pickRay(_nodes: Node[], _ray: Ray, _min: number, _max: number, _pickGizmos?: boolean, _gizmosFilter?: Map<string, boolean>): Pick[];
+        static pickRay(_nodes: Node[], _ray: Ray, _min: number, _max: number): Pick[];
+        static pickRay(_gizmos: Gizmo[], _ray: Ray, _min: number, _max: number): Pick[];
         /**
          * Takes a camera and a point on its virtual normed projection plane (distance 1) to construct the picker-camera,
          * then renders the pick-texture and returns an unsorted {@link Pick}-array with information about the hits of the ray.
          */
-        static pickCamera(_nodes: Node[], _cmpCamera: ComponentCamera, _posProjection: Vector2, _pickGizmos?: boolean, _gizmosFilter?: Map<string, boolean>): Pick[];
+        static pickCamera(_nodes: Node[], _cmpCamera: ComponentCamera, _posProjection: Vector2): Pick[];
+        static pickCamera(_nodes: Gizmo[], _cmpCamera: ComponentCamera, _posProjection: Vector2): Pick[];
         /**
          * Takes the camera of the given viewport and a point the client surface to construct the picker-camera,
          * then renders the pick-texture and returns an unsorted {@link Pick}-array with information about the hits of the ray.
@@ -6400,6 +6625,20 @@ declare namespace FudgeCore {
 }
 declare namespace FudgeCore {
     /**
+     * The interface to render visual aids in the editor. Implemented by {@link Component}s. Can be used on its own to draw and pick visual aids independent of a scene graph.
+     */
+    interface Gizmo {
+        node?: Node;
+        /**
+         * Implement this to draw visual aids inside the editors render view. Use {@link Gizmos} inside the override to draw stuff.
+         */
+        drawGizmos?(_cmpCamera?: ComponentCamera, _picking?: boolean): void;
+        /**
+         * See {@link drawGizmos}. Only displayed while the corresponding node is selected.
+         */
+        drawGizmosSelected?(_cmpCamera?: ComponentCamera): void;
+    }
+    /**
      * The gizmos drawing interface. {@link Component}s can use this to draw visual aids inside {@link Component.drawGizmos} and {@link Component.drawGizmosSelected}.
      */
     abstract class Gizmos {
@@ -6409,25 +6648,22 @@ declare namespace FudgeCore {
          * Set to 0 to make occluded gizmo parts disappear. Set to 1 to make occluded gizmo parts fully visible.
          */
         private static alphaOccluded;
-        private static pickId;
-        private static readonly posIcons;
         private static readonly arrayBuffer;
         private static readonly indexBuffer;
-        /**
-         * The camera which is currently used to draw gizmos.
-         */
-        static get camera(): ComponentCamera;
-        private static get quad();
-        private static get cube();
-        private static get sphere();
+        private static pickId;
+        private static readonly posIcons;
         private static get wireCircle();
         private static get wireSphere();
         private static get wireCone();
         private static get wireCube();
         /**
-         * Are we currently rendering for picking?
+         * Draws the given gizmos from the point of view of the given camera.
          */
-        private static get picking();
+        static draw(_gizmos: Gizmo[], _cmpCamera: ComponentCamera, _selected?: Node[]): void;
+        /**
+         * Picks all gizmos in the line of sight and returns an unsorted array of {@link Pick}s each associated with the gizmo the pick ray hit.
+         */
+        static pick(_gizmos: Gizmos[], _cmpCamera: ComponentCamera): Pick[];
         /**
          * Draws a camera frustum for the given parameters. The frustum is oriented along the z-axis, with the tip of the truncated pyramid at the origin.
          */
@@ -6458,6 +6694,11 @@ declare namespace FudgeCore {
          */
         static drawWireMesh(_mesh: Mesh, _mtxWorld: Matrix4x4, _color: Color, _alphaOccluded?: number): void;
         /**
+         * Draws an arrow at the given world position, facing in the given direction with the given length and width.
+         * Size refers to the size of the arrow head: the height of the pyramid; the size of the cube; the diameter of the sphere.
+         */
+        static drawArrow(_position: Vector3, _color: Color, _direction: Vector3, _up: Vector3, _length: number, _width: number, _size: number, _head?: typeof MeshCube | typeof MeshPyramid | typeof MeshSphere | null, _alphaOccluded?: number): void;
+        /**
          * Draws a solid cube.
          */
         static drawCube(_mtxWorld: Matrix4x4, _color: Color, _alphaOccluded?: number): void;
@@ -6465,6 +6706,18 @@ declare namespace FudgeCore {
          * Draws a solid sphere.
          */
         static drawSphere(_mtxWorld: Matrix4x4, _color: Color, _alphaOccluded?: number): void;
+        /**
+         * Draws a solid quad.
+         */
+        static drawQuad(_mtxWorld: Matrix4x4, _color: Color, _alphaOccluded?: number): void;
+        /**
+         * Draws a solid double sided quad.
+         */
+        static drawSprite(_mtxWorld: Matrix4x4, _color: Color, _alphaOccluded?: number): void;
+        /**
+         * Draws a solid pyramid.
+         */
+        static drawPyramid(_mtxWorld: Matrix4x4, _color: Color, _alphaOccluded?: number): void;
         /**
          * Draws a solid mesh.
          */
@@ -6480,14 +6733,13 @@ declare namespace FudgeCore {
         private static drawElementsTrianlges;
         private static drawElementsLines;
         private static drawArrays;
+        private static getMesh;
     }
 }
 declare namespace FudgeCore {
     type MapLightTypeToLightList = Map<TypeOfLight, RecycableArray<ComponentLight>>;
     interface RenderPrepareOptions {
         ignorePhysics?: boolean;
-        gizmosEnabled?: boolean;
-        gizmosFilter?: Map<string, boolean>;
     }
     /**
      * The main interface to the render engine, here WebGL (see superclass {@link RenderWebGL} and the RenderInjectors
@@ -6498,7 +6750,6 @@ declare namespace FudgeCore {
         static readonly nodesPhysics: RecycableArray<Node>;
         static readonly componentsPick: RecycableArray<ComponentPick>;
         static readonly lights: MapLightTypeToLightList;
-        static readonly gizmos: RecycableArray<Component>;
         private static readonly nodesSimple;
         private static readonly nodesAlpha;
         private static readonly componentsSkeleton;
@@ -6514,7 +6765,7 @@ declare namespace FudgeCore {
          * Used with a {@link Picker}-camera, this method renders one pixel with picking information
          * for each node in the line of sight and return that as an unsorted {@link Pick}-array
          */
-        static pickBranch(_nodes: Node[], _cmpCamera: ComponentCamera, _pickGizmos?: boolean, _gizmosFilter?: Map<string, boolean>): Pick[];
+        static pick(_nodes: Node[], _cmpCamera: ComponentCamera): Pick[];
         /**
          * Draws the scene from the point of view of the given camera
          */
@@ -6589,7 +6840,9 @@ declare namespace FudgeCore {
         physicsDebugMode: PHYSICS_DEBUGMODE;
         gizmosEnabled: boolean;
         gizmosSelected: Node[];
-        gizmosFilter: Map<string, boolean>;
+        gizmosFilter: {
+            [_gizmo: string]: boolean;
+        };
         componentsPick: RecycableArray<ComponentPick>;
         /**
          * Returns true if this viewport currently has focus and thus receives keyboard events
@@ -6692,6 +6945,10 @@ declare namespace FudgeCore {
          * Returns a point in the browser page matching the given point of the viewport
          */
         pointClientToScreen(_client: Vector2): Vector2;
+        /**
+         * Returns all the gizmos in the branch of this viewport that are active, filtered by {@link gizmosFilter}
+         */
+        getGizmos(_nodes?: Node[]): Gizmo[];
     }
 }
 declare namespace FudgeCore {
@@ -6801,7 +7058,7 @@ declare namespace FudgeCore {
          */
         getMutatorForUserInterface(): Mutator;
         /**
-         * Mutate each element of this array by invoking {@link Mutable.mutate} on it
+         * Mutate the elements of this array defined by the _mutator by invoking {@link Mutable.mutate} on it
          */
         mutate(_mutator: Mutator): Promise<void>;
         /**
@@ -6893,6 +7150,7 @@ declare namespace FudgeCore {
          * Retrieves the resource stored with the given id
          */
         static getResource(_idResource: string): Promise<SerializableResource>;
+        static cloneResource(_resource: SerializableResource): Promise<SerializableResource>;
         /**
          * Creates and registers a resource from a {@link Node}, copying the complete graph starting with it
          * @param _node A node to create the resource from
@@ -8300,125 +8558,6 @@ declare namespace FudgeCore {
         static define: string[];
         static getCoat(): typeof Coat;
     }
-}
-declare namespace FudgeCore {
-    /** {@link TexImageSource} is a union type which as of now includes {@link VideoFrame}. All other parts of this union have a .width and .height property but VideoFrame does not. And since we only ever use {@link HTMLImageElement} and {@link OffscreenCanvas} currently VideoFrame can be excluded for convenience of accessing .width and .height */
-    type ImageSource = Exclude<TexImageSource, VideoFrame>;
-    /**
-     * - CRISP: no mipmapping, mag filter nearest, min filter nearest
-     * - MEDIUM: mipmapping, mag filter nearest, min filter nearest_mipmap_linear
-     * - BLURRY: mipmapping, mag filter linear, min filter linear_mipmap_linear
-     * - SMOOTH: no mipmapping, mag filter linear, min filter linear
-     */
-    export enum MIPMAP {
-        CRISP = 0,
-        MEDIUM = 1,
-        BLURRY = 2,
-        SMOOTH = 3
-    }
-    export enum WRAP {
-        REPEAT = 0,
-        CLAMP = 1,
-        MIRROR = 2
-    }
-    /**
-     * Baseclass for different kinds of textures.
-     * @authors Jirka Dell'Oro-Friedl, HFU, 2019
-     */
-    export abstract class Texture extends Mutable implements SerializableResource {
-        #private;
-        name: string;
-        idResource: string;
-        protected renderData: unknown;
-        protected textureDirty: boolean;
-        protected mipmapDirty: boolean;
-        protected wrapDirty: boolean;
-        constructor(_name?: string);
-        set mipmap(_mipmap: MIPMAP);
-        get mipmap(): MIPMAP;
-        set wrap(_wrap: WRAP);
-        get wrap(): WRAP;
-        /**
-         * Returns the image source of this texture.
-         */
-        abstract get texImageSource(): ImageSource;
-        /**
-         * Refreshes the image data in the render engine.
-         */
-        refresh(): void;
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<Serializable>;
-        getMutator(_extendable?: boolean): Mutator;
-        getMutatorAttributeTypes(_mutator: Mutator): MutatorAttributeTypes;
-        protected reduceMutator(_mutator: Mutator): void;
-    }
-    /**
-     * Texture created from an existing image
-     */
-    export class TextureImage extends Texture {
-        image: HTMLImageElement;
-        url: RequestInfo;
-        constructor(_url?: RequestInfo);
-        get texImageSource(): ImageSource;
-        /**
-         * Asynchronously loads the image from the given url
-         */
-        load(_url: RequestInfo): Promise<void>;
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<Serializable>;
-        mutate(_mutator: Mutator, _selection?: string[], _dispatchMutate?: boolean): Promise<void>;
-    }
-    /**
-     * Texture created from a canvas
-     */
-    export class TextureBase64 extends Texture {
-        image: HTMLImageElement;
-        constructor(_name: string, _base64: string, _mipmap?: MIPMAP, _wrap?: WRAP, _width?: number, _height?: number);
-        get texImageSource(): ImageSource;
-    }
-    /**
-     * Texture created from a canvas
-     */
-    export class TextureCanvas extends Texture {
-        crc2: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
-        constructor(_name: string, _crc2: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D);
-        get texImageSource(): ImageSource;
-    }
-    /**
-     * Texture created from a text. Texture upates when the text or font changes. The texture is resized to fit the text.
-     * @authors Jonas Plotzky, HFU, 2024
-     */
-    export class TextureText extends Texture {
-        #private;
-        protected crc2: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
-        constructor(_name: string, _text?: string, _font?: string);
-        set text(_text: string);
-        get text(): string;
-        set font(_font: string);
-        get font(): string;
-        get texImageSource(): ImageSource;
-        get width(): number;
-        get height(): number;
-        get hasTransparency(): boolean;
-        private get canvas();
-        useRenderData(_textureUnit?: number): void;
-        serialize(): Serialization;
-        deserialize(_serialization: Serialization): Promise<Serializable>;
-        getMutator(_extendable?: boolean): Mutator;
-    }
-    /**
-     * Texture created from a FUDGE-Sketch
-     */
-    export class TextureSketch extends TextureCanvas {
-        get texImageSource(): ImageSource;
-    }
-    /**
-     * Texture created from an HTML-page
-     */
-    export class TextureHTML extends TextureCanvas {
-        get texImageSource(): ImageSource;
-    }
-    export {};
 }
 declare namespace FudgeCore {
     class TextureDefault extends TextureBase64 {
