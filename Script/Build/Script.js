@@ -964,6 +964,7 @@ var Script;
         #attackBarColor;
         #previewNode;
         #previewActive = false;
+        #previewMaterial;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -996,6 +997,20 @@ var Script;
                     this.#previewNode.mtxLocal.translation = newPosition;
                     break;
             }
+            if (!this.#previewMaterial)
+                return;
+            let { g } = this.#previewMaterial.clrPrimary;
+            let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
+            if (charges < 1 && g === 1) {
+                // can't attack
+                this.#previewMaterial.clrPrimary.g = 0;
+                this.#previewMaterial.clrPrimary.b = 0;
+            }
+            else if (charges >= 1 && g !== 1) {
+                // can attack
+                this.#previewMaterial.clrPrimary.g = 1;
+                this.#previewMaterial.clrPrimary.b = 1;
+            }
         }
         initAttack = async () => {
             // Preview
@@ -1024,6 +1039,7 @@ var Script;
             let mat = new ƒ.ComponentMaterial(texture);
             childNode.addComponent(mat);
             mat.sortForAlpha = true;
+            this.#previewMaterial = mat;
             if (this.previewType === AttackPreviewType.CONE || this.previewType === AttackPreviewType.LINE) {
                 mesh.mtxPivot.scaleX(this.previewWidth);
                 mesh.mtxPivot.translateZ(0.5);
