@@ -14,15 +14,15 @@ namespace Script {
         }
 
         update = () => {
-            let direction: ƒ.Vector3 = new ƒ.Vector3();
+            let direction: ƒ.Vector3 = ƒ.Recycler.reuse(ƒ.Vector3).set(0,0,0);
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(-1, 0, 0))
+                direction.x += -1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(1, 0, 0))
+                direction.x += 1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, 1))
+                direction.z += 1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, -1))
+                direction.z += -1;
 
             let mgtSqrt = direction.magnitudeSquared;
             if (mgtSqrt === 0) {
@@ -34,6 +34,7 @@ namespace Script {
             }
 
             EntityManager.Instance.playerBrawler?.setMovement(direction);
+            ƒ.Recycler.store(direction);
         }
 
         mainPreviewTimeout: number;

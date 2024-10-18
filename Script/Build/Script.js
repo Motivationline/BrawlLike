@@ -285,15 +285,15 @@ var Script;
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.update);
         }
         update = () => {
-            let direction = new ƒ.Vector3();
+            let direction = ƒ.Recycler.reuse(ƒ.Vector3).set(0, 0, 0);
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(-1, 0, 0));
+                direction.x += -1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(1, 0, 0));
+                direction.x += 1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, 1));
+                direction.z += 1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
-                direction.add(ƒ.Recycler.borrow(ƒ.Vector3).set(0, 0, -1));
+                direction.z += -1;
             let mgtSqrt = direction.magnitudeSquared;
             if (mgtSqrt === 0) {
                 Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
@@ -303,6 +303,7 @@ var Script;
                 direction.normalize(1);
             }
             Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
+            ƒ.Recycler.store(direction);
         };
         mainPreviewTimeout;
         specialPreviewTimeout;
@@ -1689,7 +1690,7 @@ var Script;
                 console.error(`${this.node.name} doesn't have a main and a special attack attached.`);
         }
         setMovement(_direction) {
-            this.direction = _direction;
+            this.direction.copy(_direction);
         }
         update() {
             if (!this.rigidbody)

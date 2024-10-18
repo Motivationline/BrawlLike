@@ -109,7 +109,7 @@ namespace Script {
     }
 
     public setMovement(_direction: ƒ.Vector3) {
-      this.direction = _direction;
+      this.direction.copy(_direction);
     }
 
     public update() {
