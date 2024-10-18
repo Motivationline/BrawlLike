@@ -335,9 +335,7 @@ var Script;
         };
         mousemove = (_event) => {
             _event.preventDefault();
-            let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
-            Script.EntityManager.Instance.playerBrawler.mousePosition = clickPos;
+            Script.EntityManager.Instance.playerBrawler.mousePosition = new ƒ.Vector2(_event.clientX, _event.clientY);
         };
         tryToAttack(_atk, _event) {
             _event.preventDefault();
@@ -347,10 +345,14 @@ var Script;
             Script.viewport.pointClientToProjection;
             // let playerPos = viewport.pointWorldToClient(pb.node.mtxWorld.translation);
             // let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            let clickPos = InputManager.mousePositionToWorldPlanePosition(new ƒ.Vector2(_event.clientX, _event.clientY));
             let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation);
             Script.EntityManager.Instance.playerBrawler?.attack(_atk, direction);
+        }
+        static mousePositionToWorldPlanePosition(_mousePosition) {
+            let ray = Script.viewport.getRayFromClient(_mousePosition);
+            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            return clickPos;
         }
     }
     Script.InputManager = InputManager;
@@ -1617,7 +1619,7 @@ var Script;
         #animator;
         #animations = new Map();
         #currentlyActiveAnimation = { name: "idle", lock: false };
-        mousePosition = ƒ.Vector3.ZERO();
+        mousePosition = ƒ.Vector2.ZERO();
         animationIdleName = "";
         animationWalkName = "";
         animationAttackName = "";
@@ -1715,9 +1717,10 @@ var Script;
                 this.rigidbody.activate(true);
             this.move();
             if (Script.EntityManager.Instance.playerBrawler === this) {
-                this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+                let mouseWorldPosition = Script.InputManager.mousePositionToWorldPlanePosition(this.mousePosition);
+                this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, mouseWorldPosition);
                 this.attackSpecial?.update();
-                this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+                this.attackMain?.updatePreview(this.node.mtxLocal.translation, mouseWorldPosition);
                 this.attackMain?.update();
             }
             if (this.#invulnerable) {

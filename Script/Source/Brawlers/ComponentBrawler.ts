@@ -20,7 +20,7 @@ namespace Script {
     #animator: ƒ.ComponentAnimator;
     #animations: Map<string, ƒ.Animation> = new Map();
     #currentlyActiveAnimation: { name: string, lock: boolean } = { name: "idle", lock: false };
-    public mousePosition: ƒ.Vector3 = ƒ.Vector3.ZERO();
+    public mousePosition: ƒ.Vector2 = ƒ.Vector2.ZERO();
     public animationIdleName: string = "";
     public animationWalkName: string = "";
     public animationAttackName: string = "";
@@ -118,9 +118,10 @@ namespace Script {
       this.move();
 
       if (EntityManager.Instance.playerBrawler === this) {
-        this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+        let mouseWorldPosition = InputManager.mousePositionToWorldPlanePosition(this.mousePosition);
+        this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, mouseWorldPosition);
         this.attackSpecial?.update();
-        this.attackMain?.updatePreview(this.node.mtxLocal.translation, this.mousePosition);
+        this.attackMain?.updatePreview(this.node.mtxLocal.translation, mouseWorldPosition);
         this.attackMain?.update();
       }
 

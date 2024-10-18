@@ -67,9 +67,7 @@ namespace Script {
 
         mousemove = (_event: MouseEvent) => {
             _event.preventDefault();
-            let ray = viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
-            EntityManager.Instance.playerBrawler.mousePosition = clickPos;
+            EntityManager.Instance.playerBrawler.mousePosition = new ƒ.Vector2(_event.clientX, _event.clientY);
         }
 
         private tryToAttack(_atk: ATTACK_TYPE, _event: MouseEvent) {
@@ -79,10 +77,15 @@ namespace Script {
             viewport.pointClientToProjection
             // let playerPos = viewport.pointWorldToClient(pb.node.mtxWorld.translation);
             // let clientPos = viewport.pointClientToSource(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let ray = viewport.getRayFromClient(new ƒ.Vector2(_event.clientX, _event.clientY));
-            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            let clickPos = InputManager.mousePositionToWorldPlanePosition(new ƒ.Vector2(_event.clientX, _event.clientY))
             let direction = ƒ.Vector3.DIFFERENCE(clickPos, pb.node.mtxWorld.translation);
             EntityManager.Instance.playerBrawler?.attack(_atk, direction);
+        }
+        
+        static mousePositionToWorldPlanePosition(_mousePosition: ƒ.Vector2): ƒ.Vector3 {
+            let ray = viewport.getRayFromClient(_mousePosition);
+            let clickPos = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Y(1));
+            return clickPos;
         }
     }
 }

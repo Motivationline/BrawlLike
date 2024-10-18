@@ -64,6 +64,7 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     class InputManager {
         static Instance: InputManager;
         constructor();
@@ -74,6 +75,7 @@ declare namespace Script {
         mouseup: (_event: MouseEvent) => void;
         mousemove: (_event: MouseEvent) => void;
         private tryToAttack;
+        static mousePositionToWorldPlanePosition(_mousePosition: ƒ.Vector2): ƒ.Vector3;
     }
 }
 declare namespace Script {
@@ -325,7 +327,7 @@ declare namespace Script {
         protected rotationWrapperMatrix: ƒ.Matrix4x4;
         protected attackMain: ComponentAttack;
         protected attackSpecial: ComponentAttack;
-        mousePosition: ƒ.Vector3;
+        mousePosition: ƒ.Vector2;
         animationIdleName: string;
         animationWalkName: string;
         animationAttackName: string;
