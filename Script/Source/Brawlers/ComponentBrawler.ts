@@ -28,6 +28,7 @@ namespace Script {
     #invulnerable: boolean = false
     #velocityOverrides: VelocityOverride[] = [];
     #playerMovementLockedUntil: number = -1;
+    #dead: boolean = false;
 
     constructor() {
       super();
@@ -113,6 +114,7 @@ namespace Script {
     }
 
     public update() {
+      if (this.#dead) return;
       if (!this.rigidbody) return;
       if (!this.rigidbody.isActive) this.rigidbody.activate(true);
       this.move();
@@ -230,7 +232,15 @@ namespace Script {
     }
 
     protected death(): void {
-      console.log("I died.", this);
+      this.#dead = true;
+      GameManager.Instance.playerDied(this);
+      this.node.activate(false);
+    }
+
+    public respawn(_position: ƒ.Vector3) {
+      this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_position, this.node.mtxWorld.translation));
+      this.node.activate(true);
+      this.health = Infinity;
     }
 
     protected reduceMutator(_mutator: ƒ.Mutator): void {

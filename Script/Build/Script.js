@@ -233,13 +233,10 @@ var Script;
                 });
                 document.getElementById("selection-overlay").querySelectorAll("button").forEach((button) => {
                     button.addEventListener("click", async () => {
-                        let graph = ƒ.Project.getResourcesByName("TrainingMap")[0];
-                        Script.viewport.setBranch(graph);
-                        await Script.EntityManager.Instance.loadBrawler(button.dataset.brawler);
-                        ƒ.Loop.start();
-                        // ƒ.Time.game.setScale(0.2);
-                        this.showOverlay(MENU_TYPE.NONE);
+                        Script.GameManager.Instance.selectBrawler(button.dataset.brawler);
                     });
+                    // await GameManager.Instance.startGame();
+                    // this.showOverlay(MENU_TYPE.NONE);
                 });
                 document.getElementById("lobby-host").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
@@ -251,7 +248,96 @@ var Script;
                     this.showOverlay(MENU_TYPE.LOBBY);
                 });
                 document.getElementById("game-lobby-start").addEventListener("click", () => {
-                    this.showOverlay(MENU_TYPE.SELECTION);
+                    let form = document.getElementById("game-settings");
+                    form.querySelectorAll("select").forEach(el => {
+                        if (el.disabled)
+                            el.dataset.disabled = "true";
+                        el.disabled = false;
+                    });
+                    let data = new FormData(form);
+                    form.querySelectorAll("select").forEach(el => {
+                        if (el.dataset.disabled)
+                            el.disabled = true;
+                        el.dataset.disabled = "";
+                    });
+                    let respawnTypeSetting = data.get("setting-respawn");
+                    let respawnType = [Script.RESPAWN_TYPE.AT_DEATH_LOCATION];
+                    switch (respawnTypeSetting) {
+                        case "initial":
+                            respawnType.unshift(Script.RESPAWN_TYPE.AT_FIXED_RESPAWN_POINT);
+                            break;
+                        case "random":
+                            respawnType.unshift(Script.RESPAWN_TYPE.AT_RANDOM_RESPAWN_POINT);
+                            break;
+                        case "teammate":
+                            respawnType.unshift(Script.RESPAWN_TYPE.AT_TEAMMATE_LOCATION);
+                            break;
+                        case "death":
+                        default:
+                            respawnType.unshift(Script.RESPAWN_TYPE.AT_DEATH_LOCATION);
+                            break;
+                    }
+                    let selectedMap = document.getElementById("setting-map").querySelector(`option[value="${data.get("setting-map")}"]`);
+                    let arena = selectedMap.dataset.arena;
+                    let gameData = {
+                        amtRounds: Number(data.get("setting-rounds")),
+                        maxRespawnsPerRoundAndPlayer: Number(data.get("setting-lives")),
+                        maxRespawnsPerRoundAndTeam: Number(data.get("setting-team-lives")),
+                        respawnTime: Number(data.get("setting-respawn-timer")),
+                        timer: Number(data.get("setting-timer")),
+                        respawnType,
+                        arena,
+                    };
+                    let teams = [];
+                    let playerIDs = Object.keys(Script.LobbyManager.client.clientsInfoFromServer);
+                    switch (data.get("setting-team")) {
+                        case "team":
+                            switch (arena) {
+                                case "TrainingMap": {
+                                    teams = createTeams(playerIDs, { maxTeams: 1 });
+                                    break;
+                                }
+                                case "Map":
+                                    teams = createTeams(playerIDs, { maxTeams: 2, maxPlayersPerTeam: 3, fillMode: "CREATE_TEAMS" });
+                                    break;
+                                case "Map2":
+                                default:
+                                    teams = createTeams(playerIDs, { maxPlayersPerTeam: 2, fillMode: "FILL_TEAMS", maxTeams: 8 });
+                                    break;
+                            }
+                            break;
+                        case "ffa":
+                            teams = createTeams(playerIDs, { maxPlayersPerTeam: 1 });
+                            break;
+                    }
+                    console.log(teams);
+                    // GameManager.Instance.init(teams, gameData)
+                    // this.showOverlay(MENU_TYPE.SELECTION);
+                });
+                document.getElementById("setting-map").addEventListener("change", (_event) => {
+                    let value = _event.target.value;
+                    switch (value) {
+                        case "training":
+                            document.getElementById("setting-respawn").disabled = true;
+                            document.getElementById("setting-respawn").value = "initial";
+                            document.getElementById("setting-team").disabled = true;
+                            document.getElementById("setting-team").value = "team";
+                            break;
+                        case "small":
+                            document.getElementById("setting-respawn").disabled = true;
+                            document.getElementById("setting-respawn").value = "initial";
+                            document.getElementById("setting-team").disabled = true;
+                            document.getElementById("setting-team").value = "team";
+                            break;
+                        case "large":
+                            document.getElementById("setting-respawn").disabled = false;
+                            document.getElementById("setting-respawn").value = "random";
+                            document.getElementById("setting-team").disabled = false;
+                            document.getElementById("setting-team").value = "ffa";
+                            break;
+                        default:
+                            break;
+                    }
                 });
             });
         }
@@ -269,6 +355,40 @@ var Script;
         }
     }
     Script.MenuManager = MenuManager;
+    function createTeams(_clients, _options) {
+        const options = {
+            ...{ maxTeams: Infinity, maxPlayersPerTeam: Infinity, fillMode: "CREATE_TEAMS" }, ..._options
+        };
+        let teams = [];
+        if (options.fillMode === "CREATE_TEAMS") {
+            for (let i = 0; i < _clients.length; i++) {
+                let player = _clients[i];
+                if (teams.length < options.maxTeams) {
+                    teams.push({ players: [{ id: player }] });
+                }
+                else {
+                    let team = teams[i % options.maxTeams];
+                    if (!team || team.players.length >= options.maxPlayersPerTeam)
+                        return teams;
+                    team.players.push({ id: player });
+                }
+            }
+        }
+        else if (options.fillMode === "FILL_TEAMS") {
+            for (let i = 0; i < _clients.length; i++) {
+                let player = _clients[i];
+                let team = teams[teams.length - 1];
+                if (!team || team.players.length >= options.maxPlayersPerTeam) {
+                    team = { players: [{ id: player }] };
+                    teams.push(team);
+                }
+                else {
+                    team.players.push({ id: player });
+                }
+            }
+        }
+        return teams;
+    }
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -1627,6 +1747,7 @@ var Script;
         #invulnerable = false;
         #velocityOverrides = [];
         #playerMovementLockedUntil = -1;
+        #dead = false;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -1711,6 +1832,8 @@ var Script;
             this.direction.copy(_direction);
         }
         update() {
+            if (this.#dead)
+                return;
             if (!this.rigidbody)
                 return;
             if (!this.rigidbody.isActive)
@@ -1819,7 +1942,14 @@ var Script;
             this.attackSpecial?.charge(_amt, Script.ChargeType.DAMAGE_DEALT);
         }
         death() {
-            console.log("I died.", this);
+            this.#dead = true;
+            Script.GameManager.Instance.playerDied(this);
+            this.node.activate(false);
+        }
+        respawn(_position) {
+            this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_position, this.node.mtxWorld.translation));
+            this.node.activate(true);
+            this.health = Infinity;
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -1890,13 +2020,14 @@ var Script;
         }
         death() {
             this.#respawnPos.copy(this.node.mtxLocal.translation);
-            ƒ.Time.game.setTimer(this.respawnTime * 1000, 1, this.respawn);
+            ƒ.Time.game.setTimer(this.respawnTime * 1000, 1, () => {
+                this.respawn();
+            });
             this.node.activate(false);
         }
-        respawn = () => {
-            this.node.activate(true);
-            this.health = Infinity;
-        };
+        respawn() {
+            super.respawn(this.#respawnPos);
+        }
         changeDirection = () => {
             // this.setMovement(new ƒ.Vector3(Math.random() - 0.5, 0, Math.random() - 0.5).normalize());
         };
@@ -1928,6 +2059,55 @@ var Script;
         }
     }
     Script.DummyBrawler = DummyBrawler;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let RESPAWN_TYPE;
+    (function (RESPAWN_TYPE) {
+        RESPAWN_TYPE[RESPAWN_TYPE["AT_FIXED_RESPAWN_POINT"] = 0] = "AT_FIXED_RESPAWN_POINT";
+        RESPAWN_TYPE[RESPAWN_TYPE["AT_RANDOM_RESPAWN_POINT"] = 1] = "AT_RANDOM_RESPAWN_POINT";
+        RESPAWN_TYPE[RESPAWN_TYPE["AT_DEATH_LOCATION"] = 2] = "AT_DEATH_LOCATION";
+        RESPAWN_TYPE[RESPAWN_TYPE["AT_TEAMMATE_LOCATION"] = 3] = "AT_TEAMMATE_LOCATION";
+    })(RESPAWN_TYPE = Script.RESPAWN_TYPE || (Script.RESPAWN_TYPE = {}));
+    class GameManager {
+        static Instance = new GameManager();
+        teams;
+        settings;
+        gameActive = false;
+        defaultSettings = {
+            amtRounds: 1,
+            maxRespawnsPerRoundAndPlayer: 3,
+            maxRespawnsPerRoundAndTeam: -1,
+            respawnTime: 3,
+            respawnType: [RESPAWN_TYPE.AT_TEAMMATE_LOCATION, RESPAWN_TYPE.AT_FIXED_RESPAWN_POINT, RESPAWN_TYPE.AT_DEATH_LOCATION],
+            timer: 120,
+            arena: "TrainingMap"
+        };
+        constructor() {
+            if (GameManager.Instance)
+                return GameManager.Instance;
+        }
+        init(_teams, _settings, _gameActive = false) {
+            if (this.gameActive)
+                throw new Error("Game is already in progress");
+            this.gameActive = _gameActive;
+            this.settings = { ...this.defaultSettings, ..._settings };
+            this.teams = _teams;
+        }
+        async startGame() {
+            let graph = ƒ.Project.getResourcesByName(this.settings.arena)[0];
+            Script.viewport.setBranch(graph);
+            await Script.EntityManager.Instance.loadBrawler();
+            ƒ.Loop.start();
+            // ƒ.Time.game.setScale(0.2);
+        }
+        async selectBrawler(_brawler) {
+        }
+        playerDied(cp) {
+        }
+    }
+    Script.GameManager = GameManager;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -2098,5 +2278,32 @@ var Script;
         };
     }
     Script.Shadow = Shadow;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class SpawnPoint extends ƒ.Component {
+        group;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+        }
+        serialize() {
+            let serialization = {
+                [super.constructor.name]: super.serialize(),
+                group: this.group,
+            };
+            return serialization;
+        }
+        async deserialize(_serialization) {
+            if (_serialization[super.constructor.name] != null)
+                await super.deserialize(_serialization[super.constructor.name]);
+            if (_serialization.speed != null)
+                this.group = _serialization.group;
+            return this;
+        }
+    }
+    Script.SpawnPoint = SpawnPoint;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

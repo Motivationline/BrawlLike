@@ -1,103 +1,167 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <title>BrawlLike</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
+  <title>BrawlLike</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" />
 
-    <!--Editor settings of this project-->
-    <meta type="settings" autoview="Graph|2024-08-16T12:09:59.666Z|75108" project="{'name':'BrawlLike','graphAutoView':'Graph|2024-08-16T12:09:59.666Z|75108'}" />
+  <!--Editor settings of this project-->
+  <meta type="settings" autoview="Graph|2024-08-16T12:09:59.666Z|75108"
+    project="{'name':'BrawlLike','graphAutoView':'Graph|2024-08-16T12:09:59.666Z|75108'}" />
 
-    <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
-    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>
+  <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
+  <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>
 
-    <!--Load FUDGE. You may want to download local copies to work offline and be independent from future changes! Developers working on FUDGE itself may want to create symlinks-->
-    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeCore.js"></script>
-    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeAid.js"></script>
-    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeClient.js"></script>
+  <!--Load FUDGE. You may want to download local copies to work offline and be independent from future changes! Developers working on FUDGE itself may want to create symlinks-->
+  <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeCore.js"></script>
+  <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeAid.js"></script>
+  <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeClient.js"></script>
 
-    <!--Link internal resources. The editor only loads the first, but at runtime, multiple files can contribute-->
-    <link type="resources" src="Internal.json" />
+  <!--Link internal resources. The editor only loads the first, but at runtime, multiple files can contribute-->
+  <link type="resources" src="Internal.json" />
 
-    <!--Load custom scripts-->
-    <script type="text/javascript" src="Script/Build/Script.js" editor="true"></script>
+  <!--Load custom scripts-->
+  <script type="text/javascript" src="Script/Build/Script.js" editor="true"></script>
 
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
-    <!--Load Autoview script-->
-    <!-- <script type="text/javascript" src="Autoview.js"></script> -->
-  </head>
+  <!--Load Autoview script-->
+  <!-- <script type="text/javascript" src="Autoview.js"></script> -->
+</head>
 
-  <body>
-    <!--Dialog shown at startup only-->
-    <dialog>
-      <p>FUDGE Autoview</p>
-      <h1>Title (will be replaced by Autoview)</h1>
-      <p>click to start</p>
-    </dialog>
-    <!--Canvas for FUDGE to render to-->
-    <canvas class="fullscreen"> </canvas>
-    <div class="overlay" id="start-overlay">
-      <button id="start">Start</button>
-    </div>
-    <div class="overlay hidden" id="loading-overlay">
-      <h1>Loading...</h1>
-    </div>
-    <div class="overlay hidden" id="lobby-overlay">
-      <h1>Lobby</h1>
-      <h3>Games</h3>
-      <ul id="open-lobbies">
-        Loading...
-      </ul>
-      <button id="lobby-host">Host</button>
-      <button id="lobby-join" disabled="">Join</button>
-    </div>
-    <div class="overlay hidden" id="game-lobby-overlay">
-      <h1>Game Lobby</h1> <span id="game-lobby-id">
-</span>
-      <h3>Connected Players</h3>
-      <ul id="connected-players">
-        Loading...
-      </ul>
-      <button id="game-lobby-start">Start</button>
-      <button id="game-lobby-cancel">Cancel</button>
-    </div>
-    <div class="overlay hidden" id="selection-overlay">
-      <div id="brawler">
-        <button id="b1" data-brawler="BrawlerSpider">
-          <img src="UI/BrawlerPicking/Cowgirl.png" />
-          <div>Melee</div>
-        </button>
-        <button id="b2" data-brawler="BrawlerFrogger">
-          <img src="UI/BrawlerPicking/Frog.png" />
-          <div>Frogger</div>
-        </button>
-        <button id="b3" data-brawler="BrawlerBugsy">
-          <img src="UI/BrawlerPicking/Bugsy.png" />
-          <div>Bugsy</div>
-        </button>
-
-        <button id="b4" data-brawler="BrawlerSniper">
-          <img src="UI/BrawlerPicking/Sniper.png" />
-          <div>Sniper</div>
-        </button>
+<body>
+  <!--Dialog shown at startup only-->
+  <dialog>
+    <p>FUDGE Autoview</p>
+    <h1>Title (will be replaced by Autoview)</h1>
+    <p>click to start</p>
+  </dialog>
+  <!--Canvas for FUDGE to render to-->
+  <canvas class="fullscreen"> </canvas>
+  <div class="overlay" id="start-overlay">
+    <button id="start">Start</button>
+  </div>
+  <div class="overlay hidden" id="loading-overlay">
+    <h1>Loading...</h1>
+  </div>
+  <div class="overlay hidden" id="lobby-overlay">
+    <h1>Lobby</h1>
+    <h3>Games</h3>
+    <ul id="open-lobbies">
+      Loading...
+    </ul>
+    <button id="lobby-host">Host</button>
+    <button id="lobby-join" disabled="">Join</button>
+  </div>
+  <div class="overlay hidden" id="game-lobby-overlay">
+    <h1>Game Lobby</h1> <span id="game-lobby-id">
+    </span>
+    <h3>Connected Players</h3>
+    <ul id="connected-players">
+      Loading...
+    </ul>
+    <button id="game-lobby-start">Start</button>
+    <button id="game-lobby-cancel">Cancel</button>
+    <form id="game-settings">
+      <div class="option-wrapper">
+        <label for="setting-map">Map</label>
+        <select name="setting-map" id="setting-map">
+          <option value="training" data-arena="TrainingMap" selected>Training Area - Test your abilities</option>
+          <option value="small" data-arena="Map">Smaller Team vs Team Arena</option>
+          <option value="large" data-arena="Map2">Large Arena for large scale fights</option>
+        </select>
       </div>
-      <div id="brawler-preview">
-</div>
-      <div id="brawler-info">
-</div>
-      <div id="brawler-ready">
-<button disabled="">READY</button>
-</div>
-    </div>
-
-    <div id="permanent-overlay" class="overlay">
-      <div>
-        <span id="client-name">
-</span>:<span id="client-id">
-</span>
+      <div class="option-wrapper">
+        <label for="setting-rounds">
+          Best Of
+        </label>
+        <input type="number" name="setting-rounds" id="setting-rounds" min="1" value="1" step="1">
+        <label for="setting-rounds">
+          Rounds
+        </label>
       </div>
+      <div class="option-wrapper">
+        <label for="setting-timer">
+          Timer (in seconds)
+        </label>
+        <input type="number" name="setting-timer" id="setting-timer" min="0" value="120" step="10">
+      </div>
+      <div class="option-wrapper">
+        <label for="setting-lives">
+          Max Respawns Per Player (-1 == no limit)
+        </label>
+        <input type="number" name="setting-lives" id="setting-lives" min="-1" value="3">
+      </div>
+      <div class="option-wrapper">
+        <label for="setting-team-lives">
+          Max Respawns Per Team (-1 == no limit)
+        </label>
+        <input type="number" name="setting-team-lives" id="setting-team-lives" min="-1" value="-1">
+      </div>
+      <div class="option-wrapper">
+        <label for="setting-respawn-timer">
+          Respawn Timer (in seconds)
+        </label>
+        <input type="number" name="setting-respawn-timer" id="setting-respawn-timer" min="0" value="3" step="0.1">
+      </div>
+
+      <div class="option-wrapper">
+        <label for="setting-respawn">Respawn Location</label>
+        <select name="setting-respawn" id="setting-respawn" disabled>
+          <option value="initial" selected>preset / initial respawn point</option>
+          <option value="random">random respawn point</option>
+          <option value="death">place of death</option>
+          <option value="teammate">teammate</option>
+        </select>
+      </div>
+
+      <div class="option-wrapper">
+        <label for="setting-team">Teams</label>
+        <select name="setting-team" id="setting-team" disabled>
+          <option value="team" selected>Teams</option>
+          <option value="ffa">Free For All</option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <div class="overlay hidden" id="selection-overlay">
+    <div id="brawler">
+      <button id="b1" data-brawler="BrawlerSpider">
+        <img src="UI/BrawlerPicking/Cowgirl.png" />
+        <div>Melee</div>
+      </button>
+      <button id="b2" data-brawler="BrawlerFrogger">
+        <img src="UI/BrawlerPicking/Frog.png" />
+        <div>Frogger</div>
+      </button>
+      <button id="b3" data-brawler="BrawlerBugsy">
+        <img src="UI/BrawlerPicking/Bugsy.png" />
+        <div>Bugsy</div>
+      </button>
+
+      <button id="b4" data-brawler="BrawlerSniper">
+        <img src="UI/BrawlerPicking/Sniper.png" />
+        <div>Sniper</div>
+      </button>
     </div>
-  
+    <div id="brawler-preview">
+    </div>
+    <div id="brawler-info">
+    </div>
+    <div id="brawler-ready">
+      <button disabled="">READY</button>
+    </div>
+  </div>
+
+  <div id="permanent-overlay" class="overlay">
+    <div>
+      <span id="client-name">
+      </span>:<span id="client-id">
+      </span>
+    </div>
+  </div>
+
 </body>
+
 </html>

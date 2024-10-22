@@ -349,6 +349,7 @@ declare namespace Script {
         makeInvulnerableFor(_timeInMS: number): void;
         dealDamageToOthers(_amt: number): void;
         protected death(): void;
+        respawn(_position: ƒ.Vector3): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
@@ -373,11 +374,51 @@ declare namespace Script {
         walkRandom: boolean;
         constructor();
         protected death(): void;
-        private respawn;
+        respawn(): void;
         private changeDirection;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
         update(): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    interface Player {
+        id: string;
+        brawler?: ComponentBrawler;
+        remainingRespawns?: number;
+    }
+    interface Team {
+        players: Player[];
+        remainingRespawns?: number;
+        respawnPoints?: ƒ.Node[];
+    }
+    enum RESPAWN_TYPE {
+        AT_FIXED_RESPAWN_POINT = 0,
+        AT_RANDOM_RESPAWN_POINT = 1,
+        AT_DEATH_LOCATION = 2,
+        AT_TEAMMATE_LOCATION = 3
+    }
+    interface GameSettings {
+        timer: number;
+        maxRespawnsPerRoundAndTeam: number;
+        maxRespawnsPerRoundAndPlayer: number;
+        amtRounds: number;
+        respawnTime: number;
+        respawnType: RESPAWN_TYPE[];
+        arena: string;
+    }
+    class GameManager {
+        static Instance: GameManager;
+        teams: Team[];
+        settings: GameSettings;
+        gameActive: boolean;
+        private defaultSettings;
+        constructor();
+        init(_teams: Team[], _settings: Partial<GameSettings>, _gameActive?: boolean): void;
+        startGame(): Promise<void>;
+        selectBrawler(_brawler: string): Promise<void>;
+        playerDied(cp: ComponentBrawler): void;
     }
 }
 declare namespace Script {
@@ -429,5 +470,14 @@ declare namespace Script {
     class Shadow extends ƒ.Component {
         constructor();
         moveShadow: () => void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class SpawnPoint extends ƒ.Component {
+        group: number;
+        constructor();
+        serialize(): ƒ.Serialization;
+        deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
 }

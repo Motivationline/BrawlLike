@@ -18,15 +18,16 @@ namespace Script {
 
         protected death(): void {
             this.#respawnPos.copy(this.node.mtxLocal.translation);
-            ƒ.Time.game.setTimer(this.respawnTime * 1000, 1, this.respawn);
+            ƒ.Time.game.setTimer(this.respawnTime * 1000, 1, () => {
+                this.respawn();
+            });
             this.node.activate(false);
         }
 
-        private respawn = () => {
-            this.node.activate(true);
-            this.health = Infinity;
+        public respawn(): void {
+            super.respawn(this.#respawnPos);
         }
-        
+
         private changeDirection = () => {
             // this.setMovement(new ƒ.Vector3(Math.random() - 0.5, 0, Math.random() - 0.5).normalize());
         }
