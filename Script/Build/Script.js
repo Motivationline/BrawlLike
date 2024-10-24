@@ -231,18 +231,30 @@ var Script;
                     this.showOverlay(MENU_TYPE.LOADING);
                     Script.startViewport();
                 });
-                document.getElementById("selection-overlay").querySelectorAll("button").forEach((button) => {
+                document.getElementById("brawler").querySelectorAll("button").forEach((button) => {
                     button.addEventListener("click", async () => {
-                        Script.GameManager.Instance.selectBrawler(button.dataset.brawler);
+                        document.getElementById("brawler").querySelectorAll("button").forEach((button) => button.classList.remove("selected"));
+                        button.classList.add("selected");
+                        // GameManager.Instance.selectBrawler(button.dataset.brawler, LobbyManager.client.id);
+                        Script.LobbyManager.selectBrawler(button.dataset.brawler);
                     });
                     // await GameManager.Instance.startGame();
                     // this.showOverlay(MENU_TYPE.NONE);
                 });
                 document.getElementById("lobby-host").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
+                    document.getElementById("game-settings").hidden = false;
+                    document.getElementById("game-lobby-start").hidden = false;
+                    document.getElementById("start_game").hidden = false;
+                    document.getElementById("lobby-client-settings").hidden = true;
                 });
                 document.getElementById("lobby-join").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
+                    document.getElementById("game-settings").hidden = true;
+                    document.getElementById("game-lobby-start").hidden = true;
+                    document.getElementById("start_game").hidden = true;
+                    document.getElementById("start_game").disabled = true;
+                    document.getElementById("lobby-client-settings").hidden = false;
                 });
                 document.getElementById("game-lobby-cancel").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.LOBBY);
@@ -310,9 +322,15 @@ var Script;
                             teams = createTeams(playerIDs, { maxPlayersPerTeam: 1 });
                             break;
                     }
-                    console.log(teams);
-                    // GameManager.Instance.init(teams, gameData)
-                    // this.showOverlay(MENU_TYPE.SELECTION);
+                    if (arena !== "TrainingMap") {
+                        if (teams.length <= 1) {
+                            alert("You need at least two players for this map.");
+                            return;
+                        }
+                    }
+                    Script.GameManager.Instance.init(teams, gameData);
+                    Script.LobbyManager.switchView(MENU_TYPE.SELECTION);
+                    this.showOverlay(MENU_TYPE.SELECTION);
                 });
                 document.getElementById("setting-map").addEventListener("change", (_event) => {
                     let value = _event.target.value;
@@ -338,6 +356,9 @@ var Script;
                         default:
                             break;
                     }
+                });
+                document.getElementById("start_game").addEventListener("click", (_event) => {
+                    Script.LobbyManager.startGame();
                 });
             });
         }
@@ -698,7 +719,9 @@ var Script;
                     case ƒNet.COMMAND.SERVER_HEARTBEAT:
                         this.updateRoom();
                         break;
-                    // case ƒNet.COMMAND.UNDEFINED:
+                    case ƒNet.COMMAND.UNDEFINED:
+                        this.handleUndefined(message);
+                        break;
                     // case ƒNet.COMMAND.ERROR:
                     // case ƒNet.COMMAND.ASSIGN_ID:
                     // case ƒNet.COMMAND.LOGIN_REQUEST:
@@ -777,6 +800,30 @@ var Script;
             }
             document.getElementById("connected-players").replaceChildren(...players);
         };
+        static handleUndefined(_message) {
+            switch (_message.content.command) {
+                case "switchView":
+                    Script.menuManager.showOverlay(_message.content.data);
+                    break;
+                case "selectBrawler":
+                    Script.GameManager.Instance.selectBrawler(_message.content.data, _message.idSource);
+                    break;
+                case "startGame":
+                    Script.GameManager.Instance.settings = _message.content.data.settings;
+                    Script.GameManager.Instance.teams = _message.content.data.teams;
+                    Script.GameManager.Instance.startGame();
+                    break;
+            }
+        }
+        static switchView(_view) {
+            this.client.dispatch({ command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: { command: "switchView", data: _view } });
+        }
+        static selectBrawler(_brawler) {
+            this.client.dispatch({ command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: { command: "selectBrawler", data: _brawler } });
+        }
+        static startGame() {
+            this.client.dispatch({ command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: { command: "startGame", data: { settings: Script.GameManager.Instance.settings, teams: Script.GameManager.Instance.teams } } });
+        }
     }
     Script.LobbyManager = LobbyManager;
 })(Script || (Script = {}));
@@ -2096,13 +2143,36 @@ var Script;
             this.teams = _teams;
         }
         async startGame() {
+            await this.startRound();
+            ƒ.Loop.start();
+            Script.menuManager.showOverlay(Script.MENU_TYPE.NONE);
+            // ƒ.Time.game.setScale(0.2);
+        }
+        async startRound() {
             let graph = ƒ.Project.getResourcesByName(this.settings.arena)[0];
             Script.viewport.setBranch(graph);
             await Script.EntityManager.Instance.loadBrawler();
-            ƒ.Loop.start();
-            // ƒ.Time.game.setScale(0.2);
         }
-        async selectBrawler(_brawler) {
+        async selectBrawler(_brawler, _player) {
+            let totalPlayers = 0;
+            let totalSelected = 0;
+            if (!this.teams)
+                return;
+            for (let team of this.teams) {
+                for (let player of team.players) {
+                    totalPlayers++;
+                    if (player.id === _player) {
+                        player.chosenBrawler = _brawler;
+                    }
+                    if (player.chosenBrawler) {
+                        totalSelected++;
+                    }
+                }
+            }
+            document.getElementById("brawler-ready-text").innerText = `${totalSelected} / ${totalPlayers} players selected a brawler`;
+            if (totalPlayers === totalSelected) {
+                document.getElementById("start_game").disabled = false;
+            }
         }
         playerDied(cp) {
         }

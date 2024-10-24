@@ -4,6 +4,7 @@ namespace Script {
         id: string,
         brawler?: ComponentBrawler,
         remainingRespawns?: number,
+        chosenBrawler?: string,
     }
     export interface Team {
         players: Player[],
@@ -53,15 +54,40 @@ namespace Script {
         }
 
         async startGame() {
-            let graph = <ƒ.Graph>ƒ.Project.getResourcesByName(this.settings.arena)[0];
-            viewport.setBranch(graph);
-            await EntityManager.Instance.loadBrawler();
+            await this.startRound();
             ƒ.Loop.start();
+            menuManager.showOverlay(MENU_TYPE.NONE);
             // ƒ.Time.game.setScale(0.2);
         }
 
-        async selectBrawler(_brawler: string){
-            
+        async startRound() {
+            let graph = <ƒ.Graph>ƒ.Project.getResourcesByName(this.settings.arena)[0];
+            viewport.setBranch(graph);
+            await EntityManager.Instance.loadBrawler();
+        }
+
+        async selectBrawler(_brawler: string, _player: string) {
+            let totalPlayers: number = 0;
+            let totalSelected: number = 0;
+            if (!this.teams) return;
+
+            for (let team of this.teams) {
+                for (let player of team.players) {
+                    totalPlayers++;
+                    if (player.id === _player) {
+                        player.chosenBrawler = _brawler;
+                    }
+                    if (player.chosenBrawler) {
+                        totalSelected++;
+                    }
+                }
+            }
+
+            document.getElementById("brawler-ready-text").innerText = `${totalSelected} / ${totalPlayers} players selected a brawler`;
+            if (totalPlayers === totalSelected) {
+                (<HTMLInputElement>document.getElementById("start_game")).disabled = false;
+            }
+
         }
 
         playerDied(cp: ComponentBrawler) {

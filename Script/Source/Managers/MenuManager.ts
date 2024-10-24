@@ -27,18 +27,30 @@ namespace Script {
                     this.showOverlay(MENU_TYPE.LOADING)
                     startViewport();
                 });
-                document.getElementById("selection-overlay").querySelectorAll("button").forEach((button) => {
+                document.getElementById("brawler").querySelectorAll("button").forEach((button) => {
                     button.addEventListener("click", async () => {
-                        GameManager.Instance.selectBrawler(button.dataset.brawler);
+                        document.getElementById("brawler").querySelectorAll("button").forEach((button) => button.classList.remove("selected"));
+                        button.classList.add("selected");
+                        // GameManager.Instance.selectBrawler(button.dataset.brawler, LobbyManager.client.id);
+                        LobbyManager.selectBrawler(button.dataset.brawler);
                     });
                     // await GameManager.Instance.startGame();
                     // this.showOverlay(MENU_TYPE.NONE);
                 });
                 document.getElementById("lobby-host").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
+                    document.getElementById("game-settings")!.hidden = false;
+                    document.getElementById("game-lobby-start")!.hidden = false;
+                    document.getElementById("start_game")!.hidden = false;
+                    document.getElementById("lobby-client-settings")!.hidden = true;
                 });
                 document.getElementById("lobby-join").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
+                    document.getElementById("game-settings")!.hidden = true;
+                    document.getElementById("game-lobby-start")!.hidden = true;
+                    document.getElementById("start_game")!.hidden = true;
+                    (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
+                    document.getElementById("lobby-client-settings")!.hidden = false;
                 });
                 document.getElementById("game-lobby-cancel").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.LOBBY);
@@ -109,10 +121,16 @@ namespace Script {
                             teams = createTeams(playerIDs, { maxPlayersPerTeam: 1 });
                             break;
                     }
-                    console.log(teams);
+                    if (arena !== "TrainingMap") {
+                        if (teams.length <= 1) {
+                            alert("You need at least two players for this map.");
+                            return;
+                        }
+                    }
 
-                    // GameManager.Instance.init(teams, gameData)
-                    // this.showOverlay(MENU_TYPE.SELECTION);
+                    GameManager.Instance.init(teams, gameData);
+                    LobbyManager.switchView(MENU_TYPE.SELECTION);
+                    this.showOverlay(MENU_TYPE.SELECTION);
                 });
                 document.getElementById("setting-map").addEventListener("change", (_event) => {
                     let value: string = (<HTMLSelectElement>_event.target).value;
@@ -139,7 +157,11 @@ namespace Script {
                         default:
                             break;
                     }
-                })
+                });
+
+                document.getElementById("start_game").addEventListener("click", (_event)=> {
+                    LobbyManager.startGame();
+                });
 
             });
         }

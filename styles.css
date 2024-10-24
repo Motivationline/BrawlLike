@@ -58,6 +58,9 @@ div.overlay.hidden {
 #brawler button:hover {
   transform: scale(1.05);
 }
+#brawler button.selected {
+  background-color: rgba(255, 255, 255, 0.95);
+}
 
 #brawler button img {
   width: 100%;

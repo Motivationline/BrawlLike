@@ -14,7 +14,7 @@ namespace Script {
             document.getElementById("lobby-host").addEventListener("click", this.hostRoom);
             document.getElementById("lobby-join").addEventListener("click", this.joinRoom);
             document.getElementById("game-lobby-cancel").addEventListener("click", this.leaveRoom);
-            
+
         }
 
         static refreshRooms = () => {
@@ -33,7 +33,9 @@ namespace Script {
                     case ƒNet.COMMAND.SERVER_HEARTBEAT:
                         this.updateRoom();
                         break;
-                    // case ƒNet.COMMAND.UNDEFINED:
+                    case ƒNet.COMMAND.UNDEFINED:
+                        this.handleUndefined(message);
+                        break;
                     // case ƒNet.COMMAND.ERROR:
                     // case ƒNet.COMMAND.ASSIGN_ID:
                     // case ƒNet.COMMAND.LOGIN_REQUEST:
@@ -53,7 +55,7 @@ namespace Script {
         }
 
         static updateVisibleRooms() {
-            if(this.client.idRoom !== "Lobby") return;
+            if (this.client.idRoom !== "Lobby") return;
             document.getElementById("client-id").innerText = this.client.id;
             document.getElementById("client-name").innerText = this.client.name;
             let listElement: HTMLUListElement = <HTMLUListElement>document.getElementById("open-lobbies");
@@ -92,7 +94,7 @@ namespace Script {
 
         static joinRoom = () => {
             (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = true;
-            if(!this.selectedRoom) return;
+            if (!this.selectedRoom) return;
             client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: this.selectedRoom } });
             this.selectedRoom = "";
         }
@@ -102,18 +104,44 @@ namespace Script {
         }
 
         static updateRoom = () => {
-            if(this.client.idRoom === "Lobby") return;
+            if (this.client.idRoom === "Lobby") return;
             document.getElementById("game-lobby-id").innerText = `Room id: ${this.client.idRoom}`;
 
             let players: HTMLElement[] = [];
 
-            for(let client in this.client.clientsInfoFromServer){
+            for (let client in this.client.clientsInfoFromServer) {
                 let li = document.createElement("li");
                 li.innerText = `${this.client.clientsInfoFromServer[client].name} (id: ${client}) ${client === this.client.id ? "(you)" : ""}`;
                 players.push(li);
             }
 
             document.getElementById("connected-players").replaceChildren(...players);
+        }
+
+        static handleUndefined(_message: ƒNet.Message) {
+            switch (_message.content.command) {
+                case "switchView":
+                    menuManager.showOverlay(_message.content.data);
+                    break;
+                case "selectBrawler":
+                    GameManager.Instance.selectBrawler(_message.content.data, _message.idSource);
+                    break;
+                case "startGame":
+                    GameManager.Instance.settings = _message.content.data.settings;
+                    GameManager.Instance.teams = _message.content.data.teams;
+                    GameManager.Instance.startGame();
+                    break;
+            }
+        }
+
+        static switchView(_view: MENU_TYPE) {
+            this.client.dispatch({ command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: { command: "switchView", data: _view } });
+        }
+        static selectBrawler(_brawler: string) {
+            this.client.dispatch({ command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: { command: "selectBrawler", data: _brawler } });
+        }
+        static startGame() {
+            this.client.dispatch({ command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: { command: "startGame", data: { settings: GameManager.Instance.settings, teams: GameManager.Instance.teams } } });
         }
     }
 }

@@ -124,6 +124,7 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒNet = FudgeNet;
     class LobbyManager {
         static client: FudgeNet.FudgeClient;
         static rooms: {
@@ -140,6 +141,10 @@ declare namespace Script {
         static joinRoom: () => void;
         static leaveRoom: () => void;
         static updateRoom: () => void;
+        static handleUndefined(_message: ƒNet.Message): void;
+        static switchView(_view: MENU_TYPE): void;
+        static selectBrawler(_brawler: string): void;
+        static startGame(): void;
     }
 }
 declare namespace Script {
@@ -387,6 +392,7 @@ declare namespace Script {
         id: string;
         brawler?: ComponentBrawler;
         remainingRespawns?: number;
+        chosenBrawler?: string;
     }
     interface Team {
         players: Player[];
@@ -417,7 +423,8 @@ declare namespace Script {
         constructor();
         init(_teams: Team[], _settings: Partial<GameSettings>, _gameActive?: boolean): void;
         startGame(): Promise<void>;
-        selectBrawler(_brawler: string): Promise<void>;
+        startRound(): Promise<void>;
+        selectBrawler(_brawler: string, _player: string): Promise<void>;
         playerDied(cp: ComponentBrawler): void;
     }
 }
