@@ -42,6 +42,7 @@ namespace Script {
                     document.getElementById("game-settings")!.hidden = false;
                     document.getElementById("game-lobby-start")!.hidden = false;
                     document.getElementById("start_game")!.hidden = false;
+                    (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
                     document.getElementById("lobby-client-settings")!.hidden = true;
                 });
                 document.getElementById("lobby-join").addEventListener("click", () => {
@@ -111,7 +112,7 @@ namespace Script {
                                 case "Map":
                                     teams = createTeams(playerIDs, { maxTeams: 2, maxPlayersPerTeam: 3, fillMode: "CREATE_TEAMS" });
                                     break;
-                                case "Map2":
+                                case "BigMap":
                                 default:
                                     teams = createTeams(playerIDs, { maxPlayersPerTeam: 2, fillMode: "FILL_TEAMS", maxTeams: 8 });
                                     break;

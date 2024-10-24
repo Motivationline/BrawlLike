@@ -797,6 +797,39 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
+                                  "translation": "[-9, 0, 1]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 0
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
                                   "translation": "[-9, 0, 0]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
@@ -804,6 +837,82 @@
                                 "Component": {
                                   "active": true
                                 }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 0
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-9, 0, -1]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 0
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[8.999999809265137, 0, -1]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 1
                               }
                             }
                           ]
@@ -827,6 +936,49 @@
                                 "Component": {
                                   "active": true
                                 }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 1
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[8.999999809265137, 0, 1]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 1
                               }
                             }
                           ]
@@ -7774,13 +7926,6 @@
                   "name": "Entities",
                   "active": true,
                   "components": {
-                    "EntityManager": [
-                      {
-                        "Script.EntityManager": {
-                          "active": true
-                        }
-                      }
-                    ],
                     "ComponentTransform": [
                       {
                         "ƒ.ComponentTransform": {
@@ -8252,6 +8397,16 @@
                                 }
                               }
                             }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 0
+                              }
+                            }
                           ]
                         },
                         "children": []
@@ -8273,6 +8428,16 @@
                                 "Component": {
                                   "active": true
                                 }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 0
                               }
                             }
                           ]
@@ -16927,6 +17092,16 @@
                                 }
                               }
                             }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 0
+                              }
+                            }
                           ]
                         },
                         "children": []
@@ -16948,6 +17123,148 @@
                                 "Component": {
                                   "active": true
                                 }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 1
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[7, 0, 7]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 2
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[6.999999809265137, 0, -7]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 3
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-7, 0, 7]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 4
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Spawn",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-7, 0, -7]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "SpawnPoint": [
+                            {
+                              "Script.SpawnPoint": {
+                                "Component": {
+                                  "active": true
+                                },
+                                "team": 5
                               }
                             }
                           ]

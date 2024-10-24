@@ -1,7 +1,7 @@
 namespace Script {
     import ƒ = FudgeCore;
     export class SpawnPoint extends ƒ.Component {
-        group: number;
+        public team: number = 0;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -12,7 +12,7 @@ namespace Script {
         public serialize(): ƒ.Serialization {
             let serialization: ƒ.Serialization = {
                 [super.constructor.name]: super.serialize(),
-                group: this.group,
+                team: this.team,
             }
             return serialization;
         }
@@ -20,8 +20,8 @@ namespace Script {
         public async deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable> {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.speed != null)
-                this.group = _serialization.group;
+            if (_serialization.team != null)
+                this.team = _serialization.team;
             return this;
         }
 

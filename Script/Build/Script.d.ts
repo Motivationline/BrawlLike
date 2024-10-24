@@ -424,7 +424,8 @@ declare namespace Script {
         init(_teams: Team[], _settings: Partial<GameSettings>, _gameActive?: boolean): void;
         startGame(): Promise<void>;
         startRound(): Promise<void>;
-        selectBrawler(_brawler: string, _player: string): Promise<void>;
+        selectBrawler(_brawler: string, _player: string): void;
+        getBrawlerOfPlayer(_player: string): string;
         playerDied(cp: ComponentBrawler): void;
     }
 }
@@ -482,7 +483,7 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class SpawnPoint extends ƒ.Component {
-        group: number;
+        team: number;
         constructor();
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;

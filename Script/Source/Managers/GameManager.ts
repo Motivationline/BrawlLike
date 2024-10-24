@@ -63,10 +63,14 @@ namespace Script {
         async startRound() {
             let graph = <ƒ.Graph>ƒ.Project.getResourcesByName(this.settings.arena)[0];
             viewport.setBranch(graph);
-            await EntityManager.Instance.loadBrawler();
+            let em = new EntityManager();
+            let entityNode = graph.getChildrenByName("Terrain")[0].getChildrenByName("Entities")[0];
+            entityNode.removeAllChildren();
+            entityNode.addComponent(em);
+            await EntityManager.Instance.loadBrawler(this.getBrawlerOfPlayer(LobbyManager.client.id));
         }
 
-        async selectBrawler(_brawler: string, _player: string) {
+        selectBrawler(_brawler: string, _player: string) {
             let totalPlayers: number = 0;
             let totalSelected: number = 0;
             if (!this.teams) return;
@@ -88,6 +92,16 @@ namespace Script {
                 (<HTMLInputElement>document.getElementById("start_game")).disabled = false;
             }
 
+        }
+
+        getBrawlerOfPlayer(_player: string): string {
+            if (!this.teams) return "Brawler";
+            for (let team of this.teams) {
+                for (let p of team.players) {
+                    if (p.id === _player) return p.chosenBrawler;
+                }
+            }
+            return "Brawler";
         }
 
         playerDied(cp: ComponentBrawler) {

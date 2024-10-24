@@ -246,6 +246,7 @@ var Script;
                     document.getElementById("game-settings").hidden = false;
                     document.getElementById("game-lobby-start").hidden = false;
                     document.getElementById("start_game").hidden = false;
+                    document.getElementById("start_game").disabled = true;
                     document.getElementById("lobby-client-settings").hidden = true;
                 });
                 document.getElementById("lobby-join").addEventListener("click", () => {
@@ -312,7 +313,7 @@ var Script;
                                 case "Map":
                                     teams = createTeams(playerIDs, { maxTeams: 2, maxPlayersPerTeam: 3, fillMode: "CREATE_TEAMS" });
                                     break;
-                                case "Map2":
+                                case "BigMap":
                                 default:
                                     teams = createTeams(playerIDs, { maxPlayersPerTeam: 2, fillMode: "FILL_TEAMS", maxTeams: 8 });
                                     break;
@@ -2151,9 +2152,13 @@ var Script;
         async startRound() {
             let graph = ƒ.Project.getResourcesByName(this.settings.arena)[0];
             Script.viewport.setBranch(graph);
-            await Script.EntityManager.Instance.loadBrawler();
+            let em = new Script.EntityManager();
+            let entityNode = graph.getChildrenByName("Terrain")[0].getChildrenByName("Entities")[0];
+            entityNode.removeAllChildren();
+            entityNode.addComponent(em);
+            await Script.EntityManager.Instance.loadBrawler(this.getBrawlerOfPlayer(Script.LobbyManager.client.id));
         }
-        async selectBrawler(_brawler, _player) {
+        selectBrawler(_brawler, _player) {
             let totalPlayers = 0;
             let totalSelected = 0;
             if (!this.teams)
@@ -2173,6 +2178,17 @@ var Script;
             if (totalPlayers === totalSelected) {
                 document.getElementById("start_game").disabled = false;
             }
+        }
+        getBrawlerOfPlayer(_player) {
+            if (!this.teams)
+                return "Brawler";
+            for (let team of this.teams) {
+                for (let p of team.players) {
+                    if (p.id === _player)
+                        return p.chosenBrawler;
+                }
+            }
+            return "Brawler";
         }
         playerDied(cp) {
         }
@@ -2353,7 +2369,7 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class SpawnPoint extends ƒ.Component {
-        group;
+        team = 0;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -2362,15 +2378,15 @@ var Script;
         serialize() {
             let serialization = {
                 [super.constructor.name]: super.serialize(),
-                group: this.group,
+                team: this.team,
             };
             return serialization;
         }
         async deserialize(_serialization) {
             if (_serialization[super.constructor.name] != null)
                 await super.deserialize(_serialization[super.constructor.name]);
-            if (_serialization.speed != null)
-                this.group = _serialization.group;
+            if (_serialization.team != null)
+                this.team = _serialization.team;
             return this;
         }
     }
