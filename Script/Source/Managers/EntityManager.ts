@@ -17,15 +17,11 @@ namespace Script {
             ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.update);
         }
 
-        loadBrawler = async (_playerBrawler: string = "Brawler") => {
+        loadBrawler = async (_playerBrawler: string) => {
             console.log("load Brawler");
-            let defaultBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName("Brawler")[0];
             let playerBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(_playerBrawler)[0];
-            let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
-            for (let i = 0; i < spawnPoints.length - 1; i++) {
-                await this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
-            }
-            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
+            let spawnPoint = GameManager.Instance.getSpawnPointForPlayer(LobbyManager.client.id);
+            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoint);
             let cameraGraph = <ƒ.Graph>ƒ.Project.getResourcesByName("CameraBrawler")[0];
             let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
             this.playerBrawler.node.addChild(cameraInstance);

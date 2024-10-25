@@ -219,6 +219,12 @@ namespace Script {
             }
         }
 
+        for(let t: number = 0; t < teams.length; t++) {
+            for(let player of teams[t].players){
+                player.team = t;
+            }
+        }
+
         return teams;
     }
 }

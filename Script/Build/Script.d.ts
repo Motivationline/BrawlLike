@@ -86,7 +86,7 @@ declare namespace Script {
         playerBrawler: ComponentBrawler;
         projectiles: ComponentProjectile[];
         constructor();
-        loadBrawler: (_playerBrawler?: string) => Promise<void>;
+        loadBrawler: (_playerBrawler: string) => Promise<void>;
         private initBrawler;
         addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node): void;
         removeProjectile(_proj: ComponentProjectile): void;
@@ -393,6 +393,7 @@ declare namespace Script {
         brawler?: ComponentBrawler;
         remainingRespawns?: number;
         chosenBrawler?: string;
+        team?: number;
     }
     interface Team {
         players: Player[];
@@ -415,6 +416,7 @@ declare namespace Script {
         arena: string;
     }
     class GameManager {
+        #private;
         static Instance: GameManager;
         teams: Team[];
         settings: GameSettings;
@@ -425,8 +427,11 @@ declare namespace Script {
         startGame(): Promise<void>;
         startRound(): Promise<void>;
         selectBrawler(_brawler: string, _player: string): void;
-        getBrawlerOfPlayer(_player: string): string;
+        getPlayer(_playerID: string): Player | undefined;
+        getChosenBrawlerOfPlayer(_player: string): string;
         playerDied(cp: ComponentBrawler): void;
+        private initSpawnPoints;
+        getSpawnPointForPlayer(_playerId: string): ƒ.Vector3;
     }
 }
 declare namespace Script {

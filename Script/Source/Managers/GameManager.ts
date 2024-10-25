@@ -5,6 +5,7 @@ namespace Script {
         brawler?: ComponentBrawler,
         remainingRespawns?: number,
         chosenBrawler?: string,
+        team?: number,
     }
     export interface Team {
         players: Player[],
@@ -31,6 +32,7 @@ namespace Script {
         teams: Team[];
         settings: GameSettings;
         gameActive: boolean = false;
+        #allSpawnPoints: ƒ.Node[] = [];
 
         private defaultSettings: GameSettings = {
             amtRounds: 1,
@@ -67,7 +69,8 @@ namespace Script {
             let entityNode = graph.getChildrenByName("Terrain")[0].getChildrenByName("Entities")[0];
             entityNode.removeAllChildren();
             entityNode.addComponent(em);
-            await EntityManager.Instance.loadBrawler(this.getBrawlerOfPlayer(LobbyManager.client.id));
+            this.initSpawnPoints();
+            await EntityManager.Instance.loadBrawler(this.getChosenBrawlerOfPlayer(LobbyManager.client.id));
         }
 
         selectBrawler(_brawler: string, _player: string) {
@@ -94,18 +97,67 @@ namespace Script {
 
         }
 
-        getBrawlerOfPlayer(_player: string): string {
-            if (!this.teams) return "Brawler";
+        getPlayer(_playerID: string): Player | undefined {
+            if (!this.teams) return undefined;
             for (let team of this.teams) {
                 for (let p of team.players) {
-                    if (p.id === _player) return p.chosenBrawler;
+                    if (p.id === _playerID) return p;
                 }
             }
-            return "Brawler";
+            return undefined;
+        }
+
+        getChosenBrawlerOfPlayer(_player: string): string {
+            return this.getPlayer(_player)?.chosenBrawler ?? "Brawler";
         }
 
         playerDied(cp: ComponentBrawler) {
 
+        }
+
+        private initSpawnPoints() {
+            let spawnPointNodes = EntityManager.Instance.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
+            for (let team of this.teams) {
+                team.respawnPoints = [];
+            }
+            for (let node of spawnPointNodes) {
+                let sp = node.getComponent(SpawnPoint);
+                if (!sp) continue;
+                if (this.teams.length > sp.team) {
+                    this.teams[sp.team].respawnPoints.push(node);
+                }
+            }
+            this.#allSpawnPoints = spawnPointNodes;
+        }
+
+        getSpawnPointForPlayer(_playerId: string): ƒ.Vector3 {
+            let player = this.getPlayer(_playerId);
+            if (!player) return new ƒ.Vector3();
+            for (let type of this.settings.respawnType) {
+                switch (type) {
+                    case RESPAWN_TYPE.AT_DEATH_LOCATION: {
+                        return player.brawler.node.mtxLocal.translation.clone;
+                    }
+                    case RESPAWN_TYPE.AT_FIXED_RESPAWN_POINT: {
+                        let rPoints: ƒ.Node[] = this.teams[player.team].respawnPoints;
+                        if(!rPoints || rPoints.length === 0) continue;
+                        return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;
+                    }
+                    case RESPAWN_TYPE.AT_RANDOM_RESPAWN_POINT: {
+                        let rPoints: ƒ.Node[] = this.#allSpawnPoints;
+                        if(!rPoints || rPoints.length === 0) continue;
+                        return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;    
+                    }
+                    case RESPAWN_TYPE.AT_TEAMMATE_LOCATION: {
+                        let team = this.teams[player.team];
+                        //TODO make sure not to select dead players
+                        let otherPlayer = team.players.find((p) => p.id !== player.id);
+                        if(!otherPlayer) continue;
+                        return otherPlayer.brawler?.node.mtxLocal.translation.clone;
+                    }
+                }
+            }
+            return new ƒ.Vector3();
         }
     }
 }

@@ -409,6 +409,11 @@ var Script;
                 }
             }
         }
+        for (let t = 0; t < teams.length; t++) {
+            for (let player of teams[t].players) {
+                player.team = t;
+            }
+        }
         return teams;
     }
 })(Script || (Script = {}));
@@ -517,15 +522,11 @@ var Script;
                 return;
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.update);
         }
-        loadBrawler = async (_playerBrawler = "Brawler") => {
+        loadBrawler = async (_playerBrawler) => {
             console.log("load Brawler");
-            let defaultBrawler = ƒ.Project.getResourcesByName("Brawler")[0];
             let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler)[0];
-            let spawnPoints = this.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
-            for (let i = 0; i < spawnPoints.length - 1; i++) {
-                await this.initBrawler(defaultBrawler, spawnPoints[i].mtxLocal.translation.clone);
-            }
-            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoints[spawnPoints.length - 1].mtxLocal.translation.clone);
+            let spawnPoint = Script.GameManager.Instance.getSpawnPointForPlayer(Script.LobbyManager.client.id);
+            this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoint);
             let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
             let cameraInstance = await ƒ.Project.createGraphInstance(cameraGraph);
             this.playerBrawler.node.addChild(cameraInstance);
@@ -2123,6 +2124,7 @@ var Script;
         teams;
         settings;
         gameActive = false;
+        #allSpawnPoints = [];
         defaultSettings = {
             amtRounds: 1,
             maxRespawnsPerRoundAndPlayer: 3,
@@ -2156,7 +2158,8 @@ var Script;
             let entityNode = graph.getChildrenByName("Terrain")[0].getChildrenByName("Entities")[0];
             entityNode.removeAllChildren();
             entityNode.addComponent(em);
-            await Script.EntityManager.Instance.loadBrawler(this.getBrawlerOfPlayer(Script.LobbyManager.client.id));
+            this.initSpawnPoints();
+            await Script.EntityManager.Instance.loadBrawler(this.getChosenBrawlerOfPlayer(Script.LobbyManager.client.id));
         }
         selectBrawler(_brawler, _player) {
             let totalPlayers = 0;
@@ -2179,18 +2182,69 @@ var Script;
                 document.getElementById("start_game").disabled = false;
             }
         }
-        getBrawlerOfPlayer(_player) {
+        getPlayer(_playerID) {
             if (!this.teams)
-                return "Brawler";
+                return undefined;
             for (let team of this.teams) {
                 for (let p of team.players) {
-                    if (p.id === _player)
-                        return p.chosenBrawler;
+                    if (p.id === _playerID)
+                        return p;
                 }
             }
-            return "Brawler";
+            return undefined;
+        }
+        getChosenBrawlerOfPlayer(_player) {
+            return this.getPlayer(_player)?.chosenBrawler ?? "Brawler";
         }
         playerDied(cp) {
+        }
+        initSpawnPoints() {
+            let spawnPointNodes = Script.EntityManager.Instance.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
+            for (let team of this.teams) {
+                team.respawnPoints = [];
+            }
+            for (let node of spawnPointNodes) {
+                let sp = node.getComponent(Script.SpawnPoint);
+                if (!sp)
+                    continue;
+                if (this.teams.length > sp.team) {
+                    this.teams[sp.team].respawnPoints.push(node);
+                }
+            }
+            this.#allSpawnPoints = spawnPointNodes;
+        }
+        getSpawnPointForPlayer(_playerId) {
+            let player = this.getPlayer(_playerId);
+            if (!player)
+                return new ƒ.Vector3();
+            for (let type of this.settings.respawnType) {
+                switch (type) {
+                    case RESPAWN_TYPE.AT_DEATH_LOCATION: {
+                        return player.brawler.node.mtxLocal.translation.clone;
+                    }
+                    case RESPAWN_TYPE.AT_FIXED_RESPAWN_POINT: {
+                        let rPoints = this.teams[player.team].respawnPoints;
+                        if (!rPoints || rPoints.length === 0)
+                            continue;
+                        return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;
+                    }
+                    case RESPAWN_TYPE.AT_RANDOM_RESPAWN_POINT: {
+                        let rPoints = this.#allSpawnPoints;
+                        if (!rPoints || rPoints.length === 0)
+                            continue;
+                        return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;
+                    }
+                    case RESPAWN_TYPE.AT_TEAMMATE_LOCATION: {
+                        let team = this.teams[player.team];
+                        //TODO make sure not to select dead players
+                        let otherPlayer = team.players.find((p) => p.id !== player.id);
+                        if (!otherPlayer)
+                            continue;
+                        return otherPlayer.brawler?.node.mtxLocal.translation.clone;
+                    }
+                }
+            }
+            return new ƒ.Vector3();
         }
     }
     Script.GameManager = GameManager;
