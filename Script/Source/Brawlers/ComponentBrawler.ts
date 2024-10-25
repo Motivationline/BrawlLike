@@ -111,6 +111,11 @@ namespace Script {
 
     public setMovement(_direction: ƒ.Vector3) {
       this.direction.copy(_direction);
+      this.syncSelf();
+    }
+
+    public getDirection(): ƒ.Vector3 {
+      return this.direction;
     }
 
     public update() {
@@ -277,6 +282,31 @@ namespace Script {
       return this;
     }
 
+
+    creationData(): CreationData {
+      return {
+        id: this.id,
+        initData: this.getInfo(),
+        resourceName: this.node.name,
+      }
+    }
+
+    getInfo(): any {
+      let info = super.getInfo();
+      info.direction = {
+        x: this.direction.x,
+        y: this.direction.y,
+        z: this.direction.z,
+      }
+      return info;
+    }
+
+    applyData(data: any): void {
+      super.applyData(data);
+      this.direction.x = data.direction.x;
+      this.direction.y = data.direction.y;
+      this.direction.z = data.direction.z;
+    }
   }
 
   export enum ATTACK_TYPE {

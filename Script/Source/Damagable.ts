@@ -1,6 +1,7 @@
+/// <reference path="Misc/ServerSync.ts" />
 namespace Script {
     import ƒ = FudgeCore;
-    export abstract class Damagable extends ƒ.Component {
+    export abstract class Damagable extends ServerSync {
         #health: number = 500;
         rigidbody: ƒ.ComponentRigidbody;
         #healthBar: ƒ.ComponentMesh;

@@ -80,7 +80,7 @@ namespace Script {
         private static async createObject(_data: CreationData) {
             let graph = <ƒ.Graph>ƒ.Project.getResourcesByName(_data.resourceName)[0];
             let instance = await ƒ.Project.createGraphInstance(graph);
-            viewport.getBranch().addChild(instance);
+            EntityManager.Instance.addObjectThroughNetwork(instance);
             let ssc = <ServerSync>instance.getAllComponents().find(c => c instanceof ServerSync);
             ssc.setupId(_data.id);
             ssc.applyData(_data.initData);

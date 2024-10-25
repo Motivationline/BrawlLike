@@ -24,9 +24,15 @@ namespace Script {
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
                 direction.z += -1;
 
+            if(direction.equals(EntityManager.Instance.playerBrawler.getDirection())) {
+                ƒ.Recycler.store(direction);
+                return;
+            }
+
             let mgtSqrt = direction.magnitudeSquared;
             if (mgtSqrt === 0) {
                 EntityManager.Instance.playerBrawler?.setMovement(direction);
+                ƒ.Recycler.store(direction);
                 return;
             }
             if (mgtSqrt > 1) {

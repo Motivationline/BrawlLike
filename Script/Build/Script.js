@@ -93,7 +93,52 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    class Damagable extends ƒ.Component {
+    class ServerSync extends ƒ.Component {
+        id;
+        ownerId;
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+        }
+        setupId(_id) {
+            this.id = _id;
+            if (!_id) {
+                this.id = Script.MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
+            }
+            this.ownerId = Script.MultiplayerManager.getOwnerIdFromId(this.id);
+            Script.MultiplayerManager.register(this);
+        }
+        syncSelf() {
+            Script.MultiplayerManager.updateOne(this.getInfo(), this.id);
+        }
+        getInfo() {
+            let info = {};
+            info.position = this.node.mtxLocal.translation;
+            return info;
+        }
+        putInfo(_data) {
+            if (this.ownerId === Script.MultiplayerManager.client.id)
+                return;
+            if (!_data)
+                return;
+            this.applyData(_data);
+        }
+        applyData(data) {
+            let rb = this.node.getComponent(ƒ.ComponentRigidbody);
+            rb.activate(false);
+            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
+            rb.activate(true);
+        }
+    }
+    Script.ServerSync = ServerSync;
+})(Script || (Script = {}));
+/// <reference path="Misc/ServerSync.ts" />
+var Script;
+/// <reference path="Misc/ServerSync.ts" />
+(function (Script) {
+    var ƒ = FudgeCore;
+    class Damagable extends Script.ServerSync {
         #health = 500;
         rigidbody;
         #healthBar;
@@ -441,9 +486,14 @@ var Script;
                 direction.z += 1;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]))
                 direction.z += -1;
+            if (direction.equals(Script.EntityManager.Instance.playerBrawler.getDirection())) {
+                ƒ.Recycler.store(direction);
+                return;
+            }
             let mgtSqrt = direction.magnitudeSquared;
             if (mgtSqrt === 0) {
                 Script.EntityManager.Instance.playerBrawler?.setMovement(direction);
+                ƒ.Recycler.store(direction);
                 return;
             }
             if (mgtSqrt > 1) {
@@ -532,6 +582,7 @@ var Script;
             this.playerBrawler.node.addChild(cameraInstance);
             let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
             Script.viewport.camera = camera;
+            this.playerBrawler.setupId();
         };
         async initBrawler(_g, _pos) {
             let instance = await ƒ.Project.createGraphInstance(_g);
@@ -540,6 +591,16 @@ var Script;
             let cb = instance.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
             this.brawlers.push(cb);
             return cb;
+        }
+        addObjectThroughNetwork(_instance) {
+            let components = _instance.getAllComponents();
+            let brawler = components.find(c => c instanceof Script.ComponentBrawler);
+            if (brawler)
+                this.brawlers.push(brawler);
+            let proj = components.find(c => c instanceof Script.ComponentProjectile);
+            if (proj)
+                this.addProjectile(_instance, proj);
+            this.node.addChild(_instance);
         }
         addProjectile(_instance, _component, _parent) {
             if (!_parent) {
@@ -625,7 +686,7 @@ var Script;
         static async createObject(_data) {
             let graph = ƒ.Project.getResourcesByName(_data.resourceName)[0];
             let instance = await ƒ.Project.createGraphInstance(graph);
-            Script.viewport.getBranch().addChild(instance);
+            Script.EntityManager.Instance.addObjectThroughNetwork(instance);
             let ssc = instance.getAllComponents().find(c => c instanceof Script.ServerSync);
             ssc.setupId(_data.id);
             ssc.applyData(_data.initData);
@@ -1879,6 +1940,10 @@ var Script;
         }
         setMovement(_direction) {
             this.direction.copy(_direction);
+            this.syncSelf();
+        }
+        getDirection() {
+            return this.direction;
         }
         update() {
             if (this.#dead)
@@ -2029,6 +2094,28 @@ var Script;
             this.animationAttackName = _serialization.animationAttackName;
             this.animationSpecialName = _serialization.animationSpecialName;
             return this;
+        }
+        creationData() {
+            return {
+                id: this.id,
+                initData: this.getInfo(),
+                resourceName: this.node.name,
+            };
+        }
+        getInfo() {
+            let info = super.getInfo();
+            info.direction = {
+                x: this.direction.x,
+                y: this.direction.y,
+                z: this.direction.z,
+            };
+            return info;
+        }
+        applyData(data) {
+            super.applyData(data);
+            this.direction.x = data.direction.x;
+            this.direction.y = data.direction.y;
+            this.direction.z = data.direction.z;
         }
     }
     Script.ComponentBrawler = ComponentBrawler;
@@ -2356,49 +2443,6 @@ var Script;
         }
     }
     Script.ComponentRandomRotation = ComponentRandomRotation;
-})(Script || (Script = {}));
-var Script;
-(function (Script) {
-    var ƒ = FudgeCore;
-    class ServerSync extends ƒ.Component {
-        id;
-        ownerId;
-        constructor() {
-            super();
-            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
-                return;
-        }
-        setupId(_id) {
-            this.id = _id;
-            if (!_id) {
-                this.id = Script.MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
-            }
-            this.ownerId = Script.MultiplayerManager.getOwnerIdFromId(this.id);
-            Script.MultiplayerManager.register(this);
-        }
-        syncSelf() {
-            Script.MultiplayerManager.updateOne(this.getInfo(), this.id);
-        }
-        getInfo() {
-            let info = {};
-            info.position = this.node.mtxLocal.translation;
-            return info;
-        }
-        putInfo(_data) {
-            if (this.ownerId === Script.MultiplayerManager.client.id)
-                return;
-            if (!_data)
-                return;
-            this.applyData(_data);
-        }
-        applyData(data) {
-            let rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            rb.activate(false);
-            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
-            rb.activate(true);
-        }
-    }
-    Script.ServerSync = ServerSync;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

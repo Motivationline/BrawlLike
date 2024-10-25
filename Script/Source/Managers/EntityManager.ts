@@ -27,6 +27,8 @@ namespace Script {
             this.playerBrawler.node.addChild(cameraInstance);
             let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
             viewport.camera = camera;
+
+            this.playerBrawler.setupId();
         }
 
         private async initBrawler(_g: ƒ.Graph, _pos: ƒ.Vector3): Promise<ComponentBrawler> {
@@ -38,7 +40,19 @@ namespace Script {
             return cb;
         }
 
-        public addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node) {
+        public addObjectThroughNetwork(_instance: ƒ.GraphInstance){
+            let components = _instance.getAllComponents();
+            let brawler = components.find(c => c instanceof ComponentBrawler);
+            if(brawler)
+                this.brawlers.push(brawler)
+            let proj = components.find(c => c instanceof ComponentProjectile);
+            if(proj)
+                this.addProjectile(_instance, proj);
+
+            this.node.addChild(_instance);
+        }
+
+        public addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent?: ƒ.Node) {
             if (!_parent) {
                 _parent = this.node;
             }

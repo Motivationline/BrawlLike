@@ -21,7 +21,21 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    abstract class Damagable extends ƒ.Component {
+    abstract class ServerSync extends ƒ.Component {
+        id: string;
+        ownerId: string;
+        constructor();
+        setupId(_id?: string): void;
+        syncSelf(): void;
+        getInfo(): any;
+        putInfo(_data: any): void;
+        applyData(data: any): void;
+        abstract creationData(): CreationData;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    abstract class Damagable extends ServerSync {
         #private;
         rigidbody: ƒ.ComponentRigidbody;
         constructor();
@@ -88,7 +102,8 @@ declare namespace Script {
         constructor();
         loadBrawler: (_playerBrawler: string) => Promise<void>;
         private initBrawler;
-        addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent: ƒ.Node): void;
+        addObjectThroughNetwork(_instance: ƒ.GraphInstance): void;
+        addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent?: ƒ.Node): void;
         removeProjectile(_proj: ComponentProjectile): void;
         update: () => void;
     }
@@ -343,6 +358,7 @@ declare namespace Script {
         private playAnimation;
         private findAttacks;
         setMovement(_direction: ƒ.Vector3): void;
+        getDirection(): ƒ.Vector3;
         update(): void;
         protected move(): void;
         dealDamage(_amt: number): void;
@@ -358,6 +374,9 @@ declare namespace Script {
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        creationData(): CreationData;
+        getInfo(): any;
+        applyData(data: any): void;
     }
     enum ATTACK_TYPE {
         MAIN = 0,
@@ -462,20 +481,6 @@ declare namespace Script {
         constructor();
         hndEvent: (_event: Event) => void;
         private randomizeRotation;
-    }
-}
-declare namespace Script {
-    import ƒ = FudgeCore;
-    abstract class ServerSync extends ƒ.Component {
-        id: string;
-        ownerId: string;
-        constructor();
-        setupId(_id?: string): void;
-        syncSelf(): void;
-        getInfo(): any;
-        putInfo(_data: any): void;
-        applyData(data: any): void;
-        abstract creationData(): CreationData;
     }
 }
 declare namespace Script {
