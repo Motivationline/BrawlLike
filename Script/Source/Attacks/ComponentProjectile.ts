@@ -53,9 +53,14 @@ namespace Script {
         }
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
-            if (_event.cmpRigidbody === this.#owner.rigidbody) return;
-            if (this.gravity && this.#rb.getVelocity().y > 0) return;
-            // TODO do team check
+            if (_event.cmpRigidbody === this.#owner.rigidbody) return; // don't hit owner
+            if (this.gravity && this.#rb.getVelocity().y > 0) return; // don't hit anything while going up
+            if (this.#owner !== EntityManager.Instance.playerBrawler) return; // don't do anything if owner isn't own brawler
+            // team check
+            let otherEntity = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(this.#owner.id));
+            let owner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.ownerId));
+            if (otherEntity && owner && otherEntity.id !== owner.id && otherEntity.team === owner.team) return;
+
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(IgnoredByProjectiles);
             if (noProjectile && noProjectile.isActive) return;
@@ -84,8 +89,8 @@ namespace Script {
                 compAOE.setup(this.#owner, this.node.mtxLocal.translation);
             }
             EntityManager.Instance.removeProjectile(this);
-            if(this.#owner === EntityManager.Instance.playerBrawler) {
-                MultiplayerManager.updateOne({type: "explosion", data: this.getInfo()}, this.id)
+            if (this.#owner === EntityManager.Instance.playerBrawler) {
+                MultiplayerManager.updateOne({ type: "explosion", data: this.getInfo() }, this.id)
             }
         }
 
@@ -137,7 +142,7 @@ namespace Script {
             return this;
         }
 
-        
+
         creationData(): CreationData {
             let initData = this.getInfo();
             return {
@@ -160,25 +165,25 @@ namespace Script {
 
         applyData(_data: any): void {
             if (_data.type) {
-              switch (_data.type) {
-                case "explosion": {
-                    super.applyData(_data.data);
-                    
-                    this.#rb.setVelocity(new ƒ.Vector3(_data.data.velo.x, _data.data.velo.y,_data.data.velo.z));
-                    
-                    let owner = EntityManager.Instance.brawlers.find(b => b.id === _data.data.owner)
-                    this.#owner = owner;
-                    this.explode();
-                  break;
+                switch (_data.type) {
+                    case "explosion": {
+                        super.applyData(_data.data);
+
+                        this.#rb.setVelocity(new ƒ.Vector3(_data.data.velo.x, _data.data.velo.y, _data.data.velo.z));
+
+                        let owner = EntityManager.Instance.brawlers.find(b => b.id === _data.data.owner)
+                        this.#owner = owner;
+                        this.explode();
+                        break;
+                    }
                 }
-              }
-              return;
+                return;
             }
 
             super.applyData(_data);
-            
-            this.#rb.setVelocity(new ƒ.Vector3(_data.velo.x, _data.velo.y,_data.velo.z));
-            
+
+            this.#rb.setVelocity(new ƒ.Vector3(_data.velo.x, _data.velo.y, _data.velo.z));
+
             let owner = EntityManager.Instance.brawlers.find(b => b.id === _data.owner)
             this.#owner = owner;
         }

@@ -1579,10 +1579,16 @@ var Script;
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
-                return;
+                return; // don't hit owner
             if (this.gravity && this.#rb.getVelocity().y > 0)
+                return; // don't hit anything while going up
+            if (this.#owner !== Script.EntityManager.Instance.playerBrawler)
+                return; // don't do anything if owner isn't own brawler
+            // team check
+            let otherEntity = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(this.#owner.id));
+            let owner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.ownerId));
+            if (otherEntity && owner && otherEntity.id !== owner.id && otherEntity.team === owner.team)
                 return;
-            // TODO do team check
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(Script.IgnoredByProjectiles);
             if (noProjectile && noProjectile.isActive)
@@ -2169,7 +2175,8 @@ var Script;
                 switch (data.type) {
                     case "animation": {
                         this.playAnimation(data.name, data.options);
-                        this.rotationWrapperMatrix.lookIn(new ƒ.Vector3(data.direction.x, data.direction.y, data.direction.z));
+                        if (data.direction)
+                            this.rotationWrapperMatrix.lookIn(new ƒ.Vector3(data.direction.x, data.direction.y, data.direction.z));
                         break;
                     }
                 }

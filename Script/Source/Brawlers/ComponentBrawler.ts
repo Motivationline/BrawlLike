@@ -317,7 +317,8 @@ namespace Script {
         switch (data.type) {
           case "animation": {
             this.playAnimation(data.name, data.options);
-            this.rotationWrapperMatrix.lookIn(new ƒ.Vector3(data.direction.x, data.direction.y, data.direction.z));
+            if (data.direction)
+              this.rotationWrapperMatrix.lookIn(new ƒ.Vector3(data.direction.x, data.direction.y, data.direction.z));
             break;
           }
         }
