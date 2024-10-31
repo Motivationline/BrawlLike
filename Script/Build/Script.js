@@ -669,7 +669,9 @@ var Script;
         static getUpdate() {
             let data = {};
             for (let element of this.#ownElementsToSync.values()) {
-                data[element.id] = element.getInfo();
+                if (element.node.getParent()) {
+                    data[element.id] = element.getInfo();
+                }
             }
             return data;
         }
@@ -1529,7 +1531,7 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    class ComponentProjectile extends ƒ.Component {
+    class ComponentProjectile extends Script.ServerSync {
         gravity = false;
         rotateInDirection = true;
         damage = 100;
@@ -1573,6 +1575,7 @@ var Script;
             else {
                 this.#rb.setVelocity(_direction.scale(this.speed));
             }
+            this.setupId();
         }
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
@@ -1605,6 +1608,9 @@ var Script;
                 compAOE.setup(this.#owner, this.node.mtxLocal.translation);
             }
             Script.EntityManager.Instance.removeProjectile(this);
+            if (this.#owner === Script.EntityManager.Instance.playerBrawler) {
+                Script.MultiplayerManager.updateOne({ type: "explosion", data: this.getInfo() }, this.id);
+            }
         }
         moveToPosition(_pos) {
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
@@ -1649,6 +1655,43 @@ var Script;
             if (_serialization.impactAOE !== undefined)
                 this.impactAOE = _serialization.impactAOE;
             return this;
+        }
+        creationData() {
+            let initData = this.getInfo();
+            return {
+                id: this.id,
+                initData,
+                resourceName: this.node.name,
+            };
+        }
+        getInfo() {
+            let info = super.getInfo();
+            info.owner = this.#owner.id;
+            info.velo = {
+                x: this.#rb.getVelocity().x,
+                y: this.#rb.getVelocity().y,
+                z: this.#rb.getVelocity().z,
+            };
+            return info;
+        }
+        applyData(_data) {
+            if (_data.type) {
+                switch (_data.type) {
+                    case "explosion": {
+                        super.applyData(_data.data);
+                        this.#rb.setVelocity(new ƒ.Vector3(_data.data.velo.x, _data.data.velo.y, _data.data.velo.z));
+                        let owner = Script.EntityManager.Instance.brawlers.find(b => b.id === _data.data.owner);
+                        this.#owner = owner;
+                        this.explode();
+                        break;
+                    }
+                }
+                return;
+            }
+            super.applyData(_data);
+            this.#rb.setVelocity(new ƒ.Vector3(_data.velo.x, _data.velo.y, _data.velo.z));
+            let owner = Script.EntityManager.Instance.brawlers.find(b => b.id === _data.owner);
+            this.#owner = owner;
         }
     }
     Script.ComponentProjectile = ComponentProjectile;
@@ -1897,6 +1940,7 @@ var Script;
                 return;
             if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter)
                 return;
+            Script.MultiplayerManager.updateOne({ type: "animation", name: _name, options: _options }, this.id);
             if (!this.#animations.has(_name)) {
                 let animationName = this.animationIdleName;
                 if (_name == "walk")
@@ -2005,12 +2049,16 @@ var Script;
             switch (_atk) {
                 case ATTACK_TYPE.MAIN:
                     if (this.attackMain.attack(_direction)) {
-                        this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime });
+                        let options = { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime };
+                        this.playAnimation("attack", options);
+                        Script.MultiplayerManager.updateOne({ type: "animation", name: "attack", options, direction: JSON.parse(JSON.stringify(_direction)) }, this.id);
                     }
                     break;
                 case ATTACK_TYPE.SPECIAL:
                     if (this.attackSpecial.attack(_direction)) {
-                        this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackSpecial.lockTime });
+                        let options = { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackSpecial.lockTime };
+                        this.playAnimation("special", options);
+                        Script.MultiplayerManager.updateOne({ type: "animation", name: "special", options, direction: JSON.parse(JSON.stringify(_direction)) }, this.id);
                     }
                     break;
             }
@@ -2042,6 +2090,7 @@ var Script;
                 velocity: _velocity,
                 until: ƒ.Time.game.get() + _duration,
             });
+            this.syncSelf();
         }
         lockPlayerFor(_time) {
             this.#playerMovementLockedUntil = Math.max(ƒ.Time.game.get() + _time, this.#playerMovementLockedUntil);
@@ -2109,13 +2158,34 @@ var Script;
                 y: this.direction.y,
                 z: this.direction.z,
             };
+            info.velOverride = [];
+            this.#velocityOverrides.forEach(value => {
+                info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } });
+            });
             return info;
         }
         applyData(data) {
+            if (data.type) {
+                switch (data.type) {
+                    case "animation": {
+                        this.playAnimation(data.name, data.options);
+                        this.rotationWrapperMatrix.lookIn(new ƒ.Vector3(data.direction.x, data.direction.y, data.direction.z));
+                        break;
+                    }
+                }
+                return;
+            }
             super.applyData(data);
             this.direction.x = data.direction.x;
             this.direction.y = data.direction.y;
             this.direction.z = data.direction.z;
+            this.#velocityOverrides = [];
+            data.velOverride.forEach((value) => {
+                this.#velocityOverrides.push({
+                    until: value.until,
+                    velocity: new ƒ.Vector3(value.velocity.x, value.velocity.y, value.velocity.z),
+                });
+            });
         }
     }
     Script.ComponentBrawler = ComponentBrawler;

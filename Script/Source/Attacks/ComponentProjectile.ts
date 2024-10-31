@@ -1,6 +1,6 @@
 namespace Script {
     import ƒ = FudgeCore;
-    export class ComponentProjectile extends ƒ.Component {
+    export class ComponentProjectile extends ServerSync {
         gravity: boolean = false;
         rotateInDirection: boolean = true;
         damage: number = 100;
@@ -49,6 +49,7 @@ namespace Script {
             } else {
                 this.#rb.setVelocity(_direction.scale(this.speed));
             }
+            this.setupId();
         }
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
@@ -83,6 +84,9 @@ namespace Script {
                 compAOE.setup(this.#owner, this.node.mtxLocal.translation);
             }
             EntityManager.Instance.removeProjectile(this);
+            if(this.#owner === EntityManager.Instance.playerBrawler) {
+                MultiplayerManager.updateOne({type: "explosion", data: this.getInfo()}, this.id)
+            }
         }
 
         moveToPosition(_pos: ƒ.Vector3) {
@@ -131,6 +135,52 @@ namespace Script {
             if (_serialization.impactAOE !== undefined)
                 this.impactAOE = _serialization.impactAOE;
             return this;
+        }
+
+        
+        creationData(): CreationData {
+            let initData = this.getInfo();
+            return {
+                id: this.id,
+                initData,
+                resourceName: this.node.name,
+            }
+        }
+
+        getInfo(): any {
+            let info = super.getInfo();
+            info.owner = this.#owner.id;
+            info.velo = {
+                x: this.#rb.getVelocity().x,
+                y: this.#rb.getVelocity().y,
+                z: this.#rb.getVelocity().z,
+            }
+            return info;
+        }
+
+        applyData(_data: any): void {
+            if (_data.type) {
+              switch (_data.type) {
+                case "explosion": {
+                    super.applyData(_data.data);
+                    
+                    this.#rb.setVelocity(new ƒ.Vector3(_data.data.velo.x, _data.data.velo.y,_data.data.velo.z));
+                    
+                    let owner = EntityManager.Instance.brawlers.find(b => b.id === _data.data.owner)
+                    this.#owner = owner;
+                    this.explode();
+                  break;
+                }
+              }
+              return;
+            }
+
+            super.applyData(_data);
+            
+            this.#rb.setVelocity(new ƒ.Vector3(_data.velo.x, _data.velo.y,_data.velo.z));
+            
+            let owner = EntityManager.Instance.brawlers.find(b => b.id === _data.owner)
+            this.#owner = owner;
         }
     }
 }

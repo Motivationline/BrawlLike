@@ -267,7 +267,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    class ComponentProjectile extends ƒ.Component {
+    class ComponentProjectile extends ServerSync {
         #private;
         gravity: boolean;
         rotateInDirection: boolean;
@@ -287,6 +287,9 @@ declare namespace Script {
         private initShadow;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        creationData(): CreationData;
+        getInfo(): any;
+        applyData(_data: any): void;
     }
 }
 declare namespace Script {

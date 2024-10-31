@@ -42,10 +42,10 @@ namespace Script {
 
         public addObjectThroughNetwork(_instance: ƒ.GraphInstance){
             let components = _instance.getAllComponents();
-            let brawler = components.find(c => c instanceof ComponentBrawler);
+            let brawler = <ComponentBrawler>components.find(c => c instanceof ComponentBrawler);
             if(brawler)
                 this.brawlers.push(brawler)
-            let proj = components.find(c => c instanceof ComponentProjectile);
+            let proj = <ComponentProjectile>components.find(c => c instanceof ComponentProjectile);
             if(proj)
                 this.addProjectile(_instance, proj);
 

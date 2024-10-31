@@ -61,7 +61,9 @@ namespace Script {
         private static getUpdate(): NetworkData {
             let data: NetworkData = {};
             for (let element of this.#ownElementsToSync.values()) {
-                data[element.id] = element.getInfo();
+                if(element.node.getParent()){
+                    data[element.id] = element.getInfo();
+                }
             }
             return data;
         }

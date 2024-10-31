@@ -68,11 +68,13 @@ namespace Script {
     }
 
     #animationTimeout: number = -1;
-    private playAnimation(_name: AnimationType, _options?: { lockAndSwitchToIdleAfter: boolean, playFromStart: boolean, lockMovement: boolean, lockTime: number }) {
+    private playAnimation(_name: AnimationType, _options?: { lockAndSwitchToIdleAfter: boolean, playFromStart: boolean, lockMovement: boolean, lockTime: number, direction?: ƒ.Vector3 }) {
       _options = { ...{ lockAndSwitchToIdleAfter: false, playFromStart: false, lockMovement: false, lockTime: 0 }, ..._options };
 
       if (_name === this.#currentlyActiveAnimation.name && !_options.lockAndSwitchToIdleAfter) return;
       if (this.#currentlyActiveAnimation.lock && !_options.lockAndSwitchToIdleAfter) return;
+
+      MultiplayerManager.updateOne({ type: "animation", name: _name, options: _options }, this.id);
 
       if (!this.#animations.has(_name)) {
         let animationName: string = this.animationIdleName;
@@ -179,12 +181,16 @@ namespace Script {
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
           if (this.attackMain.attack(_direction)) {
-            this.playAnimation("attack", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime });
+            let options = { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackMain.lockBrawlerForAnimationTime, lockTime: this.attackMain.lockTime };
+            this.playAnimation("attack", options);
+            MultiplayerManager.updateOne({ type: "animation", name: "attack", options, direction: JSON.parse(JSON.stringify(_direction)) }, this.id);
           }
           break;
         case ATTACK_TYPE.SPECIAL:
           if (this.attackSpecial.attack(_direction)) {
-            this.playAnimation("special", { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackSpecial.lockTime });
+            let options = { lockAndSwitchToIdleAfter: true, playFromStart: true, lockMovement: this.attackSpecial.lockBrawlerForAnimationTime, lockTime: this.attackSpecial.lockTime };
+            this.playAnimation("special", options);
+            MultiplayerManager.updateOne({ type: "animation", name: "special", options, direction: JSON.parse(JSON.stringify(_direction)) }, this.id);
           }
           break;
       }
@@ -219,6 +225,7 @@ namespace Script {
         velocity: _velocity,
         until: ƒ.Time.game.get() + _duration,
       });
+      this.syncSelf();
     }
 
     public lockPlayerFor(_time: number) {
@@ -298,14 +305,37 @@ namespace Script {
         y: this.direction.y,
         z: this.direction.z,
       }
+      info.velOverride = [];
+      this.#velocityOverrides.forEach(value => {
+        info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } })
+      });
       return info;
     }
 
     applyData(data: any): void {
+      if (data.type) {
+        switch (data.type) {
+          case "animation": {
+            this.playAnimation(data.name, data.options);
+            this.rotationWrapperMatrix.lookIn(new ƒ.Vector3(data.direction.x, data.direction.y, data.direction.z));
+            break;
+          }
+        }
+        return;
+      }
+
       super.applyData(data);
       this.direction.x = data.direction.x;
       this.direction.y = data.direction.y;
       this.direction.z = data.direction.z;
+      this.#velocityOverrides = [];
+      data.velOverride.forEach((value: any) => {
+        this.#velocityOverrides.push(
+          {
+            until: value.until,
+            velocity: new ƒ.Vector3(value.velocity.x, value.velocity.y, value.velocity.z),
+          })
+      });
     }
   }
 
