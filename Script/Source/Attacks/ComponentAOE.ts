@@ -63,14 +63,17 @@ namespace Script {
         }
 
         protected loop = () => {
-            if(this.maxTicksPerEnemy === null || this.maxTicksPerEnemy === undefined) this.maxTicksPerEnemy = Infinity;
+            if (this.maxTicksPerEnemy === null || this.maxTicksPerEnemy === undefined) this.maxTicksPerEnemy = Infinity;
             let currentTime = ƒ.Time.game.get();
-            for (let pair of this.#damagables) {
-                if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
-                    pair.target.dealDamage(this.damage);
-                    this.#owner.dealDamageToOthers(this.damage);
-                    pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
-                    pair.amtTicks++;
+
+            if (this.#owner === EntityManager.Instance.playerBrawler) {
+                for (let pair of this.#damagables) {
+                    if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
+                        pair.target.dealDamage(this.damage, true);
+                        this.#owner.dealDamageToOthers(this.damage);
+                        pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
+                        pair.amtTicks++;
+                    }
                 }
             }
             if (this.#endTimeDamage < currentTime) {
@@ -78,7 +81,7 @@ namespace Script {
                 this.#rb.activate(false);
             }
             if (this.#endTimeVisual < currentTime) {
-                for(let child of this.node.getChildren()){
+                for (let child of this.node.getChildren()) {
                     child.activate(false);
                 }
             }
@@ -90,13 +93,22 @@ namespace Script {
 
         protected onTriggerEnter = (_event: ƒ.EventPhysics) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody) return;
-            // TODO: Team check
+            if (this.#owner !== EntityManager.Instance.playerBrawler) return; // don't do anything if owner isn't own brawler
+
+            // team check
+            let otherBrawler: ComponentBrawler = (<ComponentBrawler>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof ComponentBrawler));
+            if (otherBrawler) {
+                let otherPlayer = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
+                let owner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.ownerId));
+                if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team) return;
+            }
+
             // check if damagable
             let damagable: Damagable = (<Damagable>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Damagable));
             if (damagable) {
                 let amtTicks: number = 0;
                 if (this.delayBeforeFirstTickInMS === 0) {
-                    damagable.dealDamage(this.damage);
+                    damagable.dealDamage(this.damage, true);
                     this.#owner.dealDamageToOthers(this.damage);
                     amtTicks++;
                 }

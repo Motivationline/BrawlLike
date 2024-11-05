@@ -11,8 +11,8 @@ namespace Script {
 
         setupId(_id?: string) {
             this.id = _id;
-            if(!_id){
-                this.id = MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
+            if (!_id) {
+                this.id = MultiplayerManager.client.id + "+" + Math.floor(ƒ.Time.game.get()) + "+" + Math.floor(Math.random() * 10000 + 1);
             }
             this.ownerId = MultiplayerManager.getOwnerIdFromId(this.id);
             MultiplayerManager.register(this);
@@ -28,11 +28,14 @@ namespace Script {
             return info;
         }
         putInfo(_data: any) {
-            if (this.ownerId === MultiplayerManager.client.id) return;
+            if (this.ownerId === MultiplayerManager.client.id && !_data.override) return;
             if (!_data) return;
             this.applyData(_data);
         }
         applyData(data: any) {
+            if (data.type) {
+                return;
+            }
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
             rb.activate(false);
             this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);

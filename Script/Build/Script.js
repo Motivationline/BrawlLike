@@ -104,7 +104,7 @@ var Script;
         setupId(_id) {
             this.id = _id;
             if (!_id) {
-                this.id = Script.MultiplayerManager.client.id + "+" + ƒ.Time.game.get() + "+" + Math.floor(Math.random() * 10000 + 1);
+                this.id = Script.MultiplayerManager.client.id + "+" + Math.floor(ƒ.Time.game.get()) + "+" + Math.floor(Math.random() * 10000 + 1);
             }
             this.ownerId = Script.MultiplayerManager.getOwnerIdFromId(this.id);
             Script.MultiplayerManager.register(this);
@@ -118,13 +118,16 @@ var Script;
             return info;
         }
         putInfo(_data) {
-            if (this.ownerId === Script.MultiplayerManager.client.id)
+            if (this.ownerId === Script.MultiplayerManager.client.id && !_data.override)
                 return;
             if (!_data)
                 return;
             this.applyData(_data);
         }
         applyData(data) {
+            if (data.type) {
+                return;
+            }
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
             rb.activate(false);
             this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
@@ -148,12 +151,12 @@ var Script;
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.initDamagable);
-            this.#maxHealth = this.#health;
         }
         initDamagable = () => {
             // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
             this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initHealthbar, true);
             this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+            this.#maxHealth = this.#health;
         };
         initHealthbar = async () => {
             // this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
@@ -165,7 +168,7 @@ var Script;
         get health() {
             return this.#health;
         }
-        dealDamage(_amt) {
+        dealDamage(_amt, _broadcast) {
             this.#health = Math.min(this.#health - _amt, this.#maxHealth);
             if (this.#health <= 0)
                 this.death();
@@ -174,9 +177,11 @@ var Script;
             let scale = this.#health / this.#maxHealth;
             this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(scale, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
             this.#healthBar.mtxPivot.translation = new ƒ.Vector3(scale / 2 - 0.5, this.#healthBar.mtxPivot.translation.y, this.#healthBar.mtxPivot.translation.z);
+            if (_broadcast)
+                Script.MultiplayerManager.updateOne({ type: "damage", override: true, amt: _amt }, this.id);
         }
         set health(_amt) {
-            this.dealDamage(this.#health - _amt);
+            this.dealDamage(this.#health - _amt, false);
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -200,6 +205,26 @@ var Script;
             if (_serialization.health != null)
                 this.health = _serialization.health;
             return this;
+        }
+        getInfo() {
+            let info = super.getInfo();
+            info.health = this.#health;
+            info.maxHealth = this.#maxHealth;
+            return info;
+        }
+        applyData(data) {
+            super.applyData(data);
+            if (data.type) {
+                switch (data.type) {
+                    case "damage": {
+                        this.dealDamage(data.amt, false);
+                        break;
+                    }
+                }
+                return;
+            }
+            this.health = data.health;
+            this.#maxHealth = data.maxHealth;
         }
     }
     Script.Damagable = Damagable;
@@ -684,6 +709,12 @@ var Script;
                 }
                 delete _data[element.id];
             }
+            for (let id in _data) {
+                let data = _data[id];
+                if (!data.override)
+                    continue;
+                this.#ownElementsToSync.get(id)?.putInfo(data);
+            }
         }
         static async createObject(_data) {
             let graph = ƒ.Project.getResourcesByName(_data.resourceName)[0];
@@ -1042,12 +1073,14 @@ var Script;
             if (this.maxTicksPerEnemy === null || this.maxTicksPerEnemy === undefined)
                 this.maxTicksPerEnemy = Infinity;
             let currentTime = ƒ.Time.game.get();
-            for (let pair of this.#damagables) {
-                if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
-                    pair.target.dealDamage(this.damage);
-                    this.#owner.dealDamageToOthers(this.damage);
-                    pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
-                    pair.amtTicks++;
+            if (this.#owner === Script.EntityManager.Instance.playerBrawler) {
+                for (let pair of this.#damagables) {
+                    if (pair.nextDamage <= currentTime && pair.amtTicks < this.maxTicksPerEnemy) {
+                        pair.target.dealDamage(this.damage, true);
+                        this.#owner.dealDamageToOthers(this.damage);
+                        pair.nextDamage = currentTime + this.delayBetweenTicksInMS;
+                        pair.amtTicks++;
+                    }
                 }
             }
             if (this.#endTimeDamage < currentTime) {
@@ -1067,13 +1100,22 @@ var Script;
         onTriggerEnter = (_event) => {
             if (_event.cmpRigidbody === this.#owner.rigidbody)
                 return;
-            // TODO: Team check
+            if (this.#owner !== Script.EntityManager.Instance.playerBrawler)
+                return; // don't do anything if owner isn't own brawler
+            // team check
+            let otherBrawler = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            if (otherBrawler) {
+                let otherPlayer = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
+                let owner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.ownerId));
+                if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team)
+                    return;
+            }
             // check if damagable
             let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
             if (damagable) {
                 let amtTicks = 0;
                 if (this.delayBeforeFirstTickInMS === 0) {
-                    damagable.dealDamage(this.damage);
+                    damagable.dealDamage(this.damage, true);
                     this.#owner.dealDamageToOthers(this.damage);
                     amtTicks++;
                 }
@@ -1549,6 +1591,12 @@ var Script;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
             ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
         }
+        removeEventListeners() {
+            this.removeEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.init);
+            ƒ.Loop.removeEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, this.loop);
+            this.#rb.removeEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
+            this.node.removeEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initShadow, true);
+        }
         init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
             this.#rb.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTriggerEnter);
@@ -1585,10 +1633,13 @@ var Script;
             if (this.#owner !== Script.EntityManager.Instance.playerBrawler)
                 return; // don't do anything if owner isn't own brawler
             // team check
-            let otherEntity = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(this.#owner.id));
-            let owner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.ownerId));
-            if (otherEntity && owner && otherEntity.id !== owner.id && otherEntity.team === owner.team)
-                return;
+            let otherBrawler = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            if (otherBrawler) {
+                let otherPlayer = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
+                let owner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.ownerId));
+                if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team)
+                    return;
+            }
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(Script.IgnoredByProjectiles);
             if (noProjectile && noProjectile.isActive)
@@ -1596,7 +1647,7 @@ var Script;
             // check for damagable target
             let damagable = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.Damagable);
             if (damagable) {
-                damagable.dealDamage(this.damage);
+                damagable.dealDamage(this.damage, true);
                 this.#owner.dealDamageToOthers(this.damage);
             }
             // check for destructible target
@@ -1614,6 +1665,7 @@ var Script;
                 compAOE.setup(this.#owner, this.node.mtxLocal.translation);
             }
             Script.EntityManager.Instance.removeProjectile(this);
+            this.removeEventListeners();
             if (this.#owner === Script.EntityManager.Instance.playerBrawler) {
                 Script.MultiplayerManager.updateOne({ type: "explosion", data: this.getInfo() }, this.id);
             }
@@ -2042,9 +2094,9 @@ var Script;
             }
             ƒ.Recycler.store(combinedVelocity);
         }
-        dealDamage(_amt) {
+        dealDamage(_amt, _broadcast) {
             if (!this.#invulnerable) {
-                super.dealDamage(_amt);
+                super.dealDamage(_amt, _broadcast);
                 this.attackMain?.charge(_amt, Script.ChargeType.DAMAGE_RECEIVED);
                 this.attackSpecial?.charge(_amt, Script.ChargeType.DAMAGE_RECEIVED);
             }
@@ -2171,6 +2223,7 @@ var Script;
             return info;
         }
         applyData(data) {
+            super.applyData(data);
             if (data.type) {
                 switch (data.type) {
                     case "animation": {
@@ -2182,7 +2235,6 @@ var Script;
                 }
                 return;
             }
-            super.applyData(data);
             this.direction.x = data.direction.x;
             this.direction.y = data.direction.y;
             this.direction.z = data.direction.z;

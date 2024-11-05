@@ -42,13 +42,15 @@ declare namespace Script {
         private initDamagable;
         private initHealthbar;
         get health(): number;
-        dealDamage(_amt: number): void;
+        dealDamage(_amt: number, _broadcast: boolean): void;
         set health(_amt: number);
         protected abstract death(): void;
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         getMutator(_extendable?: boolean): ƒ.Mutator;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        getInfo(): any;
+        applyData(data: any): void;
     }
 }
 declare namespace Script {
@@ -277,6 +279,7 @@ declare namespace Script {
         destructive: boolean;
         impactAOE: string;
         constructor();
+        private removeEventListeners;
         private init;
         fire(_direction: ƒ.Vector3, _owner: ComponentBrawler): void;
         protected onTriggerEnter: (_event: ƒ.EventPhysics) => void;
@@ -364,7 +367,7 @@ declare namespace Script {
         getDirection(): ƒ.Vector3;
         update(): void;
         protected move(): void;
-        dealDamage(_amt: number): void;
+        dealDamage(_amt: number, _broadcast: boolean): void;
         attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
         showPreview(_atk: ATTACK_TYPE): void;
         hidePreview(_atk: ATTACK_TYPE): void;

@@ -168,9 +168,9 @@ namespace Script {
       ƒ.Recycler.store(combinedVelocity);
     }
 
-    dealDamage(_amt: number) {
+    dealDamage(_amt: number, _broadcast: boolean) {
       if (!this.#invulnerable) {
-        super.dealDamage(_amt);
+        super.dealDamage(_amt, _broadcast);
         this.attackMain?.charge(_amt, ChargeType.DAMAGE_RECEIVED);
         this.attackSpecial?.charge(_amt, ChargeType.DAMAGE_RECEIVED);
       }
@@ -313,6 +313,7 @@ namespace Script {
     }
 
     applyData(data: any): void {
+      super.applyData(data);
       if (data.type) {
         switch (data.type) {
           case "animation": {
@@ -325,7 +326,6 @@ namespace Script {
         return;
       }
 
-      super.applyData(data);
       this.direction.x = data.direction.x;
       this.direction.y = data.direction.y;
       this.direction.z = data.direction.z;

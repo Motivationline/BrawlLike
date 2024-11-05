@@ -12,13 +12,13 @@ namespace Script {
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
-            this.#maxHealth = this.#health;
         }
 
         private initDamagable = () => {
             // this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.initDamagable);
             this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initHealthbar, true);
             this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+            this.#maxHealth = this.#health;
         }
 
         private initHealthbar = async () => {
@@ -33,17 +33,19 @@ namespace Script {
             return this.#health;
         }
 
-        dealDamage(_amt: number){
+        dealDamage(_amt: number, _broadcast: boolean) {
             this.#health = Math.min(this.#health - _amt, this.#maxHealth);
             if (this.#health <= 0) this.death();
             if (!this.#healthBar) return;
             let scale: number = this.#health / this.#maxHealth;
             this.#healthBar.mtxPivot.scaling = new ƒ.Vector3(scale, this.#healthBar.mtxPivot.scaling.y, this.#healthBar.mtxPivot.scaling.z);
             this.#healthBar.mtxPivot.translation = new ƒ.Vector3(scale / 2 - 0.5, this.#healthBar.mtxPivot.translation.y, this.#healthBar.mtxPivot.translation.z);
-        } 
+            if (_broadcast)
+                MultiplayerManager.updateOne({ type: "damage", override: true, amt: _amt }, this.id);
+        }
 
         set health(_amt: number) {
-            this.dealDamage(this.#health - _amt);
+            this.dealDamage(this.#health - _amt, false);
         }
 
         protected abstract death(): void;
@@ -75,6 +77,28 @@ namespace Script {
                 this.health = _serialization.health;
 
             return this;
+        }
+
+        getInfo(): any {
+            let info = super.getInfo();
+            info.health = this.#health;
+            info.maxHealth = this.#maxHealth;
+            return info;
+        }
+
+        applyData(data: any): void {
+            super.applyData(data);
+            if (data.type) {
+                switch (data.type) {
+                    case "damage": {
+                        this.dealDamage(data.amt, false);
+                        break;
+                    }
+                }
+                return;
+            }
+            this.health = data.health;
+            this.#maxHealth = data.maxHealth;
         }
     }
 }

@@ -77,6 +77,11 @@ namespace Script {
                 }
                 delete _data[element.id];
             }
+            for(let id in _data){
+                let data = _data[id];
+                if(!data.override) continue;
+                this.#ownElementsToSync.get(id)?.putInfo(data);
+            }
         }
 
         private static async createObject(_data: CreationData) {

@@ -20,6 +20,13 @@ namespace Script {
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.init);
             ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.loop);
         }
+        
+        private removeEventListeners(){
+            this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.init);
+            ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, this.loop);
+            this.#rb.removeEventListener(ƒ.EVENT_PHYSICS.TRIGGER_ENTER, this.onTriggerEnter);
+            this.node.removeEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initShadow, true);
+        }
 
         private init = () => {
             this.#rb = this.node.getComponent(ƒ.ComponentRigidbody);
@@ -57,9 +64,12 @@ namespace Script {
             if (this.gravity && this.#rb.getVelocity().y > 0) return; // don't hit anything while going up
             if (this.#owner !== EntityManager.Instance.playerBrawler) return; // don't do anything if owner isn't own brawler
             // team check
-            let otherEntity = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(this.#owner.id));
-            let owner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.ownerId));
-            if (otherEntity && owner && otherEntity.id !== owner.id && otherEntity.team === owner.team) return;
+            let otherBrawler: ComponentBrawler = (<ComponentBrawler>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof ComponentBrawler));
+            if(otherBrawler) {
+                let otherPlayer = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
+                let owner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.ownerId));
+                if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team) return;
+            }
 
             // check if target has disable script
             let noProjectile = _event.cmpRigidbody.node.getComponent(IgnoredByProjectiles);
@@ -68,7 +78,7 @@ namespace Script {
             // check for damagable target
             let damagable: Damagable = (<Damagable>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Damagable));
             if (damagable) {
-                damagable.dealDamage(this.damage);
+                damagable.dealDamage(this.damage, true);
                 this.#owner.dealDamageToOthers(this.damage);
             }
             // check for destructible target
@@ -89,6 +99,7 @@ namespace Script {
                 compAOE.setup(this.#owner, this.node.mtxLocal.translation);
             }
             EntityManager.Instance.removeProjectile(this);
+            this.removeEventListeners();
             if (this.#owner === EntityManager.Instance.playerBrawler) {
                 MultiplayerManager.updateOne({ type: "explosion", data: this.getInfo() }, this.id)
             }
