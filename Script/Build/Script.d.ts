@@ -102,7 +102,7 @@ declare namespace Script {
         playerBrawler: ComponentBrawler;
         projectiles: ComponentProjectile[];
         constructor();
-        loadBrawler: (_playerBrawler: string) => Promise<void>;
+        loadBrawler: (_playerBrawler: Player) => Promise<void>;
         private initBrawler;
         addObjectThroughNetwork(_instance: ƒ.GraphInstance): void;
         addProjectile(_instance: ƒ.GraphInstance, _component: ComponentProjectile, _parent?: ƒ.Node): void;
@@ -455,8 +455,10 @@ declare namespace Script {
         getPlayer(_playerID: string): Player | undefined;
         getChosenBrawlerOfPlayer(_player: string): string;
         playerDied(cp: ComponentBrawler): void;
+        private respawnPlayer;
+        private getTeamOfPlayer;
         private initSpawnPoints;
-        getSpawnPointForPlayer(_playerId: string): ƒ.Vector3;
+        getSpawnPointForPlayer(_player: string | Player): ƒ.Vector3;
     }
 }
 declare namespace Script {

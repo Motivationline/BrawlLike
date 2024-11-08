@@ -17,9 +17,10 @@ namespace Script {
             ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.update);
         }
 
-        loadBrawler = async (_playerBrawler: string) => {
+        loadBrawler = async (_playerBrawler: Player) => {
             console.log("load Brawler");
-            let playerBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(_playerBrawler)[0];
+            if(!_playerBrawler) return;
+            let playerBrawler: ƒ.Graph = <ƒ.Graph>ƒ.Project.getResourcesByName(_playerBrawler.chosenBrawler)[0];
             let spawnPoint = GameManager.Instance.getSpawnPointForPlayer(LobbyManager.client.id);
             this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoint);
             let cameraGraph = <ƒ.Graph>ƒ.Project.getResourcesByName("CameraBrawler")[0];
@@ -29,6 +30,7 @@ namespace Script {
             viewport.camera = camera;
 
             this.playerBrawler.setupId();
+            _playerBrawler.brawler = this.playerBrawler;
         }
 
         private async initBrawler(_g: ƒ.Graph, _pos: ƒ.Vector3): Promise<ComponentBrawler> {

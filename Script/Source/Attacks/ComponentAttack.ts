@@ -83,15 +83,15 @@ namespace Script {
                     this.#previewNode.mtxLocal.translation = newPosition;
                     break;
             }
-            
-            if(!this.#previewMaterial) return;
-            let {g} = this.#previewMaterial.clrPrimary;
+
+            if (!this.#previewMaterial) return;
+            let { g } = this.#previewMaterial.clrPrimary;
             let charges = Math.floor(this.currentEnergy / this.energyNeededPerCharge);
             if (charges < 1 && g === 1) {
                 // can't attack
                 this.#previewMaterial.clrPrimary.g = 0;
                 this.#previewMaterial.clrPrimary.b = 0;
-            } else if(charges >= 1 && g !== 1) {
+            } else if (charges >= 1 && g !== 1) {
                 // can attack
                 this.#previewMaterial.clrPrimary.g = 1;
                 this.#previewMaterial.clrPrimary.b = 1;
@@ -227,13 +227,14 @@ namespace Script {
         }
 
         public charge(_amt: number, type: ChargeType) {
+            if (!isFinite(_amt)) return;
             switch (type) {
                 case ChargeType.PASSIVE: {
                     this.currentEnergy += _amt;
                     break;
                 }
                 case ChargeType.DAMAGE_DEALT: {
-                    this.currentEnergy +=_amt * this.energyGeneratedPerDamageDealt;
+                    this.currentEnergy += _amt * this.energyGeneratedPerDamageDealt;
                     break;
                 }
                 case ChargeType.DAMAGE_RECEIVED: {

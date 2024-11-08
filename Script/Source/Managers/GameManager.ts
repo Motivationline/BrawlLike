@@ -70,7 +70,16 @@ namespace Script {
             entityNode.removeAllChildren();
             entityNode.addComponent(em);
             this.initSpawnPoints();
-            await EntityManager.Instance.loadBrawler(this.getChosenBrawlerOfPlayer(LobbyManager.client.id));
+            for(let team of this.teams){
+                team.remainingRespawns = this.settings.maxRespawnsPerRoundAndTeam;
+                if(team.remainingRespawns < 0) team.remainingRespawns = Infinity;
+                for(let player of team.players){
+                    player.remainingRespawns = this.settings.maxRespawnsPerRoundAndPlayer;
+                    if(player.remainingRespawns < 0) player.remainingRespawns = Infinity;
+                }
+            }
+            await EntityManager.Instance.loadBrawler(this.getPlayer(LobbyManager.client.id));
+
         }
 
         selectBrawler(_brawler: string, _player: string) {
@@ -112,7 +121,31 @@ namespace Script {
         }
 
         playerDied(cp: ComponentBrawler) {
+            let ownerId = MultiplayerManager.getOwnerIdFromId(cp.id);
+            let player = this.getPlayer(ownerId);
+            player.remainingRespawns--;
+            let team = this.getTeamOfPlayer(player);
+            team.remainingRespawns--;
 
+            if (player.remainingRespawns <= 0 || team.remainingRespawns <= 0) {
+                // player was eliminated
+                return;
+            }
+
+            ƒ.Time.game.setTimer(this.settings.respawnTime * 1000, 1, () => {
+                this.respawnPlayer(player);
+            });
+            
+        }
+
+        private respawnPlayer(_player: Player) {
+            if(MultiplayerManager.client.id !== MultiplayerManager.getOwnerIdFromId(_player.id)) return;
+            let spawnPoint = this.getSpawnPointForPlayer(_player)
+            _player.brawler.respawn(spawnPoint);
+        }
+
+        private getTeamOfPlayer(_player: Player) {
+            return this.teams.find(t => t.players.includes(_player));
         }
 
         private initSpawnPoints() {
@@ -130,8 +163,13 @@ namespace Script {
             this.#allSpawnPoints = spawnPointNodes;
         }
 
-        getSpawnPointForPlayer(_playerId: string): ƒ.Vector3 {
-            let player = this.getPlayer(_playerId);
+        getSpawnPointForPlayer(_player: string | Player): ƒ.Vector3 {
+            let player: Player;
+            if(typeof _player === "string"){
+                player = this.getPlayer(_player);
+            } else {
+                player = _player;
+            }
             if (!player) return new ƒ.Vector3();
             for (let type of this.settings.respawnType) {
                 switch (type) {
@@ -140,19 +178,19 @@ namespace Script {
                     }
                     case RESPAWN_TYPE.AT_FIXED_RESPAWN_POINT: {
                         let rPoints: ƒ.Node[] = this.teams[player.team].respawnPoints;
-                        if(!rPoints || rPoints.length === 0) continue;
+                        if (!rPoints || rPoints.length === 0) continue;
                         return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;
                     }
                     case RESPAWN_TYPE.AT_RANDOM_RESPAWN_POINT: {
                         let rPoints: ƒ.Node[] = this.#allSpawnPoints;
-                        if(!rPoints || rPoints.length === 0) continue;
-                        return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;    
+                        if (!rPoints || rPoints.length === 0) continue;
+                        return rPoints[Math.floor(Math.random() * rPoints.length)].mtxLocal.translation.clone;
                     }
                     case RESPAWN_TYPE.AT_TEAMMATE_LOCATION: {
                         let team = this.teams[player.team];
                         //TODO make sure not to select dead players
                         let otherPlayer = team.players.find((p) => p.id !== player.id);
-                        if(!otherPlayer) continue;
+                        if (!otherPlayer) continue;
                         return otherPlayer.brawler?.node.mtxLocal.translation.clone;
                     }
                 }

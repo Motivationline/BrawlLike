@@ -129,6 +129,7 @@ namespace Script {
                         }
                     }
 
+                    // LobbyManager.client.dispatch({command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: {command: "initGameManager", data: {teams, gameData}}})
                     GameManager.Instance.init(teams, gameData);
                     LobbyManager.switchView(MENU_TYPE.SELECTION);
                     this.showOverlay(MENU_TYPE.SELECTION);

@@ -253,6 +253,7 @@ namespace Script {
       this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_position, this.node.mtxWorld.translation));
       this.node.activate(true);
       this.health = Infinity;
+      this.#dead = false;
     }
 
     protected reduceMutator(_mutator: ƒ.Mutator): void {
@@ -309,6 +310,7 @@ namespace Script {
       this.#velocityOverrides.forEach(value => {
         info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } })
       });
+      info.active = this.node.isActive;
       return info;
     }
 
@@ -337,6 +339,10 @@ namespace Script {
             velocity: new ƒ.Vector3(value.velocity.x, value.velocity.y, value.velocity.z),
           })
       });
+
+      if(this.node.isActive !== data.active){
+        this.node.activate(data.active);
+      }
     }
   }
 

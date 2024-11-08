@@ -399,6 +399,7 @@ var Script;
                             return;
                         }
                     }
+                    // LobbyManager.client.dispatch({command: FudgeNet.COMMAND.UNDEFINED, route: FudgeNet.ROUTE.VIA_SERVER, content: {command: "initGameManager", data: {teams, gameData}}})
                     Script.GameManager.Instance.init(teams, gameData);
                     Script.LobbyManager.switchView(MENU_TYPE.SELECTION);
                     this.showOverlay(MENU_TYPE.SELECTION);
@@ -599,7 +600,9 @@ var Script;
         }
         loadBrawler = async (_playerBrawler) => {
             console.log("load Brawler");
-            let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler)[0];
+            if (!_playerBrawler)
+                return;
+            let playerBrawler = ƒ.Project.getResourcesByName(_playerBrawler.chosenBrawler)[0];
             let spawnPoint = Script.GameManager.Instance.getSpawnPointForPlayer(Script.LobbyManager.client.id);
             this.playerBrawler = await this.initBrawler(playerBrawler, spawnPoint);
             let cameraGraph = ƒ.Project.getResourcesByName("CameraBrawler")[0];
@@ -608,6 +611,7 @@ var Script;
             let camera = cameraInstance.getComponent(ƒ.ComponentCamera);
             Script.viewport.camera = camera;
             this.playerBrawler.setupId();
+            _playerBrawler.brawler = this.playerBrawler;
         };
         async initBrawler(_g, _pos) {
             let instance = await ƒ.Project.createGraphInstance(_g);
@@ -1411,6 +1415,8 @@ var Script;
             }
         }
         charge(_amt, type) {
+            if (!isFinite(_amt))
+                return;
             switch (type) {
                 case ChargeType.PASSIVE: {
                     this.currentEnergy += _amt;
@@ -2171,6 +2177,7 @@ var Script;
             this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_position, this.node.mtxWorld.translation));
             this.node.activate(true);
             this.health = Infinity;
+            this.#dead = false;
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -2220,6 +2227,7 @@ var Script;
             this.#velocityOverrides.forEach(value => {
                 info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } });
             });
+            info.active = this.node.isActive;
             return info;
         }
         applyData(data) {
@@ -2245,6 +2253,9 @@ var Script;
                     velocity: new ƒ.Vector3(value.velocity.x, value.velocity.y, value.velocity.z),
                 });
             });
+            if (this.node.isActive !== data.active) {
+                this.node.activate(data.active);
+            }
         }
     }
     Script.ComponentBrawler = ComponentBrawler;
@@ -2375,7 +2386,17 @@ var Script;
             entityNode.removeAllChildren();
             entityNode.addComponent(em);
             this.initSpawnPoints();
-            await Script.EntityManager.Instance.loadBrawler(this.getChosenBrawlerOfPlayer(Script.LobbyManager.client.id));
+            for (let team of this.teams) {
+                team.remainingRespawns = this.settings.maxRespawnsPerRoundAndTeam;
+                if (team.remainingRespawns < 0)
+                    team.remainingRespawns = Infinity;
+                for (let player of team.players) {
+                    player.remainingRespawns = this.settings.maxRespawnsPerRoundAndPlayer;
+                    if (player.remainingRespawns < 0)
+                        player.remainingRespawns = Infinity;
+                }
+            }
+            await Script.EntityManager.Instance.loadBrawler(this.getPlayer(Script.LobbyManager.client.id));
         }
         selectBrawler(_brawler, _player) {
             let totalPlayers = 0;
@@ -2413,6 +2434,27 @@ var Script;
             return this.getPlayer(_player)?.chosenBrawler ?? "Brawler";
         }
         playerDied(cp) {
+            let ownerId = Script.MultiplayerManager.getOwnerIdFromId(cp.id);
+            let player = this.getPlayer(ownerId);
+            player.remainingRespawns--;
+            let team = this.getTeamOfPlayer(player);
+            team.remainingRespawns--;
+            if (player.remainingRespawns <= 0 || team.remainingRespawns <= 0) {
+                // player was eliminated
+                return;
+            }
+            ƒ.Time.game.setTimer(this.settings.respawnTime * 1000, 1, () => {
+                this.respawnPlayer(player);
+            });
+        }
+        respawnPlayer(_player) {
+            if (Script.MultiplayerManager.client.id !== Script.MultiplayerManager.getOwnerIdFromId(_player.id))
+                return;
+            let spawnPoint = this.getSpawnPointForPlayer(_player);
+            _player.brawler.respawn(spawnPoint);
+        }
+        getTeamOfPlayer(_player) {
+            return this.teams.find(t => t.players.includes(_player));
         }
         initSpawnPoints() {
             let spawnPointNodes = Script.EntityManager.Instance.node.getParent().getChildrenByName("Spawnpoints")[0].getChildren();
@@ -2429,8 +2471,14 @@ var Script;
             }
             this.#allSpawnPoints = spawnPointNodes;
         }
-        getSpawnPointForPlayer(_playerId) {
-            let player = this.getPlayer(_playerId);
+        getSpawnPointForPlayer(_player) {
+            let player;
+            if (typeof _player === "string") {
+                player = this.getPlayer(_player);
+            }
+            else {
+                player = _player;
+            }
             if (!player)
                 return new ƒ.Vector3();
             for (let type of this.settings.respawnType) {
