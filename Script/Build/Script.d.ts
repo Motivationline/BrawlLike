@@ -466,6 +466,7 @@ declare namespace Script {
         private getTeamOfPlayer;
         private initSpawnPoints;
         getSpawnPointForPlayer(_player: string | Player): ƒ.Vector3;
+        resetGame(): void;
     }
 }
 declare namespace Script {

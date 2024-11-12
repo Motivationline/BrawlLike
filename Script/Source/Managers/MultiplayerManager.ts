@@ -48,6 +48,7 @@ namespace Script {
             this.client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, <EventListenerOrEventListenerObject>this.messageHandler.bind(this));
 
             setInterval(() => {
+                if(!GameManager.Instance.gameActive) return;
                 let updateData: NetworkData = this.getUpdate();
                 if (Object.keys(updateData).length == 0) return;
                 this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.SYNC, data: updateData } })

@@ -59,6 +59,7 @@ namespace Script {
         async startGame() {
             await this.startRound();
             ƒ.Loop.start();
+            this.gameActive = true;
             menuManager.showOverlay(MENU_TYPE.GAME_OVERLAY);
             // ƒ.Time.game.setScale(0.2);
             if (this.timerId !== undefined) ƒ.Time.game.deleteTimer(this.timerId);
@@ -181,7 +182,7 @@ namespace Script {
                             gameOverElement.innerText = "YOU LOOSE"
                         }
                         
-                        setTimeout(() => { window.location.reload() }, 3000)
+                        setTimeout(() => { this.resetGame() }, 3000)
                     } else {
                         setTimeout(() => { this.startRound() }, 3000)
                     }
@@ -285,6 +286,21 @@ namespace Script {
                 }
             }
             return new ƒ.Vector3();
+        }
+
+        resetGame() {
+            let gameOverElement = document.getElementById("game-over-wrapper")!;
+            gameOverElement.parentElement.classList.add("hidden");
+            menuManager.showOverlay(MENU_TYPE.GAME_LOBBY);
+            viewport.setBranch(undefined);
+
+            
+            document.getElementById("brawler-ready-text").innerText = `waiting for players`;
+            (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
+            document.getElementById("brawler").querySelectorAll("button").forEach(b => b.classList.remove("selected"));
+
+            this.gameActive = false;
+            ƒ.Loop.stop();
         }
     }
 }

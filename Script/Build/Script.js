@@ -690,6 +690,8 @@ var Script;
         static installListeners() {
             this.client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, this.messageHandler.bind(this));
             setInterval(() => {
+                if (!Script.GameManager.Instance.gameActive)
+                    return;
                 let updateData = this.getUpdate();
                 if (Object.keys(updateData).length == 0)
                     return;
@@ -2387,6 +2389,7 @@ var Script;
         async startGame() {
             await this.startRound();
             ƒ.Loop.start();
+            this.gameActive = true;
             Script.menuManager.showOverlay(Script.MENU_TYPE.GAME_OVERLAY);
             // ƒ.Time.game.setScale(0.2);
             if (this.timerId !== undefined)
@@ -2492,7 +2495,7 @@ var Script;
                         else {
                             gameOverElement.innerText = "YOU LOOSE";
                         }
-                        setTimeout(() => { window.location.reload(); }, 3000);
+                        setTimeout(() => { this.resetGame(); }, 3000);
                     }
                     else {
                         setTimeout(() => { this.startRound(); }, 3000);
@@ -2597,6 +2600,17 @@ var Script;
                 }
             }
             return new ƒ.Vector3();
+        }
+        resetGame() {
+            let gameOverElement = document.getElementById("game-over-wrapper");
+            gameOverElement.parentElement.classList.add("hidden");
+            Script.menuManager.showOverlay(Script.MENU_TYPE.GAME_LOBBY);
+            Script.viewport.setBranch(undefined);
+            document.getElementById("brawler-ready-text").innerText = `waiting for players`;
+            document.getElementById("start_game").disabled = true;
+            document.getElementById("brawler").querySelectorAll("button").forEach(b => b.classList.remove("selected"));
+            this.gameActive = false;
+            ƒ.Loop.stop();
         }
     }
     Script.GameManager = GameManager;
