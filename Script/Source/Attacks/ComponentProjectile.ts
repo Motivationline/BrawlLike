@@ -171,6 +171,7 @@ namespace Script {
                 y: this.#rb.getVelocity().y,
                 z: this.#rb.getVelocity().z,
             }
+            info.gravity = this.gravity;
             return info;
         }
 
@@ -197,6 +198,7 @@ namespace Script {
 
             let owner = EntityManager.Instance.brawlers.find(b => b.id === _data.owner)
             this.#owner = owner;
+            this.gravity = _data.gravity;
         }
     }
 }

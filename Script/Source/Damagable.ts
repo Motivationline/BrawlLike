@@ -34,6 +34,7 @@ namespace Script {
         }
 
         dealDamage(_amt: number, _broadcast: boolean) {
+            if(_amt === 0) return;
             this.#health = Math.min(this.#health - _amt, this.#maxHealth);
             if (this.#health <= 0) this.death();
             if (!this.#healthBar) return;

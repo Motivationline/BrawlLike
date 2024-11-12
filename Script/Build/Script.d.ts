@@ -70,7 +70,8 @@ declare namespace Script {
         LOADING = 2,
         LOBBY = 3,
         GAME_LOBBY = 4,
-        SELECTION = 5
+        SELECTION = 5,
+        GAME_OVERLAY = 6
     }
     class MenuManager {
         overlays: Map<MENU_TYPE, HTMLElement>;
@@ -424,6 +425,7 @@ declare namespace Script {
         players: Player[];
         remainingRespawns?: number;
         respawnPoints?: ƒ.Node[];
+        wonRounds?: number;
     }
     enum RESPAWN_TYPE {
         AT_FIXED_RESPAWN_POINT = 0,
@@ -450,11 +452,16 @@ declare namespace Script {
         constructor();
         init(_teams: Team[], _settings: Partial<GameSettings>, _gameActive?: boolean): void;
         startGame(): Promise<void>;
+        timerId: number;
+        timeDiv: HTMLDivElement;
+        remainingTime: number;
         startRound(): Promise<void>;
         selectBrawler(_brawler: string, _player: string): void;
         getPlayer(_playerID: string): Player | undefined;
         getChosenBrawlerOfPlayer(_player: string): string;
         playerDied(cp: ComponentBrawler): void;
+        private getRoundWinner;
+        private getGameWinner;
         private respawnPlayer;
         private getTeamOfPlayer;
         private initSpawnPoints;

@@ -169,6 +169,8 @@ var Script;
             return this.#health;
         }
         dealDamage(_amt, _broadcast) {
+            if (_amt === 0)
+                return;
             this.#health = Math.min(this.#health - _amt, this.#maxHealth);
             if (this.#health <= 0)
                 this.death();
@@ -284,6 +286,7 @@ var Script;
         MENU_TYPE[MENU_TYPE["LOBBY"] = 3] = "LOBBY";
         MENU_TYPE[MENU_TYPE["GAME_LOBBY"] = 4] = "GAME_LOBBY";
         MENU_TYPE[MENU_TYPE["SELECTION"] = 5] = "SELECTION";
+        MENU_TYPE[MENU_TYPE["GAME_OVERLAY"] = 6] = "GAME_OVERLAY";
     })(MENU_TYPE = Script.MENU_TYPE || (Script.MENU_TYPE = {}));
     class MenuManager {
         overlays = new Map();
@@ -297,6 +300,7 @@ var Script;
                 this.overlays.set(MENU_TYPE.LOBBY, document.getElementById("lobby-overlay"));
                 this.overlays.set(MENU_TYPE.GAME_LOBBY, document.getElementById("game-lobby-overlay"));
                 this.overlays.set(MENU_TYPE.SELECTION, document.getElementById("selection-overlay"));
+                this.overlays.set(MENU_TYPE.GAME_OVERLAY, document.getElementById("game-overlay"));
                 document.getElementById("start").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.LOADING);
                     Script.startViewport();
@@ -1736,6 +1740,7 @@ var Script;
                 y: this.#rb.getVelocity().y,
                 z: this.#rb.getVelocity().z,
             };
+            info.gravity = this.gravity;
             return info;
         }
         applyData(_data) {
@@ -1756,6 +1761,7 @@ var Script;
             this.#rb.setVelocity(new ƒ.Vector3(_data.velo.x, _data.velo.y, _data.velo.z));
             let owner = Script.EntityManager.Instance.brawlers.find(b => b.id === _data.owner);
             this.#owner = owner;
+            this.gravity = _data.gravity;
         }
     }
     Script.ComponentProjectile = ComponentProjectile;
@@ -2169,15 +2175,19 @@ var Script;
             this.attackSpecial?.charge(_amt, Script.ChargeType.DAMAGE_DEALT);
         }
         death() {
+            if (this.#dead)
+                return;
             this.#dead = true;
             Script.GameManager.Instance.playerDied(this);
             this.node.activate(false);
+            // document.getElementById(MultiplayerManager.getOwnerIdFromId(this.id))?.classList.add("dead");
         }
         respawn(_position) {
             this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_position, this.node.mtxWorld.translation));
             this.node.activate(true);
             this.health = Infinity;
             this.#dead = false;
+            // document.getElementById(MultiplayerManager.getOwnerIdFromId(this.id))?.classList.remove("dead");
         }
         reduceMutator(_mutator) {
             super.reduceMutator(_mutator);
@@ -2228,6 +2238,7 @@ var Script;
                 info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } });
             });
             info.active = this.node.isActive;
+            info.dead = this.#dead;
             return info;
         }
         applyData(data) {
@@ -2246,6 +2257,7 @@ var Script;
             this.direction.x = data.direction.x;
             this.direction.y = data.direction.y;
             this.direction.z = data.direction.z;
+            this.#dead = data.dead;
             this.#velocityOverrides = [];
             data.velOverride.forEach((value) => {
                 this.#velocityOverrides.push({
@@ -2375,10 +2387,22 @@ var Script;
         async startGame() {
             await this.startRound();
             ƒ.Loop.start();
-            Script.menuManager.showOverlay(Script.MENU_TYPE.NONE);
+            Script.menuManager.showOverlay(Script.MENU_TYPE.GAME_OVERLAY);
             // ƒ.Time.game.setScale(0.2);
+            if (this.timerId !== undefined)
+                ƒ.Time.game.deleteTimer(this.timerId);
+            this.timerId = ƒ.Time.game.setTimer(1000, 0, () => {
+                this.remainingTime--;
+                this.timeDiv.innerText = `${Math.floor(this.remainingTime / 60)} : ${Math.floor(this.remainingTime % 60)}`;
+            });
         }
+        timerId;
+        timeDiv;
+        remainingTime = 0;
         async startRound() {
+            let gameOverElement = document.getElementById("game-over-wrapper");
+            gameOverElement.parentElement.classList.add("hidden");
+            this.timeDiv = document.getElementById("game-time");
             let graph = ƒ.Project.getResourcesByName(this.settings.arena)[0];
             Script.viewport.setBranch(graph);
             let em = new Script.EntityManager();
@@ -2386,6 +2410,10 @@ var Script;
             entityNode.removeAllChildren();
             entityNode.addComponent(em);
             this.initSpawnPoints();
+            this.remainingTime = this.settings.timer;
+            let teamDisplays = [document.getElementById("game-team-1"), document.getElementById("game-team-2")];
+            teamDisplays.forEach(td => td.innerHTML = "");
+            let scores = [];
             for (let team of this.teams) {
                 team.remainingRespawns = this.settings.maxRespawnsPerRoundAndTeam;
                 if (team.remainingRespawns < 0)
@@ -2394,8 +2422,12 @@ var Script;
                     player.remainingRespawns = this.settings.maxRespawnsPerRoundAndPlayer;
                     if (player.remainingRespawns < 0)
                         player.remainingRespawns = Infinity;
+                    let imgSrc = document.getElementById("brawler").querySelector(`button[data-brawler="${player.chosenBrawler}"] img`).src;
+                    teamDisplays[player.team % teamDisplays.length].innerHTML += `<div class="brawler-display" id="${player.id}"><img src="${imgSrc}"></div>`;
                 }
+                scores.push(team.wonRounds ?? 0);
             }
+            document.getElementById("game-score").innerText = scores.join(" : ");
             await Script.EntityManager.Instance.loadBrawler(this.getPlayer(Script.LobbyManager.client.id));
         }
         selectBrawler(_brawler, _player) {
@@ -2441,11 +2473,67 @@ var Script;
             team.remainingRespawns--;
             if (player.remainingRespawns <= 0 || team.remainingRespawns <= 0) {
                 // player was eliminated
+                if (ownerId == Script.MultiplayerManager.client.id) {
+                    let gameOverElement = document.getElementById("game-over-wrapper");
+                    gameOverElement.parentElement.classList.remove("hidden");
+                    gameOverElement.innerText = "ELIMINATED";
+                }
+                let roundWinner = this.getRoundWinner();
+                if (roundWinner) {
+                    roundWinner.wonRounds = (roundWinner.wonRounds ?? 0) + 1;
+                    let gameOverElement = document.getElementById("game-over-wrapper");
+                    gameOverElement.parentElement.classList.remove("hidden");
+                    gameOverElement.innerText = "ROUND OVER";
+                    let gameWinner = this.getGameWinner();
+                    if (gameWinner) {
+                        if (gameWinner.players.find(p => p.brawler === Script.EntityManager.Instance.playerBrawler)) {
+                            gameOverElement.innerText = "YOU WIN";
+                        }
+                        else {
+                            gameOverElement.innerText = "YOU LOOSE";
+                        }
+                        setTimeout(() => { window.location.reload(); }, 3000);
+                    }
+                    else {
+                        setTimeout(() => { this.startRound(); }, 3000);
+                    }
+                }
+                // document.getElementById(ownerId)?.classList.remove("dead");
+                // document.getElementById(ownerId)?.classList.add("eliminated");
                 return;
             }
             ƒ.Time.game.setTimer(this.settings.respawnTime * 1000, 1, () => {
                 this.respawnPlayer(player);
             });
+        }
+        getRoundWinner() {
+            let winnerTeam;
+            for (let team of this.teams) {
+                if (isFinite(team.remainingRespawns) && team.remainingRespawns > 0) {
+                    if (winnerTeam)
+                        return undefined;
+                    winnerTeam = team;
+                    continue;
+                }
+                for (let player of team.players) {
+                    if (isFinite(player.remainingRespawns) && player.remainingRespawns > 0) {
+                        if (winnerTeam && winnerTeam !== team)
+                            return undefined;
+                        winnerTeam = team;
+                        break;
+                    }
+                }
+            }
+            return winnerTeam;
+        }
+        getGameWinner() {
+            let roundsNeededToWin = Math.ceil(this.settings.amtRounds / 2);
+            for (let team of this.teams) {
+                if (team.wonRounds >= roundsNeededToWin) {
+                    return team;
+                }
+            }
+            return undefined;
         }
         respawnPlayer(_player) {
             if (Script.MultiplayerManager.client.id !== Script.MultiplayerManager.getOwnerIdFromId(_player.id))

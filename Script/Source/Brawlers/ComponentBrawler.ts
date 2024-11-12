@@ -244,9 +244,11 @@ namespace Script {
     }
 
     protected death(): void {
+      if(this.#dead) return;
       this.#dead = true;
       GameManager.Instance.playerDied(this);
       this.node.activate(false);
+      // document.getElementById(MultiplayerManager.getOwnerIdFromId(this.id))?.classList.add("dead");
     }
 
     public respawn(_position: ƒ.Vector3) {
@@ -254,6 +256,7 @@ namespace Script {
       this.node.activate(true);
       this.health = Infinity;
       this.#dead = false;
+      // document.getElementById(MultiplayerManager.getOwnerIdFromId(this.id))?.classList.remove("dead");
     }
 
     protected reduceMutator(_mutator: ƒ.Mutator): void {
@@ -311,6 +314,7 @@ namespace Script {
         info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } })
       });
       info.active = this.node.isActive;
+      info.dead = this.#dead;
       return info;
     }
 
@@ -331,6 +335,7 @@ namespace Script {
       this.direction.x = data.direction.x;
       this.direction.y = data.direction.y;
       this.direction.z = data.direction.z;
+      this.#dead = data.dead;
       this.#velocityOverrides = [];
       data.velOverride.forEach((value: any) => {
         this.#velocityOverrides.push(

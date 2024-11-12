@@ -7,6 +7,7 @@ namespace Script {
         LOBBY,
         GAME_LOBBY,
         SELECTION,
+        GAME_OVERLAY,
     }
     export class MenuManager {
         overlays: Map<MENU_TYPE, HTMLElement> = new Map();
@@ -22,6 +23,7 @@ namespace Script {
                 this.overlays.set(MENU_TYPE.LOBBY, document.getElementById("lobby-overlay"));
                 this.overlays.set(MENU_TYPE.GAME_LOBBY, document.getElementById("game-lobby-overlay"));
                 this.overlays.set(MENU_TYPE.SELECTION, document.getElementById("selection-overlay"));
+                this.overlays.set(MENU_TYPE.GAME_OVERLAY, document.getElementById("game-overlay"));
 
                 document.getElementById("start").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.LOADING)

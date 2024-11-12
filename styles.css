@@ -100,6 +100,71 @@ li.room.selected {
   color: gray;
 }
 
+
+#game-overlay {
+  background-color: transparent;
+  pointer-events: none;
+}
+#game-top-row {
+  display: grid;
+  grid-template-columns: 1fr 10% 1fr;
+}
+
+#game-team-1 {
+  background-color: rgba(255, 0, 0, 0.5);
+  justify-content: end;
+}
+#game-team-2 {
+  background-color: rgba(0, 0, 255, 0.5);
+}
+#game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+}
+.game-team {
+  justify-self: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 10px;
+}
+.game-team .brawler-display {
+  height: 10vh;
+  background-color: rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+.game-team .brawler-display img {
+  height: 100%;
+}
+
+.brawler-display::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 8vh;
+}
+.brawler-display.eliminated::after {
+  content: "❌";
+}
+.brawler-display.dead::after {
+  content: "💀";
+}
+
+.center-center {
+  display: grid;
+  place-items: center;
+}
+
+#game-over-overlay {
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 4em;
+  pointer-events: none;
+}
+
 @media screen and (max-width: 768px) {
   #brawler {
     grid-template-columns: repeat(2, 1fr);
