@@ -235,6 +235,7 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class Destructible extends ƒ.Component {
+        static destrcutibles = [];
         replaceWith = "";
         constructor() {
             super();
@@ -243,8 +244,16 @@ var Script;
             this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, () => {
                 this.node.addEventListener("destruction", this.destroy.bind(this));
             });
+            Destructible.destrcutibles.push(this);
         }
-        async destroy() {
+        async destroy(_fromNetwork = false) {
+            let index = Destructible.destrcutibles.indexOf(this);
+            if (index < 0)
+                return;
+            Destructible.destrcutibles.splice(index, 1);
+            if (!_fromNetwork) {
+                Script.MultiplayerManager.broadcastDestructible(this);
+            }
             let parent = this.node.getParent();
             parent.removeChild(this.node);
             if (this.replaceWith) {
@@ -667,6 +676,7 @@ var Script;
         MessageCommand[MessageCommand["DESTROY"] = 1] = "DESTROY";
         MessageCommand[MessageCommand["CREATE"] = 2] = "CREATE";
         MessageCommand[MessageCommand["JOIN"] = 3] = "JOIN";
+        MessageCommand[MessageCommand["DESTRUCT"] = 4] = "DESTRUCT";
     })(MessageCommand || (MessageCommand = {}));
     class MultiplayerManager {
         static Instance = new MultiplayerManager();
@@ -749,6 +759,11 @@ var Script;
         static broadcastJoin() {
             this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.JOIN } });
         }
+        static broadcastDestructible(d) {
+            let translation = d.node.mtxWorld.translation;
+            let translationToSend = { x: translation.x, y: translation.y, z: translation.z };
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.DESTRUCT, data: translationToSend } });
+        }
         static messageHandler(_event) {
             if (_event instanceof MessageEvent) {
                 let message = JSON.parse(_event.data);
@@ -758,16 +773,26 @@ var Script;
                     if (message.content.command === MessageCommand.SYNC) {
                         this.applyUpdate(message.content.data);
                     }
-                    if (message.content.command === MessageCommand.CREATE) {
+                    else if (message.content.command === MessageCommand.CREATE) {
                         this.createObject(message.content.data);
                     }
-                    if (message.content.command === MessageCommand.DESTROY) {
+                    else if (message.content.command === MessageCommand.DESTROY) {
                         this.destroyObject(message.content.data);
                     }
-                    if (message.content.command === MessageCommand.JOIN) {
+                    else if (message.content.command === MessageCommand.JOIN) {
                         for (let element of this.#ownElementsToSync.values()) {
                             let creationData = element.creationData();
                             this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, idTarget: message.idSource, content: { command: MessageCommand.CREATE, data: creationData } });
+                        }
+                    }
+                    else if (message.content.command === MessageCommand.DESTRUCT) {
+                        let newPosData = message.content.data;
+                        let posV = new ƒ.Vector3(newPosData.x, newPosData.y, newPosData.z);
+                        for (let d of Script.Destructible.destrcutibles) {
+                            if (d.node.mtxWorld.translation.equals(posV, 0.6)) {
+                                d.destroy(true);
+                                return;
+                            }
                         }
                     }
                 }

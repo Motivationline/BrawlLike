@@ -56,9 +56,10 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class Destructible extends ƒ.Component {
+        static destrcutibles: Destructible[];
         replaceWith: string;
         constructor();
-        destroy(): Promise<void>;
+        destroy(_fromNetwork?: boolean): Promise<void>;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
     }
@@ -137,6 +138,7 @@ declare namespace Script {
         private static destroyObject;
         static updateOne(_data: any, _id: string): void;
         static broadcastJoin(): void;
+        static broadcastDestructible(d: Destructible): void;
         private static messageHandler;
         static getOwnerIdFromId(_id: string): string;
     }

@@ -7,6 +7,7 @@ namespace Script {
         DESTROY,
         CREATE,
         JOIN,
+        DESTRUCT
     }
     export interface NetworkData {
         [id: string]: any;
@@ -48,7 +49,7 @@ namespace Script {
             this.client.addEventListener(ƒNet.EVENT.MESSAGE_RECEIVED, <EventListenerOrEventListenerObject>this.messageHandler.bind(this));
 
             setInterval(() => {
-                if(!GameManager.Instance.gameActive) return;
+                if (!GameManager.Instance.gameActive) return;
                 let updateData: NetworkData = this.getUpdate();
                 if (Object.keys(updateData).length == 0) return;
                 this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.SYNC, data: updateData } })
@@ -62,7 +63,7 @@ namespace Script {
         private static getUpdate(): NetworkData {
             let data: NetworkData = {};
             for (let element of this.#ownElementsToSync.values()) {
-                if(element.node.getParent()){
+                if (element.node.getParent()) {
                     data[element.id] = element.getInfo();
                 }
             }
@@ -78,9 +79,9 @@ namespace Script {
                 }
                 delete _data[element.id];
             }
-            for(let id in _data){
+            for (let id in _data) {
                 let data = _data[id];
-                if(!data.override) continue;
+                if (!data.override) continue;
                 this.#ownElementsToSync.get(id)?.putInfo(data);
             }
         }
@@ -111,6 +112,12 @@ namespace Script {
             this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.JOIN } });
         }
 
+        public static broadcastDestructible(d: Destructible) {
+            let translation = d.node.mtxWorld.translation;
+            let translationToSend = { x: translation.x, y: translation.y, z: translation.z };
+            this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, content: { command: MessageCommand.DESTRUCT, data: translationToSend } });
+        }
+
         private static messageHandler(_event: CustomEvent | MessageEvent) {
             if (_event instanceof MessageEvent) {
                 let message: ƒNet.Message = JSON.parse(_event.data);
@@ -119,16 +126,26 @@ namespace Script {
                     if (message.content.command === MessageCommand.SYNC) {
                         this.applyUpdate(message.content.data);
                     }
-                    if (message.content.command === MessageCommand.CREATE) {
+                    else if (message.content.command === MessageCommand.CREATE) {
                         this.createObject(message.content.data);
                     }
-                    if (message.content.command === MessageCommand.DESTROY) {
+                    else if (message.content.command === MessageCommand.DESTROY) {
                         this.destroyObject(message.content.data);
                     }
-                    if (message.content.command === MessageCommand.JOIN) {
+                    else if (message.content.command === MessageCommand.JOIN) {
                         for (let element of this.#ownElementsToSync.values()) {
                             let creationData = element.creationData();
                             this.client.dispatch({ command: ƒNet.COMMAND.UNDEFINED, route: ƒNet.ROUTE.VIA_SERVER, idTarget: message.idSource, content: { command: MessageCommand.CREATE, data: creationData } })
+                        }
+                    }
+                    else if (message.content.command === MessageCommand.DESTRUCT) {
+                        let newPosData = message.content.data;
+                        let posV: ƒ.Vector3 = new ƒ.Vector3(newPosData.x, newPosData.y, newPosData.z);
+                        for (let d of Destructible.destrcutibles) {
+                            if (d.node.mtxWorld.translation.equals(posV, 0.6)) {
+                                d.destroy(true);
+                                return;
+                            }
                         }
                     }
                 }
