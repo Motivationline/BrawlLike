@@ -246,7 +246,7 @@ declare namespace Script {
         showPreview(): void;
         hidePreview(): void;
         updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3): void;
-        private initAttack;
+        initAttack: () => Promise<void>;
         attack(_direction: ƒ.Vector3): boolean;
         executeAttack: (_event: ƒ.EventTimer) => void;
         executeRecoil: (_event: ƒ.EventTimer) => void;
@@ -371,6 +371,7 @@ declare namespace Script {
         update(): void;
         protected move(): void;
         dealDamage(_amt: number, _broadcast: boolean): void;
+        initAttacks(): void;
         attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3): void;
         showPreview(_atk: ATTACK_TYPE): void;
         hidePreview(_atk: ATTACK_TYPE): void;
@@ -386,6 +387,7 @@ declare namespace Script {
         creationData(): CreationData;
         getInfo(): any;
         applyData(data: any): void;
+        onTrigger: (_event: ƒ.EventPhysics) => void;
     }
     enum ATTACK_TYPE {
         MAIN = 0,

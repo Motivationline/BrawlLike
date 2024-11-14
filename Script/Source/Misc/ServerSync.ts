@@ -37,9 +37,8 @@ namespace Script {
                 return;
             }
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            rb.activate(false);
-            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
-            rb.activate(true);
+            let difference = ƒ.Vector3.DIFFERENCE(new ƒ.Vector3(data.position.x, data.position.y, data.position.z), this.node.mtxLocal.translation);
+            rb.translateBody(difference);
         }
         abstract creationData(): CreationData;
 

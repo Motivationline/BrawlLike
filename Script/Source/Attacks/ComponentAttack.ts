@@ -48,15 +48,16 @@ namespace Script {
         #previewNode: ƒ.Node;
         #previewActive: boolean = false;
         #previewMaterial: ƒ.ComponentMaterial;
+        #displayThings: boolean = false;
 
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
 
-            this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, () => {
-                this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initAttack, true);
-            });
+            // this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, () => {
+            //     this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initAttack, true);
+            // });
         }
 
         public showPreview() {
@@ -70,6 +71,7 @@ namespace Script {
         }
 
         public updatePreview(_brawlerPosition: ƒ.Vector3, _mousePosition: ƒ.Vector3) {
+            if (!this.#displayThings) return;
             if (!this.#previewActive) return;
             switch (this.previewType) {
                 case AttackPreviewType.LINE:
@@ -98,7 +100,14 @@ namespace Script {
             }
         }
 
-        private initAttack = async () => {
+        public initAttack = async () => {
+            let cmpBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
+            if (!cmpBrawler) return;
+
+            if (cmpBrawler === EntityManager.Instance.playerBrawler)
+                this.#displayThings = true;
+            if (!this.#displayThings) return;
+
             // Preview
             let quad: ƒ.MeshQuad = <ƒ.MeshQuad>ƒ.Project.getResourcesByType(ƒ.MeshQuad)[0];
             let texture: ƒ.Material;
@@ -227,6 +236,7 @@ namespace Script {
         }
 
         public charge(_amt: number, type: ChargeType) {
+            if (!this.#displayThings) return;
             if (!isFinite(_amt)) return;
             switch (type) {
                 case ChargeType.PASSIVE: {
@@ -245,7 +255,8 @@ namespace Script {
             this.currentEnergy = Math.min(this.currentEnergy, this.maxEnergy);
 
             for (let charge = 0; charge < this.maxCharges; charge++) {
-                let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                let scaling = this.#attackBars[charge]?.getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                if (!scaling) continue;
                 let thisChargePercentage: number = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
                 this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
                 let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;

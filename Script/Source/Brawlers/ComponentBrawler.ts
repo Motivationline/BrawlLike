@@ -54,6 +54,8 @@ namespace Script {
         case ƒ.EVENT.NODE_DESERIALIZED:
           // if deserialized the node is now fully reconstructed and access to all its components and children is possible
           this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+          this.rigidbody.addEventListener(ƒ.EVENT_PHYSICS.TRIGGER_ENTER, this.onTrigger);
+          this.rigidbody.addEventListener(ƒ.EVENT_PHYSICS.TRIGGER_EXIT, this.onTrigger);
           this.rigidbody.effectRotation = new ƒ.Vector3();
           this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
           this.findAttacks();
@@ -176,6 +178,11 @@ namespace Script {
       }
     }
 
+    initAttacks(){
+      this.attackMain?.initAttack();
+      this.attackSpecial?.initAttack();
+    }
+
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
       if (this.#currentlyActiveAnimation.lock) return;
       switch (_atk) {
@@ -244,7 +251,7 @@ namespace Script {
     }
 
     protected death(): void {
-      if(this.#dead) return;
+      if (this.#dead) return;
       this.#dead = true;
       GameManager.Instance.playerDied(this);
       this.node.activate(false);
@@ -345,8 +352,43 @@ namespace Script {
           })
       });
 
-      if(this.node.isActive !== data.active){
+      if (this.node.isActive !== data.active) {
         this.node.activate(data.active);
+      }
+    }
+
+    #touchingGrass: number = 0;
+    onTrigger = (_event: ƒ.EventPhysics) => {
+      let teamOfOwner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.id)).team;
+      let teamOfThis = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(this.id)).team;
+      if (teamOfOwner === teamOfThis) return;
+
+      if (_event.cmpRigidbody.node.name === "GrassPatch") {
+        if (_event.type === ƒ.EVENT_PHYSICS.TRIGGER_ENTER) { this.#touchingGrass++; }
+        if (_event.type === ƒ.EVENT_PHYSICS.TRIGGER_EXIT) { this.#touchingGrass--; }
+      }
+
+      // if (!this.#visualWrapper) return;
+      // let brawlerShouldBeHidden: boolean = false;
+      // for (let trigger of this.rigidbody.triggerings) {
+      //   if (trigger.node.name === "GrassPatch") {
+      //     brawlerShouldBeHidden = true;
+      //     break;
+      //   }
+      // }
+
+      // if(this.#touchingGrass > 0 && !brawlerShouldBeHidden) {
+      //   console.log("bad value!");
+      //   return;
+      // }
+      if (this.#touchingGrass > 0) {
+        for(let child of this.node.getChildren()){
+          child.activate(false);
+        }
+      } else {
+        for(let child of this.node.getChildren()){
+          child.activate(true);
+        }
       }
     }
   }

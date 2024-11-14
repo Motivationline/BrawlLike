@@ -129,9 +129,8 @@ var Script;
                 return;
             }
             let rb = this.node.getComponent(ƒ.ComponentRigidbody);
-            rb.activate(false);
-            this.node.mtxLocal.translation = new ƒ.Vector3(data.position.x, data.position.y, data.position.z);
-            rb.activate(true);
+            let difference = ƒ.Vector3.DIFFERENCE(new ƒ.Vector3(data.position.x, data.position.y, data.position.z), this.node.mtxLocal.translation);
+            rb.translateBody(difference);
         }
     }
     Script.ServerSync = ServerSync;
@@ -625,6 +624,7 @@ var Script;
             Script.viewport.camera = camera;
             this.playerBrawler.setupId();
             _playerBrawler.brawler = this.playerBrawler;
+            this.playerBrawler.initAttacks();
         };
         async initBrawler(_g, _pos) {
             let instance = await ƒ.Project.createGraphInstance(_g);
@@ -1276,13 +1276,14 @@ var Script;
         #previewNode;
         #previewActive = false;
         #previewMaterial;
+        #displayThings = false;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
-            this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, () => {
-                this.node.addEventListener("graphInstantiated" /* ƒ.EVENT.GRAPH_INSTANTIATED */, this.initAttack, true);
-            });
+            // this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, () => {
+            //     this.node.addEventListener(ƒ.EVENT.GRAPH_INSTANTIATED, this.initAttack, true);
+            // });
         }
         showPreview() {
             this.#previewActive = true;
@@ -1293,6 +1294,8 @@ var Script;
             ComponentAttack.activePreviews.delete(this.#previewNode);
         }
         updatePreview(_brawlerPosition, _mousePosition) {
+            if (!this.#displayThings)
+                return;
             if (!this.#previewActive)
                 return;
             switch (this.previewType) {
@@ -1324,6 +1327,13 @@ var Script;
             }
         }
         initAttack = async () => {
+            let cmpBrawler = this.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
+            if (!cmpBrawler)
+                return;
+            if (cmpBrawler === Script.EntityManager.Instance.playerBrawler)
+                this.#displayThings = true;
+            if (!this.#displayThings)
+                return;
             // Preview
             let quad = ƒ.Project.getResourcesByType(ƒ.MeshQuad)[0];
             let texture;
@@ -1446,6 +1456,8 @@ var Script;
             }
         }
         charge(_amt, type) {
+            if (!this.#displayThings)
+                return;
             if (!isFinite(_amt))
                 return;
             switch (type) {
@@ -1464,7 +1476,9 @@ var Script;
             }
             this.currentEnergy = Math.min(this.currentEnergy, this.maxEnergy);
             for (let charge = 0; charge < this.maxCharges; charge++) {
-                let scaling = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                let scaling = this.#attackBars[charge]?.getComponent(ƒ.ComponentMesh).mtxPivot.scaling;
+                if (!scaling)
+                    continue;
                 let thisChargePercentage = Math.min(1, Math.max(0, (this.currentEnergy - (charge * this.energyNeededPerCharge)) / this.energyNeededPerCharge));
                 this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.scaling = new ƒ.Vector3(Math.min(1, thisChargePercentage), scaling.y, scaling.z);
                 let translation = this.#attackBars[charge].getComponent(ƒ.ComponentMesh).mtxPivot.translation;
@@ -2019,6 +2033,8 @@ var Script;
                 case "nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */:
                     // if deserialized the node is now fully reconstructed and access to all its components and children is possible
                     this.rigidbody = this.node.getComponent(ƒ.ComponentRigidbody);
+                    this.rigidbody.addEventListener("TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */, this.onTrigger);
+                    this.rigidbody.addEventListener("TriggerLeftCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_EXIT */, this.onTrigger);
                     this.rigidbody.effectRotation = new ƒ.Vector3();
                     this.rotationWrapperMatrix = this.node.getChild(0).mtxLocal;
                     this.findAttacks();
@@ -2139,6 +2155,10 @@ var Script;
                 this.attackMain?.charge(_amt, Script.ChargeType.DAMAGE_RECEIVED);
                 this.attackSpecial?.charge(_amt, Script.ChargeType.DAMAGE_RECEIVED);
             }
+        }
+        initAttacks() {
+            this.attackMain?.initAttack();
+            this.attackSpecial?.initAttack();
         }
         attack(_atk, _direction) {
             if (this.#currentlyActiveAnimation.lock)
@@ -2296,6 +2316,43 @@ var Script;
                 this.node.activate(data.active);
             }
         }
+        #touchingGrass = 0;
+        onTrigger = (_event) => {
+            let teamOfOwner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.id)).team;
+            let teamOfThis = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(this.id)).team;
+            if (teamOfOwner === teamOfThis)
+                return;
+            if (_event.cmpRigidbody.node.name === "GrassPatch") {
+                if (_event.type === "TriggerEnteredCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_ENTER */) {
+                    this.#touchingGrass++;
+                }
+                if (_event.type === "TriggerLeftCollision" /* ƒ.EVENT_PHYSICS.TRIGGER_EXIT */) {
+                    this.#touchingGrass--;
+                }
+            }
+            // if (!this.#visualWrapper) return;
+            // let brawlerShouldBeHidden: boolean = false;
+            // for (let trigger of this.rigidbody.triggerings) {
+            //   if (trigger.node.name === "GrassPatch") {
+            //     brawlerShouldBeHidden = true;
+            //     break;
+            //   }
+            // }
+            // if(this.#touchingGrass > 0 && !brawlerShouldBeHidden) {
+            //   console.log("bad value!");
+            //   return;
+            // }
+            if (this.#touchingGrass > 0) {
+                for (let child of this.node.getChildren()) {
+                    child.activate(false);
+                }
+            }
+            else {
+                for (let child of this.node.getChildren()) {
+                    child.activate(true);
+                }
+            }
+        };
     }
     Script.ComponentBrawler = ComponentBrawler;
     let ATTACK_TYPE;

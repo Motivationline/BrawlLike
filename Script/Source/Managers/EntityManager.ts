@@ -31,6 +31,7 @@ namespace Script {
 
             this.playerBrawler.setupId();
             _playerBrawler.brawler = this.playerBrawler;
+            this.playerBrawler.initAttacks();
         }
 
         private async initBrawler(_g: ƒ.Graph, _pos: ƒ.Vector3): Promise<ComponentBrawler> {
