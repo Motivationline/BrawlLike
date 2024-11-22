@@ -2533,17 +2533,12 @@ var Script;
             this.gameActive = true;
             Script.menuManager.showOverlay(Script.MENU_TYPE.GAME_OVERLAY);
             // ƒ.Time.game.setScale(0.2);
-            if (this.timerId !== undefined)
-                ƒ.Time.game.deleteTimer(this.timerId);
-            this.timerId = ƒ.Time.game.setTimer(1000, 0, () => {
-                this.remainingTime--;
-                this.timeDiv.innerText = `${Math.floor(this.remainingTime / 60)} : ${Math.floor(this.remainingTime % 60)}`;
-            });
         }
         timerId;
         timeDiv;
         remainingTime = 0;
         async startRound() {
+            document.getElementsByTagName("canvas")[0].hidden = false;
             let gameOverElement = document.getElementById("game-over-wrapper");
             gameOverElement.parentElement.classList.add("hidden");
             this.timeDiv = document.getElementById("game-time");
@@ -2573,6 +2568,23 @@ var Script;
             }
             document.getElementById("game-score").innerText = scores.join(" : ");
             await Script.EntityManager.Instance.loadBrawler(this.getPlayer(Script.LobbyManager.client.id));
+            if (this.timerId !== undefined)
+                ƒ.Time.game.deleteTimer(this.timerId);
+            this.timerId = ƒ.Time.game.setTimer(1000, 0, () => {
+                this.remainingTime--;
+                this.timeDiv.innerText = formatMinutes(this.remainingTime);
+                if (this.remainingTime <= 0) {
+                    this.checkEndRound();
+                }
+            });
+            function formatMinutes(timeInSeconds, leadingZero = true) {
+                let seconds = Math.floor(timeInSeconds % 60);
+                let minutes = Math.floor(timeInSeconds / 60);
+                let timeString = "";
+                timeString += `${minutes < 10 && leadingZero ? "0" : ""}${minutes}`;
+                timeString += ` : ${seconds < 10 ? "0" : ""}${seconds}`;
+                return timeString;
+            }
         }
         selectBrawler(_brawler, _player) {
             let totalPlayers = 0;
@@ -2622,26 +2634,7 @@ var Script;
                     gameOverElement.parentElement.classList.remove("hidden");
                     gameOverElement.innerText = "ELIMINATED";
                 }
-                let roundWinner = this.getRoundWinner();
-                if (roundWinner) {
-                    roundWinner.wonRounds = (roundWinner.wonRounds ?? 0) + 1;
-                    let gameOverElement = document.getElementById("game-over-wrapper");
-                    gameOverElement.parentElement.classList.remove("hidden");
-                    gameOverElement.innerText = "ROUND OVER";
-                    let gameWinner = this.getGameWinner();
-                    if (gameWinner) {
-                        if (gameWinner.players.find(p => p.brawler === Script.EntityManager.Instance.playerBrawler)) {
-                            gameOverElement.innerText = "YOU WIN";
-                        }
-                        else {
-                            gameOverElement.innerText = "YOU LOOSE";
-                        }
-                        setTimeout(() => { this.resetGame(); }, 3000);
-                    }
-                    else {
-                        setTimeout(() => { this.startRound(); }, 3000);
-                    }
-                }
+                this.checkEndRound();
                 // document.getElementById(ownerId)?.classList.remove("dead");
                 // document.getElementById(ownerId)?.classList.add("eliminated");
                 return;
@@ -2649,6 +2642,35 @@ var Script;
             ƒ.Time.game.setTimer(this.settings.respawnTime * 1000, 1, () => {
                 this.respawnPlayer(player);
             });
+        }
+        checkEndRound() {
+            let roundWinner = this.getRoundWinner();
+            if (!roundWinner && this.remainingTime > 0)
+                return;
+            let gameOverElement = document.getElementById("game-over-wrapper");
+            if (roundWinner) {
+                roundWinner.wonRounds = (roundWinner.wonRounds ?? 0) + 1;
+                gameOverElement.parentElement.classList.remove("hidden");
+                gameOverElement.innerText = "ROUND OVER";
+            }
+            if (this.remainingTime <= 0) {
+                gameOverElement.parentElement.classList.remove("hidden");
+                gameOverElement.innerText = "TIME IS UP";
+            }
+            let gameWinner = this.getGameWinner();
+            if (gameWinner) {
+                if (gameWinner.players.find(p => p.brawler === Script.EntityManager.Instance.playerBrawler)) {
+                    gameOverElement.innerText = "YOU WIN";
+                }
+                else {
+                    gameOverElement.innerText = "YOU LOOSE";
+                }
+                setTimeout(() => { this.resetGame(); }, 3000);
+            }
+            else {
+                setTimeout(() => { this.startRound(); }, 3000);
+            }
+            ƒ.Time.game.deleteTimer(this.timerId);
         }
         getRoundWinner() {
             let winnerTeam;
@@ -2752,6 +2774,7 @@ var Script;
             document.getElementById("brawler").querySelectorAll("button").forEach(b => b.classList.remove("selected"));
             this.gameActive = false;
             ƒ.Loop.stop();
+            document.getElementsByTagName("canvas")[0].hidden = true;
         }
     }
     Script.GameManager = GameManager;

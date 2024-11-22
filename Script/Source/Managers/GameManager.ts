@@ -55,24 +55,21 @@ namespace Script {
             this.settings = { ...this.defaultSettings, ..._settings };
             this.teams = _teams;
         }
-        
+
         async startGame() {
             await this.startRound();
             ƒ.Loop.start();
             this.gameActive = true;
             menuManager.showOverlay(MENU_TYPE.GAME_OVERLAY);
             // ƒ.Time.game.setScale(0.2);
-            if (this.timerId !== undefined) ƒ.Time.game.deleteTimer(this.timerId);
-            this.timerId = ƒ.Time.game.setTimer(1000, 0, () => {
-                this.remainingTime--;
-                this.timeDiv.innerText = `${Math.floor(this.remainingTime / 60)} : ${Math.floor(this.remainingTime % 60)}`
-            });
         }
-        
+
         timerId: number;
         timeDiv: HTMLDivElement;
         remainingTime: number = 0;
         async startRound() {
+            document.getElementsByTagName("canvas")[0].hidden = false;
+            
             let gameOverElement = document.getElementById("game-over-wrapper")!;
             gameOverElement.parentElement.classList.add("hidden");
 
@@ -110,6 +107,25 @@ namespace Script {
 
             await EntityManager.Instance.loadBrawler(this.getPlayer(LobbyManager.client.id));
 
+            if (this.timerId !== undefined) ƒ.Time.game.deleteTimer(this.timerId);
+            this.timerId = ƒ.Time.game.setTimer(1000, 0, () => {
+                this.remainingTime--;
+                this.timeDiv.innerText = formatMinutes(this.remainingTime);
+                if (this.remainingTime <= 0) {
+                    this.checkEndRound();
+                }
+            });
+
+            function formatMinutes(timeInSeconds: number, leadingZero: boolean = true): string {
+                let seconds = Math.floor(timeInSeconds % 60);
+                let minutes = Math.floor(timeInSeconds / 60);
+
+                let timeString: string = "";
+                timeString += `${minutes < 10 && leadingZero ? "0" : ""}${minutes}`;
+                timeString += ` : ${seconds < 10 ? "0" : ""}${seconds}`
+
+                return timeString;
+            }
         }
 
         selectBrawler(_brawler: string, _player: string) {
@@ -165,28 +181,7 @@ namespace Script {
                     gameOverElement.innerText = "ELIMINATED";
                 }
 
-                let roundWinner = this.getRoundWinner();
-
-                if (roundWinner) {
-                    roundWinner.wonRounds = (roundWinner.wonRounds ?? 0) + 1;
-
-                    let gameOverElement = document.getElementById("game-over-wrapper")!;
-                    gameOverElement.parentElement.classList.remove("hidden");
-                    gameOverElement.innerText = "ROUND OVER";
-
-                    let gameWinner = this.getGameWinner();
-                    if (gameWinner) {
-                        if (gameWinner.players.find(p => p.brawler === EntityManager.Instance.playerBrawler)) {
-                            gameOverElement.innerText = "YOU WIN"
-                        } else {
-                            gameOverElement.innerText = "YOU LOOSE"
-                        }
-                        
-                        setTimeout(() => { this.resetGame() }, 3000)
-                    } else {
-                        setTimeout(() => { this.startRound() }, 3000)
-                    }
-                }
+                this.checkEndRound();
                 // document.getElementById(ownerId)?.classList.remove("dead");
                 // document.getElementById(ownerId)?.classList.add("eliminated");
                 return;
@@ -195,6 +190,39 @@ namespace Script {
             ƒ.Time.game.setTimer(this.settings.respawnTime * 1000, 1, () => {
                 this.respawnPlayer(player);
             });
+
+        }
+
+        private checkEndRound() {
+            let roundWinner = this.getRoundWinner();
+
+            if (!roundWinner && this.remainingTime > 0) return;
+            
+            let gameOverElement = document.getElementById("game-over-wrapper")!;
+            if (roundWinner) {
+                roundWinner.wonRounds = (roundWinner.wonRounds ?? 0) + 1;
+
+                gameOverElement.parentElement.classList.remove("hidden");
+                gameOverElement.innerText = "ROUND OVER";
+            }
+            if(this.remainingTime <= 0){
+                gameOverElement.parentElement.classList.remove("hidden");
+                gameOverElement.innerText = "TIME IS UP";
+            }
+
+            let gameWinner = this.getGameWinner();
+            if (gameWinner) {
+                if (gameWinner.players.find(p => p.brawler === EntityManager.Instance.playerBrawler)) {
+                    gameOverElement.innerText = "YOU WIN"
+                } else {
+                    gameOverElement.innerText = "YOU LOOSE"
+                }
+
+                setTimeout(() => { this.resetGame() }, 3000)
+            } else {
+                setTimeout(() => { this.startRound() }, 3000)
+            }
+            ƒ.Time.game.deleteTimer(this.timerId);
 
         }
 
@@ -294,13 +322,14 @@ namespace Script {
             menuManager.showOverlay(MENU_TYPE.GAME_LOBBY);
             viewport.setBranch(undefined);
 
-            
             document.getElementById("brawler-ready-text").innerText = `waiting for players`;
             (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
             document.getElementById("brawler").querySelectorAll("button").forEach(b => b.classList.remove("selected"));
 
             this.gameActive = false;
             ƒ.Loop.stop();
+
+            document.getElementsByTagName("canvas")[0].hidden = true;
         }
     }
 }

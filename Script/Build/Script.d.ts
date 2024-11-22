@@ -465,6 +465,7 @@ declare namespace Script {
         getPlayer(_playerID: string): Player | undefined;
         getChosenBrawlerOfPlayer(_player: string): string;
         playerDied(cp: ComponentBrawler): void;
+        private checkEndRound;
         private getRoundWinner;
         private getGameWinner;
         private respawnPlayer;
