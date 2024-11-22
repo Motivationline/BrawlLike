@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Luckiest Guy";
+  src: url(Assets/Fonts/LuckiestGuy.ttf);
+}
+
 html,
 body {
   padding: 0px;
@@ -5,6 +10,18 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  --color-background: #1e1204;
+  --color-main: #81a263;
+  --color-main-darker: #365e32;
+  --color-highlight: #e7d37f;
+  --color-white: #fff;
+  --color-gray: #3f3f3f;
+  --color-gray-light: #747474;
+
+  background-color: var(--color-background);
+  color: var(--color-main);
+  font-family: "Luckiest Guy", cursive;
 }
 
 dialog {
@@ -22,51 +39,91 @@ div.overlay {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
+}
+
+.div.overlay.menu {
+  background-color: var(--color-background);
 }
 
 div.overlay.hidden {
   display: none;
 }
 
-#brawler {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 100%;
-  gap: 10px;
-  box-sizing: border-box;
-  padding: 10px;
-  background-color: rgb(128, 186, 187)
+div.panel {
+  background-color: var(--color-main);
+  color: var(--color-main-darker);
+  padding: 2em;
+  border-radius: 1em;
+  position: relative;
 }
 
-#brawler button {
-  height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 48px;
-  color: rgb(39, 39, 39);
-  font-family: "Poppins";
+button {
+  background-color: var(--color-main);
+  outline: none;
+  border: none;
+  font-family: inherit;
+  color: var(--color-main-darker);
+  border-radius: 0.25em;
+  font-size: inherit;
+  padding: 0.5em 0.75em;
   cursor: pointer;
-  transition: transform 0.3s ease;
-  background-color: rgba(255, 255, 255, 0.597);
-  border: 10px solid rgb(39, 39, 39);
-  border-radius: 10px;
 }
 
-#brawler button:hover {
-  transform: scale(1.05);
-}
-#brawler button.selected {
-  background-color: rgba(255, 255, 255, 0.95);
+button:hover,
+button.on-green {
+  background-color: var(--color-main-darker);
+  color: var(--color-main);
 }
 
-#brawler button img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 10px;
+button.on-green:hover {
+  background-color: var(--color-highlight);
+  color: var(--color-main-darker);
+}
+
+button:disabled {
+  color: var(--color-white);
+  background-color: var(--color-gray-light);
+  cursor: not-allowed;
+}
+
+#game-lobby-id,
+input,
+select {
+  background-color: var(--color-main-darker);
+  color: var(--color-highlight);
+  outline: none;
+  border: none;
+  font-size: inherit;
+  padding: 0.5em 0.15em;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 0.25em;
+  font-family: inherit;
+}
+
+select {
+  text-align: left;
+}
+
+input:disabled,
+select:disabled {
+  background-color: var(--color-gray-light);
+  color: var(--color-white);
+}
+
+option {
+  font-family: inherit;
+}
+
+#game-lobby-id {
+  position: absolute;
+  top: -5rem;
+  right: -4rem;
+  font-size: 3rem;
+  rotate: 20deg;
+  animation: pulse 2s infinite ease-in-out;
+  padding: 0.5em;
 }
 
 #start {
@@ -100,6 +157,10 @@ li.room.selected {
   color: gray;
 }
 
+h1 {
+  text-align: center;
+  font-size: 5rem;
+}
 
 #game-overlay {
   background-color: transparent;
@@ -165,6 +226,151 @@ li.room.selected {
   pointer-events: none;
 }
 
+
+#lobby-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  font-size: 3em;
+}
+
+#game-lobby-overlay div.panel{
+  gap: 1em;
+  display: grid;
+  grid-template-areas: 
+  "buttons buttons"
+  "options players"
+  ;
+}
+
+#game-players {
+  grid-area: players;
+}
+#game-buttons {
+  grid-area: buttons;
+  font-size: 2em;
+}
+#game-settings {
+  grid-area: options;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+#game-settings.hidden {
+  display: none;
+}
+.option-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+}
+
+#selection-overlay:not(.hidden) {
+  display: grid;
+  grid-template-areas: 
+  "brawler preview info"
+  "ready ready ready"
+  ;
+  grid-template-columns: 25% 25% 50%;
+  margin: 1em;
+}
+
+#brawler-preview {
+  grid-area: preview;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#selected-character-name {
+  color: var(--color-highlight);
+  font-size: 8vh;
+  text-align: center;
+}
+#selected-character-name:not(.selected){
+  animation: pulse 1s infinite;
+}
+#selected-character-img {
+  max-height: 70vh;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+}
+
+#brawler-info {
+  grid-area: info;
+  color: var(--color-white);
+  font-size: 2vh;
+}
+
+.brawler-stat {
+  margin-bottom: 1em;
+}
+
+.brawler-stat-preview-outer {
+  height: 4em;
+  background-color: var(--color-gray);
+  border-radius: 0.5em;
+  position: relative;
+  overflow: hidden;
+}
+.brawler-stat-preview {
+  position: absolute;
+  width: 0%;
+  background-color: var(--color-highlight);
+  height: 100%;
+  transition: background-color 0.2s ease-out, width 0.2s ease-out;
+}
+
+#brawler-ready {
+  grid-area: ready;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 3vh;
+}
+
+#brawler {
+  grid-area: brawler;
+  display: grid;
+  grid-template-columns: repeat(2, 20vh);
+  grid-template-rows: repeat(3, 20vh);
+  width: 100%;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  justify-content: top;
+  font-size: 3vh;
+}
+
+#brawler button {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* font-size: 48px;
+  color: rgb(39, 39, 39);
+  font-family: "Poppins";
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.597);
+  border: 10px solid rgb(39, 39, 39);
+  border-radius: 10px; */
+}
+
+#brawler button.selected {
+  background-color: var(--color-highlight);
+}
+
+#brawler button img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
 @media screen and (max-width: 768px) {
   #brawler {
     grid-template-columns: repeat(2, 1fr);
@@ -177,4 +383,36 @@ li.room.selected {
     grid-template-columns: 1fr;
     /* Eine Spalte auf sehr kleinen Bildschirmen */
   }
+}
+
+@keyframes pulse {
+  0% {scale: 1}
+  50% {scale: 1.1}
+  100% {scale: 1}
+}
+
+.shakeX {
+  animation: shakeX 0.2s;
+}
+.shakeYUp {
+  animation: shakeYUp 0.2s;
+}
+.shakeYDown {
+  animation: shakeYDown 0.2s;
+}
+
+@keyframes shakeX {
+  0% {transform: translateX(0)}
+  50% {transform: translateX(10%)}
+  100% {transform: translateX(0)}
+}
+@keyframes shakeYDown {
+  0% {transform: translateY(0)}
+  50% {transform: translateY(10%)}
+  100% {transform: translateY(0)}
+}
+@keyframes shakeYUp {
+  0% {transform: translateY(0)}
+  50% {transform: translateY(-10%)}
+  100% {transform: translateY(0)}
 }

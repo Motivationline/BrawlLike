@@ -23,6 +23,7 @@
 
   <!--Load custom scripts-->
   <script type="text/javascript" src="Script/Build/Script.js" editor="true"></script>
+  <script src="https://unpkg.com/@rive-app/canvas@2.21.3"></script>
 
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
@@ -39,99 +40,111 @@
   </dialog>
   <!--Canvas for FUDGE to render to-->
   <canvas class="fullscreen"> </canvas>
-  <div class="overlay" id="start-overlay">
+  <div class="overlay menu hidden" id="start-overlay">
     <button id="start">Start</button>
   </div>
-  <div class="overlay hidden" id="loading-overlay">
+  <div class="overlay menu hidden" id="loading-overlay">
     <h1>Loading...</h1>
   </div>
-  <div class="overlay hidden" id="lobby-overlay">
-    <h1>Lobby</h1>
+  <div class="overlay menu hidden center-center" id="lobby-overlay">
+    <!-- <h1>Lobby</h1>
     <h3>Games</h3>
     <ul id="open-lobbies">
       Loading...
-    </ul>
-    <button id="lobby-host">Host</button>
-    <button id="lobby-join" disabled="">Join</button>
+    </ul> -->
+    <div id="lobby-overlay-inner">
+      <button id="lobby-host">Host</button>
+      <div>
+        <input type="text" name="room-code" id="room-code" maxlength="5" minlength="5" size="5">
+        <button id="lobby-join" disabled>Join</button>
+      </div>
+    </div>
   </div>
-  <div class="overlay hidden" id="game-lobby-overlay">
-    <h1>Game Lobby</h1> <span id="game-lobby-id">
-    </span>
-    <h3>Connected Players</h3>
-    <ul id="connected-players">
-      Loading...
-    </ul>
-    <button id="game-lobby-start">Start</button>
-    <button id="game-lobby-cancel">Cancel</button>
-    <form id="game-settings">
-      <div class="option-wrapper">
-        <label for="setting-map">Map</label>
-        <select name="setting-map" id="setting-map">
-          <option value="training" data-arena="TrainingMap" selected>Training Area - Test your abilities</option>
-          <option value="small" data-arena="Map">Smaller Team vs Team Arena</option>
-          <option value="large" data-arena="BigMap">Large Arena for large scale fights</option>
-        </select>
-      </div>
-      <div class="option-wrapper">
-        <label for="setting-rounds">
-          Best Of
-        </label>
-        <input type="number" name="setting-rounds" id="setting-rounds" min="1" value="1" step="1">
-        <label for="setting-rounds">
-          Rounds
-        </label>
-      </div>
-      <div class="option-wrapper">
-        <label for="setting-timer">
-          Timer (in seconds)
-        </label>
-        <input type="number" name="setting-timer" id="setting-timer" min="0" value="120" step="10">
-      </div>
-      <div class="option-wrapper">
-        <label for="setting-lives">
-          Max Respawns Per Player (-1 == no limit)
-        </label>
-        <input type="number" name="setting-lives" id="setting-lives" min="-1" value="3">
-      </div>
-      <div class="option-wrapper">
-        <label for="setting-team-lives">
-          Max Respawns Per Team (-1 == no limit)
-        </label>
-        <input type="number" name="setting-team-lives" id="setting-team-lives" min="-1" value="-1">
-      </div>
-      <div class="option-wrapper">
-        <label for="setting-respawn-timer">
-          Respawn Timer (in seconds)
-        </label>
-        <input type="number" name="setting-respawn-timer" id="setting-respawn-timer" min="0" value="3" step="0.1">
-      </div>
+  <div class="overlay menu hidden center-center" id="game-lobby-overlay">
+    <div>
+      <h1>Lobby</h1>
 
-      <div class="option-wrapper">
-        <label for="setting-respawn">Respawn Location</label>
-        <select name="setting-respawn" id="setting-respawn" disabled>
-          <option value="initial" selected>preset / initial respawn point</option>
-          <option value="random">random respawn point</option>
-          <option value="death">place of death</option>
-          <option value="teammate">teammate</option>
-        </select>
-      </div>
+      <div class="panel">
+        <span id="game-lobby-id"></span>
+        <div id="game-players">
+          <h3>Connected Players</h3>
+          <ul id="connected-players">
+            Loading...
+          </ul>
+        </div>
+        <form id="game-settings">
+          <h2>Options</h2>
+          <div class="option-wrapper">
+            <label for="setting-map">Map</label>
+            <select name="setting-map" id="setting-map">
+              <option value="training" data-arena="TrainingMap" selected>Training Area - Test your abilities</option>
+              <option value="small" data-arena="Map">Smaller Team vs Team Arena</option>
+              <option value="large" data-arena="BigMap">Large Arena for large scale fights</option>
+            </select>
+          </div>
+          <div class="option-wrapper">
+            <label for="setting-rounds">
+              Best Of
+            </label>
+            <input type="number" name="setting-rounds" id="setting-rounds" min="1" value="1" step="1" size="2">
+            <label for="setting-rounds">
+              Rounds
+            </label>
+          </div>
+          <div class="option-wrapper">
+            <label for="setting-timer">
+              Timer (in seconds)
+            </label>
+            <input type="number" name="setting-timer" id="setting-timer" min="0" value="120" step="10" size="4">
+          </div>
+          <div class="option-wrapper">
+            <label for="setting-lives">
+              Max Respawns Per Player (-1 = no limit)
+            </label>
+            <input type="number" name="setting-lives" id="setting-lives" min="-1" value="3" size="2">
+          </div>
+          <div class="option-wrapper">
+            <label for="setting-team-lives">
+              Max Respawns Per Team (-1 = no limit)
+            </label>
+            <input type="number" name="setting-team-lives" id="setting-team-lives" min="-1" value="-1" size="2">
+          </div>
+          <div class="option-wrapper">
+            <label for="setting-respawn-timer">
+              Respawn Timer (in seconds)
+            </label>
+            <input type="number" name="setting-respawn-timer" id="setting-respawn-timer" min="0" value="3" step="0.1"
+              size="3">
+          </div>
 
-      <div class="option-wrapper">
-        <label for="setting-team">Teams</label>
-        <select name="setting-team" id="setting-team" disabled>
-          <option value="team" selected>Teams</option>
-          <option value="ffa">Free For All</option>
-        </select>
+          <div class="option-wrapper">
+            <label for="setting-respawn">Respawn Location</label>
+            <select name="setting-respawn" id="setting-respawn" disabled>
+              <option value="initial" selected>preset / initial respawn point</option>
+              <option value="random">random respawn point</option>
+              <option value="death">place of death</option>
+              <option value="teammate">teammate</option>
+            </select>
+          </div>
+
+          <div class="option-wrapper">
+            <label for="setting-team">Teams</label>
+            <select name="setting-team" id="setting-team" disabled>
+              <option value="team" selected>Teams</option>
+              <option value="ffa">Free For All</option>
+            </select>
+          </div>
+        </form>
+        <div id="lobby-client-settings">Waiting for Host...</div>
+        <div id="game-buttons">
+          <button id="game-lobby-start" class="on-green">Start</button>
+          <button id="game-lobby-cancel" class="on-green">Cancel</button>
+        </div>
       </div>
-    </form>
-    <div id="lobby-client-settings">Waiting for Host...</div>
+    </div>
   </div>
-  <div class="overlay hidden" id="selection-overlay">
+  <div class="overlay hidden menu" id="selection-overlay">
     <div id="brawler">
-      <button id="b1" data-brawler="BrawlerSpider">
-        <img src="UI/BrawlerPicking/Cowgirl.png" />
-        <div>Melee</div>
-      </button>
       <button id="b2" data-brawler="BrawlerFrogger">
         <img src="UI/BrawlerPicking/Frog.png" />
         <div>Frogger</div>
@@ -140,18 +153,51 @@
         <img src="UI/BrawlerPicking/Bugsy.png" />
         <div>Bugsy</div>
       </button>
-
+      <button id="b1" data-brawler="BrawlerSpider">
+        <img src="UI/BrawlerPicking/Cowgirl.png" />
+        <div>Spidey</div>
+      </button>
       <button id="b4" data-brawler="BrawlerSniper">
         <img src="UI/BrawlerPicking/Sniper.png" />
         <div>Sniper</div>
       </button>
     </div>
     <div id="brawler-preview">
+      <div id="selected-character-name">Select a Character</div>
+      <img src="" alt="" id="selected-character-img">
     </div>
     <div id="brawler-info">
+      <div class="brawler-stat">
+        <span class="brawler-stat-name">Damage</span>
+        <div class="brawler-stat-preview-outer">
+          <div class="brawler-stat-preview" data-info="damage"></div>
+        </div>
+      </div>
+      <div class="brawler-stat">
+        <span class="brawler-stat-name">Speed</span>
+        <div class="brawler-stat-preview-outer">
+          <div class="brawler-stat-preview" data-info="speed"></div>
+        </div>
+      </div>
+      <div class="brawler-stat">
+        <span class="brawler-stat-name">Range</span>
+        <div class="brawler-stat-preview-outer">
+          <div class="brawler-stat-preview" data-info="range"></div>
+        </div>
+      </div>
+      <div class="brawler-stat">
+        <span class="brawler-stat-name">Health</span>
+        <div class="brawler-stat-preview-outer">
+          <div class="brawler-stat-preview" data-info="health"></div>
+        </div>
+      </div>
     </div>
     <div id="brawler-ready">
       <span id="brawler-ready-text">waiting for players</span>
+      <!-- <label for="ready_up">
+        <input type="checkbox" name="ready_up" id="ready_up">
+        Ready
+      </label> -->
       <button id="start_game" disabled>Start</button>
     </div>
   </div>

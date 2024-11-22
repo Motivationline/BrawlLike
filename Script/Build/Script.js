@@ -296,6 +296,12 @@ var Script;
         MENU_TYPE[MENU_TYPE["SELECTION"] = 5] = "SELECTION";
         MENU_TYPE[MENU_TYPE["GAME_OVERLAY"] = 6] = "GAME_OVERLAY";
     })(MENU_TYPE = Script.MENU_TYPE || (Script.MENU_TYPE = {}));
+    const brawlerInfo = new Map([
+        ["BrawlerFrogger", { name: "Frogger", stats: { damage: 0.75, health: 0.75, range: 0.5, speed: 0.25 }, img: "UI/BrawlerPicking/Frogger.png", shake: "shakeYUp" }],
+        ["BrawlerBugsy", { name: "Bugsy", stats: { damage: 0.5, health: 0.25, range: 0.75, speed: 0.5 }, img: "UI/BrawlerPicking/Bugsy_2.png", shake: "shakeX" }],
+        ["BrawlerSpider", { name: "Spidey", stats: { damage: 0.75, health: 1, range: 0.25, speed: 0.5 }, img: "UI/BrawlerPicking/Spider.png", shake: "shakeYDown" }],
+        ["BrawlerSniper", { name: "Sniper", stats: { damage: 1, health: 0.25, range: 1, speed: 0.75 }, img: "UI/BrawlerPicking/Bunny.png", shake: "shakeX" }],
+    ]);
     class MenuManager {
         overlays = new Map();
         constructor() {
@@ -318,26 +324,18 @@ var Script;
                         document.getElementById("brawler").querySelectorAll("button").forEach((button) => button.classList.remove("selected"));
                         button.classList.add("selected");
                         // GameManager.Instance.selectBrawler(button.dataset.brawler, LobbyManager.client.id);
-                        Script.LobbyManager.selectBrawler(button.dataset.brawler);
+                        this.selectBrawler(button);
                     });
                     // await GameManager.Instance.startGame();
                     // this.showOverlay(MENU_TYPE.NONE);
                 });
                 document.getElementById("lobby-host").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
-                    document.getElementById("game-settings").hidden = false;
+                    document.getElementById("game-settings").classList.remove("hidden");
                     document.getElementById("game-lobby-start").hidden = false;
                     document.getElementById("start_game").hidden = false;
                     document.getElementById("start_game").disabled = true;
                     document.getElementById("lobby-client-settings").hidden = true;
-                });
-                document.getElementById("lobby-join").addEventListener("click", () => {
-                    this.showOverlay(MENU_TYPE.GAME_LOBBY);
-                    document.getElementById("game-settings").hidden = true;
-                    document.getElementById("game-lobby-start").hidden = true;
-                    document.getElementById("start_game").hidden = true;
-                    document.getElementById("start_game").disabled = true;
-                    document.getElementById("lobby-client-settings").hidden = false;
                 });
                 document.getElementById("game-lobby-cancel").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.LOBBY);
@@ -450,6 +448,14 @@ var Script;
             console.log("resources loaded");
             this.showOverlay(MENU_TYPE.LOBBY);
         };
+        joinRoom() {
+            this.showOverlay(MENU_TYPE.GAME_LOBBY);
+            document.getElementById("game-settings").classList.add("hidden");
+            document.getElementById("game-lobby-start").hidden = true;
+            document.getElementById("start_game").hidden = true;
+            document.getElementById("start_game").disabled = true;
+            document.getElementById("lobby-client-settings").hidden = false;
+        }
         showOverlay(_type) {
             if (!this.overlays.has(_type) && _type !== MENU_TYPE.NONE)
                 return;
@@ -457,6 +463,37 @@ var Script;
                 overlay.classList.add("hidden");
             });
             this.overlays.get(_type)?.classList.remove("hidden");
+        }
+        selectBrawler(_button) {
+            Script.LobbyManager.selectBrawler(_button.dataset.brawler);
+            let brawler = brawlerInfo.get(_button.dataset.brawler);
+            let img = document.getElementById("selected-character-img");
+            img.src = brawler.img;
+            img.classList.remove("shakeX", "shakeYUp", "shakeYDown");
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    img.classList.add(brawler.shake);
+                });
+            });
+            document.getElementById("selected-character-name").innerText = brawler.name;
+            document.getElementById("selected-character-name").classList.add("selected");
+            for (let stat in brawler.stats) {
+                let element = document.querySelector(`div.brawler-stat-preview[data-info="${stat}"]`);
+                if (!element)
+                    continue;
+                //@ts-ignore
+                element.style.width = `${brawler.stats[stat] * 100}%`;
+                //@ts-ignore
+                element.style.backgroundColor = lerpColors([203, 140, 87], [53, 94, 49], brawler.stats[stat]);
+            }
+            function lerpColors(a, b, p) {
+                let final = {
+                    r: a[0] + (b[0] - a[0]) * p,
+                    g: a[1] + (b[1] - a[1]) * p,
+                    b: a[2] + (b[2] - a[2]) * p,
+                };
+                return `rgb(${final.r}, ${final.g}, ${final.b})`;
+            }
         }
     }
     Script.MenuManager = MenuManager;
@@ -821,6 +858,7 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
+    // import ƒ = FudgeCore;
     var ƒNet = FudgeNet;
     class LobbyManager {
         static client;
@@ -834,6 +872,9 @@ var Script;
             document.getElementById("lobby-host").addEventListener("click", this.hostRoom);
             document.getElementById("lobby-join").addEventListener("click", this.joinRoom);
             document.getElementById("game-lobby-cancel").addEventListener("click", this.leaveRoom);
+            document.getElementById("room-code").addEventListener("input", this.inputRoom);
+            document.getElementById("room-code").value = "";
+            document.getElementById("lobby-join").disabled = true;
         }
         static refreshRooms = () => {
             this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_GET_IDS, route: FudgeNet.ROUTE.SERVER });
@@ -844,9 +885,10 @@ var Script;
                 switch (message.command) {
                     case ƒNet.COMMAND.ROOM_GET_IDS:
                         this.rooms = message.content.rooms;
-                        this.updateVisibleRooms();
+                        // this.updateVisibleRooms();
                         break;
                     case ƒNet.COMMAND.ROOM_ENTER:
+                    // RiveManager.joinRoom(this.client.idRoom);
                     case ƒNet.COMMAND.SERVER_HEARTBEAT:
                         this.updateRoom();
                         break;
@@ -870,50 +912,64 @@ var Script;
                 }
             }
         }
-        static updateVisibleRooms() {
-            if (this.client.idRoom !== "Lobby")
-                return;
-            document.getElementById("client-id").innerText = this.client.id;
-            document.getElementById("client-name").innerText = this.client.name;
-            let listElement = document.getElementById("open-lobbies");
-            let newChildren = [];
-            if (Object.keys(this.rooms).length <= 1) {
-                let span = document.createElement("span");
-                span.innerText = "No games going on. Why don't you host yourself?";
-                newChildren.push(span);
-            }
-            else {
-                for (let room in this.rooms) {
-                    if (room === "Lobby")
-                        continue;
-                    let li = document.createElement("li");
-                    li.innerText = `${room} - ${this.rooms[room]} Players`;
-                    li.dataset.room = room;
-                    li.addEventListener("click", this.selectRoom);
-                    li.classList.add("room");
-                    if (room === this.selectedRoom)
-                        li.classList.add("selected");
-                    newChildren.push(li);
-                }
-            }
-            listElement.replaceChildren(...newChildren);
-        }
+        // static updateVisibleRooms() {
+        //     return;
+        //     if (this.client.idRoom !== "Lobby") return;
+        //     document.getElementById("client-id").innerText = this.client.id;
+        //     document.getElementById("client-name").innerText = this.client.name;
+        //     let listElement: HTMLUListElement = <HTMLUListElement>document.getElementById("open-lobbies");
+        //     let newChildren: HTMLElement[] = [];
+        //     if (Object.keys(this.rooms).length <= 1) {
+        //         let span = document.createElement("span");
+        //         span.innerText = "No games going on. Why don't you host yourself?";
+        //         newChildren.push(span);
+        //     } else {
+        //         for (let room in this.rooms) {
+        //             if (room === "Lobby") continue;
+        //             let li = document.createElement("li");
+        //             li.innerText = `${room} - ${this.rooms[room]} Players`;
+        //             li.dataset.room = room;
+        //             li.addEventListener("click", this.selectRoom);
+        //             li.classList.add("room");
+        //             if (room === this.selectedRoom) li.classList.add("selected");
+        //             newChildren.push(li);
+        //         }
+        //     }
+        //     listElement.replaceChildren(...newChildren);
+        // }
         static hostRoom = () => {
             this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_CREATE, route: FudgeNet.ROUTE.SERVER });
         };
-        static selectRoom = (_event) => {
-            let target = _event.target;
-            document.querySelectorAll("li.room").forEach(el => el.classList.remove("selected"));
-            this.selectedRoom = target.dataset.room;
-            target.classList.add("selected");
-            document.getElementById("lobby-join").disabled = false;
+        static inputRoom = (_event) => {
+            let element = _event.target;
+            let value = element.value;
+            if (value.length === 5) {
+                this.selectedRoom = value.toLocaleLowerCase();
+                document.getElementById("lobby-join").disabled = false;
+            }
+            else {
+                document.getElementById("lobby-join").disabled = true;
+            }
         };
+        // static selectRoom = (_event: Event) => {
+        //     let target = <HTMLLIElement>_event.target;
+        //     document.querySelectorAll("li.room").forEach(el => el.classList.remove("selected"));
+        //     this.selectedRoom = target.dataset.room;
+        //     target.classList.add("selected");
+        //     (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = false;
+        // }
         static joinRoom = () => {
-            document.getElementById("lobby-join").disabled = true;
+            // (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = true;
             if (!this.selectedRoom)
                 return;
-            Script.client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: this.selectedRoom } });
+            let roomID = `_${this.selectedRoom}`;
+            if (!this.rooms[roomID]) {
+                alert("Room not found");
+                return;
+            }
+            Script.client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: roomID } });
             this.selectedRoom = "";
+            Script.menuManager.joinRoom();
         };
         static leaveRoom = () => {
             Script.client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: "Lobby" } });
@@ -922,7 +978,8 @@ var Script;
         static updateRoom = () => {
             if (this.client.idRoom === "Lobby")
                 return;
-            document.getElementById("game-lobby-id").innerText = `Room id: ${this.client.idRoom}`;
+            if (document.getElementById("game-lobby-id").innerText.toLocaleLowerCase() !== `${this.client.idRoom.substring(1).toLocaleLowerCase()}`)
+                document.getElementById("game-lobby-id").innerText = `${this.client.idRoom.substring(1)}`;
             let players = [];
             for (let client in this.client.clientsInfoFromServer) {
                 let li = document.createElement("li");
@@ -982,6 +1039,7 @@ var Script;
     function preStart() {
         Script.MultiplayerManager.installListeners();
         Script.LobbyManager.installListeners();
+        Script.RiveManager.init(Script.RIVE_SCENE.WIREFRAME);
     }
     function start(_event) {
         Script.viewport = _event.detail;
@@ -1895,6 +1953,7 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
+    // import ƒ = FudgeCore;
     class CowboySpecialAttack extends Script.ComponentAttack {
     }
     Script.CowboySpecialAttack = CowboySpecialAttack;
@@ -2531,7 +2590,7 @@ var Script;
                     }
                 }
             }
-            document.getElementById("brawler-ready-text").innerText = `${totalSelected} / ${totalPlayers} players selected a brawler`;
+            document.getElementById("brawler-ready-text").innerText = `${totalSelected} / ${totalPlayers} players`;
             if (totalPlayers === totalSelected) {
                 document.getElementById("start_game").disabled = false;
             }
@@ -2696,6 +2755,113 @@ var Script;
         }
     }
     Script.GameManager = GameManager;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let RIVE_SCENE;
+    (function (RIVE_SCENE) {
+        RIVE_SCENE[RIVE_SCENE["INTRO"] = 0] = "INTRO";
+        RIVE_SCENE[RIVE_SCENE["MAIN_MENU"] = 1] = "MAIN_MENU";
+        RIVE_SCENE[RIVE_SCENE["WIREFRAME"] = 2] = "WIREFRAME";
+    })(RIVE_SCENE = Script.RIVE_SCENE || (Script.RIVE_SCENE = {}));
+    let INPUTS;
+    (function (INPUTS) {
+        INPUTS["INTRO_END"] = "IntroEnd";
+        INPUTS["SELECT_CHARACTER"] = "SelectCharacter";
+        INPUTS["ASSETS_LOADED"] = "AssetsLoaded";
+        INPUTS["PLAYER_READY"] = "PlayerReady";
+        INPUTS["ROOM_CREATED"] = "RoomCreated";
+        INPUTS["MENU_STATE"] = "MenuState";
+    })(INPUTS || (INPUTS = {}));
+    Script.RiveMap = new Map([
+        [RIVE_SCENE.INTRO, { src: "./UI/Rive/intromenu.riv", stateMachine: "TitleScreenStateMachine" }],
+        [RIVE_SCENE.MAIN_MENU, { src: "./UI/Rive/mainmenu.riv", stateMachine: "StateMachineMainMenu" }],
+        [RIVE_SCENE.WIREFRAME, { src: "./UI/Rive/wireframe.riv", stateMachine: "MainStateMachine" }],
+    ]);
+    class RiveManager {
+        static rive;
+        static inputs;
+        static init(_scene) {
+            if (this.rive)
+                this.rive.cleanup();
+            let sceneInfo = Script.RiveMap.get(_scene);
+            this.rive = new rive.Rive({
+                src: sceneInfo.src,
+                canvas: document.getElementsByTagName("canvas")[0],
+                autoplay: true,
+                stateMachines: sceneInfo.stateMachine,
+                onLoad: () => {
+                    this.rive.resizeDrawingSurfaceToCanvas();
+                    let inputs = this.rive.stateMachineInputs(sceneInfo.stateMachine);
+                    this.inputs = new Map();
+                    for (let input of inputs) {
+                        this.inputs.set(input.name, input);
+                    }
+                    console.log(this.inputs);
+                }
+            });
+            window.addEventListener("resize", () => {
+                this.rive.resizeDrawingSurfaceToCanvas();
+            });
+            this.rive.on(rive.EventType.RiveEvent, this.eventHandler);
+            this.rive;
+            ƒ.Project.addEventListener("resourcesLoaded" /* ƒ.EVENT.RESOURCES_LOADED */, this.loadMainMenu);
+        }
+        static eventHandler = (_event) => {
+            console.log("Rive Event!", _event, _event.data.name);
+            switch (_event.data.name) {
+                case "IntroEnd": {
+                    Script.startViewport();
+                    // menuManager.resourcesLoaded();
+                    // this.loadMainMenu();
+                    break;
+                }
+                case "MainMenuHostButton": {
+                    Script.LobbyManager.hostRoom();
+                    break;
+                }
+                case "MainMenuJoinButton": {
+                    break;
+                }
+                case "JoinMenuJoinButton": {
+                    break;
+                }
+                case "JoinMenuBackButton": {
+                    Script.LobbyManager.leaveRoom();
+                    break;
+                }
+                case "HostMenuBackButton": {
+                    Script.LobbyManager.leaveRoom();
+                    break;
+                }
+                case "HostMenuStartButton": {
+                    break;
+                }
+                case "CharacterSelectionPlayerNotReady": {
+                    break;
+                }
+                case "CharacterSelectionPlayerReady": {
+                    break;
+                }
+                case "CharacterSelectionBackButton": {
+                    break;
+                }
+                case "Reset": {
+                    Script.LobbyManager.leaveRoom();
+                    break;
+                }
+            }
+        };
+        static loadMainMenu = () => {
+            // this.inputs.get(INPUTS.ASSETS_LOADED).value = true;
+            this.rive.removeAllRiveEventListeners();
+            this.rive.removeRiveListeners();
+            this.rive.cleanup();
+            document.getElementsByTagName("canvas")[0].getContext("2d").reset();
+        };
+    }
+    Script.RiveManager = RiveManager;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

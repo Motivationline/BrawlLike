@@ -21,6 +21,7 @@ namespace Script {
   function preStart() {
     MultiplayerManager.installListeners();
     LobbyManager.installListeners();
+    RiveManager.init(RIVE_SCENE.WIREFRAME);
   }
 
   function start(_event: CustomEvent): void {

@@ -1,5 +1,5 @@
 namespace Script {
-    import ƒ = FudgeCore;
+    // import ƒ = FudgeCore;
     import ƒNet = FudgeNet;
     export class LobbyManager {
         static client: FudgeNet.FudgeClient;
@@ -15,6 +15,9 @@ namespace Script {
             document.getElementById("lobby-join").addEventListener("click", this.joinRoom);
             document.getElementById("game-lobby-cancel").addEventListener("click", this.leaveRoom);
 
+            document.getElementById("room-code").addEventListener("input", this.inputRoom);
+            (<HTMLInputElement>document.getElementById("room-code")).value = "";
+            (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = true;
         }
 
         static refreshRooms = () => {
@@ -27,9 +30,10 @@ namespace Script {
                 switch (message.command) {
                     case ƒNet.COMMAND.ROOM_GET_IDS:
                         this.rooms = message.content.rooms;
-                        this.updateVisibleRooms();
+                        // this.updateVisibleRooms();
                         break;
                     case ƒNet.COMMAND.ROOM_ENTER:
+                        // RiveManager.joinRoom(this.client.idRoom);
                     case ƒNet.COMMAND.SERVER_HEARTBEAT:
                         this.updateRoom();
                         break;
@@ -54,49 +58,67 @@ namespace Script {
             }
         }
 
-        static updateVisibleRooms() {
-            if (this.client.idRoom !== "Lobby") return;
-            document.getElementById("client-id").innerText = this.client.id;
-            document.getElementById("client-name").innerText = this.client.name;
-            let listElement: HTMLUListElement = <HTMLUListElement>document.getElementById("open-lobbies");
-            let newChildren: HTMLElement[] = [];
+        // static updateVisibleRooms() {
+        //     return;
+        //     if (this.client.idRoom !== "Lobby") return;
+        //     document.getElementById("client-id").innerText = this.client.id;
+        //     document.getElementById("client-name").innerText = this.client.name;
+        //     let listElement: HTMLUListElement = <HTMLUListElement>document.getElementById("open-lobbies");
+        //     let newChildren: HTMLElement[] = [];
 
-            if (Object.keys(this.rooms).length <= 1) {
-                let span = document.createElement("span");
-                span.innerText = "No games going on. Why don't you host yourself?";
-                newChildren.push(span);
-            } else {
-                for (let room in this.rooms) {
-                    if (room === "Lobby") continue;
-                    let li = document.createElement("li");
-                    li.innerText = `${room} - ${this.rooms[room]} Players`;
-                    li.dataset.room = room;
-                    li.addEventListener("click", this.selectRoom);
-                    li.classList.add("room");
-                    if (room === this.selectedRoom) li.classList.add("selected");
-                    newChildren.push(li);
-                }
-            }
-            listElement.replaceChildren(...newChildren);
-        }
+        //     if (Object.keys(this.rooms).length <= 1) {
+        //         let span = document.createElement("span");
+        //         span.innerText = "No games going on. Why don't you host yourself?";
+        //         newChildren.push(span);
+        //     } else {
+        //         for (let room in this.rooms) {
+        //             if (room === "Lobby") continue;
+        //             let li = document.createElement("li");
+        //             li.innerText = `${room} - ${this.rooms[room]} Players`;
+        //             li.dataset.room = room;
+        //             li.addEventListener("click", this.selectRoom);
+        //             li.classList.add("room");
+        //             if (room === this.selectedRoom) li.classList.add("selected");
+        //             newChildren.push(li);
+        //         }
+        //     }
+        //     listElement.replaceChildren(...newChildren);
+        // }
 
         static hostRoom = () => {
             this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_CREATE, route: FudgeNet.ROUTE.SERVER });
         }
 
-        static selectRoom = (_event: MouseEvent) => {
-            let target = <HTMLLIElement>_event.target;
-            document.querySelectorAll("li.room").forEach(el => el.classList.remove("selected"));
-            this.selectedRoom = target.dataset.room;
-            target.classList.add("selected");
-            (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = false;
+        static inputRoom = (_event: Event) => {
+            let element = <HTMLInputElement>_event.target;
+            let value = element.value;
+            if (value.length === 5) {
+                this.selectedRoom = value.toLocaleLowerCase();
+                (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = false;
+            } else {
+                (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = true;
+            }
         }
 
+        // static selectRoom = (_event: Event) => {
+        //     let target = <HTMLLIElement>_event.target;
+        //     document.querySelectorAll("li.room").forEach(el => el.classList.remove("selected"));
+        //     this.selectedRoom = target.dataset.room;
+        //     target.classList.add("selected");
+        //     (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = false;
+        // }
+
         static joinRoom = () => {
-            (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = true;
+            // (<HTMLButtonElement>document.getElementById("lobby-join")).disabled = true;
             if (!this.selectedRoom) return;
-            client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: this.selectedRoom } });
+            let roomID = `_${this.selectedRoom}`;
+            if (!this.rooms[roomID]) {
+                alert("Room not found");
+                return;
+            }
+            client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: roomID } });
             this.selectedRoom = "";
+            menuManager.joinRoom();
         }
         static leaveRoom = () => {
             client.dispatch({ command: FudgeNet.COMMAND.ROOM_ENTER, route: FudgeNet.ROUTE.SERVER, content: { room: "Lobby" } });
@@ -105,7 +127,8 @@ namespace Script {
 
         static updateRoom = () => {
             if (this.client.idRoom === "Lobby") return;
-            document.getElementById("game-lobby-id").innerText = `Room id: ${this.client.idRoom}`;
+            if (document.getElementById("game-lobby-id").innerText.toLocaleLowerCase() !== `${this.client.idRoom.substring(1).toLocaleLowerCase()}`)
+                document.getElementById("game-lobby-id").innerText = `${this.client.idRoom.substring(1)}`;
 
             let players: HTMLElement[] = [];
 

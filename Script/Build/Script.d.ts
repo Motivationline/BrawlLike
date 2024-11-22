@@ -78,7 +78,9 @@ declare namespace Script {
         overlays: Map<MENU_TYPE, HTMLElement>;
         constructor();
         resourcesLoaded: () => void;
+        joinRoom(): void;
         showOverlay(_type: MENU_TYPE): void;
+        selectBrawler(_button: HTMLButtonElement): void;
     }
 }
 declare namespace Script {
@@ -155,9 +157,8 @@ declare namespace Script {
         static installListeners(): void;
         static refreshRooms: () => void;
         static messageHandler(_event: CustomEvent | MessageEvent): void;
-        static updateVisibleRooms(): void;
         static hostRoom: () => void;
-        static selectRoom: (_event: MouseEvent) => void;
+        static inputRoom: (_event: Event) => void;
         static joinRoom: () => void;
         static leaveRoom: () => void;
         static updateRoom: () => void;
@@ -471,6 +472,24 @@ declare namespace Script {
         private initSpawnPoints;
         getSpawnPointForPlayer(_player: string | Player): ƒ.Vector3;
         resetGame(): void;
+    }
+}
+declare namespace Script {
+    enum RIVE_SCENE {
+        INTRO = 0,
+        MAIN_MENU = 1,
+        WIREFRAME = 2
+    }
+    const RiveMap: Map<RIVE_SCENE, {
+        src: string;
+        stateMachine: string;
+    }>;
+    class RiveManager {
+        static rive: rive.Rive;
+        static inputs: Map<string, rive.StateMachineInput>;
+        static init(_scene: RIVE_SCENE): void;
+        static eventHandler: (_event: rive.Event) => void;
+        static loadMainMenu: () => void;
     }
 }
 declare namespace Script {

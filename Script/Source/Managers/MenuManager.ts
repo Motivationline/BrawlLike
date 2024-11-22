@@ -9,6 +9,28 @@ namespace Script {
         SELECTION,
         GAME_OVERLAY,
     }
+
+    interface BrawlerInfo {
+        name: string,
+        stats: {
+            damage: number,
+            speed: number,
+            range: number,
+            health: number,
+        },
+        shake: "shakeX" | "shakeYUp" | "shakeYDown",
+        img: string,
+    }
+
+    const brawlerInfo: Map<string, BrawlerInfo> = new Map<string, BrawlerInfo>(
+        [
+            ["BrawlerFrogger", { name: "Frogger", stats: { damage: 0.75, health: 0.75, range: 0.5, speed: 0.25 }, img: "UI/BrawlerPicking/Frogger.png" , shake: "shakeYUp" }],
+            ["BrawlerBugsy", { name: "Bugsy", stats: { damage: 0.5, health: 0.25, range: 0.75, speed: 0.5 }, img: "UI/BrawlerPicking/Bugsy_2.png" , shake: "shakeX" }],
+            ["BrawlerSpider", { name: "Spidey", stats: { damage: 0.75, health: 1, range: 0.25, speed: 0.5 }, img: "UI/BrawlerPicking/Spider.png" , shake: "shakeYDown" }],
+            ["BrawlerSniper", { name: "Sniper", stats: { damage: 1, health: 0.25, range: 1, speed: 0.75 }, img: "UI/BrawlerPicking/Bunny.png" , shake: "shakeX" }],
+        ]
+    )
+
     export class MenuManager {
         overlays: Map<MENU_TYPE, HTMLElement> = new Map();
 
@@ -34,26 +56,18 @@ namespace Script {
                         document.getElementById("brawler").querySelectorAll("button").forEach((button) => button.classList.remove("selected"));
                         button.classList.add("selected");
                         // GameManager.Instance.selectBrawler(button.dataset.brawler, LobbyManager.client.id);
-                        LobbyManager.selectBrawler(button.dataset.brawler);
+                        this.selectBrawler(button);
                     });
                     // await GameManager.Instance.startGame();
                     // this.showOverlay(MENU_TYPE.NONE);
                 });
                 document.getElementById("lobby-host").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.GAME_LOBBY);
-                    document.getElementById("game-settings")!.hidden = false;
+                    document.getElementById("game-settings")!.classList.remove("hidden");
                     document.getElementById("game-lobby-start")!.hidden = false;
                     document.getElementById("start_game")!.hidden = false;
                     (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
                     document.getElementById("lobby-client-settings")!.hidden = true;
-                });
-                document.getElementById("lobby-join").addEventListener("click", () => {
-                    this.showOverlay(MENU_TYPE.GAME_LOBBY);
-                    document.getElementById("game-settings")!.hidden = true;
-                    document.getElementById("game-lobby-start")!.hidden = true;
-                    document.getElementById("start_game")!.hidden = true;
-                    (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
-                    document.getElementById("lobby-client-settings")!.hidden = false;
                 });
                 document.getElementById("game-lobby-cancel").addEventListener("click", () => {
                     this.showOverlay(MENU_TYPE.LOBBY);
@@ -163,7 +177,7 @@ namespace Script {
                     }
                 });
 
-                document.getElementById("start_game").addEventListener("click", (_event)=> {
+                document.getElementById("start_game").addEventListener("click", (_event) => {
                     LobbyManager.startGame();
                 });
 
@@ -175,12 +189,56 @@ namespace Script {
             this.showOverlay(MENU_TYPE.LOBBY);
         }
 
+        joinRoom() {
+            this.showOverlay(MENU_TYPE.GAME_LOBBY);
+            document.getElementById("game-settings")!.classList.add("hidden");
+            document.getElementById("game-lobby-start")!.hidden = true;
+            document.getElementById("start_game")!.hidden = true;
+            (<HTMLInputElement>document.getElementById("start_game")).disabled = true;
+            document.getElementById("lobby-client-settings")!.hidden = false;
+        }
+
         showOverlay(_type: MENU_TYPE) {
             if (!this.overlays.has(_type) && _type !== MENU_TYPE.NONE) return;
             this.overlays.forEach(overlay => {
                 overlay.classList.add("hidden");
             });
             this.overlays.get(_type)?.classList.remove("hidden");
+        }
+
+
+        selectBrawler(_button: HTMLButtonElement) {
+            LobbyManager.selectBrawler(_button.dataset.brawler);
+            let brawler = brawlerInfo.get(_button.dataset.brawler);
+
+            let img: HTMLImageElement = <HTMLImageElement>document.getElementById("selected-character-img");
+            img.src = brawler.img;
+            img.classList.remove("shakeX", "shakeYUp", "shakeYDown");
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    img.classList.add(brawler.shake);
+                })
+            })
+
+            document.getElementById("selected-character-name").innerText = brawler.name;
+            document.getElementById("selected-character-name").classList.add("selected");
+            for (let stat in brawler.stats) {
+                let element: HTMLDivElement = document.querySelector(`div.brawler-stat-preview[data-info="${stat}"]`);
+                if (!element) continue;
+                //@ts-ignore
+                element.style.width = `${brawler.stats[stat] * 100}%`;
+                //@ts-ignore
+                element.style.backgroundColor = lerpColors([203, 140, 87], [53, 94, 49], brawler.stats[stat]);
+            }
+
+            function lerpColors(a: number[], b: number[], p: number) {
+                let final = {
+                    r: a[0] + (b[0] - a[0]) * p,
+                    g: a[1] + (b[1] - a[1]) * p,
+                    b: a[2] + (b[2] - a[2]) * p,
+                }
+                return `rgb(${final.r}, ${final.g}, ${final.b})`;
+            }
         }
     }
 
@@ -222,8 +280,8 @@ namespace Script {
             }
         }
 
-        for(let t: number = 0; t < teams.length; t++) {
-            for(let player of teams[t].players){
+        for (let t: number = 0; t < teams.length; t++) {
+            for (let player of teams[t].players) {
                 player.team = t;
             }
         }

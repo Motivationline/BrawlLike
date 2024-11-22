@@ -129,7 +129,7 @@ namespace Script {
                 }
             }
 
-            document.getElementById("brawler-ready-text").innerText = `${totalSelected} / ${totalPlayers} players selected a brawler`;
+            document.getElementById("brawler-ready-text").innerText = `${totalSelected} / ${totalPlayers} players`;
             if (totalPlayers === totalSelected) {
                 (<HTMLInputElement>document.getElementById("start_game")).disabled = false;
             }
