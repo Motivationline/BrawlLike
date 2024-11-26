@@ -73,6 +73,7 @@ namespace Script {
 
         mousemove = (_event: MouseEvent) => {
             _event.preventDefault();
+            if(!EntityManager.Instance || !EntityManager.Instance.playerBrawler) return;
             EntityManager.Instance.playerBrawler.mousePosition = new ƒ.Vector2(_event.clientX, _event.clientY);
         }
 

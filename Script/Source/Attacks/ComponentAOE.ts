@@ -97,7 +97,7 @@ namespace Script {
 
             // team check
             let otherBrawler: ComponentBrawler = (<ComponentBrawler>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof ComponentBrawler));
-            if (otherBrawler) {
+            if (otherBrawler && otherBrawler.id) {
                 let otherPlayer = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
                 let owner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.ownerId));
                 if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team) return;

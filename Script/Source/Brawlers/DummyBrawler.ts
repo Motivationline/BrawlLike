@@ -17,7 +17,7 @@ namespace Script {
         }
 
         protected death(): void {
-            this.#respawnPos.copy(this.node.mtxLocal.translation);
+            this.#respawnPos.copy(this.node.mtxWorld.translation);
             ƒ.Time.game.setTimer(this.respawnTime * 1000, 1, () => {
                 this.respawn();
             });

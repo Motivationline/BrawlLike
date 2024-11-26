@@ -178,7 +178,7 @@ namespace Script {
       }
     }
 
-    initAttacks(){
+    initAttacks() {
       this.attackMain?.initAttack();
       this.attackSpecial?.initAttack();
     }
@@ -360,6 +360,7 @@ namespace Script {
     #touchingGrass: number = 0;
     onTrigger = (_event: ƒ.EventPhysics) => {
       let teamOfOwner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.id)).team;
+      if (!this.id) return;
       let teamOfThis = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(this.id)).team;
       if (teamOfOwner === teamOfThis) return;
 
@@ -382,11 +383,11 @@ namespace Script {
       //   return;
       // }
       if (this.#touchingGrass > 0) {
-        for(let child of this.node.getChildren()){
+        for (let child of this.node.getChildren()) {
           child.activate(false);
         }
       } else {
-        for(let child of this.node.getChildren()){
+        for (let child of this.node.getChildren()) {
           child.activate(true);
         }
       }

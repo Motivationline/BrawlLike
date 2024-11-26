@@ -607,6 +607,8 @@ var Script;
         };
         mousemove = (_event) => {
             _event.preventDefault();
+            if (!Script.EntityManager.Instance || !Script.EntityManager.Instance.playerBrawler)
+                return;
             Script.EntityManager.Instance.playerBrawler.mousePosition = new ƒ.Vector2(_event.clientX, _event.clientY);
         };
         tryToAttack(_atk, _event) {
@@ -1197,7 +1199,7 @@ var Script;
                 return; // don't do anything if owner isn't own brawler
             // team check
             let otherBrawler = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
-            if (otherBrawler) {
+            if (otherBrawler && otherBrawler.id) {
                 let otherPlayer = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
                 let owner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.ownerId));
                 if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team)
@@ -1743,7 +1745,7 @@ var Script;
                 return; // don't do anything if owner isn't own brawler
             // team check
             let otherBrawler = _event.cmpRigidbody.node.getAllComponents().find(c => c instanceof Script.ComponentBrawler);
-            if (otherBrawler) {
+            if (otherBrawler && otherBrawler.id) {
                 let otherPlayer = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
                 let owner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.ownerId));
                 if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team)
@@ -2378,6 +2380,8 @@ var Script;
         #touchingGrass = 0;
         onTrigger = (_event) => {
             let teamOfOwner = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(Script.EntityManager.Instance.playerBrawler.id)).team;
+            if (!this.id)
+                return;
             let teamOfThis = Script.GameManager.Instance.getPlayer(Script.MultiplayerManager.getOwnerIdFromId(this.id)).team;
             if (teamOfOwner === teamOfThis)
                 return;
@@ -2450,7 +2454,7 @@ var Script;
             // })
         }
         death() {
-            this.#respawnPos.copy(this.node.mtxLocal.translation);
+            this.#respawnPos.copy(this.node.mtxWorld.translation);
             ƒ.Time.game.setTimer(this.respawnTime * 1000, 1, () => {
                 this.respawn();
             });
