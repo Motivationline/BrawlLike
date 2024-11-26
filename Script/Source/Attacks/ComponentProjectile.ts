@@ -20,8 +20,8 @@ namespace Script {
             this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.init);
             ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.loop);
         }
-        
-        private removeEventListeners(){
+
+        private removeEventListeners() {
             this.removeEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.init);
             ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, this.loop);
             this.#rb.removeEventListener(ƒ.EVENT_PHYSICS.TRIGGER_ENTER, this.onTriggerEnter);
@@ -65,7 +65,7 @@ namespace Script {
             if (this.#owner !== EntityManager.Instance.playerBrawler) return; // don't do anything if owner isn't own brawler
             // team check
             let otherBrawler: ComponentBrawler = (<ComponentBrawler>_event.cmpRigidbody.node.getAllComponents().find(c => c instanceof ComponentBrawler));
-            if(otherBrawler && otherBrawler.id) {
+            if (otherBrawler && otherBrawler.id) {
                 let otherPlayer = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(otherBrawler.id));
                 let owner = GameManager.Instance.getPlayer(MultiplayerManager.getOwnerIdFromId(EntityManager.Instance.playerBrawler.ownerId));
                 if (otherPlayer && owner && otherPlayer.id !== owner.id && otherPlayer.team === owner.team) return;
@@ -166,6 +166,7 @@ namespace Script {
         getInfo(): any {
             let info = super.getInfo();
             info.owner = this.#owner.id;
+            info.resourceName = this.node.name;
             info.velo = {
                 x: this.#rb.getVelocity().x,
                 y: this.#rb.getVelocity().y,

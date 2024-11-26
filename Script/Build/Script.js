@@ -770,10 +770,23 @@ var Script;
             }
             for (let id in _data) {
                 let data = _data[id];
-                if (!data.override)
-                    continue;
-                this.#ownElementsToSync.get(id)?.putInfo(data);
+                if (this.#ownElementsToSync.has(id)) {
+                    if (!data.override)
+                        continue;
+                    this.#ownElementsToSync.get(id)?.putInfo(data);
+                }
+                else {
+                    console.warn("desync detected, unknown object created.");
+                    this.createObjectLater(id, data);
+                }
             }
+        }
+        static createObjectLater(_id, _data) {
+            this.createObject({
+                id: _id,
+                initData: _data,
+                resourceName: _data.resourceName,
+            });
         }
         static async createObject(_data) {
             let graph = ƒ.Project.getResourcesByName(_data.resourceName)[0];
@@ -854,6 +867,10 @@ var Script;
         }
         static getOwnerIdFromId(_id) {
             return _id.split("+")[0];
+        }
+        static clearObjects() {
+            this.#otherElementsToSync = new Map();
+            this.#ownElementsToSync = new Map();
         }
     }
     Script.MultiplayerManager = MultiplayerManager;
@@ -1836,6 +1853,7 @@ var Script;
         getInfo() {
             let info = super.getInfo();
             info.owner = this.#owner.id;
+            info.resourceName = this.node.name;
             info.velo = {
                 x: this.#rb.getVelocity().x,
                 y: this.#rb.getVelocity().y,
@@ -2336,11 +2354,12 @@ var Script;
         }
         getInfo() {
             let info = super.getInfo();
-            info.direction = {
-                x: this.direction.x,
-                y: this.direction.y,
-                z: this.direction.z,
-            };
+            info.resourceName = this.node.name,
+                info.direction = {
+                    x: this.direction.x,
+                    y: this.direction.y,
+                    z: this.direction.z,
+                };
             info.velOverride = [];
             this.#velocityOverrides.forEach(value => {
                 info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } });
@@ -2543,6 +2562,7 @@ var Script;
         remainingTime = 0;
         async startRound() {
             document.getElementsByTagName("canvas")[0].hidden = false;
+            Script.MultiplayerManager.clearObjects();
             let gameOverElement = document.getElementById("game-over-wrapper");
             gameOverElement.parentElement.classList.add("hidden");
             this.timeDiv = document.getElementById("game-time");

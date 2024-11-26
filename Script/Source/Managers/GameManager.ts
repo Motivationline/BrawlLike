@@ -69,6 +69,7 @@ namespace Script {
         remainingTime: number = 0;
         async startRound() {
             document.getElementsByTagName("canvas")[0].hidden = false;
+            MultiplayerManager.clearObjects();
             
             let gameOverElement = document.getElementById("game-over-wrapper")!;
             gameOverElement.parentElement.classList.add("hidden");

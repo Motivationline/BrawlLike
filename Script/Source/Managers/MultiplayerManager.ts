@@ -81,9 +81,22 @@ namespace Script {
             }
             for (let id in _data) {
                 let data = _data[id];
-                if (!data.override) continue;
-                this.#ownElementsToSync.get(id)?.putInfo(data);
+                if (this.#ownElementsToSync.has(id)) {
+                    if (!data.override) continue;
+                    this.#ownElementsToSync.get(id)?.putInfo(data);
+                } else {
+                    console.warn("desync detected, unknown object created.");
+                    this.createObjectLater(id, data);
+                }
             }
+        }
+
+        private static createObjectLater(_id: string, _data: any){
+            this.createObject({
+                id: _id,
+                initData: _data,
+                resourceName: _data.resourceName,
+            })
         }
 
         private static async createObject(_data: CreationData) {
@@ -169,6 +182,11 @@ namespace Script {
 
         static getOwnerIdFromId(_id: string): string {
             return _id.split("+")[0];
+        }
+
+        static clearObjects() {
+            this.#otherElementsToSync = new Map();
+            this.#ownElementsToSync = new Map();
         }
     }
 }

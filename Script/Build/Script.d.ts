@@ -136,6 +136,7 @@ declare namespace Script {
         static broadcastCreation(_data: CreationData): void;
         private static getUpdate;
         private static applyUpdate;
+        private static createObjectLater;
         private static createObject;
         private static destroyObject;
         static updateOne(_data: any, _id: string): void;
@@ -143,6 +144,7 @@ declare namespace Script {
         static broadcastDestructible(d: Destructible): void;
         private static messageHandler;
         static getOwnerIdFromId(_id: string): string;
+        static clearObjects(): void;
     }
 }
 declare namespace Script {

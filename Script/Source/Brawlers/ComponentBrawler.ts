@@ -308,9 +308,10 @@ namespace Script {
         resourceName: this.node.name,
       }
     }
-
+    
     getInfo(): any {
       let info = super.getInfo();
+      info.resourceName = this.node.name,
       info.direction = {
         x: this.direction.x,
         y: this.direction.y,
