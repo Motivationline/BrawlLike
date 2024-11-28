@@ -61,6 +61,7 @@ namespace Script {
             ƒ.Loop.start();
             this.gameActive = true;
             menuManager.showOverlay(MENU_TYPE.GAME_OVERLAY);
+            document.getElementById("touch-overlay").classList.remove("hidden");
             // ƒ.Time.game.setScale(0.2);
         }
 
@@ -331,6 +332,8 @@ namespace Script {
             ƒ.Loop.stop();
 
             document.getElementsByTagName("canvas")[0].hidden = true;
+            
+            document.getElementById("touch-overlay").classList.add("hidden");
         }
     }
 }

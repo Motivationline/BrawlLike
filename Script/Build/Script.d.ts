@@ -83,10 +83,115 @@ declare namespace Script {
         selectBrawler(_button: HTMLButtonElement): void;
     }
 }
+declare namespace TouchJoystick {
+    enum EVENT {
+        /** Fired every time the input changes. Returns CustomEvent where event.detail is the current (unclamped) x/y values of the joystick. */
+        CHANGE = "change",
+        /** Fired when the virtual Joystick is pressed. */
+        PRESSED = "pressed",
+        /** Fired when the virtual Joystick is released. Returns CustomEvent where event.detail is the current (unclamped) x/y values of the joystick. */
+        RELEASED = "released"
+    }
+    type JoystickPositioning = "fixed" | "floating";
+    type JoystickLimitation = "none" | "x" | "y";
+    interface JoystickHandleOptions {
+        /** Max distance from center point the inner ring can be visually pulled.
+         * 0 = no movement
+         * 1 = edge of the outer ring
+         * _Default: `1`_
+        */
+        limit: number;
+        /** Whether the inner handle should behave like it is in a rounded or square limitation.
+         * _Default: `true`_
+         */
+        round: boolean;
+    }
+    /** A joystick comes with various functionalities out of the box. To configure them, set the options accordingly. They all come with reasonable defaults. */
+    interface JoystickOptions {
+        /** How the joystick should be positioned.
+         *
+         * `"fixed"`: The joystick **doesn't** move within its parent to match the tapped starting point and only reacts to touches that start within its boundaries.
+         * `"floating"`: The joystick moves to the starting location of the tap within the parent element.
+         * _Default: `"fixed"`_
+         */
+        positioning: JoystickPositioning;
+        /** Adjusts inner-handle related settings. */
+        handle: JoystickHandleOptions;
+        /** Allows you to limit the input of the joystick to one axis.
+         * Possible values: `"none" | "x" | "y"`
+         * _Default: `"none"`_
+         */
+        limitInput: JoystickLimitation;
+        /** Makes the Joystick follow the touchpoint if it moves outside of the joystick handle limit. Only works in `positioning = "floating"` mode.
+         * _Default: `false`_
+         */
+        following: boolean;
+        /** Inverts the output vertical value. Does not change the appearance of the joystick.
+         * _Default: `false`_
+         */
+        invertY: boolean;
+        /** Limits the movement from the `following` attribute to the parents boundaries.
+         * _Default: `true`_
+         */
+        limitToParentElement: boolean;
+    }
+    /**
+     * ### Joystick
+     *
+     * A functional class without any dependencies that lets you easily create and use joysticks for mobile devices.
+     *
+     * #### Access
+     * To access the relevant info, you can either use the `horizontal` / `x` and `vertical` / `y` getters on demand or add any of the events defined in `TouchJoystick.EVENT`.
+     * > ℹ The returned data ist **unclamped**. This means instead of getting a value from 0 to whatever the handle limit is (1 being the default, meaning the edge of the outer element),
+     * you'll get a value representative of how far the touch point actually is from the center of the joystick!
+     *
+     * #### Styling
+     * The joystick will be created as two styleable divs inside the given parent element. The parent element also defines the joysticks boundaries (can be disabled).
+     * You can access the outer div using `joystick.element` for further editing (e.g. adding ids or classes).
+     *
+     * For reactionary styling, various css classes are applied to the outer element to reflect the current state of the joystick. `active`, `inactive`, `fixed` and `floating`. See the `TouchJoystick.css` file for examples.
+     */
+    class Joystick extends EventTarget {
+        #private;
+        constructor(_parent: HTMLElement, _options?: Partial<JoystickOptions>);
+        get defaultOptions(): JoystickOptions;
+        /** The **unclamped** (see class documentation for more info) **horizontal (x)** distance between the center of the joystick and the current touch point. 0 if inactive.
+         * Equivalent to `.horizontal`
+         */
+        get x(): number;
+        /** The **unclamped** (see class documentation for more info) **horizontal (x)** distance between the center of the joystick and the current touch point. 0 if inactive.
+         * Equivalent to `.x`
+         */
+        get horizontal(): number;
+        /** The **unclamped** (see class documentation for more info) **vertical (y)** distance between the center of the joystick and the current touch point. 0 if inactive.
+         * Equivalent to `.vertical`
+         */
+        get y(): number;
+        /** The **unclamped** (see class documentation for more info) **vertical (y)** distance between the center of the joystick and the current touch point. 0 if inactive.
+         * Equivalent to `.y`
+         */
+        get vertical(): number;
+        /** The outer HTMLElement used to create & display the joystick. */
+        get element(): HTMLElement;
+        set positioning(_positioning: JoystickPositioning);
+        get positioning(): JoystickPositioning;
+        set handle(_handle: JoystickHandleOptions);
+        set following(_following: boolean);
+        set limitToParentElement(_limitToParentElement: boolean);
+        set limitInput(_limitInput: JoystickLimitation);
+        set invertY(_invertY: boolean);
+        private hndTouchEvent;
+        private positionJoystick;
+        private normalizeToMaxScale;
+    }
+}
 declare namespace Script {
     import ƒ = FudgeCore;
     class InputManager {
+        #private;
         static Instance: InputManager;
+        movementJoystick: TouchJoystick.Joystick;
+        attackJoystick: TouchJoystick.Joystick;
         constructor();
         update: () => void;
         mainPreviewTimeout: number;
@@ -95,7 +200,12 @@ declare namespace Script {
         mouseup: (_event: MouseEvent) => void;
         mousemove: (_event: MouseEvent) => void;
         private tryToAttack;
+        private setupTouch;
+        private joystickChange;
+        private joystickPressed;
+        private joystickReleased;
         static mousePositionToWorldPlanePosition(_mousePosition: ƒ.Vector2): ƒ.Vector3;
+        static joystickPositionToWorldPosition(_mousePosition: ƒ.Vector2, _atk: ATTACK_TYPE): ƒ.Vector3;
     }
 }
 declare namespace Script {
@@ -175,7 +285,6 @@ declare namespace Script {
     import ƒNet = FudgeNet;
     let viewport: ƒ.Viewport;
     const menuManager: MenuManager;
-    const inputManager: InputManager;
     const client: ƒNet.FudgeClient;
     function startViewport(): Promise<void>;
 }
@@ -387,6 +496,8 @@ declare namespace Script {
         protected reduceMutator(_mutator: ƒ.Mutator): void;
         serialize(): ƒ.Serialization;
         deserialize(_serialization: ƒ.Serialization): Promise<ƒ.Serializable>;
+        getAttackRange(_atk: ATTACK_TYPE): number;
+        setMousePositionAsJoystickInput(_pos: ƒ.Vector2): void;
         creationData(): CreationData;
         getInfo(): any;
         applyData(data: any): void;

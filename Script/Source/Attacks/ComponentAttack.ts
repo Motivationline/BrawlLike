@@ -190,9 +190,10 @@ namespace Script {
             this.currentEnergy -= this.energyNeededPerCharge;
             this.#attackBars[charges - 1].getComponent(ƒ.ComponentMaterial).clrPrimary = ƒ.Color.CSS("gray");
             this.nextAttackAllowedAt = timeNow + this.minDelayBetweenAttacks * 1000;
-            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, _direction);
-            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeRecoil, _direction);
-            ƒ.Time.game.setTimer(this.effectDelay * 1000, 1, this.executeEffect, _direction);
+            let dir = _direction.clone;
+            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeAttack, dir);
+            ƒ.Time.game.setTimer(this.castingTime * 1000, 1, this.executeRecoil, dir);
+            ƒ.Time.game.setTimer(this.effectDelay * 1000, 1, this.executeEffect, dir);
             let brawlerComp: ComponentBrawler = <ComponentBrawler>this.node.getAllComponents().find(c => c instanceof ComponentBrawler);
             if (this.invulerableTime) brawlerComp.makeInvulnerableFor(this.invulerableTime * 1000);
             return true;

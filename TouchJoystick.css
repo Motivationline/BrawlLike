@@ -1,0 +1,96 @@
+.touch-circle,
+.touch-circle-inner {
+    position: absolute;
+    touch-action: none;
+    pointer-events: none;
+}
+
+.touch-circle.fixed {
+    touch-action: all;
+    pointer-events: all;
+}
+
+.touch-circle-parent {
+    display: none;
+    position: relative;
+}
+
+
+/* things that should be changed / overwritten to fit the specific needs */
+
+.touch-circle,
+.touch-circle-inner {
+    /* Style goes here*/
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.touch-circle {
+    /* Style goes here*/
+    height: 15vh;
+}
+
+.touch-circle-inner {
+    /* Style goes here*/
+    height: 10vh;
+    left: 2.5vh;
+    top: 2.5vh;
+}
+
+
+#touch-overlay {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    grid-template-columns: repeat(2, auto);
+}
+
+#touch-overlay.hidden {
+    display: none;
+}
+
+#touch-move .touch-circle {
+    left: 10vh;
+    bottom: 10vh;
+    background-color: #0603be;
+}
+#touch-attack .touch-circle {
+    right: 10vh;
+    bottom: 10vh;
+    background-color: #be0303;
+}
+
+.touch-circle.fixed {
+    /* bottom: 10vh;
+    left: calc(50vw - 7.5vw); */
+}
+
+.touch-circle.inactive {
+    /* visibility: hidden; */
+    /* DO NOT USE "display:none" to hide this element! */
+    /* Style goes here*/
+}
+
+.touch-circle.active {
+    /* Style goes here*/
+}
+
+.touch-circle.active .touch-circle-inner {
+    /* Style goes here */
+}
+
+
+/* pointer: coarse aka we're on a mobile device with touch input */
+@media (pointer: coarse) {
+    .touch-circle-parent {
+        display: block;
+    }
+    #touch-overlay {
+        display: grid;
+    }
+}

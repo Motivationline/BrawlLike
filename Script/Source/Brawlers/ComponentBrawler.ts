@@ -29,6 +29,7 @@ namespace Script {
     #velocityOverrides: VelocityOverride[] = [];
     #playerMovementLockedUntil: number = -1;
     #dead: boolean = false;
+    #isJoystick: boolean = false;
 
     constructor() {
       super();
@@ -129,7 +130,12 @@ namespace Script {
       this.move();
 
       if (EntityManager.Instance.playerBrawler === this) {
-        let mouseWorldPosition = InputManager.mousePositionToWorldPlanePosition(this.mousePosition);
+        let mouseWorldPosition: ƒ.Vector3;
+        if (this.#isJoystick) {
+          mouseWorldPosition = InputManager.joystickPositionToWorldPosition(this.mousePosition, ATTACK_TYPE.MAIN);
+        } else {
+          mouseWorldPosition = InputManager.mousePositionToWorldPlanePosition(this.mousePosition);
+        }
         this.attackSpecial?.updatePreview(this.node.mtxLocal.translation, mouseWorldPosition);
         this.attackSpecial?.update();
         this.attackMain?.updatePreview(this.node.mtxLocal.translation, mouseWorldPosition);
@@ -184,6 +190,7 @@ namespace Script {
     }
 
     attack(_atk: ATTACK_TYPE, _direction: ƒ.Vector3) {
+      console.log(_direction);
       if (this.#currentlyActiveAnimation.lock) return;
       switch (_atk) {
         case ATTACK_TYPE.MAIN:
@@ -300,6 +307,18 @@ namespace Script {
       return this;
     }
 
+    public getAttackRange(_atk: ATTACK_TYPE) {
+      if (_atk === ATTACK_TYPE.MAIN) return this.attackMain.range;
+      if (_atk === ATTACK_TYPE.SPECIAL) return this.attackSpecial.range;
+      return 0;
+    }
+
+    public setMousePositionAsJoystickInput(_pos: ƒ.Vector2) {
+      ƒ.Recycler.store(this.mousePosition);
+      this.mousePosition = _pos;
+      this.#isJoystick = true;
+    }
+
 
     creationData(): CreationData {
       return {
@@ -308,15 +327,15 @@ namespace Script {
         resourceName: this.node.name,
       }
     }
-    
+
     getInfo(): any {
       let info = super.getInfo();
       info.resourceName = this.node.name,
-      info.direction = {
-        x: this.direction.x,
-        y: this.direction.y,
-        z: this.direction.z,
-      }
+        info.direction = {
+          x: this.direction.x,
+          y: this.direction.y,
+          z: this.direction.z,
+        }
       info.velOverride = [];
       this.#velocityOverrides.forEach(value => {
         info.velOverride.push({ until: value.until, velocity: { x: value.velocity.x, y: value.velocity.y, z: value.velocity.z } })

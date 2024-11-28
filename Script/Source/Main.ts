@@ -11,7 +11,6 @@ namespace Script {
   export let viewport: ƒ.Viewport;
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
   export const menuManager = new MenuManager();
-  export const inputManager = new InputManager();
   export const client: ƒNet.FudgeClient = initClient();
   MultiplayerManager.client = client;
   LobbyManager.client = client;
@@ -23,8 +22,9 @@ namespace Script {
     LobbyManager.installListeners();
     RiveManager.init(RIVE_SCENE.WIREFRAME);
   }
-
+  
   function start(_event: CustomEvent): void {
+    const inputManager = new InputManager();
     viewport = _event.detail;
     // viewport.physicsDebugMode = ƒ.PHYSICS_DEBUGMODE.COLLIDERS;
     viewport.addEventListener(ƒ.EVENT.RENDER_END, drawAttackPreviews);
