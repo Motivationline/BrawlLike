@@ -15,8 +15,6 @@ namespace Script {
   MultiplayerManager.client = client;
   LobbyManager.client = client;
   
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
   document.addEventListener("DOMContentLoaded", preStart);
   
   function preStart() {
@@ -44,8 +42,6 @@ namespace Script {
   export async function startViewport() {
     // document.getElementById("start").removeEventListener("click", startViewport);
     let graphId = document.head.querySelector("meta[autoView]").getAttribute("autoView");
-    if (isMobile)
-      document.documentElement.requestFullscreen();
 
     await ƒ.Project.loadResourcesFromHTML();
     let graph: ƒ.Graph = <ƒ.Graph>ƒ.Project.resources[graphId];

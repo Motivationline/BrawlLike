@@ -1,6 +1,8 @@
 namespace Script {
     // import ƒ = FudgeCore;
     import ƒNet = FudgeNet;
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     export class LobbyManager {
         static client: FudgeNet.FudgeClient;
         static rooms: { [roomId: string]: number }
@@ -33,7 +35,7 @@ namespace Script {
                         // this.updateVisibleRooms();
                         break;
                     case ƒNet.COMMAND.ROOM_ENTER:
-                        // RiveManager.joinRoom(this.client.idRoom);
+                    // RiveManager.joinRoom(this.client.idRoom);
                     case ƒNet.COMMAND.SERVER_HEARTBEAT:
                         this.updateRoom();
                         break;
@@ -87,9 +89,13 @@ namespace Script {
 
         static hostRoom = () => {
             this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_CREATE, route: FudgeNet.ROUTE.SERVER });
+            if (isMobile)
+                document.documentElement.requestFullscreen();
         }
 
         static inputRoom = (_event: Event) => {
+            if (isMobile)
+                document.documentElement.requestFullscreen();
             let element = <HTMLInputElement>_event.target;
             let value = element.value;
             if (value.length === 5) {

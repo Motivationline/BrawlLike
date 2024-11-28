@@ -1143,6 +1143,7 @@ var Script;
 (function (Script) {
     // import ƒ = FudgeCore;
     var ƒNet = FudgeNet;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     class LobbyManager {
         static client;
         static rooms;
@@ -1222,8 +1223,12 @@ var Script;
         // }
         static hostRoom = () => {
             this.client.dispatch({ command: FudgeNet.COMMAND.ROOM_CREATE, route: FudgeNet.ROUTE.SERVER });
+            if (isMobile)
+                document.documentElement.requestFullscreen();
         };
         static inputRoom = (_event) => {
+            if (isMobile)
+                document.documentElement.requestFullscreen();
             let element = _event.target;
             let value = element.value;
             if (value.length === 5) {
@@ -1317,7 +1322,6 @@ var Script;
     Script.client = initClient();
     Script.MultiplayerManager.client = Script.client;
     Script.LobbyManager.client = Script.client;
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     document.addEventListener("DOMContentLoaded", preStart);
     function preStart() {
         Script.MultiplayerManager.installListeners();
@@ -1340,8 +1344,6 @@ var Script;
     async function startViewport() {
         // document.getElementById("start").removeEventListener("click", startViewport);
         let graphId = document.head.querySelector("meta[autoView]").getAttribute("autoView");
-        if (isMobile)
-            document.documentElement.requestFullscreen();
         await ƒ.Project.loadResourcesFromHTML();
         let graph = ƒ.Project.resources[graphId];
         let canvas = document.querySelector("canvas");
