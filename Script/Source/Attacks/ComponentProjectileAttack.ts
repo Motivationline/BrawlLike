@@ -9,9 +9,9 @@ namespace Script {
         gravity: boolean = false;
         destructive: boolean = false;
 
-        executeAttack: ƒ.TimerHandler = (_event: ƒ.EventTimer) => {
+        executeAttack: ƒ.TimerHandler = async (_event: ƒ.EventTimer) => {
             let direction = <ƒ.Vector3>_event.arguments[0];
-            this.shootProjectile(direction);
+            await this.shootProjectile(direction);
         }
 
         async shootProjectile(_direction: ƒ.Vector3, _ignoreRange: boolean = false) {

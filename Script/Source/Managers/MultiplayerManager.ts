@@ -86,13 +86,13 @@ namespace Script {
                     this.#ownElementsToSync.get(id)?.putInfo(data);
                 } else {
                     console.warn("desync detected, unknown object created.");
-                    this.createObjectLater(id, data);
+                    await this.createObjectLater(id, data);
                 }
             }
         }
 
-        private static createObjectLater(_id: string, _data: any){
-            this.createObject({
+        private static async createObjectLater(_id: string, _data: any){
+            await this.createObject({
                 id: _id,
                 initData: _data,
                 resourceName: _data.resourceName,

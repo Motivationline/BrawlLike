@@ -1041,12 +1041,12 @@ var Script;
                 }
                 else {
                     console.warn("desync detected, unknown object created.");
-                    this.createObjectLater(id, data);
+                    await this.createObjectLater(id, data);
                 }
             }
         }
-        static createObjectLater(_id, _data) {
-            this.createObject({
+        static async createObjectLater(_id, _data) {
+            await this.createObject({
                 id: _id,
                 initData: _data,
                 resourceName: _data.resourceName,
@@ -2166,9 +2166,9 @@ var Script;
         projectile = "DefaultProjectile";
         gravity = false;
         destructive = false;
-        executeAttack = (_event) => {
+        executeAttack = async (_event) => {
             let direction = _event.arguments[0];
-            this.shootProjectile(direction);
+            await this.shootProjectile(direction);
         };
         async shootProjectile(_direction, _ignoreRange = false) {
             let projectile = ƒ.Project.getResourcesByName(this.projectile)[0];
